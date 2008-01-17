@@ -1,0 +1,1380 @@
+#! @PERL@
+
+#
+# wikitext-sxml
+#
+# (C) 2007 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#          Alessandro Massignan <ff0000.it@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
+    if 0;
+
+BEGIN
+{
+    my $perllibdir = $ENV{'perllibdir'} || '@pkgvdatadir@/lib/perl';
+    unshift @INC, (split ':', $perllibdir);
+
+  # Override SHELL.  This is required on DJGPP so that system() uses
+  # bash, not COMMAND.COM which doesn't quote arguments properly.
+  # Other systems aren't expected to use $SHELL when Automake
+  # runs, but it should be safe to drop the `if DJGPP' guard if
+  # it turns up other systems need the same thing.  After all,
+  # if SHELL is used, ./configure's SHELL is always better than
+  # the user's SHELL (which may be something like tcsh).
+    $ENV{'SHELL'} = '@SHELL@' if exists $ENV{'DJGPP'};
+}
+
+use strict;
+use warnings;
+use diagnostics;
+use POSIX qw(&exit EXIT_FAILURE EXIT_SUCCESS);
+
+#
+# Global variables
+#
+
+my $DEBUG;
+my $VERBOSE;
+
+my @tags_stack;
+my $text_buffer;
+my $tag_has_attributes;
+
+sub parse_inline_level; # Pre declaration, for recursion
+
+sub verbose($) {
+    my $string = shift;
+
+    if ($VERBOSE == 1) {
+	print STDOUT $string;
+    }
+    return 1;
+}
+
+sub debug($) {
+    my $string = shift;
+
+    if ($DEBUG == 1) {
+	print STDERR "Debug: " . $string;
+    }
+    return 1;
+}
+
+sub error($) {
+    my $string = shift;
+
+    print STDERR "Error: " . $string;
+    return 1;
+}
+
+sub assert($) {
+    my $tmp = shift;
+
+    if (!$tmp) {
+	print STDERR "Assertion failed!\n";
+	exit 1;
+    }
+    return 1;
+}
+
+sub write_open_tag($) {
+    my $type = shift;
+
+    assert($type);
+
+    verbose("Write open tag\n");
+
+    debug("Tag type: `" . $type . "`\n");
+
+    if ($tag_has_attributes) {
+	print OUTFILE ") (" . $type;
+
+	$tag_has_attributes = 0;
+    } else {
+	print OUTFILE " (" . $type;
+    }
+
+    if ($type ne "") {
+	push @tags_stack, $type;
+    }
+    return 1;
+}
+
+sub write_close_tag($) {
+    my $type = shift;
+
+    assert($type);
+
+    verbose("Write close tag\n");
+
+    debug("Tag type: `" . $type . "`\n");
+
+    if ((pop @tags_stack) ne $type) {
+	error("Closing tag doesn't match with last opened\n");
+	return 0;
+    }
+
+    if ($tag_has_attributes) {
+	print OUTFILE "))";
+	$tag_has_attributes = 0;
+    } else {
+	print OUTFILE ")";
+    }
+    return 1;
+}
+
+sub write_tag_attribute($$) {
+    my $name  = shift;
+    my $value = shift;
+
+    assert($name);
+
+    verbose("Write tag attribute\n");
+
+    debug("Attribute name : `" . $name  . "`\n");
+    debug("Attribute value: `" . $value . "`\n");
+
+    $name  =~ s/\\/\\\\/g; # Protection for SXML
+    $name  =~ s/\"/\\\"/g; #
+    $value =~ s/\\/\\\\/g; #
+    $value =~ s/\"/\\\"/g; #
+
+    if (!$tag_has_attributes) {
+	print OUTFILE " (@ (" . $name . " \"" . $value . "\")";
+
+	$tag_has_attributes = 1;
+    } else {
+	print OUTFILE " (" . $name . " \"" . $value . "\")";
+    }
+    return 1;
+}
+
+sub write_text($) {
+    my $text = shift;
+
+    verbose("Writing text\n");
+
+    if ($text !~ /^\s*$/) {
+	$text =~ s/^\s*([\.\,\:\;\!\?\)\]\}])/$1/;
+
+	$text =~ s/\\/\\\\/g; # Protection for SXML
+	$text =~ s/\"/\\\"/g; # 
+    }
+
+    if ($tag_has_attributes) {
+	print OUTFILE ") \"" . $text . "\"";
+	$tag_has_attributes = 0;
+    } else {
+	print OUTFILE " \"" . $text . "\"";
+    }
+    return 1;
+}
+
+#
+# For inline level elements, token is separated from each other by one or 
+# more space characters. Buffering the content of a tag is like 'pacman', 
+# so when a tag is encountered, buffer will eat every tokens until next 
+# occurrence of tag is met.
+# Obviously we couldn't have same tag in a nested way... Maybe it will be 
+# a nonsence or maybe not... 
+#
+
+sub parse_inline_level($) {
+    my $inline = shift;
+    my $token;
+    
+    verbose("Process inline level\n");
+
+    debug("Inline content: `" . $inline . "`\n");
+
+    if (defined($inline)) {
+	$inline =~ s/^\s*//;   #
+	$inline =~ s/\s+/\ /g; # Clean up
+	$inline =~ s/\s*$//g;  #
+    } else {
+	$inline = "";
+    }
+
+    $inline =~ /([^\s]+).*/;
+    $token  = $1;
+    $inline =~ /[^\s]+\s*(.*)/;
+    $inline = $1;
+
+    defined($token) or $token = "";
+
+    if (($token =~ /^(\+\+\+)$/) ||
+	($token =~ /^(\_\_\_)$/) ||
+	($token =~ /^(\/\/\/)$/)) {
+	my $tag  = $1;
+	my $tmp;
+	my $text;
+
+	verbose("Found tag `" . $tag . "`\n");
+
+	while ($inline =~ /([^\s]+)(.*)/g) {
+	    $tmp    = $1;
+	    $inline = $2;
+
+	    $tmp eq $tag and last;
+
+	    if (defined($text)) {
+		$text = $text . " " . $1;
+	    } else {
+		$text = $1;
+	    }
+	}
+	defined($text) or $text = "";
+
+	if ($tmp ne $tag) {
+	    error("Missing closing tag (`" . $tag . "`)\n");
+	    return 0;
+	}
+	$text =~ s/^\s*//g;
+	$text =~ s/\s*$//g;
+	$text =~ s/\s+/\ /g;
+
+	($tag eq "+++") && ($tmp = "b");
+	($tag eq "___") && ($tmp = "u");
+	($tag eq "///") && ($tmp = "i");
+
+	if (defined($text_buffer)) {
+	    write_text($text_buffer . " ");
+	    undef($text_buffer);
+	}
+
+	if (!write_open_tag($tmp)) {
+	    error("Failed to open inline tag (`" . $tmp . "`)\n");
+	    return 0;
+	}
+
+	if (defined($text) && $text !~ /^\s*$/) {
+
+	    if (!parse_inline_level($text)) {
+		error("Failed to process inline level\n");
+		return 0;
+	    }
+	} else {
+	    write_text("");
+	}
+
+	if (!write_close_tag($tmp)) {
+	    error("Failed to close inline tag (`" . $tmp . "`)\n");
+	    return 0;
+	}
+	$text_buffer = " ";
+
+	if (defined($inline) && $inline !~ /^\s*$/) {
+
+	    if (!parse_inline_level($inline)) {
+		error("Failed to process inline level\n");
+		return 0;
+	    }
+	}
+    } elsif ($token =~ /^\[\[(url|email)\:([^\s]+)$/) {
+	my $tag    = $1;
+	my $source = $2;
+	my $tmp;
+	my $text;
+
+	debug("Found tag `" . $tag . "`\n");
+
+	while ($inline =~ /([^\s]+)(.*)/g) {
+	    $tmp    = $1;
+	    $inline = $2;
+
+	    $tmp eq "]]" and last;
+
+	    if (defined($text)) {
+		$text = $text . " " . $1;
+	    } else {
+		$text = $1;
+	    }
+	}
+	defined($text) or $text = "";
+
+	if ($tmp ne "]]") {
+	    error("Missing closing tag (`" . $tag . "`)\n");
+	    return 0;
+	}
+	
+	if (!defined($text) || $text =~ /^\s*$/) {
+	    $text = $source;
+	}
+	$text =~ s/^\s*//g;
+	$text =~ s/\s*$//g;
+	$text =~ s/\s+/\ /g;
+
+	if (defined($text_buffer)) {
+	    write_text($text_buffer . " ");
+	    undef($text_buffer);
+	}
+
+	if ($tag eq "email") {
+	    $source = "mailto:" . $source;
+	}
+
+	if (!write_open_tag("a")) {
+	    error("Failed to open anchor\n");
+	    return 0;
+	}
+
+	if (!write_tag_attribute("href", $source)) {
+	    error("Failed to add tag attribute\n");
+	    return 0;
+	}
+
+	if (!parse_inline_level($text)) {
+	    error("Failed to process inline level\n");
+	    return 0;
+	}
+
+	if (!write_close_tag("a")) {
+	    error("Failed to close anchor\n");
+	    return 0;
+	}
+	$text_buffer = " ";
+
+	if (defined($inline) && $inline !~ /^\s*$/) {
+	    
+	    if (!parse_inline_level($inline)) {
+		error("Failed to process inline level\n");
+		return 0;
+	    }
+	}
+    } elsif ($token =~ /^\(\(image\:([^\s]+)$/) {
+	my $source = $1;
+	my $tmp;
+	my $text;
+
+	debug("Found tag `image`\n");
+
+	while ($inline =~ /([^\s]+)(.*)/g) {
+	    $tmp    = $1;
+	    $inline = $2;
+
+	    $tmp eq "))" and last;
+
+	    if (defined($text)) {
+		$text = $text . " " . $1;
+	    } else {
+		$text = $1;
+	    }
+	}
+	defined($text) or $text = "";
+
+	if ($tmp ne "))") {
+	    error("Missing closing tag (`image`)\n");
+	    return 0;
+	}
+
+	if (!defined($text) || $text =~ /^\s*$/) {
+	    $text = $source;
+	}
+	$text =~ s/^\s*//g;
+	$text =~ s/\s*$//g;
+	$text =~ s/\s+/\ /g;
+
+	if (defined($text_buffer)) {
+	    write_text($text_buffer . " ");
+	    undef($text_buffer);
+	}
+
+	if (!write_open_tag("img")) {
+	    error("Failed to open image\n");
+	    return 0;
+	}
+
+	if (!write_tag_attribute("src", $source)) {
+	    error("Failed to add tag attribute\n");
+	    return 0;
+	}
+	
+	if (!write_tag_attribute("alt", $text)) {
+	    error("Failed to add tag attribute\n");
+	    return 0;
+	}
+
+	if (!write_close_tag("img")) {
+	    error("Failed to close image\n");
+	    return 0;
+	}
+	$text_buffer = " ";
+
+	if (defined($inline) && $inline !~ /^\s*$/) {
+
+	    if (!parse_inline_level($inline)) {
+		error("Failed to process inline level\n");
+		return 0;
+	    }
+	}
+    } elsif ($token =~ /^\{\{\{nowiki$/) {
+	my $tmp;
+	my $text;
+
+	debug("Found tag `nowiki`\n");
+
+	while ($inline =~ /([^\s]+)(.*)/g) {
+	    $tmp    = $1;
+	    $inline = $2;
+
+	    $tmp eq "}}}" and last;
+
+	    if (defined($text)) {
+		$text = $text . " " . $1;
+	    } else {
+		$text = $1;
+	    }
+	}
+
+	if ($tmp ne "}}}") {
+	    error("Missing closing tag (`span`)\n");
+	    return 0;
+	}
+	
+	if (defined($text)) {
+
+	    if (defined($text_buffer)) {
+		$text_buffer = $text_buffer . " " . $text;
+	    } else {
+		$text_buffer = $text;
+	    }
+	}
+
+	if (defined($inline) && $inline !~ /^\s*$/) {
+
+	    if (!parse_inline_level($inline)) {
+		error("Failed to process inline level\n");
+		return 0;
+	    }
+	}
+    } elsif ($token =~ /^\{\{span(\|([^\s]+)){0,1}$/) {
+	my $class = $2;
+	my $tmp;
+	my $text;
+
+	debug("Found tag `span`\n");
+
+	while ($inline =~ /([^\s]+)(.*)/g) {
+	    $tmp    = $1;
+	    $inline = $2;
+
+	    $tmp eq "}}" and last;
+
+	    if (defined($text)) {
+		$text = $text . " " . $1;
+	    } else {
+		$text = $1;
+	    }
+	}
+	defined($text) or $text = "";
+
+	if ($tmp ne "}}") {
+	    error("Missing closing tag (`span`)\n");
+	    return 0;
+	}
+	$text =~ s/^\s*//g;
+	$text =~ s/\s*$//g;
+	$text =~ s/\s+/\ /g;
+
+	if (defined($text_buffer)) {
+	    write_text($text_buffer . " ");
+	    undef($text_buffer);
+	}
+
+	if (!write_open_tag("span")) {
+	    error("Failed to inline container\n");
+	    return 0;
+	}
+	
+	if (defined($class) && 
+	    !write_tag_attribute("class", $class)) {
+	    error("Failed to add tag attribute\n");
+	    return 0;
+	}
+
+	if (!parse_inline_level($text)) {
+	    error("Failed to parse inline level\n");
+	    return 0;
+	}
+
+	if (!write_close_tag("span")) {
+	    error("Failed to close inline container\n");
+	    return 0;
+	}
+	$text_buffer = " ";
+
+	if (defined($inline) && $inline !~ /^\s*$/) {
+
+	    if (!parse_inline_level($inline)) {
+		error("Failed to process inline level\n");
+		return 0;
+	    }
+	}
+    } elsif ($token =~ /^\\\\\\$/) {
+
+	debug("Found tag `\\\`\n");
+
+	if (defined($text_buffer)) {
+	    write_text($text_buffer);
+	    undef($text_buffer);
+	}
+
+	if (!write_open_tag("br")) {
+	    error("Failed to open line breaking\n");
+	    return 0;
+	}
+
+	if (!write_close_tag("br")) {
+	    error("Failed to close line breaking\n");
+	    return 0;
+	}
+
+	if (defined($inline) && $inline !~ /^\s*$/) {
+
+	    if (!parse_inline_level($inline)) {
+		error("Failed to process inline level\n");
+		return 0;
+	    }
+	}
+    } else {
+
+	if (defined($text_buffer)) {
+	    $text_buffer = $text_buffer . " " . $token;
+	} else {
+	    $text_buffer = $token;
+	}
+
+	if ($inline !~ /^\s*$/) {
+
+	    if (!parse_inline_level($inline)) {
+		error("Failed to process inline level\n");
+		return 0;
+	    }
+	}
+    }    
+
+    if (defined($text_buffer)) {
+	write_text($text_buffer);
+	undef($text_buffer);
+    }
+    return 1;
+}
+
+sub process_heading($$) {
+    my $content = shift;
+    my $size    = shift;
+
+    assert($content);
+    assert($size);
+
+    verbose("Process heading\n");
+
+    debug("Heading content: `" . $content . "`\n");
+    debug("Heading size   : `" . $size    . "`\n");
+
+    if (!write_open_tag("h" . $size)) {
+	error("Failed to write open heading\n");
+	return 0;
+    }
+
+    if (!parse_inline_level($content)) {
+	error("Failed to parse inline level\n");
+	return 0;
+    }
+
+    if (!write_close_tag("h" . $size)) {
+	error("Failed to write close heading\n");
+	return 0;
+    }
+    return 1;
+}
+
+sub process_horizontal_rules() {
+
+    verbose("Process horizontal rules\n");
+
+    if (!write_open_tag("hr")) {
+	error("Failed to open horizontal rules\n");
+	return 0;
+    }
+
+    if (!write_close_tag("hr")) {
+	error("Failed to close horizontal rules\n");
+	return 0;
+    }
+    return 1;
+}
+
+sub process_paragraph($) {
+    my $content = shift;
+
+    assert($content);
+
+    verbose("Process paragraph\n");
+
+    debug("Paragraph content: `" . $content . "`\n");
+
+    if (!write_open_tag("p")) {
+	error("Failed to open paragraph\n");
+	return 0;
+    }
+
+    if (!parse_inline_level($content)) {
+	error("Failed to parse inline level\n");
+	return 0;
+    }
+
+    if (!write_close_tag("p")) {
+	error("Failed to close paragraph\n");
+	return 0;
+    }
+    return 1;
+}
+
+sub process_preformatted_text($) {
+    my $content = shift;
+
+    assert($content);
+
+    verbose("Process preformatted text\n");
+
+    debug("Preformatted text content: `" . $content . "`\n");
+
+    if (!write_open_tag("pre")) {
+	error("Failed to open preformatted text\n");
+	return 0;
+    }
+    $content =~ s/\\/\\\\/g; # Protection for SXML
+    $content =~ s/\"/\\\"/g; #
+
+    print OUTFILE " \"" . $content . "\"";
+
+    if (!write_close_tag("pre")) {
+	error("Failed to close preformatted text\n");
+	return 0;
+    }
+    return 1;
+}
+
+sub process_div($$) {
+    my $content = shift;
+    my $class = shift;
+
+    assert($content);
+
+    verbose("Process generic block container\n");
+
+    debug("Div content: `" . $content . "`\n");
+
+    if (!write_open_tag("div")) {
+	error("Failed to open preformatted text\n");
+	return 0;
+    }
+
+    if (defined($class) && $class !~ /^\s*$/) {
+
+	if (!write_tag_attribute("class", $class)) {
+	    error("Failed to add tag attribute\n");
+	    return 0;
+	}
+    }
+
+    if (!parse_block_level($content)) {
+	error("Failed to process block level\n");
+	return 0;
+    }
+
+    if (!write_close_tag("div")) {
+	error("Failed to close preformatted text\n");
+	return 0;
+    }
+    return 1;
+}
+
+sub write_open_list($) {
+    my $type = shift;
+
+    assert($type);
+
+    verbose("Open list item\n");
+
+    debug("Open item type: `" . $type . "`\n");
+
+
+    if ($type eq "*") {
+
+	if (!write_open_tag("ul")) {
+	    error("Failed to open unordered list\n");
+	    return 0;
+	}
+    } elsif ($type eq "#") {
+
+	if (!write_open_tag("ol")) {
+	    error("Failed to open ordered list\n");
+	    return 0;
+	}
+    } elsif (($type eq ";") || ($type eq ":")) {
+
+	if (!write_open_tag("dl")) {
+	    error("Failed to open definition list\n");
+	    return 0;
+	}
+    } else {
+	error("Wrong list type (`" . $type . "`) to open\n");
+	return 0;
+    }
+    return 1;
+}
+
+sub write_close_list($) {
+    my $type = shift;
+
+    assert($type);
+
+    verbose("Close list\n");
+
+    debug("List type: `" . $type . "`\n");
+
+
+    if ($type eq "*") {
+
+	if (!write_close_tag("ul")) {
+	    error("Failed to close unordered list\n");
+	    return 0;
+	}
+    } elsif ($type eq "#") {
+
+	if (!write_close_tag("ol")) {
+	    error("Failed to close ordered list\n");
+	    return 0;
+	}
+    } elsif (($type eq ";") || ($type eq ":")) {
+	
+	if (!write_close_tag("dl")) {
+	    error("Failed to close definition list\n");
+	    return 0;
+	}
+    } else {
+	error("Wrong list type (`" . $type . "`) to open\n");
+	return 0;
+    }
+    return 1;
+}
+
+sub write_open_list_item($) {
+    my $type = shift;
+
+    assert($type);
+
+    verbose("Open list item\n");
+
+    debug("List item type: `" . $type . "`\n");
+
+
+    if (($type eq "*") || ($type eq "#")) {
+
+	if (!write_open_tag("li")) {
+	    error("Failed to open ordered/unordered list item\n");
+	    return 0;
+	}
+    } elsif ($type eq ";") {
+
+	if (!write_open_tag("dt")) {
+	    error("Failed to open definition list term\n");
+	    return 0;
+	}
+    } elsif ($type eq ":") {
+
+	if (!write_open_tag("dd")) {
+	    error("Failed to open definition list definition\n");
+	    return 0;
+	}
+    } else {
+	error("Wrong list type (`" . $type . "`) to open item\n");
+	return 0;
+    }
+    return 1;
+}
+
+sub write_close_list_item($) {
+    my $type = shift;
+
+    assert($type);
+
+    verbose("Close list item\n");
+
+    debug("List item type: `" . $type . "`\n");
+
+    if (($type eq "*") || ($type eq "#")) {
+
+	if (!write_close_tag("li")) {
+	    error("Failed to close unordered/ordered list item\n");
+	    return 0;
+	}
+    } elsif ($type eq ";") {
+
+	if (!write_close_tag("dt")) {
+	    error("Failed to close definition list term\n");
+	    return 0;
+	}
+    } elsif ($type eq ":") {
+
+	if (!write_close_tag("dd")) {
+	    error("Failed to close definition list definition\n");
+	    return 0;
+	}
+    } else {
+	error("Wrong list type (`" . $type . "`) to close item\n");
+	return 0;
+    }
+    return 1;
+}
+
+sub process_list($) {
+    my $content = shift;
+    my @history;
+    my $text;
+
+    assert($content);
+
+    verbose("Process preformatted text\n");
+
+    debug("List content: `" . $content . "`\n");
+
+    while ($content =~ /([^\n]+)/g) {
+	my $line = $1;
+
+	$line =~ s/^\s*//;  #
+	$line =~ s/\s*$//;  # Clean up line
+	$line =~ s/\s+/\ /; #
+
+	if ($line =~ /^\s*([\*\#\;\:]+)\s+(.*)$/) {
+	    my $tmp          = $1;
+	    my $current_text = $2;
+	    my $count        = 0;
+	    my @current;
+
+	    if (defined($text)) {
+
+		if (!parse_inline_level($text)) {
+		    error("Failed to parse inline level\n");
+		    return 0;
+		}
+	    }
+	    defined($current_text) or $current_text = "";
+
+	    $text = $current_text;
+
+	    debug("Current list types: `" . $tmp          . "`\n");
+	    debug("Current list text: `"  . $current_text . "`\n");
+
+	    while ($tmp =~ /(.)/g) {
+
+		$current[$count] = $1;
+		$count++;
+	    }
+
+#
+# First list line; process it and go to the next cycle
+#
+	    if ($#history == -1) {
+
+		for my $i (0 .. $#current) {
+
+		    if (!write_open_list($current[$i])) {
+			error("Failed to open list\n");
+			return 0;
+		    }
+
+		    if (!write_open_list_item($current[$i])) {
+			error("Failed to open list item\n");
+			return 0;
+		    }
+		    $history[$i] = $current[$i];
+		}
+		next;
+	    }
+
+#
+# Checking list root type, it must be always the same, if we want 
+# another root type we could put such list on another block level 
+# element
+#
+	    if (($current[0] ne $history[0])                     &&
+		((($current[0] ne ";") && ($current[0] ne ":"))  && 
+		 (($history[0] ne ";") && ($history[0] ne ":")))) {
+		error("List root mismatched with previous\n");
+		return 0;
+	    }
+
+#
+# Here is how open and close list items and list
+#
+	    if ($#current > $#history) {
+		my $tmp;
+
+		for (my $i = 1; $i == $#history; $i++) {
+
+		    if ($current[$i] ne $history[$i]) {
+			$tmp = $i;
+			last;
+		    }
+		}
+
+		if (!defined($tmp)) {
+
+		    for (my $i = ($#history + 1); $i <= $#current; $i++) {
+
+			if (!write_open_list($current[$i])) {
+			    error("Failed to ope list\n");
+			    return 0;
+			}
+			
+			if (!write_open_list_item($current[$i])) {
+			    error("Failed to open list item\n");
+			    return 0;
+			}
+		    }
+		} else {
+
+		    for (my $i = $#history; $i >= $tmp; $i--) {
+
+			if (!write_close_list_item($history[$i])) {
+			    error("Failed to close list item\n");
+			    return 0;
+			}
+
+			if (!write_close_list($history[$i])) {
+			    error("Failed to close list\n");
+			    return 0;
+			}
+		    }
+
+		    for (my $i = $tmp; $i <= $#current; $i++) {
+
+			if (!write_open_list($current[$i])) {
+			    error("Failed to open list\n");
+			    return 0;
+			}
+
+			if (!write_open_list_item($current[$i])) {
+			    error("Failed to open list item\n");
+			    return 0;
+			}
+		    }
+		}
+	    } elsif ($#current < $#history) {
+		my $tmp;
+
+		for (my $i = 1; $i <= $#current; $i++) {
+
+		    if ($current[$i] ne $history[$i]) {
+			$tmp = $i;
+			last;
+		    }
+		}
+
+		if (!defined($tmp)) {
+		    
+		    for (my $i = $#history; $i >= 1; $i--) {
+			
+			if (!write_close_list_item($history[$i])) {
+			    error("Failed to close list item\n");
+			    return 0;
+			}
+			
+			if (!write_close_list($history[$i])) {
+			    error("Failed to close list\n");
+			    return 0;
+			}
+		    }
+
+		    if (!write_close_list_item($history[0])) {
+			error("Failed to close list item\n");
+			return 0;
+		    }
+
+		    if (!write_open_list_item($history[0])) {
+			error("Failed to open list item\n");
+			return 0;
+		    }
+		} else {
+
+		    for (my $i = $#history; $i >= $tmp; $i--) {
+
+			if (!write_close_list_item($history[$i])) {
+			    error("Failed to close list item\n");
+			    return 0;
+			}
+			
+			if (!write_close_list($history[$i])) {
+			    error("Failed to close list\n");
+			    return 0;
+			}
+		    }
+
+		    if (!write_close_list_item($history[($tmp - 1)])) {
+			error("Failed to close list item\n");
+			return 0;
+		    }
+
+		    if (!write_open_list_item($history[($tmp - 1)])) {
+			error("Failed to open list item\n");
+			return 0;
+		    }
+
+		    for (my $i = $tmp; $i <= $#current; $i++) {
+
+			if (!write_open_list($current[$i])) {
+			    error("Failed to open list\n");
+			    return 0;
+			}
+
+			if (!write_open_list_item($current[$i])) {
+			    error("Failed to open list item\n");
+			    return 0;
+			}
+		    }
+		}
+	    } else {
+		my $tmp;
+
+		for (my $i = 1; $i <= $#current; $i++) {
+
+		    if ($current[$i] ne $history[$i]) {
+			$tmp = $i;
+			last;
+		    }
+		}
+
+		if (!defined($tmp)) {
+
+		    if (!write_close_list_item($history[$#history])) {
+			error("Failed to open list\n");
+			    return 0;
+		    }
+		    
+		    if (!write_open_list_item($current[$#current])) {
+			error("Failed to open list item\n");
+			return 0;
+		    }
+		} else {
+
+		    for (my $i = $#history; $i >= $tmp; $i--) {
+
+			if (!write_close_list_item($history[$i])) {
+			    error("Failed to close list item\n");
+			    return 0;
+			}
+			
+			if (!write_close_list($history[$i])) {
+			    error("Failed to close list\n");
+			    return 0;
+			}
+		    }
+
+		    if (!write_close_list_item($history[$tmp])) {
+			error("Failed to open list\n");
+			    return 0;
+		    }
+		    
+		    if (!write_open_list_item($current[$tmp])) {
+			error("Failed to open list item\n");
+			return 0;
+		    }
+
+		    for (my $i = $tmp; $i <= $#current; $i++) {
+
+			if (!write_open_list($current[$i])) {
+			    error("Failed to open list\n");
+			    return 0;
+			}
+			
+			if (!write_open_list_item($current[$i])) {
+			    error("Failed to open list item\n");
+			    return 0;
+			}
+		    }
+		}
+	    }
+	    @history = @current;
+	} else {
+
+	    if (defined($text)) {
+		$text = $text . " " . $line;
+	    } else {
+		$text = $line;
+	    }
+	}
+    }	
+
+#
+# Output remaining text and close remaining list items and 
+# lists
+#
+    if (defined($text)) {
+
+	if (!parse_inline_level($text)) {
+	    error("Failed to parse inline level\n");
+	    return 0;
+	}
+    }
+
+    for (my $i = $#history; $i >= 0; $i--) {
+
+	if (!write_close_list_item($history[$i])) {
+	    error("Failed to close list item\n");
+	    return 0;
+	}
+	
+	if (!write_close_list($history[$i])) {
+	    error("Failed to close list\n");
+	    return 0;
+	}
+    }
+    return 1;
+}
+
+#
+# Parsing each block to meet the right block level elements.
+# The default is paragraph
+#
+
+sub parse_block_level($) {
+    my $block = shift;
+
+    assert($block);
+
+    verbose("Parse block level elements\n");
+
+    debug("Block value: `" . $block . "`\n");
+    
+    if ($block =~ /^\s*[\*\#\;\:]+\s+/) {
+	verbose("Found list\n");
+
+	if (!process_list($block)) {
+	    error("Failed to process list\n");
+	    return 0;
+	}
+    } elsif ($block =~ /^\s*\{\{div(\|([^\s]+)){0,1}\}\}\s*/) {
+
+	verbose("Found generic block container\n");
+
+	my $class = $2;
+	$block    =~ s/^(.*)\n//;
+
+	(defined($class)) or $class = "";
+
+	if (!process_div($block, $class)) {
+	    error("Failed to process generic block container\n");
+	    return 0;
+	}
+    } elsif ($block =~ /^\s*\-\-\-\s*$/) {
+
+	verbose("Found horizontal rule\n");
+
+	if (!process_horizontal_rules()) {
+	    error("Failed to process horizontal rules\n");
+	    return 0;
+	}
+    } elsif (($block =~ /^\s*(={2,6})\s+(.*)\s+(={2,6})\s*$/) &&
+	     ((length($1) == length($3)))) {
+
+	verbose("Found heading\n");
+
+	if (!process_heading($2, (length($1) - 1))) {
+	    error("Failed to process heading\n");
+	    return 0;
+	}
+    } else {
+
+	verbose("Found paragraph\n");
+
+	if (!process_paragraph($block)) {
+	    error("Failed to process paragraph\n");
+	    return 0;
+	}
+    }
+    return 1;
+}
+
+#
+# First processing: buffering all lines until an empty one is found. The 
+# only exception is represent when a line contains '[[pre]]' tag, in this 
+# case all lines until the next contains '[[pre]]' will be buffered; this 
+# is for preserving empty lines in preformatted text.
+#
+
+sub process_infile() {
+    my $input_buffer;
+    my $pre = 0;
+
+    verbose("Process input file\n");
+
+    debug("Write SXML open tag\n");
+    print OUTFILE "(";
+
+    while (<INFILE>) {
+	my $tmp = $_;
+
+	if ($tmp =~ /^(\{\{pre\}\}\s*\n)/) {
+
+	    if ($pre) {
+
+		if (defined($input_buffer)) {
+
+		    if (!process_preformatted_text($input_buffer)) {
+			error("Failed to process preformatted text\n");
+			return 0;
+		    }
+		    undef($input_buffer);
+		}
+		$pre = 0;
+		next;
+	    } else {
+		verbose("Found preformatted text\n");
+
+		$pre = 1;
+
+		next;
+	    }
+	}
+
+	if ($tmp =~ /^\s*$/) {
+
+	    if ($pre) {
+
+		if (defined($input_buffer)) {
+		    $input_buffer = $input_buffer . $tmp;
+		} else {
+		    $input_buffer = $tmp;
+		}
+	    } else {
+
+		if (defined($input_buffer)) {
+
+		    if (!parse_block_level($input_buffer)) {
+			error("Failed to parse block level\n");
+			return 0;
+		    }
+		    undef($input_buffer);
+		}
+	    }
+	} else {
+
+	    if (defined($input_buffer)) {
+		$input_buffer = $input_buffer . $tmp;
+	    } else {
+		$input_buffer = $tmp;
+	    }
+	}
+    }
+    
+    if (defined($input_buffer)) {
+
+	if (!parse_block_level($input_buffer)) {
+	    error("Failed to parse block level\n");
+	    return 0;
+	}
+	undef($input_buffer);
+    }
+
+    debug("Check if all tags are closed\n");
+
+    if ($#tags_stack != -1) {
+	error("Missing closing tags (" . 
+	      $tags_stack[$#tags_stack] . ")\n");
+	return 0;
+    }
+
+    debug("Close SXML open tag\n");
+    print OUTFILE ")\n";
+    return 1;
+}
+
+#
+# Script finalization, close input and output files handles
+#
+
+sub dispose () {
+    verbose("Finalization\n");
+
+    close(OUTFILE);
+    close(INFILE);
+    return 1;
+}
+
+#
+# Script initialization, set default variables, open input file 
+# for read and output file for write
+#
+
+sub init($$) {
+    my $infile  = shift;
+    my $outfile = shift;
+
+    $VERBOSE            = 0;
+    $DEBUG              = 0;
+    $tag_has_attributes = 0;
+
+    verbose("Initialization\n");
+
+    if (!defined($infile)) {
+	error("Missing input file\n");
+	return 0;
+    }
+
+    if (!defined($outfile)) {
+	error("Missing output file\n");
+	return 0;
+    }
+    debug("Input file: `" . $infile . "`\n");
+    debug("Output file: `" . $outfile . "`\n");
+
+    if (!open(INFILE, "<", $infile)) { 
+	error("Failed to open file `" . $infile . 
+	      "` for read\n");
+	return 0;
+    }
+
+    if (!open(OUTFILE, ">", $outfile)) { 
+	error("Failed to open file `" . $outfile . 
+	      "` for write\n");
+	return 0;
+    }
+    return 1;
+}
+
+#
+# Main
+#
+
+if (!init($ARGV[0], $ARGV[1])) {
+    error("Failed initialization\n");
+    dispose();
+    exit 1;
+}
+
+if (!process_infile()) {
+    error("Failed to process file `" . $ARGV[0] . "`\n"); 
+    dispose();
+    exit 1;
+}
+dispose();
+
+exit 0;

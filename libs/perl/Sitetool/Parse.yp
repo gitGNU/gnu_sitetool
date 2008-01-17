@@ -1,0 +1,316 @@
+%{
+#
+# Parse.pm
+#
+# (C) 2007 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#          Alessandro Massignan <ff0000.it@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+use 5.8.0;
+
+use warnings;
+use strict;
+use diagnostics;
+
+use Sitetool::Autoconfig;
+use Sitetool::Base::Trace;
+use Sitetool::Base::Debug;
+use Sitetool::OS::Shell;
+use Sitetool::OS::File;
+use Sitetool::OS::Filename;
+
+BEGIN {
+    use Exporter ();
+    our ($VERSION, @ISA, @EXPORT);
+    
+    @ISA    = qw(Exporter);
+    @EXPORT = qw(&parse);
+}
+
+my $parsed_string   = "";
+my $indentation     = "";
+my $container_start = 0;
+my $container_type  = "GROUP";
+my $output_handler  = "";
+my $line_number     = 1;
+my $o_curly         = '{';
+my $c_curly         = '}';
+
+
+%}
+
+%start syntax
+
+%%
+
+syntax:
+      | main_groups
+      ;
+
+main_groups: main_group
+           | main_group main_groups
+           ;
+
+main_group: LABEL '=' '{' {
+
+    $_[1] =~ y/[a-z]/[A-Z]/; 
+
+    $parsed_string .= $indentation . 
+	              "\'"         . 
+		      $_[1]        . 
+		      "\' => "     .
+		      $o_curly     .
+		      "\n";
+
+    $indentation .= "\t";
+
+} main_group_items '}' ';' {
+
+    $indentation =~ s/.//;
+
+    $parsed_string .= $c_curly . ",\n";
+
+}
+;
+
+main_group_items: main_group_item
+                | main_group_item main_group_items
+                ;
+
+main_group_item: sub_variable
+               | sub_group
+               | sub_indexed
+               ;
+
+sub_variable: LABEL '=' STRING ';' {
+
+    if ($container_start == 1) {
+	$container_start = 0;
+	$container_type  = 'GROUP';
+
+	$parsed_string .= $o_curly . "\n";
+    }
+
+    $_[1] =~ y/[a-z]/[A-Z]/;
+    $_[1] =~ s/^VAR\-//;
+
+    $parsed_string .= $indentation .
+ 	              "\'"         .
+		      $_[1]        .
+		      "\' => \""   .
+		      $_[3]        .
+		      "\",\n";
+
+}
+;
+
+sub_group: LABEL '=' '{' sub_group_id sub_group_items '}' ';' {
+
+    $indentation =~ s/.//;
+
+    $parsed_string .= $indentation . $c_curly . ",\n";
+
+}
+;
+
+sub_group_id: 'id' '=' STRING ';' {
+
+    $parsed_string .= $indentation .
+	              "\'"         .
+		      $_[3]        .
+		      "\' => "     .
+		      $o_curly     .
+		      "\n";
+
+    $indentation .= "\t";
+
+};
+
+sub_group_items: sub_group_item
+               | sub_group_item sub_group_items
+               ; 
+
+sub_group_item: sub_variable
+              | sub_container
+              ;
+
+sub_container: LABEL '=' '{' {
+
+    $_[1] =~ y/[a-z]/[A-Z]/; 
+
+    $parsed_string .= $indentation . "\'" . $_[1] . "\' => ";
+
+    $container_start = 1;
+
+    $indentation .= "\t";
+ 
+} sub_container_items '}' ';' {
+
+    $indentation =~ s/.//;
+
+    if ($container_type eq 'GROUP') {
+	$parsed_string .= $indentation . $c_curly . ",\n";
+    } else {
+	$parsed_string .= $indentation . "],\n";
+    }
+
+}
+;
+
+sub_container_items: sub_indexed_items
+                   | sub_group_items
+                   ;
+
+sub_indexed_items: sub_indexed_item
+                 | sub_indexed_item sub_indexed_items
+                 ;
+
+sub_indexed_item: LABEL '[' DECIMAL ']' '=' '{' {
+
+    if ($container_start == 1) {
+	$container_start = 0;
+	$container_type  = 'INDEXED';
+
+	$parsed_string .= "[\n";
+
+    }
+    $parsed_string .= $indentation . $o_curly . "\n";
+
+    $indentation .= "\t";
+
+} sub_group_items '}' ';' {
+
+    $indentation =~ s/.//;
+
+    $parsed_string .= $indentation . $c_curly . ",\n";
+
+}
+;
+
+%%
+
+sub lexer_callback {
+    my $parser = shift;
+    
+    assert(defined($parser));
+
+    # Remove useless whites
+    $parser->YYData->{INPUT} =~ s/^\s+//;
+    $parser->YYData->{INPUT} =~ s/\s+$//;
+
+    # Remove autogen initial proclamation
+    if ($line_number == 1) {
+	$parser->YYData->{INPUT} =~ s/autogen\s+definitions[^\n]+\;[\t ]*\n//;
+	$line_number = 0;
+    } 
+
+    if (!defined($parser->YYData->{INPUT})) {
+	return ('', undef);
+    }
+
+    if ($parser->YYData->{INPUT} eq "") {
+	return ('', undef);
+    }
+
+    for ($parser->YYData->{INPUT}) {
+	s/^\s*//;
+
+	# Remove comments
+	s/\/\/.*\n//;
+
+	if ($_ =~ s/^id//) {
+	    return ("id", "id");
+	} elsif ($_ =~ s/^([a-zA-Z][a-zA-Z0-9_\-]*)//) {
+	    return ("LABEL", $1);
+	} elsif ($_ =~ s/^([0-9]+)//) {
+	    return ("DECIMAL", $1);
+	} elsif ($_ =~ s/^\"(.*)\"//) {
+	    return ("STRING", $1);
+	} elsif ($_ =~ s/^([\{\}\[\]\;\=])//) {
+	    return ($1, $1);
+	} elsif ($_ =~ s/^(.)//) {
+	    return ($1, $1);
+	} else {
+	    bug("Undefined lexer input `"              . 
+		substr($parser->YYData->{INPUT}, 0, 1) .
+		"\'");
+	}
+    }
+    bug("Unreacheable lexer code");
+}
+
+sub syntax_error {
+    my $message = shift;
+    my $lineno  = shift;
+
+    assert(defined($message));
+    assert(defined($lineno));
+
+    error("Syntax error at line " . $lineno . ": " . $message);
+    exit 1;
+}
+
+sub error_callback {
+    my $parser = shift;
+
+    assert(defined($parser));
+
+    my $value = $parser->YYCurtok;
+    assert(defined($value));
+
+    error("Unexpected \`" . $value . "'");
+}
+
+sub parse ($$)
+{
+    my $input_filename = shift;
+    my $string_ref     = shift;
+
+    debug("Parsing file \`" . $input_filename . "'");
+
+    if (!file_ispresent($input_filename)) {
+	error("Input file \`" . $input_filename . "' is missing");
+	return 0;
+    }
+
+    my $string = "";
+    if (!file_tostring($input_filename, \$string)) {
+	return 0;
+    }
+
+    # Parse !
+    my $parser;
+    $parser = Sitetool::Parse->new();
+    assert(defined($parser));
+
+    $parser->YYData->{INPUT} = $string;
+
+    my $result;
+    $result = $parser->YYParse(yylex   => \&lexer_callback,
+			       yyerror => \&error_callback);
+    
+    if ($parser->YYNberr() > 0) {
+	error("Cannot parse input file \`" . $input_filename . "'");
+	return 0;
+    }
+    
+    debug("Parsing completed successfully");
+
+    ${$string_ref} = $parsed_string;
+    
+    return 1;
+}

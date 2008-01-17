@@ -1,0 +1,375 @@
+#! @PERL@
+
+#
+# sitetool
+#
+# (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
+    if 0;
+
+use File::Spec;
+
+BEGIN
+{
+    # Retrieve our perl libraries path
+    my $perllibdir;
+
+    $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
+	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+
+    unshift(@INC, map(File::Spec->catfile($_, "perl"),
+		      (split '@PATH_SEPARATOR@', $perllibdir)));
+    
+    # Override SHELL.  This is required on DJGPP so that system() uses
+    # bash, not COMMAND.COM which doesn't quote arguments properly.
+    # Other systems aren't expected to use $SHELL when Automake
+    # runs, but it should be safe to drop the `if DJGPP' guard if
+    # it turns up other systems need the same thing.  After all,
+    # if SHELL is used, ./configure's SHELL is always better than
+    # the user's SHELL (which may be something like tcsh).
+    $ENV{'SHELL'} = '@SHELL@' if exists $ENV{'DJGPP'};
+}
+
+#
+# Misc
+#
+
+use strict;
+use warnings;
+use diagnostics;
+
+use File::Path;
+
+use Sitetool::Autoconfig;
+use Sitetool::Base::Trace;
+use Sitetool::Base::Debug;
+use Sitetool::Base::Program;
+use Sitetool::Configuration;
+use Sitetool::OS::File;
+use Sitetool::OS::Filename;
+use Sitetool::OS::Shell;
+
+#
+# Globals
+#
+
+our $PROGRAM_NAME = "sitetool";
+
+# XXX FIXME: To be removed ASAP
+my $work_dir           = File::Spec->catdir(File::Spec->curdir(),
+					    "." . $PROGRAM_NAME,
+					    "site.wrk");
+# XXX FIXME: To be removed ASAP
+my $output_dir         = File::Spec->catdir(File::Spec->curdir(),
+					    "." . $PROGRAM_NAME,
+					    "site.out");
+
+my $input_file         = File::Spec->catfile(File::Spec->curdir(), "site.as");
+my $configuration_file = File::Spec->catfile($work_dir,            "site.cfg");
+
+my %tools = (
+    "initialize" => {
+	HANDLER        => "sitetool-initialize",
+	DESCRIPTION    => "initialize",
+	FLAGS          => "-D $input_file -c $configuration_file -w $work_dir -o $output_dir",
+	PRE_REQUISITE  => [ ],
+	POST_REQUISITE => [ ],
+    },
+    "build" => {
+	HANDLER        => "sitetool-build",
+	DESCRIPTION    => "build site",
+	FLAGS          => "-c $configuration_file -w $work_dir -o $output_dir",
+	PRE_REQUISITE  => [ "initialize" ],
+	POST_REQUISITE => [ ],
+    },
+    "check" => {
+	HANDLER        => "sitetool-check",
+	DESCRIPTION    => "check links in a previously built site",
+	FLAGS          => "-c $configuration_file -o $output_dir",
+	PRE_REQUISITE  => [ "initialize",
+			    "build" ],
+	POST_REQUISITE => [ ],
+    },
+    "validate" => {
+	HANDLER        => "sitetool-validate",
+	DESCRIPTION    => "validate previously built site",
+	FLAGS          => "-c $configuration_file -o $output_dir",
+	PRE_REQUISITE  => [ "initialize",
+			    "build" ],
+	POST_REQUISITE => [ ],
+    },
+    "digest" => {
+	HANDLER        => "sitetool-digest",
+	DESCRIPTION    => "compute digest for each previously built page",
+	FLAGS          => "-c $configuration_file -o $output_dir",
+	PRE_REQUISITE  => [ "initialize",
+			    "build" ],
+	POST_REQUISITE => [ ],
+    },
+    "install" => {
+	HANDLER        => "sitetool-install",
+	DESCRIPTION    => "install previously built site",
+	FLAGS          => "-c $configuration_file",
+	PRE_REQUISITE  => [ "initialize",
+			    "build",
+			    "validate",
+			    "check" ],
+	POST_REQUISITE => [ ],
+    },
+    "clean" => {
+	HANDLER        => "sitetool-clean",
+	DESCRIPTION    => "remove built files",
+	FLAGS          => "-c $configuration_file -o $output_dir -w $work_dir",
+	PRE_REQUISITE  => [ "initialize" ],
+	POST_REQUISITE => [ ],
+    },
+    "uninstall" => {
+	HANDLER        => "sitetool-uninstall",
+	DESCRIPTION    => "uninstall site from remote host",
+	FLAGS          => "-c $configuration_file",
+	PRE_REQUISITE  => [ "initialize" ],
+	POST_REQUISITE => [ ],
+    },
+    );
+
+#
+# Utilities
+#
+
+sub help ()
+{
+    print "Usage: $PROGRAM_NAME [COMMON-OPTIONS] -- [SPECIFIC-OPTIONS]\n";
+    print "\n";
+    print "Common options:";
+    print "\n";
+
+    for my $tool (keys(%tools)) {
+	assert(defined($tools{$tool}{DESCRIPTION}));
+
+	printf("      --%-11s           %-s\n",
+	       $tool,
+	       $tools{$tool}{DESCRIPTION});
+    }
+
+    print "  -f, --force                 consider all files obsolete\n";
+    print "  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY\n";
+    print "  -d, --debug                 enable debugging mode\n";
+    print "  -v, --verbose               enable verbose mode\n";
+    print "  -h, --help                  print this help, then exit\n";
+    print "  -V, --version               print version number, then exit\n";
+    print "\n";
+
+    for my $tool (keys(%tools)) {
+	my $option;
+	my $string;
+
+	$option = "--" . $tool;
+	print "Flags for $option mode:\n";
+	$string =
+	    File::Spec->catfile($bin_dir, $tools{$tool}{HANDLER}) .
+	    " --brief-help";
+	if (!shell_execute($string)) {
+	    return 0;
+	}
+	print "\n";
+    }
+
+    print "Warning categories include:\n";
+    print "  \`all'           all the warnings\n";
+    print "  \`none'          turn off all the warnings\n";
+    print "\n";
+    print "Report bugs to <$PACKAGE_BUGREPORT>\n";
+
+    return 1;
+}
+
+#
+# Main
+#
+
+trace_prefix_set($PROGRAM_NAME);
+
+my $running_mode  = undef;
+my $force_mode    = 0;
+my @options_slack;
+
+debug_set(0);
+verbose_set(0);
+warning_set("none");
+
+# Parse options
+my $i = 0;
+while ($i <= $#ARGV) {
+    debug("ARGV[$i] = \`" . $ARGV[$i] . "'");
+
+    if (($ARGV[$i] =~ /^\-f$/)      || ($ARGV[$i] =~ /^\-\-force$/)) {
+	$force_mode = 1;
+    } elsif (($ARGV[$i] =~ /^\-h$/) || ($ARGV[$i] =~ /^\-\-help$/)) {
+	help();
+	exit 0;
+    } elsif (($ARGV[$i] =~ /^\-W$/) || ($ARGV[$i] =~ /^\-\-warnings$/)) {
+	$i++;
+	if (!defined($ARGV[$i])) {
+	  hint("Missing warning level");
+	  exit 1;
+	}
+	warning_set($ARGV[$i]);
+    } elsif (($ARGV[$i] =~ /^\-d$/) || ($ARGV[$i] =~ /^\-\-debug$/)) {
+	debug_set(1);
+    } elsif (($ARGV[$i] =~ /^\-v$/) || ($ARGV[$i] =~ /^\-\-verbose$/)) {
+	verbose_set(1);
+    } elsif (($ARGV[$i] =~ /^\-V$/) || ($ARGV[$i] =~ /^\-\-version$/)) {
+	version();
+	exit 0;
+    } elsif ($ARGV[$i] =~ /^\-\-$/) {
+	$i++;
+	last;
+    } else {
+	#
+	# Tools handling
+	#
+	for my $tool (keys(%tools)) {
+	    debug("Tool = \`" . $tool . "'");
+	    if ($ARGV[$i] =~ /^\-\-$tool$/) {
+		debug("Got it !");
+		if (defined($running_mode)) {
+		    hint("Too many running modes");
+		    exit 1;
+		}
+		$running_mode = $tool;
+		last;
+	    }
+	}
+	
+	if (!defined($running_mode)) {
+	    error("Unknown option \`" . $ARGV[$i] . "'");
+	    exit 1;
+	}
+    }
+
+    $i++;
+}
+
+debug("Running \`" . $PACKAGE_NAME . "' version \`" . $PACKAGE_VERSION . "'");
+
+@options_slack = @ARGV[$i .. $#ARGV];
+debug("Options slack is \`@options_slack'");
+
+if ($input_file eq "") {
+    hint("Missing input file");
+    exit 1;
+}
+if (!file_ispresent($input_file)) {
+    error("Cannot find \`$input_file'");
+    exit 1;
+}
+if (!defined($running_mode)) {
+    hint("Missing running mode");
+    exit 1;
+}
+debug("Running mode is \`$running_mode'");
+
+#
+# Setup flags (used later on)
+#
+{
+    debug("Handling flags");
+
+    my $flags = "";
+
+    if (verbose_get() != 0) {
+	$flags = "-v $flags";
+    }
+    if (debug_get() != 0) {
+	$flags = "-d $flags";
+    }
+    if ($force_mode != 0) {
+	$flags = "$flags -f";
+    }
+    $flags = "-W " . warning_get() . " " . $flags;
+
+    debug("Inherited flags are \`" . $flags . "'");
+
+    debug("Changing per-tool flags:");
+    for my $tool (keys(%tools)) {
+	debug("Tool "                          .
+	      "\`" . $tool . "'"               .
+	      "flags are "                     .
+	      "\`" . $tools{$tool}{FLAGS} . "'");
+
+	assert(defined($tools{$tool}{FLAGS}));
+	$tools{$tool}{FLAGS} = $flags . " " . $tools{$tool}{FLAGS};
+	
+	debug("Modified flags  for tool "      .
+	      "\`" . $tool . "'"               .
+	      "are "                           .
+	      "\`" . $tools{$tool}{FLAGS} . "'");
+    }
+}
+
+#
+# Start the real work
+#
+
+my @tools_chain;
+
+# Pre-requisites first
+for my $tool (@{$tools{$running_mode}{PRE_REQUISITE}}) {
+    assert(defined($tool));
+    push(@tools_chain, $tool);
+}
+
+# The requiested tool
+push(@tools_chain, $running_mode);
+
+# Post-requisites last
+for my $tool (@{$tools{$running_mode}{POST_REQUISITE}}) {
+    assert(defined($tool));
+    push(@tools_chain, $tool);
+}
+
+debug("Tools chain is \`@tools_chain'");
+assert($#tools_chain >= 0);
+
+for my $tool (@tools_chain) {
+    verbose("Running \`" . $tool . "'");
+
+    my $handler;
+    my $flags;
+
+    $handler = $tools{$tool}{HANDLER};
+    debug("Handler is `$handler'");
+    assert(defined($handler));
+    
+    $flags = $tools{$tool}{FLAGS};
+    debug("Flags are `$flags'");
+    assert(defined($flags));
+    
+    my $string;
+    
+    $string =
+	File::Spec->catfile($bin_dir, $handler) . " " .
+	"$flags @options_slack";
+    
+    if (!shell_execute($string)) {
+	exit 1;
+    }
+}
+
+exit 0;

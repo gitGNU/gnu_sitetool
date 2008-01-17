@@ -1,0 +1,490 @@
+2007-10-01 Alessandro Massignan <ff0000.it@gmail.com>
+
+	* ChangeLog: Fixed to match GNU conding standards.
+	
+	* src/filters/wikitext-sxml.in (parse_inline_buffer): Fixed buffer 
+	handling. (write_text): Fixed text substitutions.
+
+	* src/filters/changelog-wikitext.in: Added initial code.
+
+	* test/simple/changelog.page: symlinked to ChangeLog.
+
+	* test/simple/site.as: Added test/simple/changelog.page
+	processing.
+	
+2007-09-30 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/sitemap.in: Fixed.
+
+	* src/filterchain.in: Updated.
+
+	* src/pagemap.in: Added directory level computation.
+
+2007-09-28 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/filterchain.in: Transformed from shell to perl.
+
+2007-09-28 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Added File::Spec usage. 
+	(file_extension): Rearranged.
+
+2007-09-28 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/pagemap.in: Added level in recursion.
+
+2007-09-26 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/pagemap.in, src/sitemap.in: Fixed.
+	
+	* src/pagemap.in: Fixed pagemap retrieval.
+
+	* src/sitemap.in: Added directory levels.
+
+2007-09-26 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/pa22gemap.in, src/sitemap.in (hint): Fixed.
+
+	* src/pagemap.in: 
+
+2007-09-26 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Removed duplicated messages. Fixed flags. Decoupled
+	file names from descriptions.
+
+	* src/autosite.in, src/pagemap.in, src/sitemap.in: Rearranged option
+	handling.
+
+	* test/simple/site.as: Updated.
+
+2007-09-26 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Rearranged. Completed perl conversion.
+
+2007-09-26 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Lot of code on perl side.
+
+	* src/sitemap.in: Updated in order to read new configuration file.
+
+2007-09-26 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/pagemap.in, src/sitemap.in: Fixed.
+
+	* src/autosite.in: Translated to perl.
+
+2007-09-26 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/pagemap.in, src/sitemap.in: Fixed.
+
+2007-09-24 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* attic: Cleaned-up.
+
+	* src/autosite.in: Fixed CSS building. Fixed content filtering.
+
+2007-09-24 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Added explicit template specification. Fixed CSS
+	paths. Added page-vars generation. 
+
+	* libs/autogen/page-vars.tpl: Added.
+
+	* libs/autogen/Makefile.am: Fixed.
+
+2007-09-24 Alessandro Massignan <ff0000.it@gmail.com>
+
+	* src/filters/wikitext-sxml.in, test/simple/index.page: Updated and
+	fixed.
+
+2007-09-24 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/pagemap.in: Removed div production (left to layout.scm).
+
+	* test/simple/layout.sxml, test/simple/header.sxml, 
+	test/simple/footer.sxml, src/sxml2scm.in, src/pagemap.in: Updated.
+
+2007-09-24 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* test/simple: Rearranged.
+
+2007-09-24 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/pagemap.in: Fixed pagemap generation related
+	code.
+
+2007-09-24 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* test/simple/site.as: Updated.
+
+	* src/pagemap.in: Added page description.
+
+	* src/sitemap.in: Fixed in order to compose page-map with other
+	sources.
+
+2007-09-23 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/sitemap.in, src/autosite.in: Fixed.
+
+	* src/sitemap.in (node_update_infos): Fixed.
+
+	* src/autosite.in: Added touched files removal procedure (touched files
+	are used by sitemap).
+
+2007-09-22 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/sitemap.in: Added descriptions to sitemap.
+
+	* src/pagemap.in: Added node lookup.
+
+	* test/simple/site.as: Updated.
+
+2007-09-21 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Added autogen integration.
+
+	* libs/scheme: Created.
+
+	* libs/guile-lib-0.1.5, libs/guile-lib, libs/site: Moved to
+	libs/scheme directory.
+	
+	* libs/autogen: Added.
+
+	* configure.ac: Added autogen related checks. Added newly introduced
+	directories to AC_CONFIG_FILES macro.
+
+	* src/sitemap.in: Removed default files.
+
+	* src/autosite.in: Integrated with autogen.
+
+	* test/simple/site.as: Renamed as test/simple/site.def.
+
+2007-09-21 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* TODO: Updated.
+
+	* test/simple/site.as: Updated.
+
+	* test/simple/index.page: Updated.
+
+	* src/autosite.in: Fixed.
+
+2007-09-21 Alessandro Massignan <ff0000.it@gmail.com>
+
+	* src/filters/wikitext-sxml.in: Added initial code.
+
+	* TODO: Updated
+
+2007-09-21 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/sitemap.in: Fixed typo.
+
+	* src/pagemap.in: Fixed node searching.
+
+2007-09-20 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Fixed.
+
+	* src/sitemap.in: Fixed and updated in order to use Data::Dumper.
+
+	* src/sitemap.in, src/autosite.in: Fixed regexps.
+
+2007-09-20 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/sitemap.in: Renamed sitemap file name from
+	site.map to sitemap.scm.
+
+	* src/autosite.in: Fixed flags parsing.
+
+2007-09-20 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Fixed. Introduced pagemap_flags variable.
+
+	* src/sitemap.in: Fixed output and tree construction related code.
+
+2007-09-20 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* test/simple/site.map: Removed.
+
+	* src/autosite.in: Fixed sitemap invocation.
+
+	* src/sitemap.in: Removed map and description files related code. Fixed
+	tree building and output production related code.
+
+2007-09-19 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* attic: Updated.
+
+	* src/sitemap.in: Updated.
+
+2007-09-18 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* ChangeLog: Fixed a typo.
+
+	* src/sitemap.in: Fixed output.
+
+2007-09-18 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/sitemap.in: Added --site/-s and --map/-m options. Replaced
+	input_file variable with description_file. Introduced map_file
+	variable.
+
+	* src/autosite.in: Updated.
+
+	* test/simple/site.map: Added.
+
+2007-09-17 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Updated in order to filter input file for 2 passes
+	sitemap building.
+
+2007-09-17 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/sitemap.in: Converted to perl.
+
+2007-09-14 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/sitemap.in: Fixed awk related code.
+
+2007-09-14 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Revised and corrected. Replaced input_basedir with
+	input_dirname. Fixed variable substitution. Rearranged variables.
+
+2007-09-14 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* bootstrap: Updated.
+
+	* src/pagemap.in: Added.
+
+	* src/Makefile.am: Fixed.
+
+	* src/sitemap.in: Removed -f option. Fixed some procedures. Added
+	AWK substitution.
+
+	* src/autosite.in: Updated in order to use pagemap program.
+
+2007-09-13 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* configure.ac: Added macro for awk checks.
+
+	* src/autosite.in: Fixed typo. Added 3-stages running mode (in, tmp and
+	out directories are honoured now).
+
+2007-09-13 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/configure.ac: Added AC_PATH_PROGRAM call for `cut'.
+
+	* src/autosite.in: Scrambled. Fixed lot of bugs.
+
+	* ChangeLog: Fixed.
+
+	* src/filterchain.in: Updated. Replaced some verbose() calls with
+	debug() ones.
+
+2007-09-12 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Added output directory option. Fixed sitemap related
+	file.
+
+2007-09-12 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* configure.ac: Added AC_PROG_MKDIR_P macro call.
+
+	* src/autosite.in: Added input file related option and default value.
+	Added MKDIR_P variable.
+
+	* src/autosite.in, src/filterchain.in, src/scm2xml.in, xml2xhtml.in:
+	Fixed variable substitution.
+
+2007-09-12 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Replaced base with input_basedir. Added 
+	output_basedir.
+
+2007-09-11 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Fixed html output file naming.
+
+	* test/simple: Fixed contents.
+
+	* src/autosite.in, src/xml2xhtml.in, src/sitemap.in, src/scm2xml.in,
+	src/filterchain.in, src/sxml2scm.in: Added -d and -v options where
+	needed.
+
+2007-09-11 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/xml2xhtml.in: Fixed. Added wrapper when tidy is missing.
+
+	* configure.ac: Added checks for basename and dirname.
+
+	* test/simple/layout.sxml: Added.
+
+2007-09-11 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/filterchain.in: Fixed and updated. Fixed
+	regexp on site.as.
+
+2007-09-11 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Added page packaging.
+
+2007-09-11 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* test/simple/header.sxml, test/simple/footer.sxml: Added.
+
+	* src/sxml2xml.in: Renamed as src/scm2xml.in
+
+	* src/Makefile.am: Fixed.
+
+	* configure.ac: Fixed.
+
+	* test/simple: Fixed "page" files.
+
+2007-09-10 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/filters/sxml-xml.in: Moved to src/sxml2xml.in.
+
+	* src/filters/xml2html.in: Moved to src/xml2xhtml.in.
+
+	* src/filters/Makefile.am: Fixed.
+
+	* configure.ac: Updated.
+
+	* src/filterchain.in: Fixed empty filter case (input is SXML).
+
+2007-09-10 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/filtechain.in: Added -t parameter in order to specify the
+	temporary directory where to store files used during processing.
+
+	* src/autosite.in: Fixed.
+
+2007-09-10 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* test/simple/site.as: Updated.
+
+2007-09-10 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/filterchain.in: Rearranged.
+
+	* src/filters/null.in: Renamed as src/filters/null-null.in.
+
+	* src/filters/Makefile.am: Fixed.
+
+	* configure.ac: Updated.
+
+	* test/simple/site.as: Updated.
+
+2007-09-10 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in: Fixed.
+
+2007-09-09 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/autosite.in, src/filterchains.in: Rearranged and fixed.
+
+2007-09-08 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/filters/xml-xhtml.in: Added.
+
+	* src/filters/Makefile.am: Updated.
+
+	* configure.ac: Updated.
+
+2007-09-08 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/filterchain.in: Fixed and updated. Added warning() function.
+
+	* src/autosite.in: Fixed. Added warning() function.
+
+	* src/sitemap.in: Added warning() function.
+
+2007-09-08 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/filter.in: Renamed as src/filterchain.in.
+
+	* src/Makefile.am: Fixed.
+
+	* src/autosite.in: Fixed.
+
+	* configure.ac: Fixed.
+
+	* src/filters/news-wikitext.in, src/filters/sxml-xml.in
+	src/filters/changelog-wikitext.in, src/filters/wikitext-sxml.in:
+	Renamed as news-wikitext.in sxml-xml.in	changelog-wikitext.in
+	wikitext-sxml.in.
+
+	* src/filters/Makefile.am: Fixed.
+
+	* test/simple/site.as: Fixed.
+
+	* src/autosite.in: Fixed -v flag passed to filterchain.
+
+2007-09-08 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/plugins: Renamed as src/filters.
+
+	* src/autosite.in: Fixed.
+
+	* test/simple/site.as: Fixed
+
+	* src/filters/Makefile.am: Fixed
+
+	* configure.ac: Updated.
+
+	* src/filters/news2wikitext.in: Added.
+
+	* src/filters/changelog2wikitext.in: Added.
+
+	* src/sxml2xml.in: Moved to src/filters/sxml2xml.in.
+
+	* src/page2sxml.in: Fixed and renamed as src/filter.in.
+
+	* src/Makefile.am: Updated and fixed.
+	
+2007-09-07 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* configure.ac: Added calls to AC_PROG_GREP and AC_PROG_SED.
+
+	* src: Fixed ".in" scripts.
+
+	* src/autosite.in: Added support for plugin chains.
+
+2007-09-07 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/plugins: Created.
+
+	* src/plugins/Makefile.am: Added.
+
+	* src/plugins/null.in: Added.
+
+	* configure.ac: Fixed.
+
+	* src/autosite.in: Added plugin specification.
+
+	* src/page2sxml.in: Fixed.
+
+	* configure.ac: Added perl and guile AC_PATH_PROG macro calls.
+	
+2007-09-07 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/page2sxml: Added.
+
+	* configure.ac: Fixed.
+
+	* src/autosite.in: Fixed. Added -C option.
+
+	* src/Makefile.am: Fixed.
+
+	* data: Created.
+
+2007-09-07 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+
+	* src/sxml2html.in: Renamed as src/sxml2xml.in
+
+	* src/sitemap.in: Added.
+
+	* src/autosite.in: Added.
+
+	* configure.ac, src/makefile.am: Fixed.

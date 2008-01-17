@@ -1,0 +1,30 @@
+NOTE:
+        TODOs are divided in three parts: TO-BE-DONE, DONE and DONE-RECHECK.
+
+        TODOs in TO-BE-DONE are ordered in a least-to-last important order.
+        Take in charge whatever TODO you like to complete but remember that
+        the least important are probably the blocking ones ... so they should
+        be completed first ...
+
+        When a TODO in TO-BE-DONE has been completed it must be moved to DONE
+        or DONE-RECHECK if it needs further checking.
+
+        In DONE and DONE-RECHECK a date or a release version (the same that
+        the ChangeLog shows) number should be added too (in order to remember
+        when that TODO has been declared completed ...
+
+TO-BE-DONE:
+
+DONE:
+0.1.107:
+* Add /libs/site/layout.scm in order to handle a generic layout to be used 
+  if a specific layout is not defined. Its structure should be like the one 
+  found in template-body (/libs/site/template.scm) procedure.
+
+0.1.46:
+* Add lists (ordered, unordered, definition and nested), debug and verbose 
+  messages and comments to src/filters/wikitext-sxml.in.
+
+* Write a tutorial for Wikitext.
+
+DONE-RECHECK:

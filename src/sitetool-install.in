@@ -1,0 +1,239 @@
+#! @PERL@
+
+#
+# sitetool-install
+#
+# (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
+    if 0;
+
+use File::Spec;
+
+BEGIN
+{
+    # Retrieve our perl libraries path
+    my $perllibdir;
+
+    $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
+	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+
+    unshift(@INC, map(File::Spec->catfile($_, "perl"),
+		      (split '@PATH_SEPARATOR@', $perllibdir)));
+
+    # Override SHELL.  This is required on DJGPP so that system() uses
+    # bash, not COMMAND.COM which doesn't quote arguments properly.
+    # Other systems aren't expected to use $SHELL when Automake
+    # runs, but it should be safe to drop the `if DJGPP' guard if
+    # it turns up other systems need the same thing.  After all,
+    # if SHELL is used, ./configure's SHELL is always better than
+    # the user's SHELL (which may be something like tcsh).
+    $ENV{'SHELL'} = '@SHELL@' if exists $ENV{'DJGPP'};
+}
+
+#
+# Misc
+#
+
+use warnings;
+use strict;
+use diagnostics;
+
+use Sitetool::Autoconfig;
+use Sitetool::Base::Trace;
+use Sitetool::Base::Debug;
+use Sitetool::Base::Program;
+use Sitetool::OS::Shell;
+use Sitetool::Configuration;
+
+#
+# Globals
+#
+
+our $PROGRAM_NAME = "sitetool-install";
+
+#
+# Utilities
+#
+
+sub help_brief ()
+{
+    print "  -i, --input-dir=DIR         source directory is DIR\n";
+    print "  -H, --hname=HOST            destination host is HOST\n";
+    print "  -P, --hpassword=PASSWD      password for host HOST is PASSWD\n";
+    print "  -U, --huser=USER            user for host HOST is USER\n";
+    print "  -o, --hdir=DIR              destination directory is DIR\n";
+    print "  -f, --force                 consider all files obsolete\n";
+}
+
+sub help_common ()
+{
+    print "  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY\n";
+    print "  -d, --debug                 enable debugging mode\n";
+    print "  -v, --verbose               enable verbose mode\n";
+    print "  -h, --help                  print this help, then exit\n";
+    print "  -B, --brief-help            print a brief help, then exit\n";
+    print "  -V, --version               print version number, then exit\n";
+}
+
+sub help ()
+{
+    print "Usage: $PROGRAM_NAME [OPTIONS]\n";
+    print "\n";
+    print "  -c, --configuration=FILE    configuration file is FILE\n";
+
+    help_brief();
+    help_common();
+
+    print "\n";
+    print "Warning categories include:\n";
+    print "  \`all'           all the warnings\n";
+    print "  \`none'          turn off all the warnings\n";
+    print "\n";
+    print "Report bugs to <$PACKAGE_BUGREPORT>\n";
+}
+
+#
+# Main
+#
+
+trace_prefix_set($PROGRAM_NAME);
+
+my $configuration_file = "";
+my $input_dir          = "";
+my $host_dir           = "";
+my $host_name          = "";
+my $host_user          = "";
+my $host_password      = "";
+my $force_mode         = 0;
+
+debug_set(0);
+verbose_set(0);
+warning_set("none");
+
+# Parse options
+my $i = 0;
+while ($i <= $#ARGV) {
+    if (($ARGV[$i] =~ /^\-c$/)      || ($ARGV[$i] =~ /^\-\-configuration$/)) {
+	$i++;
+	$configuration_file = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-i$/) || ($ARGV[$i] =~ /^\-\-input\-dir$/)) {
+	$i++;
+	$input_dir = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-H$/) || ($ARGV[$i] =~ /^\-\-hname$/)) {
+	$i++;
+	$host_name = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-P$/) || ($ARGV[$i] =~ /^\-\-hpassword$/)) {
+	$i++;
+	$host_password = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-U$/) || ($ARGV[$i] =~ /^\-\-huser$/)) {
+	$i++;
+	$host_user = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-hdir$/)) {
+	$i++;
+	$host_dir = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
+	$force_mode = 1;
+    } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
+	help_brief();
+	exit 0;
+    } elsif (($ARGV[$i] =~ /^\-h$/) || ($ARGV[$i] =~ /^\-\-help$/)) {
+	help();
+	exit 0;
+    } elsif (($ARGV[$i] =~ /^\-W$/) || ($ARGV[$i] =~ /^\-\-warnings$/)) {
+	$i++;
+	if (!defined($ARGV[$i])) {
+	  hint("Missing warning level");
+	  exit 1;
+	}
+	warning_set($ARGV[$i]);
+    } elsif (($ARGV[$i] =~ /^\-d$/) || ($ARGV[$i] =~ /^\-\-debug$/)) {
+	debug_set(1);
+    } elsif (($ARGV[$i] =~ /^\-v$/) || ($ARGV[$i] =~ /^\-\-verbose$/)) {
+	verbose_set(1);
+    } elsif (($ARGV[$i] =~ /^\-V$/) || ($ARGV[$i] =~ /^\-\-version$/)) {
+	version();
+	exit 0;
+    } else {
+	error("Unknown option \`" . $ARGV[$i] . "'");
+	exit 1;
+    }
+
+    $i++;
+}
+
+#
+# Parameters check
+#
+
+if ($configuration_file eq "") {
+    hint("Missing configuration file");
+    exit 1;
+}
+if ($input_dir eq "") {
+    hint("Missing input directory");
+    exit 1;
+}
+if ($host_dir eq "") {
+    hint("Missing host directory");
+    exit 1;
+}
+if ($host_name eq "") {
+    hint("Missing host name");
+    exit 1;
+}
+if ($host_user eq "") {
+    hint("Missing user name");
+    exit 1;
+}
+if ($host_password eq "") {
+    hint("Missing password");
+    exit 1;
+}
+
+# XXX FIXME: Replace with a proper check
+assert(defined($WPUT));
+if ($WPUT eq "") {
+    error("The wput executable was not available in your system when "   .
+	  $PACKAGE_NAME . " has been configured");
+    error("In order to use the \`install' functionality please install " .
+	  "wput and re-install " . $PACKAGE_NAME);
+    exit 1;
+}
+
+#
+# Start the real work
+#
+
+my %configuration;
+if (!configuration_melt($configuration_file, \%configuration)) {
+    error("Cannot melt configuration from file \`$configuration_file'");
+    hint("Try forcing a complete configuration file re-parsing");
+    exit 1;
+}
+
+my $string;
+
+$string =
+    "$WPUT $input_dir ftp://$host_user:$host_password\@$host_name/$host_dir";
+
+if (!shell_execute($string)) {
+    exit 1;
+}
+
+exit 0;

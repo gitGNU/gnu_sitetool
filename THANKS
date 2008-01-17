@@ -1,0 +1,5 @@
+guile-lib
+SXML
+autoconf
+automake
+gitlog2ChangeLog

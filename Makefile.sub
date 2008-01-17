@@ -1,0 +1,41 @@
+##
+## Include file for automake
+##
+## (C) 2007 Francesco Salvestrini <salvestrini@sourceforge.net>
+##
+
+##
+## NOTE:
+##     Don't use `/' in the sed expression(s) since most likely the
+##     variables we're using, such as `$(pkgdatadir)', will contain some ...
+do_subst = sed \
+  -e 's,[@]PACKAGE[@],$(PACKAGE),g' \
+  -e 's,[@]PACKAGE_NAME[@],$(PACKAGE_NAME),g' \
+  -e 's,[@]PACKAGE_BUGREPORT[@],$(PACKAGE_BUGREPORT),g' \
+  -e 's,[@]PACKAGE_VERSION[@],$(PACKAGE_VERSION),g' \
+  -e 's,[@]VERSION[@],$(VERSION),g' \
+  -e 's,[@]API_VERSION[@],$(API_VERSION),g' \
+  -e 's,[@]PATH_SEPARATOR[@],$(PATH_SEPARATOR),g' \
+  -e 's,[@]PERL[@],$(PERL),g' \
+  -e 's,[@]PYTHON[@],$(PYTHON),g' \
+  -e 's,[@]GUILE[@],$(GUILE),g' \
+  -e 's,[@]SHELL[@],$(SHELL),g' \
+  -e 's,[@]RUBY[@],$(RUBY),g' \
+  -e 's,[@]TIDY[@],$(TIDY),g' \
+  -e 's,[@]WPUT[@],$(WPUT),g' \
+  -e 's,[@]WGET[@],$(WGET),g' \
+  -e 's,[@]MD5SUM[@],$(MD5SUM),g' \
+  -e 's,[@]SHA1SUM[@],$(SHA1SUM),g' \
+  -e 's,[@]SHA224SUM[@],$(SHA224SUM),g' \
+  -e 's,[@]SHA256SUM[@],$(SHA256SUM),g' \
+  -e 's,[@]SHA384SUM[@],$(SHA384SUM),g' \
+  -e 's,[@]SHA512SUM[@],$(SHA512SUM),g' \
+  -e 's,[@]configure_input[@],Generated from $@.in; do not edit by hand.,g' \
+  -e 's,[@]makefile_input[@],Generated from $@.am; do not edit by hand.,g' \
+  -e 's,[@]bindir[@],$(bindir),g' \
+  -e 's,[@]abs_builddir[@],$(abs_builddir),g' \
+  -e 's,[@]abs_top_builddir[@],$(abs_top_builddir),g' \
+  -e 's,[@]abs_top_srcdir[@],$(abs_top_srcdir),g' \
+  -e 's,[@]pkgvbindir[@],$(pkgvbindir),g' \
+  -e 's,[@]pkgvlibsdir[@],$(pkgvlibsdir),g' \
+  -e 's,[@]pkgvdatadir[@],$(pkgvdatadir),g'

@@ -1,0 +1,210 @@
+#! @PERL@
+
+#
+# sitetool-cleanup
+#
+# (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
+    if 0;
+
+use File::Spec;
+
+BEGIN
+{
+    # Retrieve our perl libraries path
+    my $perllibdir;
+
+    $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
+	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+
+    unshift(@INC, map(File::Spec->catfile($_, "perl"),
+		      (split '@PATH_SEPARATOR@', $perllibdir)));
+
+    # Override SHELL.  This is required on DJGPP so that system() uses
+    # bash, not COMMAND.COM which doesn't quote arguments properly.
+    # Other systems aren't expected to use $SHELL when Automake
+    # runs, but it should be safe to drop the `if DJGPP' guard if
+    # it turns up other systems need the same thing.  After all,
+    # if SHELL is used, ./configure's SHELL is always better than
+    # the user's SHELL (which may be something like tcsh).
+    $ENV{'SHELL'} = '@SHELL@' if exists $ENV{'DJGPP'};
+}
+
+#
+# Misc
+#
+
+use warnings;
+use strict;
+use diagnostics;
+
+use File::Path;
+
+use Sitetool::Autoconfig;
+use Sitetool::Base::Trace;
+use Sitetool::Base::Debug;
+use Sitetool::Base::Program;
+use Sitetool::OS::Shell;
+use Sitetool::OS::Directory;
+use Sitetool::Configuration;
+
+#
+# Globals
+#
+
+our $PROGRAM_NAME = "sitetool-cleanup";
+
+#
+# Utilities
+#
+
+sub help_brief ()
+{
+    print "  -w, --work-dir=DIR          Use DIR as a working directory\n";
+    print "  -o, --output-dir=DIR        place output into directory DIR\n";
+    print "  -f, --force                 consider all files obsolete\n";
+}
+
+sub help_common ()
+{
+    print "  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY\n";
+    print "  -d, --debug                 enable debugging mode\n";
+    print "  -v, --verbose               enable verbose mode\n";
+    print "  -h, --help                  print this help, then exit\n";
+    print "  -B, --brief-help            print a brief help, then exit\n";
+    print "  -V, --version               print version number, then exit\n";
+}
+
+sub help ()
+{
+    print "Usage: $PROGRAM_NAME [OPTIONS]\n";
+    print "\n";
+    print "  -c, --configuration=FILE    configuration file is FILE\n";
+
+    help_brief();
+    help_common();
+
+    print "\n";
+    print "Warning categories include:\n";
+    print "  \`all'           all the warnings\n";
+    print "  \`none'          turn off all the warnings\n";
+    print "\n";
+    print "Report bugs to <$PACKAGE_BUGREPORT>\n";
+}
+
+#
+# Main
+#
+
+trace_prefix_set($PROGRAM_NAME);
+
+my $work_dir           = "";
+my $output_dir         = "";
+my $configuration_file = "";
+my $force_mode         = 0;
+
+debug_set(0);
+verbose_set(0);
+warning_set("none");
+
+# Parse options
+my $i = 0;
+while ($i <= $#ARGV) {
+    if (($ARGV[$i] =~ /^\-c$/)      || ($ARGV[$i] =~ /^\-\-configuration$/)) {
+	$i++;
+	$configuration_file = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output\-dir$/)) {
+	$i++;
+	$output_dir = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-w$/) || ($ARGV[$i] =~ /^\-\-work\-dir$/)) {
+	$i++;
+	$work_dir = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
+	$force_mode = 1;
+    } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
+	help_brief();
+	exit 0;
+    } elsif (($ARGV[$i] =~ /^\-h$/) || ($ARGV[$i] =~ /^\-\-help$/)) {
+	help();
+	exit 0;
+    } elsif (($ARGV[$i] =~ /^\-W$/) || ($ARGV[$i] =~ /^\-\-warnings$/)) {
+	$i++;
+	if (!defined($ARGV[$i])) {
+	  hint("Missing warning level");
+	  exit 1;
+	}
+	warning_set($ARGV[$i]);
+    } elsif (($ARGV[$i] =~ /^\-d$/) || ($ARGV[$i] =~ /^\-\-debug$/)) {
+	debug_set(1);
+    } elsif (($ARGV[$i] =~ /^\-v$/) || ($ARGV[$i] =~ /^\-\-verbose$/)) {
+	verbose_set(1);
+    } elsif (($ARGV[$i] =~ /^\-V$/) || ($ARGV[$i] =~ /^\-\-version$/)) {
+	version();
+	exit 0;
+    } else {
+	error("Unknown option \`" . $ARGV[$i] . "'");
+	exit 1;
+    }
+
+    $i++;
+}
+
+#
+# Parameters check
+#
+
+if ($configuration_file eq "") {
+    hint("Missing configuration file");
+    exit 1;
+}
+if (-z $output_dir) {
+    hint("Missing output directory");
+    exit 1;
+}
+if (-z $work_dir) {
+    hint("Missing working directory");
+    exit 1;
+}
+
+#
+# Start the real work
+#
+
+my %configuration;
+if (!configuration_melt($configuration_file, \%configuration)) {
+    error("Cannot melt configuration from file \`$configuration_file'");
+    hint("Try forcing a complete configuration file re-parsing");
+    exit 1;
+}
+
+if (directory_ispresent($work_dir)) {
+    debug("Removing working directory \`$work_dir'");
+    if (!directory_remove($work_dir)) {
+	# Fall-through
+    }
+}
+
+if (directory_ispresent($output_dir)) {
+    debug("Removing output directory \`$output_dir'");
+    if (!directory_remove($output_dir)) {
+	# Fall-through
+    }
+}
+
+exit 0;

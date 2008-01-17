@@ -1,0 +1,130 @@
+# Process this file with autoconf to produce a configure script.
+
+#
+# configure.ac for sitetool
+#
+# (C) 2004-2005 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#
+
+AC_INIT([Sitetool],[@VERSION@],[salvestrini@users.sourceforge.net],[sitetool])
+
+# Check for a recent version of autoconf
+AC_PREREQ([2.61])
+
+# Place/find all autotools related files in the following directories
+AC_CONFIG_AUX_DIR([tools/autotools])
+AC_CONFIG_MACRO_DIR([tools/autotools/m4])
+AC_CONFIG_SRCDIR([src/sitetool.in])
+
+AM_INIT_AUTOMAKE([1.10 foreign -Wall])
+
+#
+# Build related programs
+#
+AC_PROG_MKDIR_P
+AC_PROG_GREP
+AC_PROG_SED
+AC_PROG_AWK
+AC_PROG_LN_S
+AX_PATH_MISSING([YAPP],     [yapp])
+AX_PATH_MISSING([HELP2MAN], [help2man])
+
+#
+# Runtime related programs
+#
+AX_PROG_PERL
+AS_IF([test -z "$PERL"],[
+    AC_MSG_ERROR([Missing required Perl interpreter])
+],[
+    AX_PROG_PERL_VERSION([5.8.0],[],[
+        AC_MSG_ERROR([Missing required Perl interpreter version >= 5.8.0])
+    ])
+])
+
+AX_PROG_GUILE
+AS_IF([test -z "$GUILE"],[
+    AC_MSG_ERROR([Missing required Guile interpreter])
+],[
+    AX_PROG_GUILE_VERSION([1.6.4],[],[
+        AC_MSG_ERROR([Missing required Guile interpreter version >= 1.6.4])
+    ])
+    AX_PROG_GUILE_MODULE([sxml simple],   [],[
+    	AC_MSG_ERROR([Missing module sxml-simple])])
+    AX_PROG_GUILE_MODULE([sxml transform],[],[
+    	AC_MSG_ERROR([Missing module sxml-transform])])
+])
+
+AC_PATH_PROG([PYTHON], [python])
+AC_PATH_PROG([RUBY],   [ruby])
+AC_PATH_PROG([TIDY],   [tidy])
+AC_PATH_PROG([WPUT],   [wput])
+AC_PATH_PROG([WGET],   [wget])
+
+AC_PATH_PROG([MD5SUM],    [md5sum])
+AC_PATH_PROG([SHA1SUM],   [sha1sum])
+AC_PATH_PROG([SHA224SUM], [sha224sum])
+AC_PATH_PROG([SHA256SUM], [sha256sum])
+AC_PATH_PROG([SHA384SUM], [sha384sum])
+AC_PATH_PROG([SHA512SUM], [sha512sum])
+
+AM_CONDITIONAL([PERL_AVAILABLE],   [ test ! "$PERL" = ""   ])
+AM_CONDITIONAL([PYTHON_AVAILABLE], [ test ! "$PYTHON" = "" ])
+AM_CONDITIONAL([RUBY_AVAILABLE],   [ test ! "$RUBY" = ""   ])
+AM_CONDITIONAL([SCHEME_AVAILABLE], [ test ! "$GUILE" = ""  ])
+AM_CONDITIONAL([SHELL_AVAILABLE],  [ test ! "$SHELL" = ""  ])
+
+#
+# The API version is the base version.  We must guarantee
+# compatibility for all releases with the same API version.
+# Our current rule is that:
+#
+# * All releases, including the prereleases, in an X.Y series
+#   are compatible.  So 1.5.1 is compatible with 1.5.
+#
+# * Prereleases on the trunk are all incompatible -- 1.5.1 and 1.5.2
+#   aren't the same.
+#
+AX_SPLIT_VERSION($PACKAGE_VERSION)
+API_VERSION="${AX_MAJOR_VERSION}.${AX_MINOR_VERSION}"
+AC_SUBST(API_VERSION)
+
+# Versioned directories, defined here for convenience
+AC_SUBST(pkgvdir,     ["\${datadir}/${PACKAGE}-${API_VERSION}"])
+AC_SUBST(pkgvbindir,  ["\${datadir}/${PACKAGE}-${API_VERSION}/bin"])
+AC_SUBST(pkgvdatadir, ["\${datadir}/${PACKAGE}-${API_VERSION}/data"])
+AC_SUBST(pkgvlibsdir, ["\${datadir}/${PACKAGE}-${API_VERSION}/libs"])
+
+AC_CONFIG_FILES([
+    Makefile
+
+    docs/Makefile
+    docs/man/Makefile
+    docs/info/Makefile
+
+    data/Makefile
+    data/styles/Makefile
+    data/styles/default/Makefile
+
+    src/Makefile
+    src/filters/Makefile
+
+    libs/Makefile
+    libs/perl/Makefile
+    libs/perl/Sitetool/Makefile
+    libs/perl/Sitetool/Misc/Makefile
+    libs/perl/Sitetool/Base/Makefile
+    libs/perl/Sitetool/OS/Makefile
+    libs/perl/Sitetool/WWW/Makefile
+    libs/python/Makefile
+    libs/ruby/Makefile
+    libs/scheme/Makefile
+    libs/shell/Makefile
+
+    tools/Makefile
+    tools/scripts/Makefile
+
+    test/Makefile
+    test/data/Makefile
+])
+
+AC_OUTPUT

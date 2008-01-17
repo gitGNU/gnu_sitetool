@@ -1,0 +1,8 @@
+(p "Inside an SXML content user defined variables are exported as they are"
+)
+(p "System variables are exported too:"
+)
+(dl
+ (dt (b "as_site_variable_PROGRAMNAME"   )) (i (dd ,as_site_variable_PROGRAMNAME   ))
+ (dt (b "as_site_variable_PROGRAMVERSION")) (i (dd ,as_site_variable_PROGRAMVERSION))
+ )

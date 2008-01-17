@@ -1,0 +1,313 @@
+== Wikitext-SXML reference ==
+
+Plugin "wikitext-sxml" takes a plain text file (formatted as shown below) 
+and outputs the same contents in SXML format. \\\
+As for HTML, input file is splitted into ___ major section ___ known as 
+/// block level elements /// ; block level element is splitted into ___ 
+minor section ___ known as /// inline level elements /// . \\\
+Block level contains the following elements:
+
+* headings
+* paragraphs
+* lists
+* preformatted texts
+* horizontal rules
+* generic block level container (aka "div")
+
+Inline level contains the following elements:
+
+* bold text formatting
+* italic text formatting
+* underlined text formatting
+* anchors (references to URL or e-mail addresses)
+* images
+* line breaking
+* generic inline level container (aka "span")
+
+Block level elements are separated by one or more empy lines and can't be 
+nested, while inline level elements are separated by one or more space 
+characters or should be nested. \\\
+Let's go deeper...
+
+=== Block level elements ===
+
+==== Headings ====
+
+We could have 5 level of headings (as HTML):
+
+{{pre}}
+- level 1
+  Wikitext: == text ==
+  SXML    : (h1 "text")
+
+- level 2
+  Wikitext: === text ===
+  SXML    : (h2 "text")
+
+- level 3
+  Wikitext: ==== text ====
+  SXML    : (h3 "text")
+
+- level 4
+  Wikitext: ===== text =====
+  SXML    : (h4 "text")
+
+- level 5
+  Wikitext: ====== text ======
+  SXML    : (h5 "text")
+{{pre}}
+
+==== Paragraphs ====
+
+No much words here... Just type and we got a paragraph ;-)
+
+==== Lists ====
+
+Single lists and nested lists are supported; we could have:
+
+{{pre}}
+- unordered list
+  Wikitext:
+            * item 1
+            * item 2
+  SXML:
+            (ul (li "item 1") (li "item 2"))
+
+- ordered list
+  Wikitext:
+            # item 1
+            # item 2
+  SXML:
+            (ol (li "item 1") (li "item 2"))
+
+- definition list
+  Wikitext:
+            ; definition term
+            : definition definition
+  SXML:
+            (dl (dt "definition term") (dd "definition definition"))
+{{pre}}
+
+List should be nested, but root type must be the same:
+
+{{pre}}
+* unordered list item
+*# ordered list item (nested x1)
+*; definition list term (nested x1)
+*: definition list definition 1 (nested x1)
+*: definition list definition 1 (nested x1)
+** unordered list item 1 (nested x1)
+**# ordered list item 1 (nested x2)
+*** unordered list item 1 (nested x2)
+* unordered list item
+{{pre}}
+
+==== Preformatted texts ====
+
+For preformatted text we should begin and end a block level with 
+'{{pre}}' (without quotes):
+
+{{pre}}
+Wikitext:
+          '{{pre}}'
+          text
+          '{{pre}}'
+SXML:
+          (pre "text")
+{{pre}}
+
+==== Horizontal rules ====
+
+We could put an horizontal rule simply writing '---' (without quotes) on 
+a line:
+
+{{pre}}
+Wikitext:
+          ---
+SXML:
+          (hr )
+{{pre}}
+
+==== Generic block level container ====
+
+Better known as "div", this element should be generic or belong to specific 
+class and should start with '[[div]]' or '[[div|name]]' (without quotes) 
+tag:
+
+{{pre}} 
+Wikitext:
+          {{div}}
+          contents
+SXML:
+          (div (`contents))
+
+Wikitext:
+          {{div|name}}
+          contents
+SXML:
+          (div (@ (class "name")) (`contents))
+{{pre}}
+
+=== Inline level elements ===
+
+==== Bold text formatting ====
+
+Bold text should be obtained by surrounding it with '+++' (without quotes):
+
+{{pre}}
+Wikitext:
+          *** text ***
+SXML:
+          (b "text")
+{{pre}}
+
+==== Italic text formatting ====
+
+Bold text should be obtained by surrounding it with '///' (without quotes):
+
+{{pre}}
+Wikitext:
+          /// text ///
+SXML:
+          (i "text")
+{{pre}}
+
+==== Underlined text formatting ====
+
+Bold text should be obtained by surrounding it with '___' (without quotes):
+
+{{pre}}
+Wikitext:
+          ___ text ___
+SXML:
+          (u "text")
+{{pre}}
+
+==== Anchors ====
+
+We could have anchor that point to an URL or e-mail address; generically it 
+has the form '[[<type>:<source> <text> ]]' (without quotes), where type 
+could be 'url' or 'email', source (according to type) could be an URL or an 
+e-mail address and text is optional (if it'snt specified it will be like 
+source):
+
+{{pre}}
+Wikitext:
+          [[url:http://www.gnu.org/ GNU's Not Unix! ]]
+SXML:
+          (a (@ (href "http://www.gnu.org/")) "GNU's Not Unix!" ]]
+Wikitext:
+          [[url:http://www.gnu.org/ ]]
+SXML:
+          (a (@ (href "http://www.gnu.org/")) "http://www.gnu.org/" ]]
+
+Wikitext:
+          [[email:gnu@gnu.org GNU e-mail ]]
+SXML:
+          (a (href "mailto:gnu@gnu.org") "GNU e-mail" ]]
+Wikitext:
+          [[email:gnu@gnu.org ]]
+SXML:
+          (a (href "mailto:gnu@gnu.org") "gnu@gnu.org" ]]
+{{pre}}
+
+Text to anchor is treated as an inline level element, so we could format it 
+as we want.
+
+==== Images ====
+
+Images are treated like anchors and their syntax is '((image:<source> 
+<text> ))', where source is the path to image and text is put in the 
+alternate text attribute of image (if it'snt specified, it will be 
+like source):
+
+{{pre}}
+Wikitext:
+          ((image:../images/test.png Image fo testing ))
+SXML:
+          (img (@ (src "../images/test.png") (alt "Image fo testing"))
+Wikitext:
+          ((image:../images/test.png ))
+SXML:
+          (img (@ (src "../images/test.png") (alt "../images/test.png"))
+{{pre}}
+
+==== Line breaking ====
+
+Easily break a line:
+
+{{pre}}
+\\\
+{{pre}}
+
+==== Generic inline container ====
+
+Better known as "span", this element should be generic or belong to specific 
+class and should start with '{{span contents }}' or '{{span|<name> text }}' 
+(without quotes) tag:
+
+{{pre}} 
+Wikitext:
+          {{span text }}
+SXML:
+          (span "text")
+
+Wikitext:
+          {{span|name text }}
+SXML:
+          (span (@ (class "name")) "contents")
+{{pre}}
+
+=== Output of the previous examples ===
+
+== Heading level 1 ==
+
+=== Heading level 2 ===
+
+==== Heading level 3 ====
+
+===== Heading level 4 =====
+
+====== Heading level 5 ======
+
+* unordered list item 1
+* unordered list item 2
+
+# ordered list item 1
+# ordered list item 2
+
+; definition list term
+: definition list definition 1
+: definition list definition 2
+
+* unordered list item
+*# ordered list item (nested x1)
+*; definition list term (nested x1)
+*: definition list definition 1 (nested x1)
+*: definition list definition 1 (nested x1)
+** unordered list item 1 (nested x1)
+**# ordered list item 1 (nested x2)
+*** unordered list item 1 (nested x2)
+* unordered list item
+
+This is a paragraph.
+
+{{pre}}
+This is a preformatted text.
+{{pre}}
+
+---
+
+{{div}}
+This is inside a "div"
+
++++ Bold text +++ , /// italic text /// and ___ underlined text ___ . \\\
+[[url:http://www.gnu.org/ GNU's Not Unix! ]] \\\
+[[url:http://www.gnu.org/ ]] \\\
+[[email:gnu@gnu.org GNU e-mail ]] \\\
+[[email:gnu@gnu.org ]] \\\
+((image:../images/test.png Image fo testing )) \\\
+((image:../images/test.png ))
+
+{{span text inside a "span" }} \\\
+{{span|test text inside a "span" with class "test" }}

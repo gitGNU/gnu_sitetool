@@ -1,0 +1,4 @@
+(p "This paragraph will describe filters."
+)
+(p "Currently it is written in pure SXML."
+)

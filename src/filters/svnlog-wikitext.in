@@ -1,0 +1,380 @@
+#! @PERL@
+
+#
+# svnlog-wikitext
+#
+# (C) 2007 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
+    if 0;
+
+BEGIN
+{
+    my $perllibdir = $ENV{'perllibdir'} || '@pkgvdatadir@/lib/perl';
+    unshift @INC, (split ':', $perllibdir);
+
+  # Override SHELL.  This is required on DJGPP so that system() uses
+  # bash, not COMMAND.COM which doesn't quote arguments properly.
+  # Other systems aren't expected to use $SHELL when Automake
+  # runs, but it should be safe to drop the `if DJGPP' guard if
+  # it turns up other systems need the same thing.  After all,
+  # if SHELL is used, ./configure's SHELL is always better than
+  # the user's SHELL (which may be something like tcsh).
+    $ENV{'SHELL'} = '@SHELL@' if exists $ENV{'DJGPP'};
+}
+
+use strict;
+use warnings;
+use diagnostics;
+use POSIX qw(&exit EXIT_FAILURE EXIT_SUCCESS);
+
+#
+# Global variables
+#
+
+my $DEBUG;
+my $VERBOSE;
+
+my @tags_stack;
+my $text_buffer;
+my $tag_has_attributes;
+
+sub verbose($) {
+    my $string = shift;
+
+    if ($VERBOSE == 1) {
+	print STDOUT $string;
+    }
+    return 1;
+}
+
+sub debug($) {
+    my $string = shift;
+
+    if ($DEBUG == 1) {
+	print STDERR "Debug: " . $string;
+    }
+    return 1;
+}
+
+sub error($) {
+    my $string = shift;
+
+    print STDERR "Error: " . $string;
+    return 1;
+}
+
+sub assert($) {
+    my $tmp = shift;
+
+    if (!$tmp) {
+	print STDERR "Assertion failed!\n";
+	exit 1;
+    }
+    return 1;
+}
+
+sub write_svnlog_date($) {
+    my $text = shift;
+
+    print OUTFILE "{{span|svnlog_date Date }} : " .
+		  "{{span|svnlog_date_text "      .
+		  $text                           .
+		   " }} \\\\\\\n";
+
+    return 1;
+}
+
+sub write_svnlog_author($) {
+    my $text = shift;
+
+    print OUTFILE "{{span|svnlog_author Author }} : " .
+		  "{{span|svnlog_author_text "        .
+		  $text                               .
+		  " }} \\\\\\\n";
+
+    return 1;
+}
+
+sub write_svnlog_lines($) {
+    my $text = shift;
+
+    print OUTFILE "{{span|svnlog_lines Lines }} : " .
+		  "{{span|svnlog_lines_text "       .
+		  $text                             .
+		  " }} \\\\\\\n";
+
+    return 1;
+}
+
+sub write_svnlog_revision($) {
+    my $text = shift;
+
+    print OUTFILE "{{span|svnlog_revision Revision }} : " .
+		  "{{span|svnlog_revision_text "          .
+		  $text                                   .
+		  " }} \\\\\\\n";
+
+    return 1;
+}
+
+sub write_svnlog_message($) {
+    my $text = shift;
+
+    assert($text);
+
+    print OUTFILE "{{span|svnlog_message " . $text . " }}\n";
+
+    return 1;
+}
+
+sub process_svnlog_date($) {
+    my $text = shift;
+
+    assert($text);
+
+    write_svnlog_date($text);
+
+    return 1;
+}
+
+sub process_svnlog_author($) {
+    my $text = shift;
+
+    assert($text);
+
+    write_svnlog_author($text);
+
+    return 1;
+}
+
+sub process_svnlog_revision($) {
+    my $text = shift;
+
+    assert($text);
+
+    $text =~ s/^\s*r([^\s]+)\s*/$1/;
+
+    write_svnlog_revision($text);
+
+    return 1;
+}
+
+sub process_svnlog_lines($) {
+    my $text = shift;
+
+    assert($text);
+
+    $text =~ s/^\s*([^\s]+)\s*([^\s]+)\s*$/$1/;
+
+    write_svnlog_lines($text);
+
+    return 1;
+}
+
+sub process_svnlog_message($) {
+    my $text = shift;
+
+    assert($text);
+
+    write_svnlog_message($text);
+
+    return 1;
+}
+
+sub parse_buffer($) {
+    my $buffer = shift;
+
+    assert($buffer);
+
+    $buffer =~ s/^\s*//;
+    $buffer =~ s/\s*$//;
+    $buffer =~ s/\s+/\ /;
+    $buffer =~ s/\n+/\ /;
+
+    if ($buffer =~ /^\s*([^\|]+\|){3}[^\|]+\s*$/) {
+	my @header;
+
+	verbose("Found SVN header\n");
+
+	@header = split(/\s*\|\s*/, $buffer);
+
+ 	if (!process_svnlog_date($header[2])) {
+	    error("Failed to process SVN log date\n");
+	    return 0;
+	}
+
+ 	if (!process_svnlog_author($header[1])) {
+	    error("Failed to process SVN log author\n");
+	    return 0;
+	}
+
+ 	if (!process_svnlog_revision($header[0])) {
+	    error("Failed to process SVN log revision number\n");
+	    return 0;
+	}
+
+ 	if (!process_svnlog_lines($header[3])) {
+	    error("Failed to process SVN log line numbers\n");
+	    return 0;
+	}
+    } else {
+
+	verbose("Found SVN log message\n");
+
+ 	if (!process_svnlog_message($buffer)) {
+	    error("Failed to process SVN log message\n");
+	    return 0;
+	}
+    }
+    print OUTFILE "\n";
+
+    return 1;
+}
+
+
+#
+# First processing: buffering all lines until an empty one is found.
+#
+
+sub process_infile() {
+    my $input_buffer;
+
+    verbose("Process input file\n");
+
+    while (<INFILE>) {
+	my $tmp = $_;
+
+
+	if ($tmp =~ /^\s*([^\|]+\|){3}[^\|]+\s*$/) {
+
+	    if (defined($input_buffer)) {
+
+		if (!parse_buffer($input_buffer)) {
+		    error("Failed to parse buffer\n");
+		    return 0;
+		}
+		undef($input_buffer);
+	    }
+
+	    if (!parse_buffer($tmp)) {
+		error("Failed to parse buffer\n");
+		return 0;
+	    }
+	    $input_buffer = "";
+	} elsif ($tmp =~ /^\-\-+$/) {
+
+	    if (defined($input_buffer)) {
+
+		if (!parse_buffer($input_buffer)) {
+		    error("Failed to parse buffer\n");
+		    return 0;
+		}
+		undef($input_buffer);
+	    }
+	} else {
+
+	    if (defined($input_buffer)) {
+		$input_buffer = $input_buffer . $tmp;
+	    } else {
+		$input_buffer = $tmp;
+	    }
+	}
+    }
+
+    if (defined($input_buffer)) {
+
+	if (!parse_buffer($input_buffer)) {
+	    error("Failed to parse buffer\n");
+	    return 0;
+	}
+	undef($input_buffer);
+    }
+    return 1;
+}
+
+#
+# Script finalization, close input and output files handles
+#
+
+sub dispose () {
+    verbose("Finalization\n");
+
+    close(OUTFILE);
+    close(INFILE);
+    return 1;
+}
+
+#
+# Script initialization, set default variables, open input file
+# for read and output file for write
+#
+
+sub init($$) {
+    my $infile  = shift;
+    my $outfile = shift;
+
+    $VERBOSE            = 0;
+    $DEBUG              = 0;
+
+    verbose("Initialization\n");
+
+    if (!defined($infile)) {
+	error("Missing input file\n");
+	return 0;
+    }
+
+    if (!defined($outfile)) {
+	error("Missing output file\n");
+	return 0;
+    }
+    debug("Input file: `" . $infile . "`\n");
+    debug("Output file: `" . $outfile . "`\n");
+
+    if (!open(INFILE, "<", $infile)) {
+	error("Failed to open file `" . $infile .
+	      "` for read\n");
+	return 0;
+    }
+
+    if (!open(OUTFILE, ">", $outfile)) {
+	error("Failed to open file `" . $outfile .
+	      "` for write\n");
+	return 0;
+    }
+    return 1;
+}
+
+#
+# Main
+#
+
+if (!init($ARGV[0], $ARGV[1])) {
+    error("Failed initialization\n");
+    dispose();
+    exit 1;
+}
+
+if (!process_infile()) {
+    error("Failed to process file `" . $ARGV[0] . "`\n");
+    dispose();
+    exit 1;
+}
+dispose();
+
+exit 0;
