@@ -1,7 +1,7 @@
 #! @PERL@
 
 #
-# sitetool-initialize
+# sitetool-preprocess
 #
 # (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 #
@@ -63,12 +63,13 @@ use Sitetool::OS::Filename;
 use Sitetool::OS::File;
 use Sitetool::OS::String;
 use Sitetool::Configuration;
+use Sitetool::Preprocess;
 
 #
 # Globals
 #
 
-our $PROGRAM_NAME = "sitetool-initialize";
+our $PROGRAM_NAME = "sitetool-preprocess";
 
 #
 # Utilities
@@ -76,8 +77,8 @@ our $PROGRAM_NAME = "sitetool-initialize";
 
 sub help_brief ()
 {
-    print "  -w, --work-dir=DIR          Working directory is DIR\n";
-    print "  -o, --output-dir=DIR        Output directory is DIR\n";
+    print "  -i, --input=FILE            Use FILE as input file\n";
+    print "  -o, --output=FILE           Use FILE as output file\n";
     print "  -f, --force                 consider all files obsolete\n";
 }
 
@@ -113,23 +114,23 @@ sub help ()
 
 trace_prefix_set($PROGRAM_NAME);
 
-my $work_dir           = "";
-my $output_dir         = "";
-my $force_mode         = 0;
+my $input_file  = "";
+my $output_file = "";
+my $force_mode  = 0;
 
 debug_set(0);
 verbose_set(0);
 warning_set("none");
 
-# Parse options
+# Preprocess options
 my $i = 0;
 while ($i <= $#ARGV) {
-    if (($ARGV[$i] =~ /^\-w$/)      || ($ARGV[$i] =~ /^\-\-work\-dir$/)) {
+    if (($ARGV[$i] =~ /^\-i$/)      || ($ARGV[$i] =~ /^\-\-input$/)) {
 	$i++;
-	$work_dir = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output\-dir$/)) {
+	$input_file = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output$/)) {
 	$i++;
-	$output_dir = $ARGV[$i];
+	$output_file = $ARGV[$i];
     } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
 	$force_mode = 1;
     } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
@@ -163,67 +164,35 @@ while ($i <= $#ARGV) {
 #
 # Parameters check
 #
-if ($work_dir eq "") {
-    hint("Missing work directory");
+if ($input_file eq "") {
+    hint("Missing input file");
     exit 1;
 }
-if ($output_dir eq "") {
-    hint("Missing output directory");
+if (!file_ispresent($input_file)) {
+    error("Input file is missing");
+    exit 1;
+}
+if ($output_file eq "") {
+    hint("Missing output file");
     exit 1;
 }
 
 #
-# Create work and output directories
+# Start the real work
 #
-$work_dir   = filename_rel2abs($work_dir);
-$output_dir = filename_rel2abs($output_dir);
+if ($force_mode || file_isobsolete($input_file, $output_file)) {
+    my $string;
 
-debug("Working directory is \`" . $work_dir . "'");
-debug("Output directory is \`" . $output_dir . "'");
+    $string = "";
+    if (!Sitetool::Preprocess::preprocess($input_file, \$string)) {
+	exit 1;
+    }
 
-debug("Removing old directories, if present");
-if (directory_ispresent($work_dir)) {
-    if (!directory_remove($work_dir)) {
+    debug("Dumping string to file \`" . $output_file . "'");
+    if (!string_tofile($string, $output_file)) {
+	file_remove($output_file);
 	exit 1;
     }
 }
-if (directory_ispresent($output_dir)) {
-    if (!directory_remove($output_dir)) {
-	exit 1;
-    }
-}
-
-verbose("Building working directories");
-if (!directory_create($work_dir)) {
-    exit 1;
-}
-
-#
-# Populate work directories
-#
-my $maps_dir     = File::Spec->catdir($work_dir, "maps");
-my $contents_dir = File::Spec->catdir($work_dir, "contents");
-my $pages_dir    = File::Spec->catdir($work_dir, "pages");
-if (!directory_create($maps_dir)     ||
-    !directory_create($contents_dir) ||
-    !directory_create($pages_dir)) {
-    directory_remove($work_dir);
-    exit 1;
-}
-
-verbose("Building output directory");
-if (!directory_create($output_dir)) {
-    directory_remove($work_dir);
-    exit 1;
-}
-
-#
-# Check the setup
-#
-assert(directory_ispresent($work_dir));
-assert(directory_ispresent($maps_dir));
-assert(directory_ispresent($contents_dir));
-assert(directory_ispresent($pages_dir));
-assert(directory_ispresent($output_dir));
 
 exit 0;

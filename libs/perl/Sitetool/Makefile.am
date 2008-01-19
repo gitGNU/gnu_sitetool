@@ -34,11 +34,19 @@ nodist_perllib_DATA =				\
 	Filterchain.pm				\
 	Scheme.pm
 
-CLEANFILES     = $(nodist_perllib_DATA)
-DISTCLEANFILES = Parse.pm
+CLEANFILES = $(nodist_perllib_DATA)
+MAINTAINERCLEANFILES =				\
+	Parse.pm				\
+	Preprocess.pm
 
 Parse.pm: Makefile $(srcdir)/Parse.yp
 	$(YAPP) -s -m Sitetool::Parse -o $@ $(srcdir)/Parse.yp || { \
+		rm -f $@ ; \
+		exit 1 ; \
+	}
+
+Preprocess.pm: Makefile $(srcdir)/Preprocess.yp
+	$(YAPP) -s -m Sitetool::Preprocess -o $@ $(srcdir)/Preprocess.yp || { \
 		rm -f $@ ; \
 		exit 1 ; \
 	}

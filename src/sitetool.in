@@ -81,21 +81,39 @@ my $output_dir         = File::Spec->catdir(File::Spec->curdir(),
 					    "site.out");
 
 my $input_file         = File::Spec->catfile(File::Spec->curdir(), "site.as");
-my $configuration_file = File::Spec->catfile($work_dir,            "site.cfg");
+my $preprocessed_file  = File::Spec->catfile($work_dir, 	   "site.pp");
+my $configuration_file = File::Spec->catfile($work_dir, 	   "site.cfg");
 
 my %tools = (
     "initialize" => {
 	HANDLER        => "sitetool-initialize",
 	DESCRIPTION    => "initialize",
-	FLAGS          => "-D $input_file -c $configuration_file -w $work_dir -o $output_dir",
+	FLAGS          => "-w $work_dir -o $output_dir",
 	PRE_REQUISITE  => [ ],
+	POST_REQUISITE => [ ],
+    },
+    "preprocess" => {
+	HANDLER        => "sitetool-preprocess",
+	DESCRIPTION    => "preprocess",
+	FLAGS          => "-i $input_file -o $preprocessed_file",
+	PRE_REQUISITE  => [ "initialize" ],
+	POST_REQUISITE => [ ],
+    },
+    "parse" => {
+	HANDLER        => "sitetool-parse",
+	DESCRIPTION    => "parse",
+	FLAGS          => "-i $preprocessed_file -w $work_dir -o $configuration_file",
+	PRE_REQUISITE  => [ "initialize",
+			    "preprocess" ],
 	POST_REQUISITE => [ ],
     },
     "build" => {
 	HANDLER        => "sitetool-build",
 	DESCRIPTION    => "build site",
 	FLAGS          => "-c $configuration_file -w $work_dir -o $output_dir",
-	PRE_REQUISITE  => [ "initialize" ],
+	PRE_REQUISITE  => [ "initialize",
+			    "preprocess",
+			    "parse" ],
 	POST_REQUISITE => [ ],
     },
     "check" => {
@@ -103,6 +121,8 @@ my %tools = (
 	DESCRIPTION    => "check links in a previously built site",
 	FLAGS          => "-c $configuration_file -o $output_dir",
 	PRE_REQUISITE  => [ "initialize",
+			    "preprocess",
+			    "parse",
 			    "build" ],
 	POST_REQUISITE => [ ],
     },
@@ -111,6 +131,8 @@ my %tools = (
 	DESCRIPTION    => "validate previously built site",
 	FLAGS          => "-c $configuration_file -o $output_dir",
 	PRE_REQUISITE  => [ "initialize",
+			    "preprocess",
+			    "parse",
 			    "build" ],
 	POST_REQUISITE => [ ],
     },
@@ -119,6 +141,8 @@ my %tools = (
 	DESCRIPTION    => "compute digest for each previously built page",
 	FLAGS          => "-c $configuration_file -o $output_dir",
 	PRE_REQUISITE  => [ "initialize",
+			    "preprocess",
+			    "parse",
 			    "build" ],
 	POST_REQUISITE => [ ],
     },
@@ -127,6 +151,8 @@ my %tools = (
 	DESCRIPTION    => "install previously built site",
 	FLAGS          => "-c $configuration_file",
 	PRE_REQUISITE  => [ "initialize",
+			    "preprocess",
+			    "parse",
 			    "build",
 			    "validate",
 			    "check" ],

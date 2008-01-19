@@ -1,7 +1,9 @@
+%{
 #
 # Preprocess.pm
 #
-# (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+# (C) 2007 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#          Alessandro Massignan <ff0000.it@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,8 +19,6 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-
-package Sitetool::Preprocess;
 
 use 5.8.0;
 
@@ -38,6 +38,18 @@ BEGIN {
     @ISA    = qw(Exporter);
     @EXPORT = qw(&preprocess);
 }
+
+%}
+
+%start syntax
+
+%%
+
+syntax:
+      | syntax
+      ;
+
+%%
 
 sub preprocess_helper ($$)
 {
@@ -128,5 +140,3 @@ sub preprocess ($$)
     
     return 1;
 }
-
-1;

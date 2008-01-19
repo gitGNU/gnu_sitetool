@@ -1,7 +1,7 @@
 #! @PERL@
 
 #
-# sitetool-initialize
+# sitetool-parse
 #
 # (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 #
@@ -63,12 +63,13 @@ use Sitetool::OS::Filename;
 use Sitetool::OS::File;
 use Sitetool::OS::String;
 use Sitetool::Configuration;
+use Sitetool::Parse;
 
 #
 # Globals
 #
 
-our $PROGRAM_NAME = "sitetool-initialize";
+our $PROGRAM_NAME = "sitetool-parse";
 
 #
 # Utilities
@@ -76,8 +77,8 @@ our $PROGRAM_NAME = "sitetool-initialize";
 
 sub help_brief ()
 {
-    print "  -w, --work-dir=DIR          Working directory is DIR\n";
-    print "  -o, --output-dir=DIR        Output directory is DIR\n";
+    print "  -i, --input=FILE            Use FILE as input file\n";
+    print "  -o, --output=FILE           Use FILE as output file\n";
     print "  -f, --force                 consider all files obsolete\n";
 }
 
@@ -113,9 +114,10 @@ sub help ()
 
 trace_prefix_set($PROGRAM_NAME);
 
-my $work_dir           = "";
-my $output_dir         = "";
-my $force_mode         = 0;
+my $input_file  = "";
+my $output_file = "";
+my $work_dir    = "";
+my $force_mode  = 0;
 
 debug_set(0);
 verbose_set(0);
@@ -124,12 +126,15 @@ warning_set("none");
 # Parse options
 my $i = 0;
 while ($i <= $#ARGV) {
-    if (($ARGV[$i] =~ /^\-w$/)      || ($ARGV[$i] =~ /^\-\-work\-dir$/)) {
+    if (($ARGV[$i] =~ /^\-w$/)      || ($ARGV[$i] =~ /^\-\-work-dir$/)) {
 	$i++;
 	$work_dir = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output\-dir$/)) {
+    } elsif (($ARGV[$i] =~ /^\-i$/) || ($ARGV[$i] =~ /^\-\-input$/)) {
 	$i++;
-	$output_dir = $ARGV[$i];
+	$input_file = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output$/)) {
+	$i++;
+	$output_file = $ARGV[$i];
     } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
 	$force_mode = 1;
     } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
@@ -164,66 +169,102 @@ while ($i <= $#ARGV) {
 # Parameters check
 #
 if ($work_dir eq "") {
-    hint("Missing work directory");
+    hint("Missing working directory");
     exit 1;
 }
-if ($output_dir eq "") {
-    hint("Missing output directory");
+if ($input_file eq "") {
+    hint("Missing input file");
+    exit 1;
+}
+if (!file_ispresent($input_file)) {
+    error("Input file is missing");
+    exit 1;
+}
+if ($output_file eq "") {
+    hint("Missing output file");
     exit 1;
 }
 
 #
-# Create work and output directories
+# Start the real work
 #
-$work_dir   = filename_rel2abs($work_dir);
-$output_dir = filename_rel2abs($output_dir);
+if ($force_mode || file_isobsolete($input_file, $output_file)) {
+    debug("Output file is obsolete or the user is requesting a forced update");
+    file_remove($output_file);
 
-debug("Working directory is \`" . $work_dir . "'");
-debug("Output directory is \`" . $output_dir . "'");
+    my $string;
 
-debug("Removing old directories, if present");
-if (directory_ispresent($work_dir)) {
-    if (!directory_remove($work_dir)) {
+    $string = "";
+    if (!Sitetool::Parse::parse($input_file, \$string)) {
+	exit 1;
+    }
+    assert(defined($string));
+    $string = "\%configuration = (\n" . $string . ");\n";
+ 
+    my $temp1_filename;
+    $temp1_filename = filename_mktemp();
+    
+    debug("Dumping string to file \`" . $temp1_filename . "'");
+    if (!string_tofile($string, $temp1_filename)) {
+	file_remove($temp1_filename);
+	exit 1;
+    }
+
+    debug("Reading back configuration from \`" . $temp1_filename . "'");    
+    $string = "";
+    if (!file_tostring($temp1_filename, \$string)) {
+	exit 1;
+    }
+    
+    assert(defined($string));
+
+    debug("Evaluating raw configuration");
+
+    my $style_dir;
+
+    $style_dir = File::Spec->catfile($data_dir, "styles", "default");
+
+    assert(defined($style_dir));
+
+    #
+    # NOTE:
+    #     work_dir variable is needed in order to do variable substitution
+    #     inside the configuration ...
+    #
+    assert(defined($work_dir));
+
+    my %configuration;
+    {
+	debug("Cross your fingers, we're starting evaluation");
+
+	# XXX FIXME: We should use the former version of 'eval' ...
+	#%configuration = eval {
+	#    no warnings 'all';
+	#    $string
+	#};
+	eval $string;
+	if ($@) {
+	    debug("Evaluation returned `" . $@ . "'");
+	    error("Bad configuration in \`" . $temp1_filename . "' ($@)");
+	    exit 1;
+	}
+    }
+	
+    debug("Configuration parsed successfully");
+
+    #
+    # Inject data
+    #
+    $configuration{INTERNAL} = {};
+    $configuration{INTERNAL}{PACKAGE_NAME}    = $PACKAGE_NAME;
+    $configuration{INTERNAL}{PACKAGE_VERSION} = $PACKAGE_VERSION;
+
+    # Remove useless file
+    file_remove($temp1_filename);
+    
+    if (!configuration_freeze(\%configuration, $output_file)) {
 	exit 1;
     }
 }
-if (directory_ispresent($output_dir)) {
-    if (!directory_remove($output_dir)) {
-	exit 1;
-    }
-}
-
-verbose("Building working directories");
-if (!directory_create($work_dir)) {
-    exit 1;
-}
-
-#
-# Populate work directories
-#
-my $maps_dir     = File::Spec->catdir($work_dir, "maps");
-my $contents_dir = File::Spec->catdir($work_dir, "contents");
-my $pages_dir    = File::Spec->catdir($work_dir, "pages");
-if (!directory_create($maps_dir)     ||
-    !directory_create($contents_dir) ||
-    !directory_create($pages_dir)) {
-    directory_remove($work_dir);
-    exit 1;
-}
-
-verbose("Building output directory");
-if (!directory_create($output_dir)) {
-    directory_remove($work_dir);
-    exit 1;
-}
-
-#
-# Check the setup
-#
-assert(directory_ispresent($work_dir));
-assert(directory_ispresent($maps_dir));
-assert(directory_ispresent($contents_dir));
-assert(directory_ispresent($pages_dir));
-assert(directory_ispresent($output_dir));
 
 exit 0;

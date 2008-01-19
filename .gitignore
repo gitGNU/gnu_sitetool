@@ -33,6 +33,7 @@ libs/perl/Sitetool/Autoconfig.pm
 libs/perl/Sitetool/Filterchain.pm
 libs/perl/Sitetool/Scheme.pm
 libs/perl/Sitetool/Parse.pm
+libs/perl/Sitetool/Preprocess.pm
 libs/scheme/guile-lib
 
 docs/man/sitetool.1
@@ -40,6 +41,8 @@ docs/info/sitetool.info
 
 src/sitetool
 src/sitetool-initialize
+src/sitetool-preprocess
+src/sitetool-parse
 src/sitetool-build
 src/sitetool-clean
 src/sitetool-install

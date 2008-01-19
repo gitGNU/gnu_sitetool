@@ -13,6 +13,8 @@ bin_SCRIPTS =					\
 
 pkgvbin_SCRIPTS =				\
 	sitetool-initialize			\
+	sitetool-preprocess			\
+	sitetool-parse				\
 	sitetool-build				\
 	sitetool-clean				\
 	sitetool-install			\
@@ -71,6 +73,26 @@ sitetool: $(srcdir)/sitetool.in Makefile
 sitetool-initialize: $(srcdir)/sitetool-initialize.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/sitetool-initialize.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+sitetool-preprocess: $(srcdir)/sitetool-preprocess.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/sitetool-preprocess.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+sitetool-parse: $(srcdir)/sitetool-parse.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/sitetool-parse.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \

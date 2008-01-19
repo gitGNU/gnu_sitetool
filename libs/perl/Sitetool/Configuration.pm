@@ -35,8 +35,6 @@ use Sitetool::OS::Shell;
 use Sitetool::OS::File;
 use Sitetool::OS::Filename;
 use Sitetool::OS::String;
-use Sitetool::Preprocess;
-use Sitetool::Parse;
 
 BEGIN {
     use Exporter ();
