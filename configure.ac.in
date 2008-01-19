@@ -48,10 +48,9 @@ AS_IF([test -z "$GUILE"],[
     AX_PROG_GUILE_VERSION([1.6.4],[],[
         AC_MSG_ERROR([Missing required Guile interpreter version >= 1.6.4])
     ])
-    AX_PROG_GUILE_MODULE([sxml simple],   [],[
-    	AC_MSG_ERROR([Missing module sxml-simple])])
-    AX_PROG_GUILE_MODULE([sxml transform],[],[
-    	AC_MSG_ERROR([Missing module sxml-transform])])
+    
+    GUILE_MODULE_REQUIRED([sxml simple])
+    GUILE_MODULE_REQUIRED([sxml transform])
 ])
 
 AC_PATH_PROG([PYTHON], [python])

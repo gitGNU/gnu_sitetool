@@ -60,6 +60,7 @@ AC_DEFUN([AX_PROG_GUILE],[dnl
         AC_MSG_NOTICE([Using guile interpreter $GUILE])
 
     ],[
-        AC_PATH_PROG([GUILE],[guile])
+	GUILE_PROGS
+#        AC_PATH_PROG([GUILE],[guile])
     ])
 ])
