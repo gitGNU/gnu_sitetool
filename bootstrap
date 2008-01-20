@@ -16,6 +16,15 @@ for tool in autoheader autoconf libtool libtoolize aclocal automake; do
 done
 
 #
+# Remove files left from the previous run
+#
+echo "$PROGNAME: Removing autotools related files and directories ..."
+rm -f  `find ./ -name "Makefile.in"`                 || exit 1
+rm -f  config.cache aclocal.m4 config.h.in configure || exit 1
+rm -f  config.guess config.sub ltmain.sh             || exit 1
+rm -rf autom4te.cache                                || exit 1
+
+#
 # configure.ac
 #
 echo "$PROGNAME: Building configure.ac from configure.ac.in"
@@ -38,9 +47,6 @@ chmod a-w configure.ac
 # autoreconf
 #
 echo "$PROGNAME: Handling autotools bootstrap ..."
-
-echo "$PROGNAME: Removing aclocal.m4 ..."
-rm -f aclocal.m4 || exit 1
 
 echo "$PROGNAME: Running autoreconf ..."
 autoreconf --verbose --force --install -Wall || {
