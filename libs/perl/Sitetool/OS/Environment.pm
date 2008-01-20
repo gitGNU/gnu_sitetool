@@ -60,7 +60,7 @@ sub environment_remove ($)
     return 1;
 }
 
-sub environment_set ($)
+sub environment_set ($$)
 {
     my $variable = shift;
     my $value    = shift;
