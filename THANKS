@@ -1,5 +1,8 @@
-guile-lib
-SXML
-autoconf
-automake
-gitlog2ChangeLog
+guile-lib authors
+
+SXML 
+
+autotools people
+
+Emanuele Bassi
+	 author of gitlog2ChangeLog script
