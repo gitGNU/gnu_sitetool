@@ -62,6 +62,7 @@ use Sitetool::OS::Directory;
 use Sitetool::OS::Filename;
 use Sitetool::OS::File;
 use Sitetool::OS::String;
+use Sitetool::OS::Environment;
 use Sitetool::Configuration;
 use Sitetool::Preprocess;
 
@@ -77,6 +78,8 @@ our $PROGRAM_NAME = "sitetool-preprocess";
 
 sub help_brief ()
 {
+    print "  -D, --define=VAR=VALUE      Define variable VAR to value VALUE\n";
+    print "  -U, --undefine=VAR          Undefine variable VAR\n";
     print "  -i, --input=FILE            Use FILE as input file\n";
     print "  -o, --output=FILE           Use FILE as output file\n";
     print "  -f, --force                 consider all files obsolete\n";
@@ -131,6 +134,45 @@ while ($i <= $#ARGV) {
     } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output$/)) {
 	$i++;
 	$output_file = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-D$/) || ($ARGV[$i] =~ /^\-\-define$/)) {
+	$i++;
+
+	my $variable;
+	$variable = $ARGV[$i];
+	if (!defined($variable)) {
+	    hint("Missing environment variable name");
+	    exit 1;
+	}
+	
+	$i++;
+	
+	my $value;
+	$value = $ARGV[$i];
+	if (!defined($value)) {
+	    hint("Missing environment variable value");
+	    exit 1;
+	}
+
+	if (environment_set($variable, $value)) {
+	    error("Cannot set environment variable \`" . $variable . "'");
+	    exit 1;
+	}
+
+    } elsif (($ARGV[$i] =~ /^\-U$/) || ($ARGV[$i] =~ /^\-\-undefine$/)) {
+	$i++;
+
+	my $variable;
+	$variable = $ARGV[$i];
+	if (!defined($variable)) {
+	    hint("Missing environment variable name");
+	    exit 1;
+	}
+
+	if (!environment_remove($variable)) {
+	    error("Cannot remove environment variable \`" . $variable . "'");
+	    exit 1;
+	}
+
     } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
 	$force_mode = 1;
     } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
