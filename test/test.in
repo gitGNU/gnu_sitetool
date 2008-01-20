@@ -27,7 +27,15 @@ cp -r @abs_top_srcdir@/test/data ./test-subDir || exit 1
 
 chmod -R ug+rw ./test-subDir || exit 1
 
-(cd ./test-subDir && @abs_top_builddir@/src/sitetool --build -v) || {
+PARMS=""
+if test -n "$DEBUG" ; then
+   PARMS="$PARMS -d"
+fi
+if test -n "$VERBOSE" ; then
+   PARMS="$PARMS -v"
+fi
+
+(cd ./test-subDir && @abs_top_builddir@/src/sitetool --build $PARMS) || {
     	rm -r -f ./test-subDir
 	exit 1
 }
