@@ -80,6 +80,8 @@ my $output_dir         = File::Spec->catdir(File::Spec->curdir(),
 					    "." . $PROGRAM_NAME,
 					    "site.out");
 
+my $style_dir          = File::Spec->catfile($data_dir, "styles",  "default");
+
 my $input_file         = File::Spec->catfile(File::Spec->curdir(), "site.as");
 my $preprocessed_file  = File::Spec->catfile($work_dir, 	   "site.pp");
 my $configuration_file = File::Spec->catfile($work_dir, 	   "site.cfg");
@@ -95,7 +97,7 @@ my %tools = (
     "preprocess" => {
 	HANDLER        => "sitetool-preprocess",
 	DESCRIPTION    => "preprocess",
-	FLAGS          => "-i $input_file -o $preprocessed_file",
+	FLAGS          => "-i $input_file -o $preprocessed_file -D work_dir $work_dir -D style_dir $style_dir",
 	PRE_REQUISITE  => [ "initialize" ],
 	POST_REQUISITE => [ ],
     },
@@ -343,7 +345,7 @@ debug("Running mode is \`$running_mode'");
 	$tools{$tool}{FLAGS} = $flags . " " . $tools{$tool}{FLAGS};
 	
 	debug("Modified flags  for tool "      .
-	      "\`" . $tool . "'"               .
+	      "\`" . $tool . "' "              .
 	      "are "                           .
 	      "\`" . $tools{$tool}{FLAGS} . "'");
     }
