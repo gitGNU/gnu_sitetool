@@ -46,6 +46,8 @@ uninstall-hook:
 SITETOOL_PERL_SRCS =				\
         sitetool.in				\
 	sitetool-initialize.in			\
+	sitetool-preprocess.in			\
+	sitetool-parse.in			\
 	sitetool-build.in			\
 	sitetool-clean.in			\
 	sitetool-install.in			\

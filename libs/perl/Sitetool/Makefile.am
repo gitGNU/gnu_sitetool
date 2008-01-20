@@ -88,4 +88,6 @@ EXTRA_DIST =					\
 	Autoconfig.pm.in			\
 	Filterchain.pm.in			\
 	Scheme.pm.in				\
-	Parse.yp
+	Parse.yp				\
+	Preprocess.yp
+

@@ -10,7 +10,6 @@ EXTRA_DIST =					\
 	changelog.page				\
 	contents.as				\
 	files.as				\
-	filters					\
 	filters.page				\
 	index.page				\
 	level1/test1.page			\
