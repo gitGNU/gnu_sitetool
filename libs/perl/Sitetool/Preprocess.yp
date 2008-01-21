@@ -30,6 +30,7 @@ use Sitetool::Autoconfig;
 use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
 use Sitetool::OS::File;
+use Sitetool::OS::Environment;
 
 BEGIN {
     use Exporter ();
@@ -50,6 +51,54 @@ syntax:
       ;
 
 %%
+
+sub preprocessor_expander($)
+{
+    my $ref = shift;
+
+    assert(defined($ref));
+
+    if (${$ref} =~ m/^[ \t]*$/) {
+	# Skip empty lines
+
+	return 1;
+    } elsif (${$ref} =~ m/^[ \t]*\#.*$/) {
+	# Skip comments
+
+	return 1;
+    }
+
+    debug("Expanding environment variables");
+
+    my $tmp    = ${$ref};
+    my $expand = 0;
+    
+    while ($tmp =~ s/\@(.*)\@//) {
+	my $variable = $1;
+
+	debug("Found variable `" . $variable . "\'");
+	
+	my $value = environment_get($variable);
+	
+	if (!defined($value)) {
+	    debug("Variable `" . $variable . "\' is not defined");
+	    next;
+	}
+
+	debug("Variable `" . $variable . 
+	      "\' value `" . $value    . 
+	      "\'");
+
+	${$ref}   =~ s/\@$variable\@/$value/;
+	$expand   = 1;
+    }
+
+    if ($expand == 1) {
+	debug("  Expanded line `" . ${$ref} . "\'");
+    }
+
+    return 1;
+}
 
 sub preprocess_helper ($$)
 {
@@ -84,6 +133,12 @@ sub preprocess_helper ($$)
 	chomp($tmp);
 
 	debug("  Got line \`" . $tmp . "'");
+	
+	if (!preprocessor_expander(\$tmp)) {
+	    error("Failed to expand environment variables");
+	    exit 1;
+	}
+
 	if ($tmp =~ m/^[ \t]*$/) {
 	    # Skip empty lines
 	} elsif ($tmp =~ m/^[ \t]*\#.*$/) {
@@ -137,6 +192,6 @@ sub preprocess ($$)
     assert(defined(${$string_ref}));
 
     debug("Preprocessing completed successfully");
-    
+
     return 1;
 }

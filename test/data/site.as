@@ -1,10 +1,10 @@
 autogen definitions sitetool;
 
 common = {
-//	footer = "$style_dir/footer.sxml";
-//	header = "$style_dir/header.sxml";
-//	css    = "$style_dir/site.css";
-	layout = "$style_dir/layout.sxml";
+//	footer = "@style_di@r/footer.sxml";
+//	header = "@style_dir@/header.sxml";
+//	css    = "@style_dir@/site.css";
+	layout = "@style_dir@/layout.sxml";
 };
 
 vars = {

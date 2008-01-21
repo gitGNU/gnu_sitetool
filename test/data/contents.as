@@ -1,7 +1,7 @@
 contents = {
 	content = {
 		id     = "footer";
-		source = "$style_dir/footer.sxml";
+		source = "@style_dir@/footer.sxml";
 		filters = {
 			filter[0] = {
 				source      = "sxml";
@@ -13,7 +13,7 @@ contents = {
 
 	content = {
 		id     = "header";
-		source = "$style_dir/header.sxml";
+		source = "@style_dir@/header.sxml";
 		filters = {
 			filter[0] = {
 				source      = "sxml";
@@ -36,12 +36,12 @@ contents = {
 	};
 	content = {
 		id     = "variables_map";
-		source = "$work_dir/maps/variables.map";
+		source = "@work_dir@/maps/variables.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -59,12 +59,12 @@ contents = {
 	};
 	content = {
 		id     = "filters_map";
-		source = "$work_dir/maps/filters.map";
+		source = "@work_dir@/maps/filters.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -82,12 +82,12 @@ contents = {
 	};
 	content = {
 		id      = "filters_wikitext_map";
-		source  = "$work_dir/maps/filters-wikitext.map";
+		source  = "@work_dir@/maps/filters-wikitext.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -110,12 +110,12 @@ contents = {
 	};
 	content = {
 		id      = "alfa_map";
-		source  = "$work_dir/maps/p1.map";
+		source  = "@work_dir@/maps/p1.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -138,12 +138,12 @@ contents = {
 	};
 	content = {
 		id      = "p2_map";
-		source  = "$work_dir/maps/p2.map";
+		source  = "@work_dir@/maps/p2.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -166,12 +166,12 @@ contents = {
 	};
 	content = {
 		id      = "p3_map";
-		source  = "$work_dir/maps/p3.map";
+		source  = "@work_dir@/maps/p3.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -194,12 +194,12 @@ contents = {
 	};
 	content = {
 		id      = "p4_map";
-		source  = "$work_dir/maps/p4.map";
+		source  = "@work_dir@/maps/p4.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -217,12 +217,12 @@ contents = {
 	};
 	content = {
 		id      = "p5_map";
-		source  = "$work_dir/maps/p5.map";
+		source  = "@work_dir@/maps/p5.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -240,12 +240,12 @@ contents = {
 	};
 	content = {
 		id      = "p6_map";
-		source  = "$work_dir/maps/p6.map";
+		source  = "@work_dir@/maps/p6.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -268,12 +268,12 @@ contents = {
 	};
 	content = {
 		id      = "p7_map";
-		source  = "$work_dir/maps/p7.map";
+		source  = "@work_dir@/maps/p7.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -291,12 +291,12 @@ contents = {
 	};
 	content = {
 		id      = "p8_map";
-		source  = "$work_dir/maps/p8.map";
+		source  = "@work_dir@/maps/p8.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -319,12 +319,12 @@ contents = {
 	};
 	content = {
 		id      = "p10_map";
-		source  = "$work_dir/maps/p10.map";
+		source  = "@work_dir@/maps/p10.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
@@ -347,12 +347,12 @@ contents = {
 	};
 	content = {
 		id      = "p11_map";
-		source  = "$work_dir/maps/p11.map";
+		source  = "@work_dir@/maps/p11.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l $style_dir/menu.scm";
+				parameters  = "-l @style_dir@/menu.scm";
 			};
 		};
 	};
