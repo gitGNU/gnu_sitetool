@@ -39,13 +39,13 @@ MAINTAINERCLEANFILES =				\
 	Parse.pm				\
 	Preprocess.pm
 
-Parse.pm: Makefile $(srcdir)/Parse.yp
+Parse.pm: $(srcdir)/Parse.yp
 	$(YAPP) -s -m Sitetool::Parse -o $@ $(srcdir)/Parse.yp || { \
 		rm -f $@ ; \
 		exit 1 ; \
 	}
 
-Preprocess.pm: Makefile $(srcdir)/Preprocess.yp
+Preprocess.pm: $(srcdir)/Preprocess.yp
 	$(YAPP) -s -m Sitetool::Preprocess -o $@ $(srcdir)/Preprocess.yp || { \
 		rm -f $@ ; \
 		exit 1 ; \
@@ -89,4 +89,6 @@ EXTRA_DIST =					\
 	Filterchain.pm.in			\
 	Scheme.pm.in				\
 	Parse.yp				\
-	Preprocess.yp
+	Parse.pm				\
+	Preprocess.yp				\
+	Preprocess.pm
