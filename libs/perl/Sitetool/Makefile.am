@@ -51,7 +51,7 @@ Preprocess.pm: Makefile $(srcdir)/Preprocess.yp
 		exit 1 ; \
 	}
 
-Autoconfig.pm: Makefile Autoconfig.pm.in
+Autoconfig.pm: Makefile $(srcdir)/Autoconfig.pm.in
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/Autoconfig.pm.in > $@.tmp && \
 	  chmod a-w $@.tmp && \
@@ -63,7 +63,7 @@ Autoconfig.pm: Makefile Autoconfig.pm.in
 ##
 ## This module needs @PATH_SEPARATOR@ ...
 ##
-Filterchain.pm: Makefile Filterchain.pm.in
+Filterchain.pm: Makefile $(srcdir)/Filterchain.pm.in
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/Filterchain.pm.in > $@.tmp && \
 	  chmod a-w $@.tmp && \
@@ -75,7 +75,7 @@ Filterchain.pm: Makefile Filterchain.pm.in
 ##
 ## This module needs @PATH_SEPARATOR@ ...
 ##
-Scheme.pm: Makefile Scheme.pm.in
+Scheme.pm: Makefile $(srcdir)/Scheme.pm.in
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/Scheme.pm.in > $@.tmp && \
 	  chmod a-w $@.tmp && \
@@ -90,4 +90,3 @@ EXTRA_DIST =					\
 	Scheme.pm.in				\
 	Parse.yp				\
 	Preprocess.yp
-
