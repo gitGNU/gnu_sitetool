@@ -181,6 +181,9 @@ $output_dir = filename_rel2abs($output_dir);
 debug("Working directory is \`" . $work_dir . "'");
 debug("Output directory is \`" . $output_dir . "'");
 
+#
+# Remove old directories
+#
 debug("Removing old directories, if present");
 if (directory_ispresent($work_dir)) {
     if (!directory_remove($work_dir)) {
@@ -193,24 +196,13 @@ if (directory_ispresent($output_dir)) {
     }
 }
 
+#
+# Build newer ones
+#
 verbose("Building working directories");
 if (!directory_create($work_dir)) {
     exit 1;
 }
-
-#
-# Populate work directories
-#
-my $maps_dir     = File::Spec->catdir($work_dir, "maps");
-my $contents_dir = File::Spec->catdir($work_dir, "contents");
-my $pages_dir    = File::Spec->catdir($work_dir, "pages");
-if (!directory_create($maps_dir)     ||
-    !directory_create($contents_dir) ||
-    !directory_create($pages_dir)) {
-    directory_remove($work_dir);
-    exit 1;
-}
-
 verbose("Building output directory");
 if (!directory_create($output_dir)) {
     directory_remove($work_dir);
@@ -218,12 +210,48 @@ if (!directory_create($output_dir)) {
 }
 
 #
+# Populate work directories
+#
+my $maps_dir      = File::Spec->catdir($work_dir,  "maps");
+my $contents_dir  = File::Spec->catdir($work_dir,  "contents");
+my $pages_dir     = File::Spec->catdir($work_dir,  "pages");
+my $src_style_dir = File::Spec->catfile($data_dir, "styles", "default");
+my $dst_style_dir = File::Spec->catfile($work_dir, "style");
+
+if (!directory_create($maps_dir)     ||
+    !directory_create($contents_dir) ||
+    !directory_create($pages_dir)) {
+    directory_remove($work_dir);
+    exit 1;
+}
+
+if (!directory_link($src_style_dir, $dst_style_dir)) {
+    directory_remove($work_dir);
+    exit 1;
+}
+
+#
 # Check the setup
 #
-assert(directory_ispresent($work_dir));
-assert(directory_ispresent($maps_dir));
-assert(directory_ispresent($contents_dir));
-assert(directory_ispresent($pages_dir));
-assert(directory_ispresent($output_dir));
+if (!directory_ispresent($work_dir)) {
+    error("Cannot setup \`" . $work_dir . "' directory");
+    exit 1;
+}
+if (!directory_ispresent($maps_dir)) {
+    error("Cannot setup \`" . $maps_dir . "' directory");
+    exit 1;
+}
+if (!directory_ispresent($contents_dir)) {
+    error("Cannot setup \`" . $contents_dir . "' directory");
+    exit 1;
+}
+if (!directory_ispresent($pages_dir)) {
+    error("Cannot setup \`" . $pages_dir . "' directory");
+    exit 1;
+}
+if (!directory_ispresent($output_dir)) {
+    error("Cannot setup \`" . $output_dir . "' directory");
+    exit 1;
+}
 
 exit 0;
