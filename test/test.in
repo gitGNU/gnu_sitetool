@@ -21,6 +21,9 @@
 SITETOOL_LIBRARY_PATH=@abs_top_builddir@/libs@PATH_SEPARATOR@@abs_top_srcdir@/libs
 export SITETOOL_LIBRARY_PATH
 
+SITETOOL_DATA_PATH=@abs_top_srcdir@/data
+export SITETOOL_DATA_PATH
+
 rm -r -f ./test-subDir || exit 1
 
 cp -r @abs_top_srcdir@/test/data ./test-subDir || exit 1
