@@ -40,7 +40,9 @@ BEGIN {
     @EXPORT = qw(&directory_create
 		 &directory_remove
 		 &directory_items
-		 &directory_ispresent);
+		 &directory_ispresent
+		 &directory_link
+		 &directory_copy);
 }
 
 sub directory_ispresent ($)
@@ -179,6 +181,62 @@ sub directory_items ($$)
     @items = @clean_items;
     
     return @items;
+}
+
+sub directory_copy($$)
+{
+    my $source      = shift;
+    my $destination = shift;
+
+    assert(defined($source));
+    assert($source ne "");
+    assert(defined($destination));
+    assert($destination ne "");
+
+    bug("Not yet implemented");
+    return 0;
+}
+
+sub directory_link ($$)
+{
+    my $source      = shift;
+    my $destination = shift;
+
+    assert(defined($source));
+    assert($source ne "");
+    assert(defined($destination));
+    assert($destination ne "");
+
+    if (!directory_ispresent($source)) {
+	error("Directory \`" . $source . "' does not exists");
+	return 0;
+    }
+
+    my $symlink_exists;
+    $symlink_exists = eval {
+	no warnings 'all';
+	symlink("", "");
+	1
+    };
+    if ($symlink_exists) {
+	debug("sym-linking \`" . $source . "' to \`" . $destination . "'");
+
+	if (!symlink($source, $destination)) {
+	    error("Cannot symlink "        .
+		  "\`" . $source . "'"     .
+		  " to "                   .
+		  "\`" . $destination . "'");
+	    return 0;
+	}
+    } else {
+	debug("hard-linking \`" . $source . "' to \`" . $destination . "'");
+
+	if (!directory_copy($source, $destination)) {
+	    return 0;
+	}
+    }
+
+    return 1;
 }
 
 1;
