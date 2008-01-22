@@ -29,6 +29,7 @@ tools/autotools/texinfo.tex
 
 test/test-build
 test/test-dry-run
+test/test-args
 
 libs/perl/Sitetool/Autoconfig.pm
 libs/perl/Sitetool/Filterchain.pm
