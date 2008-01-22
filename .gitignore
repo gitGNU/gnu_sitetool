@@ -27,7 +27,8 @@ tools/autotools/missing
 tools/autotools/mdate-sh
 tools/autotools/texinfo.tex
 
-test/test
+test/test-build
+test/test-dry-run
 
 libs/perl/Sitetool/Autoconfig.pm
 libs/perl/Sitetool/Filterchain.pm
