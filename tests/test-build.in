@@ -18,31 +18,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-SITETOOL_LIBRARY_PATH=@abs_top_builddir@/libs@PATH_SEPARATOR@@abs_top_srcdir@/libs
-export SITETOOL_LIBRARY_PATH
+. @builddir@/defs
 
-SITETOOL_DATA_PATH=@abs_top_srcdir@/data
-export SITETOOL_DATA_PATH
-
-rm -r -f ./test-subDir || exit 1
-cp -r @abs_top_srcdir@/tests/data ./test-subDir || exit 1
-chmod -R ug+rw ./test-subDir || exit 1
-
-PARMS=""
-if test -n "$DEBUG" ; then
-   PARMS="$PARMS -d"
-fi
-if test -n "$VERBOSE" ; then
-   PARMS="$PARMS -v"
-fi
-
-(cd ./test-subDir && @abs_top_builddir@/src/sitetool --mode build $PARMS) || {
-    	rm -r -f ./test-subDir
-	exit 1
-}
-
-#if test -z "$DEBUG" ; then
-   rm -r -f ./test-subDir
-#fi
+$SITETOOL --mode build || exit 1
 
 exit 0
