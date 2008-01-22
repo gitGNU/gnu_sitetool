@@ -27,6 +27,8 @@ tools/autotools/missing
 tools/autotools/mdate-sh
 tools/autotools/texinfo.tex
 
+test/defs
+test/wrapper
 test/test-build
 test/test-dry-run
 test/test-args
