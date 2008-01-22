@@ -27,12 +27,12 @@ tools/autotools/missing
 tools/autotools/mdate-sh
 tools/autotools/texinfo.tex
 
-test/defs
-test/wrapper
-test/test-args
-test/test-build
-test/test-dry-run
-test/test-subDir*
+tests/defs
+tests/wrapper
+tests/test-args
+tests/test-build
+tests/test-dry-run
+tests/test-subDir*
 
 libs/perl/Sitetool/Autoconfig.pm
 libs/perl/Sitetool/Filterchain.pm
