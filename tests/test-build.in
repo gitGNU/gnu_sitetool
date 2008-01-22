@@ -25,7 +25,7 @@ SITETOOL_DATA_PATH=@abs_top_srcdir@/data
 export SITETOOL_DATA_PATH
 
 rm -r -f ./test-subDir || exit 1
-cp -r @abs_top_srcdir@/test/data ./test-subDir || exit 1
+cp -r @abs_top_srcdir@/tests/data ./test-subDir || exit 1
 chmod -R ug+rw ./test-subDir || exit 1
 
 PARMS=""
@@ -36,7 +36,7 @@ if test -n "$VERBOSE" ; then
    PARMS="$PARMS -v"
 fi
 
-(cd ./test-subDir && @abs_top_builddir@/src/sitetool --dry-run --mode build $PARMS) || {
+(cd ./test-subDir && @abs_top_builddir@/src/sitetool --mode build $PARMS) || {
     	rm -r -f ./test-subDir
 	exit 1
 }

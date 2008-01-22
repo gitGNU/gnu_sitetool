@@ -122,8 +122,8 @@ AC_CONFIG_FILES([
     tools/Makefile
     tools/scripts/Makefile
 
-    test/Makefile
-    test/data/Makefile
+    tests/Makefile
+    tests/data/Makefile
 ])
 
 AC_OUTPUT
