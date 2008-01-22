@@ -43,8 +43,8 @@ fi
 	exit 1
 }
 
-if test -z "$DEBUG" ; then
+#if test -z "$DEBUG" ; then
    rm -r -f ./test-subDir
-fi
+#fi
 
 exit 0
