@@ -186,6 +186,7 @@ sub help ()
     print "\n";
 
     print "Options:\n";
+    print "  -n, --dry-run              display commands without modifying any files\n";
     print "  -m, --mode=MODE            use operation mode MODE\n";
     print "  -f, --force                consider all files obsolete\n";
     print "  -W, --warnings=CATEGORY    report the warnings falling in CATEGORY\n";
@@ -231,6 +232,7 @@ trace_prefix_set($PROGRAM_NAME);
 
 my $running_mode  = undef;
 my $force_mode    = 0;
+my $dry_run       = 0;
 my @options_slack;
 
 debug_set(0);
@@ -264,6 +266,8 @@ while ($i <= $#ARGV) {
 #    } elsif ($ARGV[$i] =~ /^\-\-$/) {
 #	$i++;
 #	last;
+    } elsif (($ARGV[$i] =~ /^\-n$/) || ($ARGV[$i] =~ /^\-\-dry\-run$/)) {
+	$dry_run = 1;
     } elsif (($ARGV[$i] =~ /^\-m$/) || ($ARGV[$i] =~ /^\-\-mode$/)) {
 	$i++;
 	if (!defined($ARGV[$i])) {
@@ -382,10 +386,10 @@ assert($#tools_chain >= 0);
 
 for my $tool (@tools_chain) {
     verbose("Running \`" . $tool . "'");
-
+    
     my $handler;
     my $flags;
-
+    
     $handler = $tools{$tool}{HANDLER};
     debug("Handler is `$handler'");
     assert(defined($handler));
@@ -400,8 +404,12 @@ for my $tool (@tools_chain) {
 	File::Spec->catfile($bin_dir, $handler) . " " .
 	"$flags @options_slack";
     
-    if (!shell_execute($string)) {
-	exit 1;
+    if (!$dry_run) {
+	if (!shell_execute($string)) {
+	    exit 1;
+	}
+    } else {
+	print $string . "\n";
     }
 }
 
