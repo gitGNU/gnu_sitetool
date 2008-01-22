@@ -182,48 +182,44 @@ my %tools = (
 
 sub help ()
 {
-    print "Usage: $PROGRAM_NAME [COMMON-OPTIONS] -- [SPECIFIC-OPTIONS]\n";
-    print "\n";
-    print "Common options:";
+    print "Usage: $PROGRAM_NAME [OPTION]... [MODE-ARG]\n";
     print "\n";
 
+    print "Options:\n";
+    print "  -m, --mode=MODE            use operation mode MODE\n";
+    print "  -f, --force                consider all files obsolete\n";
+    print "  -W, --warnings=CATEGORY    report the warnings falling in CATEGORY\n";
+    print "  -d, --debug                enable debugging mode\n";
+    print "  -v, --verbose              enable verbose mode\n";
+    print "  -h, --help                 print this help, then exit\n";
+    print "  -V, --version              print version number, then exit\n";
+    print "\n";
+    
+    print "Warning categories include:\n";
+    print "  \`all'                      all the warnings\n";
+    print "  \`none'                     turn off all the warnings\n";
+    print "\n";
+    
+    print "MODE must be one of the following:\n";
     for my $tool (keys(%tools)) {
 	assert(defined($tools{$tool}{DESCRIPTION}));
-
-	printf("      --%-11s           %-s\n",
+	
+	printf("  %-11s                %-s\n",
 	       $tool,
 	       $tools{$tool}{DESCRIPTION});
     }
-
-    print "  -f, --force                 consider all files obsolete\n";
-    print "  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY\n";
-    print "  -d, --debug                 enable debugging mode\n";
-    print "  -v, --verbose               enable verbose mode\n";
-    print "  -h, --help                  print this help, then exit\n";
-    print "  -V, --version               print version number, then exit\n";
+    print "\n";
+    
+    print "MODE-ARGS vary depending on the MODE.  Try \`" . $PROGRAM_NAME. " --mode=MODE --help' for a\n";
+    print "more detailed description of MODE.\n";
+    print "\n";
+    
+    print "The environment variables SITETOOL_BIN_PATH, SITETOOL_LIBRARY_PATH and\n";
+    print "SITETOOL_DATA_PATH are honored.\n";
     print "\n";
 
-    for my $tool (keys(%tools)) {
-	my $option;
-	my $string;
-
-	$option = "--" . $tool;
-	print "Flags for $option mode:\n";
-	$string =
-	    File::Spec->catfile($bin_dir, $tools{$tool}{HANDLER}) .
-	    " --brief-help";
-	if (!shell_execute($string)) {
-	    return 0;
-	}
-	print "\n";
-    }
-
-    print "Warning categories include:\n";
-    print "  \`all'           all the warnings\n";
-    print "  \`none'          turn off all the warnings\n";
-    print "\n";
     print "Report bugs to <$PACKAGE_BUGREPORT>\n";
-
+    
     return 1;
 }
 
@@ -265,17 +261,23 @@ while ($i <= $#ARGV) {
     } elsif (($ARGV[$i] =~ /^\-V$/) || ($ARGV[$i] =~ /^\-\-version$/)) {
 	version();
 	exit 0;
-    } elsif ($ARGV[$i] =~ /^\-\-$/) {
+#    } elsif ($ARGV[$i] =~ /^\-\-$/) {
+#	$i++;
+#	last;
+    } elsif (($ARGV[$i] =~ /^\-m$/) || ($ARGV[$i] =~ /^\-\-mode$/)) {
 	$i++;
-	last;
-    } else {
+	if (!defined($ARGV[$i])) {
+	  hint("Missing MODE");
+	  exit 1;
+	}
+
 	#
-	# Tools handling
+	# Mode handling
 	#
 	for my $tool (keys(%tools)) {
 	    debug("Tool = \`" . $tool . "'");
-	    if ($ARGV[$i] =~ /^\-\-$tool$/) {
-		debug("Got it !");
+	    if ($ARGV[$i] =~ /^$tool$/) {
+		debug("Got running mode");
 		if (defined($running_mode)) {
 		    hint("Too many running modes");
 		    exit 1;
@@ -289,6 +291,9 @@ while ($i <= $#ARGV) {
 	    error("Unknown option \`" . $ARGV[$i] . "'");
 	    exit 1;
 	}
+
+	$i++;
+	last;
     }
 
     $i++;
@@ -299,14 +304,14 @@ debug("Running \`" . $PACKAGE_NAME . "' version \`" . $PACKAGE_VERSION . "'");
 @options_slack = @ARGV[$i .. $#ARGV];
 debug("Options slack is \`@options_slack'");
 
-if ($input_file eq "") {
-    hint("Missing input file");
-    exit 1;
-}
-if (!file_ispresent($input_file)) {
-    error("Cannot find \`$input_file'");
-    exit 1;
-}
+#if ($input_file eq "") {
+#    hint("Missing input file");
+#    exit 1;
+#}
+#if (!file_ispresent($input_file)) {
+#    error("Cannot find \`$input_file'");
+#    exit 1;
+#}
 if (!defined($running_mode)) {
     hint("Missing running mode");
     exit 1;
