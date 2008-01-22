@@ -40,10 +40,14 @@ TESTS =						\
 noinst_SCRIPTS = $(TESTS)
 CLEANFILES = $(noinst_SCRIPTS) $(check_SCRIPTS)
 
+##
+## NOTE:
+##   defs should not be made executable because it should be only included by
+##   test-cases
+##
 defs: $(srcdir)/defs.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/defs.in > $@.tmp && \
-	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
@@ -91,4 +95,4 @@ test-build: $(srcdir)/test-build.in Makefile
 	}
 
 clean-local:
-	rm -rf test-subDir*
+	rm -rf testSubDir-*
