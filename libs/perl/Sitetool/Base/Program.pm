@@ -50,7 +50,7 @@ sub version ()
 
     print $::PROGRAM_NAME . " (" . $Sitetool::Autoconfig::PACKAGE_NAME . ") " . $Sitetool::Autoconfig::PACKAGE_VERSION . "\n";
     print "\n";
-    print "Copyright (C) 2007 Francesco Salvestrini\n";
+    print "Copyright (C) 2007, 2008 Francesco Salvestrini\n";
     print "This is free software.  You may redistribute copies of it under the terms of\n";
     print "the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.\n";
     print "There is NO WARRANTY, to the extent permitted by law.\n";
