@@ -38,7 +38,7 @@ if test -n "$VERBOSE" ; then
    PARMS="$PARMS -v"
 fi
 
-(cd ./test-subDir && @abs_top_builddir@/src/sitetool --mode build $PARMS) || {
+(cd ./test-subDir && @abs_top_builddir@/src/sitetool --dry-run --mode build $PARMS) || {
     	rm -r -f ./test-subDir
 	exit 1
 }
