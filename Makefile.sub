@@ -33,6 +33,7 @@ do_subst = sed \
   -e 's,[@]configure_input[@],Generated from $@.in; do not edit by hand.,g' \
   -e 's,[@]makefile_input[@],Generated from $@.am; do not edit by hand.,g' \
   -e 's,[@]bindir[@],$(bindir),g' \
+  -e 's,[@]builddir[@],$(builddir),g' \
   -e 's,[@]abs_builddir[@],$(abs_builddir),g' \
   -e 's,[@]abs_top_builddir[@],$(abs_top_builddir),g' \
   -e 's,[@]abs_top_srcdir[@],$(abs_top_srcdir),g' \
