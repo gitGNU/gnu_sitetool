@@ -62,12 +62,6 @@ FLAGS="$FLAGS --warnings"
 test -n "$VERBOSE" && FLAGS="$FLAGS --verbose "
 test -n "$DEBUG"   && FLAGS="$FLAGS --debug "
 
-# Script used during (major.minor) release installation
-test -z "$OBLITERATE_PERL_CALL" && \
-    PERL_REMOVE_CALL="@abs_top_srcdir@/tools/scripts/perl-remove-call"
-test -z "$INJECT" && \
-    INJECT="@abs_top_srcdir@/tools/scripts/inject"
-
 # We need the wrapper to call the package suite of programs because their
 # calls are relative to the testSubDir-<testname> directory (see below)
 test -z "$SITETOOL" && SITETOOL="wrapper sitetool $FLAGS"
@@ -128,7 +122,8 @@ rm -rf testSubDir-$testname > /dev/null 2>&1
 mkdir testSubDir-$testname
 
 # Copy in some files we need.
-cp -R ./data ./testSubDir-$testname
+cp -R $srcdir/data/* ./testSubDir-$testname
+chmod -R a+rw ./testSubDir-$testname/*
 
 # Then jump into the created directory
 cd ./testSubDir-$testname

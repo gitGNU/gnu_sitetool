@@ -32,7 +32,7 @@ tests/wrapper
 tests/test-args
 tests/test-build
 tests/test-dry-run
-tests/test-subDir*
+tests/testSubDir-*
 
 libs/perl/Sitetool/Autoconfig.pm
 libs/perl/Sitetool/Filterchain.pm
