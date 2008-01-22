@@ -29,6 +29,9 @@ tools/autotools/texinfo.tex
 
 test/defs
 test/wrapper
+test/test-args
+test/test-build
+test/test-dry-run
 test/test-subDir*
 
 libs/perl/Sitetool/Autoconfig.pm
