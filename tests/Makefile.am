@@ -26,6 +26,11 @@ EXTRA_DIST =					\
 	wrapper.in				\
 	test-dry-run.in				\
 	test-args.in				\
+	test-helps.in				\
+	test-initialize.in			\
+	test-preprocess.in			\
+	test-parse.in				\
+	test-validate.in			\
 	test-build.in
 
 check_SCRIPTS =					\
@@ -35,6 +40,11 @@ check_SCRIPTS =					\
 TESTS =						\
 	test-dry-run				\
 	test-args				\
+	test-helps				\
+	test-initialize				\
+	test-preprocess				\
+	test-parse				\
+	test-validate				\
 	test-build
 
 noinst_SCRIPTS = $(TESTS)
@@ -84,9 +94,59 @@ test-args: $(srcdir)/test-args.in Makefile
 		exit 1 ; \
 	}
 
+test-helps: $(srcdir)/test-helps.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-helps.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-initialize: $(srcdir)/test-initialize.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-initialize.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-preprocess: $(srcdir)/test-preprocess.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-preprocess.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-parse: $(srcdir)/test-parse.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-parse.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
 test-build: $(srcdir)/test-build.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/test-build.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-validate: $(srcdir)/test-validate.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-validate.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
