@@ -1,0 +1,6 @@
+*.ac		 crlf
+*.in		 crlf
+*.am             crlf
+*.pm		 crlf
+src/sitetool*.in crlf
+*.pm.in		 crlf
