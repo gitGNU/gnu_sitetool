@@ -14,6 +14,11 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
+* Add support for choosing the right page's DTD.
+* Oversimplify site configuration (having it in a single file would be a 
+  good thing); at the same time think, add and handle a site map indexing.
+* Add Options.pm module in order to wrap Perl's Getopt::Long.
+* Develop tools/script/perl-autofrisk.in with Guile's autofrisk in mind.
 
 DONE:
 0.1.107:
