@@ -21,7 +21,6 @@ config.status
 
 tools/scripts/gitlog2ChangeLog
 tools/scripts/NEWS-query
-tools/scripts/perl-autofrisk
 
 tools/autotools/install-sh
 tools/autotools/missing
