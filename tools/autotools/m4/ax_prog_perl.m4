@@ -56,9 +56,6 @@ AC_DEFUN([AX_PROG_PERL],[dnl
                         [override autodetected perl interpreter])], [
         PERL=$withval
 	AC_SUBST([PERL],[$PERL])
-
-        AC_MSG_NOTICE([Using perl interpreter $PERL])
-
     ],[
         AC_PATH_PROG([PERL],[perl])
     ])
