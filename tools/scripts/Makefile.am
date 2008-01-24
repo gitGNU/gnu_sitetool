@@ -8,11 +8,13 @@ include $(top_srcdir)/Makefile.sub
 
 EXTRA_DIST =					\
 	gitlog2ChangeLog.in			\
-	NEWS-query.in
+	NEWS-query.in				\
+	perl-autofrisk.in
 
 noinst_SCRIPTS =				\
 	gitlog2ChangeLog			\
-	NEWS-query
+	NEWS-query				\
+	perl-autofrisk
 
 CLEANFILES = $(noinst_SCRIPTS)
 
@@ -29,6 +31,16 @@ NEWS-query: NEWS-query.in Makefile
 gitlog2ChangeLog: gitlog2ChangeLog.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/gitlog2ChangeLog.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+perl-autofrisk: perl-autofrisk.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/perl-autofrisk.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
