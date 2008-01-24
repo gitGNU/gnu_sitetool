@@ -49,8 +49,8 @@ chmod a-w configure.ac
 echo "$PROGNAME: Handling autotools bootstrap ..."
 
 echo "$PROGNAME: Running autoreconf ..."
-autoreconf --verbose --force --install -Wall || {
-    echo "$PROGNAME: Cannot find autoreconf ..."
+aclocal    --force --install -I ./tools/autotools/m4 && \
+autoreconf --verbose --force --install -Wall         || {
     exit 1
 }
 
