@@ -57,8 +57,9 @@ AS_IF([test -z "$GUILE"],[
 	GUILE_MODULE_REQUIRED([sxml transform])
 ])
 
-AC_PATH_PROG([PYTHON], [python])
-AC_PATH_PROG([RUBY],   [ruby])
+AX_PROG_PYTHON
+AX_PROG_RUBY
+
 AC_PATH_PROG([TIDY],   [tidy])
 AC_PATH_PROG([WPUT],   [wput])
 AC_PATH_PROG([WGET],   [wget])
