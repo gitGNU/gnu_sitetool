@@ -1,22 +1,29 @@
-##### http://autoconf-archive.cryp.to/ax_gcc_option.html
+#####
 #
 # SYNOPSIS
 #
-#   AX_PROG_GUILE
+#   AX_PROG_GUILE([VALUE-IF-NOT-FOUND],[PATH])
 #
-# This macro looks for guile interpreter
-# 
-# Use it in your configure.ac as:
+# DESCRIPTION
 #
-#   AX_PROG_GUILE
+#   Locates an installed Guile binary, placing the result in the
+#   precious variable $GUILE. Accepts a present $GUILE, then
+#   --with-guile, and failing that searches for guile in the given
+#   path (which defaults to the system path). If guile is found,
+#   $GUILE is set to the full path of the binary; if it is not found,
+#   $GUILE is set to VALUE-IF-NOT-FOUND, which defaults to 'guile'.
+#
+# NOTE
+#   This macro is based upon AX_WITH_PYTHON macro from Dustin J. Mitchell
+#   <dustin@cs.uchicago.edu>
 #
 # LAST MODIFICATION
 #
-#   2007-12-10
+#   2008-01-24
 #
 # COPYLEFT
 #
-#  Copyright (c) 2007 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#  Copyright (c) 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 #
 #   This program is free software; you can redistribute it and/or
 #   modify it under the terms of the GNU General Public License as
@@ -48,19 +55,28 @@
 #   may extend this special exception to the GPL to apply to your
 #   modified version as well.
 
-AC_DEFUN([AX_PROG_GUILE],[dnl
+AC_DEFUN([AX_PROG_GUILE],[
     AC_PREREQ([2.61])
 
-    AC_ARG_WITH([guile],
-        [AS_HELP_STRING([--with-guile-interpreter],
-                        [override autodetected guile interpreter])], [
-        GUILE=$withval
-	AC_SUBST([GUILE],[$GUILE])
+    AC_ARG_VAR([GUILE])
 
-        AC_MSG_NOTICE([Using guile interpreter $GUILE])
+    AS_IF([test -z "$GUILE"],[
+    	AC_MSG_CHECKING([for --with-guile])
+        AC_ARG_WITH([guile],
+            [AS_HELP_STRING([--with-guile=GUILE],
+                            [absolute path name of Guile executable])], [
+	    AS_IF([test "$withval" != "yes"],[
+	        GUILE="$withval"
+		AC_MSG_RESULT([$GUILE])
+	    ],[
+	        AC_MSG_RESULT([no])
+	    ])
+	],[
+	    AC_MSG_RESULT([no])
+	])
 
-    ],[
-	GUILE_PROGS
-#        AC_PATH_PROG([GUILE],[guile])
+        AS_IF([test -z "$GUILE"],[
+	    AC_PATH_PROG([GUILE],[guile],m4_ifval([$1],[$1],[guile]),$3)
+        ])
     ])
 ])
