@@ -34,23 +34,27 @@ AX_PATH_MISSING([HELP2MAN], [help2man])
 #
 AX_PROG_PERL
 AS_IF([test -z "$PERL"],[
-    AC_MSG_ERROR([Missing required Perl interpreter])
+	AC_MSG_ERROR([Missing required Perl interpreter])
 ],[
-    AX_PROG_PERL_VERSION([5.8.0],[],[
-        AC_MSG_ERROR([Missing required Perl interpreter version >= 5.8.0])
-    ])
+	AX_PROG_PERL_VERSION([5.8.0],[],[
+		AC_MSG_ERROR([Missing required Perl interpreter version >= 5.8.0])
+	])
+
+	AX_PROG_PERL_MODULES([File::Path Cwd],[],[
+		AC_MSG_ERROR([Missing required Perl module])
+	])
 ])
 
 AX_PROG_GUILE
 AS_IF([test -z "$GUILE"],[
-    AC_MSG_ERROR([Missing required Guile interpreter])
+	AC_MSG_ERROR([Missing required Guile interpreter])
 ],[
-    AX_PROG_GUILE_VERSION([1.6.4],[],[
-        AC_MSG_ERROR([Missing required Guile interpreter version >= 1.6.4])
-    ])
-    
-    GUILE_MODULE_REQUIRED([sxml simple])
-    GUILE_MODULE_REQUIRED([sxml transform])
+	AX_PROG_GUILE_VERSION([1.6.4],[],[
+		AC_MSG_ERROR([Missing required Guile interpreter version >= 1.6.4])
+	])
+	
+	GUILE_MODULE_REQUIRED([sxml simple])
+	GUILE_MODULE_REQUIRED([sxml transform])
 ])
 
 AC_PATH_PROG([PYTHON], [python])
@@ -94,36 +98,36 @@ AC_SUBST(pkgvdatadir, ["\${datadir}/${PACKAGE}-${API_VERSION}/data"])
 AC_SUBST(pkgvlibsdir, ["\${datadir}/${PACKAGE}-${API_VERSION}/libs"])
 
 AC_CONFIG_FILES([
-    Makefile
+	Makefile
 
-    docs/Makefile
-    docs/man/Makefile
-    docs/info/Makefile
+	docs/Makefile
+	docs/man/Makefile
+	docs/info/Makefile
 
-    data/Makefile
-    data/styles/Makefile
-    data/styles/default/Makefile
+	data/Makefile
+	data/styles/Makefile
+	data/styles/default/Makefile
 
-    src/Makefile
-    src/filters/Makefile
+	src/Makefile
+	src/filters/Makefile
 
-    libs/Makefile
-    libs/perl/Makefile
-    libs/perl/Sitetool/Makefile
-    libs/perl/Sitetool/Misc/Makefile
-    libs/perl/Sitetool/Base/Makefile
-    libs/perl/Sitetool/OS/Makefile
-    libs/perl/Sitetool/WWW/Makefile
-    libs/python/Makefile
-    libs/ruby/Makefile
-    libs/scheme/Makefile
-    libs/shell/Makefile
+	libs/Makefile
+	libs/perl/Makefile
+	libs/perl/Sitetool/Makefile
+	libs/perl/Sitetool/Misc/Makefile
+	libs/perl/Sitetool/Base/Makefile
+	libs/perl/Sitetool/OS/Makefile
+	libs/perl/Sitetool/WWW/Makefile
+	libs/python/Makefile
+	libs/ruby/Makefile
+	libs/scheme/Makefile
+	libs/shell/Makefile
 
-    tools/Makefile
-    tools/scripts/Makefile
+	tools/Makefile
+	tools/scripts/Makefile
 
-    tests/Makefile
-    tests/data/Makefile
+	tests/Makefile
+	tests/data/Makefile
 ])
 
 AC_OUTPUT
