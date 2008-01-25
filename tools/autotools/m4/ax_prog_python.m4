@@ -61,7 +61,7 @@ AC_DEFUN([AX_PROG_PYTHON],[
     AC_ARG_VAR([PYTHON])
 
     AS_IF([test -z "$PYTHON"],[
-    	AC_MSG_CHECKING([for --with-python])
+    	AC_MSG_CHECKING([whether a python executable path has been provided])
         AC_ARG_WITH([python],
             [AS_HELP_STRING([--with-python=PYTHON],
                             [absolute path name of Python executable])], [
@@ -69,6 +69,7 @@ AC_DEFUN([AX_PROG_PYTHON],[
 	        PYTHON="$withval"
 		AC_MSG_RESULT([$PYTHON])
 	    ],[
+		PYTHON=""
 	        AC_MSG_RESULT([no])
 	    ])
 	],[

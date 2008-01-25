@@ -61,7 +61,7 @@ AC_DEFUN([AX_PROG_GUILE],[
     AC_ARG_VAR([GUILE])
 
     AS_IF([test -z "$GUILE"],[
-    	AC_MSG_CHECKING([for --with-guile])
+    	AC_MSG_CHECKING([whether a guile executable path has been provided])
         AC_ARG_WITH([guile],
             [AS_HELP_STRING([--with-guile=GUILE],
                             [absolute path name of Guile executable])], [
@@ -69,6 +69,7 @@ AC_DEFUN([AX_PROG_GUILE],[
 	        GUILE="$withval"
 		AC_MSG_RESULT([$GUILE])
 	    ],[
+		GUILE=""
 	        AC_MSG_RESULT([no])
 	    ])
 	],[

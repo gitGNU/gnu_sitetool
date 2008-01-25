@@ -61,7 +61,7 @@ AC_DEFUN([AX_PROG_PERL],[
     AC_ARG_VAR([PERL])
 
     AS_IF([test -z "$PERL"],[
-    	AC_MSG_CHECKING([for --with-perl])
+    	AC_MSG_CHECKING([whether a perl executable path has been provided])
         AC_ARG_WITH([perl],
             [AS_HELP_STRING([--with-perl=PERL],
                             [absolute path name of Perl executable])], [
@@ -69,6 +69,7 @@ AC_DEFUN([AX_PROG_PERL],[
 	        PERL="$withval"
 		AC_MSG_RESULT([$PERL])
 	    ],[
+		PERL=""
 	        AC_MSG_RESULT([no])
 	    ])
 	],[

@@ -61,7 +61,7 @@ AC_DEFUN([AX_PROG_RUBY],[
     AC_ARG_VAR([RUBY])
 
     AS_IF([test -z "$RUBY"],[
-    	AC_MSG_CHECKING([for --with-ruby])
+    	AC_MSG_CHECKING([whether a ruby executable path has been provided])
         AC_ARG_WITH([ruby],
             [AS_HELP_STRING([--with-ruby=RUBY],
                             [absolute path name of Ruby executable])], [
@@ -69,6 +69,7 @@ AC_DEFUN([AX_PROG_RUBY],[
 	        RUBY="$withval"
 		AC_MSG_RESULT([$RUBY])
 	    ],[
+		RUBY=""
 	        AC_MSG_RESULT([no])
 	    ])
 	],[
