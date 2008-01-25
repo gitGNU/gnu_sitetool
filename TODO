@@ -14,11 +14,17 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
-* Add support for choosing the right page's DTD.
+* Add support for choosing the right page's DTD. We should have a global site
+  DTD and the option to override it on each page.
+
 * Oversimplify site configuration (having it in a single file would be a 
   good thing); at the same time think, add and handle a site map indexing.
-* Add Options.pm module in order to wrap Perl's Getopt::Long.
-* Develop tools/script/perl-autofrisk.in with Guile's autofrisk in mind.
+
+* Add code into the libs/perl/Sitetool/Options.pm module in order to wrap
+  Perl's Getopt::Long.
+
+* Develop tools/script/perl-autofrisk in order to mimic the Guile's autofrisk
+  script. The script should be integrated into the bootstrap script.
 
 DONE:
 0.1.107:
