@@ -71,7 +71,7 @@
 #
 # LAST MODIFICATION
 #
-#   2007-07-29
+#   2008-01-25
 #
 # COPYLEFT
 #
@@ -83,6 +83,8 @@
 
 dnl #########################################################################
 AC_DEFUN([AX_COMPARE_VERSION], [
+  AC_PROG_AWK
+
   # Used to indicate true or false condition
   ax_compare_version=false
 
@@ -130,8 +132,8 @@ x$B" | sed 's/^ *//' | sort -r | sed "s/x${A}/true/;s/x${B}/false/;1q"`
     [0],[
       # A count of zero means use the length of the shorter version.
       # Determine the number of characters in A and B.
-      ax_compare_version_len_A=`echo "$A" | awk '{print(length)}'`
-      ax_compare_version_len_B=`echo "$B" | awk '{print(length)}'`
+      ax_compare_version_len_A=`echo "$A" | $AWK '{print(length)}'`
+      ax_compare_version_len_B=`echo "$B" | $AWK '{print(length)}'`
 
       # Set A to no more than B's length and B to no more than A's length.
       A=`echo "$A" | sed "s/\(.\{$ax_compare_version_len_B\}\).*/\1/"`
