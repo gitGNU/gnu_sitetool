@@ -132,3 +132,14 @@ AC_CONFIG_FILES([
 ])
 
 AC_OUTPUT
+
+cat <<EOF
+
+  ${PACKAGE_NAME} ${PACKAGE_VERSION} configuration summary
+
+    Perl   : ${PERL}
+    Guile  : ${GUILE}
+    Ruby   : ${RUBY}
+    Python : ${PYTHON}
+
+EOF
