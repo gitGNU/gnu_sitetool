@@ -41,7 +41,6 @@
 
 AC_DEFUN([AX_PROG_PERL_MODULES],[
   AC_PREREQ([2.61])
-  AC_REQUIRE([AX_PROG_PERL])
   
   ac_perl_modules="$1"
   
