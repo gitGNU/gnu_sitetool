@@ -58,27 +58,26 @@
 #   modified version as well.
 
 AC_DEFUN([AX_PROG_GUILE_VERSION],[
-    AC_REQUIRE([AX_PROG_GUILE])
     AC_REQUIRE([AC_PROG_SED])
 
     AS_IF([test -n "$GUILE"],[
         ax_guile_version="$1"
 
-        AC_MSG_CHECKING([for guile version >= $ax_guile_version])
-
+        AC_MSG_CHECKING([for guile version])
         changequote(<<,>>)
         guile_version=`$GUILE -q --version 2>&1 | head -n 1 | $SED -e 's/.* \([0-9]*\.[0-9]*\.[0-9]*\)/\1/'`
         changequote([,])
-        
+        AC_MSG_RESULT($guile_version)
+
         AX_COMPARE_VERSION([$ax_guile_version],[le],[$guile_version],[
-            AC_MSG_RESULT([yes])
+	    :
             $2
         ],[
-            AC_MSG_RESULT([no])
+	    :
             $3
         ])
     ],[
-        AC_MSG_RESULT([could not find guile interpreter])
+        AC_MSG_WARN([could not find guile interpreter])
         $3
     ])
 ])
