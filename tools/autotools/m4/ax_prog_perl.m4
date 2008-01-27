@@ -13,10 +13,6 @@
 #   $PERL is set to the full path of the binary; if it is not found,
 #   $PERL is set to VALUE-IF-NOT-FOUND, which defaults to 'perl'.
 #
-# NOTE
-#   This macro is based upon AX_WITH_PYTHON macro from Dustin J. Mitchell
-#   <dustin@cs.uchicago.edu>
-#
 # LAST MODIFICATION
 #
 #   2008-01-24
@@ -55,29 +51,6 @@
 #   may extend this special exception to the GPL to apply to your
 #   modified version as well.
 
-AC_DEFUN([AX_PROG_PERL],[
-    AC_PREREQ([2.61])
-
-    AC_ARG_VAR([PERL])
-
-    AS_IF([test -z "$PERL"],[
-    	AC_MSG_CHECKING([whether a perl executable path has been provided])
-        AC_ARG_WITH([perl],
-            [AS_HELP_STRING([--with-perl=PERL],
-                            [absolute path name of Perl executable])], [
-	    AS_IF([test "$withval" != "yes"],[
-	        PERL="$withval"
-		AC_MSG_RESULT([$PERL])
-	    ],[
-		PERL=""
-	        AC_MSG_RESULT([no])
-	    ])
-	],[
-	    AC_MSG_RESULT([no])
-	])
-
-        AS_IF([test -z "$PERL"],[
-	    AC_PATH_PROG([PERL],[perl],m4_ifval([$1],[$1],[perl]),$3)
-        ])
-    ])
+AC_DEFUN([AX_WITH_PERL],[
+    AX_WITH_PROG(PERL,perl,[],[])
 ])
