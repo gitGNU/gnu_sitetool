@@ -55,29 +55,6 @@
 #   may extend this special exception to the GPL to apply to your
 #   modified version as well.
 
-AC_DEFUN([AX_PROG_PYTHON],[
-    AC_PREREQ([2.61])
-
-    AC_ARG_VAR([PYTHON])
-
-    AS_IF([test -z "$PYTHON"],[
-    	AC_MSG_CHECKING([whether a python executable path has been provided])
-        AC_ARG_WITH([python],
-            [AS_HELP_STRING([--with-python=PYTHON],
-                            [absolute path name of Python executable])], [
-	    AS_IF([test "$withval" != "yes"],[
-	        PYTHON="$withval"
-		AC_MSG_RESULT([$PYTHON])
-	    ],[
-		PYTHON=""
-	        AC_MSG_RESULT([no])
-	    ])
-	],[
-	    AC_MSG_RESULT([no])
-	])
-
-        AS_IF([test -z "$PYTHON"],[
-	    AC_PATH_PROG([PYTHON],[python],m4_ifval([$1],[$1],[python]),$3)
-        ])
-    ])
+AC_DEFUN([AX_WITH_PYTHON],[
+    AX_WITH_PROG(PYTHON,python,[],[])
 ])
