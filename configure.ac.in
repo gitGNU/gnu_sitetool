@@ -32,7 +32,7 @@ AX_PATH_MISSING([HELP2MAN], [help2man])
 #
 # Runtime related programs
 #
-AX_PROG_PERL
+AX_WITH_PERL
 AS_IF([test -z "$PERL"],[
 	AC_MSG_ERROR([Missing required Perl interpreter])
 ],[
@@ -45,7 +45,7 @@ AS_IF([test -z "$PERL"],[
 	])
 ])
 
-AX_PROG_GUILE
+AX_WITH_GUILE
 AS_IF([test -z "$GUILE"],[
 	AC_MSG_ERROR([Missing required Guile interpreter])
 ],[
@@ -57,8 +57,8 @@ AS_IF([test -z "$GUILE"],[
 	GUILE_MODULE_REQUIRED([sxml transform])
 ])
 
-AX_PROG_PYTHON
-AX_PROG_RUBY
+AX_WITH_PYTHON
+AX_WITH_RUBY
 
 AC_PATH_PROG([TIDY],   [tidy])
 AC_PATH_PROG([WPUT],   [wput])
