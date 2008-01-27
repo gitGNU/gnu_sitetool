@@ -55,29 +55,6 @@
 #   may extend this special exception to the GPL to apply to your
 #   modified version as well.
 
-AC_DEFUN([AX_PROG_RUBY],[
-    AC_PREREQ([2.61])
-
-    AC_ARG_VAR([RUBY])
-
-    AS_IF([test -z "$RUBY"],[
-    	AC_MSG_CHECKING([whether a ruby executable path has been provided])
-        AC_ARG_WITH([ruby],
-            [AS_HELP_STRING([--with-ruby=RUBY],
-                            [absolute path name of Ruby executable])], [
-	    AS_IF([test "$withval" != "yes"],[
-	        RUBY="$withval"
-		AC_MSG_RESULT([$RUBY])
-	    ],[
-		RUBY=""
-	        AC_MSG_RESULT([no])
-	    ])
-	],[
-	    AC_MSG_RESULT([no])
-	])
-
-        AS_IF([test -z "$RUBY"],[
-	    AC_PATH_PROG([RUBY],[ruby],m4_ifval([$1],[$1],[ruby]),$3)
-        ])
-    ])
+AC_DEFUN([AX_WITH_RUBY],[
+    AX_WITH_PROG(RUBY,ruby,[],[])
 ])
