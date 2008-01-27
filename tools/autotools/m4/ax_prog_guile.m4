@@ -55,29 +55,6 @@
 #   may extend this special exception to the GPL to apply to your
 #   modified version as well.
 
-AC_DEFUN([AX_PROG_GUILE],[
-    AC_PREREQ([2.61])
-
-    AC_ARG_VAR([GUILE])
-
-    AS_IF([test -z "$GUILE"],[
-    	AC_MSG_CHECKING([whether a guile executable path has been provided])
-        AC_ARG_WITH([guile],
-            [AS_HELP_STRING([--with-guile=GUILE],
-                            [absolute path name of Guile executable])], [
-	    AS_IF([test "$withval" != "yes"],[
-	        GUILE="$withval"
-		AC_MSG_RESULT([$GUILE])
-	    ],[
-		GUILE=""
-	        AC_MSG_RESULT([no])
-	    ])
-	],[
-	    AC_MSG_RESULT([no])
-	])
-
-        AS_IF([test -z "$GUILE"],[
-	    AC_PATH_PROG([GUILE],[guile],m4_ifval([$1],[$1],[guile]),$3)
-        ])
-    ])
+AC_DEFUN([AX_WITH_GUILE],[
+    AX_WITH_PROG(GUILE,guile,[],[])
 ])
