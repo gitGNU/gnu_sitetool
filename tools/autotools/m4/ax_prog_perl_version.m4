@@ -58,28 +58,27 @@
 #   modified version as well.
 
 AC_DEFUN([AX_PROG_PERL_VERSION],[
-    AC_REQUIRE([AX_PROG_PERL])
+    AC_REQUIRE([AC_PROG_SED])
+    AC_REQUIRE([AC_PROG_GREP])
 
     AS_IF([test -n "$PERL"],[
         ax_perl_version="$1"
 
-        AC_MSG_CHECKING([for perl version >= $ax_perl_version])
+        AC_MSG_CHECKING([for perl version])
+        changequote(<<,>>)
+        perl_version=`$PERL --version 2>&1 | $GREP "This is perl" | $SED -e 's/.* v\([0-9]*\.[0-9]*\.[0-9]*\) .*/\1/'`
+        changequote([,])
+        AC_MSG_RESULT($perl_version)
 
-	cat > conftest.pl << EOF
-use $ax_perl_version;
-EOF
-	AC_TRY_COMMAND([$PERL conftest.pl 1>&AS_MESSAGE_LOG_FD])
-        AS_IF([ test $? -ne 0 ],[
-            AC_MSG_RESULT([no]);
-            $3
-        ],[
-            AC_MSG_RESULT([yes]);
+        AX_COMPARE_VERSION([$ax_perl_version],[le],[$perl_version],[
+	    :
             $2
+        ],[
+	    :
+            $3
         ])
-	rm -f conftest.pl
-
     ],[
-        AC_MSG_RESULT([could not find perl interpreter])
+        AC_MSG_WARN([could not find perl interpreter])
         $3
     ])
 ])
