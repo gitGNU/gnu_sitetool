@@ -7,19 +7,15 @@
 # DESCRIPTION
 #
 #   Locates an installed Guile binary, placing the result in the
-#   precious variable $GUILE. Accepts a present $GUILE, then
+#   precious variable GUILE. Accepts a present GUILE, then
 #   --with-guile, and failing that searches for guile in the given
 #   path (which defaults to the system path). If guile is found,
-#   $GUILE is set to the full path of the binary; if it is not found,
-#   $GUILE is set to VALUE-IF-NOT-FOUND, which defaults to 'guile'.
-#
-# NOTE
-#   This macro is based upon AX_WITH_PYTHON macro from Dustin J. Mitchell
-#   <dustin@cs.uchicago.edu>
+#   GUILE is set to the full path of the binary; if it is not found,
+#   GUILE is set to VALUE-IF-NOT-FOUND, which defaults to 'guile'.
 #
 # LAST MODIFICATION
 #
-#   2008-01-24
+#   2008-01-27
 #
 # COPYLEFT
 #
@@ -56,5 +52,5 @@
 #   modified version as well.
 
 AC_DEFUN([AX_WITH_GUILE],[
-    AX_WITH_PROG(GUILE,guile,[],[])
+    AX_WITH_PROG(GUILE,guile)
 ])

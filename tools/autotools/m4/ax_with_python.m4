@@ -7,19 +7,15 @@
 # DESCRIPTION
 #
 #   Locates an installed Python binary, placing the result in the
-#   precious variable $PYTHON. Accepts a present $PYTHON, then
+#   precious variable PYTHON. Accepts a present PYTHON, then
 #   --with-python, and failing that searches for python in the given
 #   path (which defaults to the system path). If python is found,
-#   $PYTHON is set to the full path of the binary; if it is not found,
-#   $PYTHON is set to VALUE-IF-NOT-FOUND, which defaults to 'python'.
-#
-# NOTE
-#   This macro is based upon AX_WITH_PYTHON macro from Dustin J. Mitchell
-#   <dustin@cs.uchicago.edu>
+#   PYTHON is set to the full path of the binary; if it is not found,
+#   PYTHON is set to VALUE-IF-NOT-FOUND, which defaults to 'python'.
 #
 # LAST MODIFICATION
 #
-#   2008-01-24
+#   2008-01-27
 #
 # COPYLEFT
 #
@@ -56,5 +52,5 @@
 #   modified version as well.
 
 AC_DEFUN([AX_WITH_PYTHON],[
-    AX_WITH_PROG(PYTHON,python,[],[])
+    AX_WITH_PROG(PYTHON,python)
 ])

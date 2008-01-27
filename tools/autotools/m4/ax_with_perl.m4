@@ -7,15 +7,15 @@
 # DESCRIPTION
 #
 #   Locates an installed Perl binary, placing the result in the
-#   precious variable $PERL. Accepts a present $PERL, then
+#   precious variable PERL. Accepts a present PERL, then
 #   --with-perl, and failing that searches for perl in the given
 #   path (which defaults to the system path). If perl is found,
-#   $PERL is set to the full path of the binary; if it is not found,
-#   $PERL is set to VALUE-IF-NOT-FOUND, which defaults to 'perl'.
+#   PERL is set to the full path of the binary; if it is not found,
+#   PERL is set to VALUE-IF-NOT-FOUND, which defaults to 'perl'.
 #
 # LAST MODIFICATION
 #
-#   2008-01-24
+#   2008-01-27
 #
 # COPYLEFT
 #
@@ -52,5 +52,5 @@
 #   modified version as well.
 
 AC_DEFUN([AX_WITH_PERL],[
-    AX_WITH_PROG(PERL,perl,[],[])
+    AX_WITH_PROG(PERL,perl)
 ])

@@ -7,19 +7,15 @@
 # DESCRIPTION
 #
 #   Locates an installed Ruby binary, placing the result in the
-#   precious variable $RUBY. Accepts a present $RUBY, then
+#   precious variable RUBY. Accepts a present RUBY, then
 #   --with-ruby, and failing that searches for ruby in the given
 #   path (which defaults to the system path). If ruby is found,
-#   $RUBY is set to the full path of the binary; if it is not found,
-#   $RUBY is set to VALUE-IF-NOT-FOUND, which defaults to 'ruby'.
-#
-# NOTE
-#   This macro is based upon AX_WITH_PYTHON macro from Dustin J. Mitchell
-#   <dustin@cs.uchicago.edu>
+#   RUBY is set to the full path of the binary; if it is not found,
+#   RUBY is set to VALUE-IF-NOT-FOUND, which defaults to 'ruby'.
 #
 # LAST MODIFICATION
 #
-#   2008-01-24
+#   2008-01-27
 #
 # COPYLEFT
 #
@@ -56,5 +52,5 @@
 #   modified version as well.
 
 AC_DEFUN([AX_WITH_RUBY],[
-    AX_WITH_PROG(RUBY,ruby,[],[])
+    AX_WITH_PROG(RUBY,ruby)
 ])
