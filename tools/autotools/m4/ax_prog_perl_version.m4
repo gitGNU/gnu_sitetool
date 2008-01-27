@@ -1,4 +1,4 @@
-##### http://autoconf-archive.cryp.to/ax_prog_perl_version.html
+##### 
 #
 # SYNOPSIS
 #
@@ -10,22 +10,27 @@
 #   shell commands in ACTION-IF-TRUE are executed. If not the shell
 #   commands in ACTION-IF-FALSE are run. Note if $PERL is not set (for
 #   example by running AC_CHECK_PROG or AC_PATH_PROG),
-#   AC_CHECK_PROG(PERL, perl, perl) will be run.
 #
 #   Example:
 #
+#     AC_PATH_PROG([PERL],[perl])
 #     AC_PROG_PERL_VERSION([5.8.0],[ ... ],[ ... ])
 #
 #   This will check to make sure that the perl you have supports at
 #   least version 5.8.0.
 #
+# NOTE
+#
+#   This macro uses the PERL variable to perform the check. The PERL_VERSION
+#   variable will be valorized with the detected version
+#
 # LAST MODIFICATION
 #
-#   2007-12-07
+#   2008-01-27
 #
 # COPYLEFT
 #
-#   Copyright (c) 2007 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#   Copyright (c) 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 #
 #   This program is free software; you can redistribute it and/or
 #   modify it under the terms of the GNU General Public License as
@@ -70,6 +75,8 @@ AC_DEFUN([AX_PROG_PERL_VERSION],[
         changequote([,])
         AC_MSG_RESULT($perl_version)
 
+	AC_SUBST([PERL_VERSION],[$perl_version])
+
         AX_COMPARE_VERSION([$ax_perl_version],[le],[$perl_version],[
 	    :
             $2
@@ -78,7 +85,7 @@ AC_DEFUN([AX_PROG_PERL_VERSION],[
             $3
         ])
     ],[
-        AC_MSG_WARN([could not find perl interpreter])
+        AC_MSG_WARN([could not find the perl interpreter])
         $3
     ])
 ])

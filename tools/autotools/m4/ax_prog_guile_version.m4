@@ -1,4 +1,4 @@
-##### http://autoconf-archive.cryp.to/ax_prog_guile_version.html
+##### 
 #
 # SYNOPSIS
 #
@@ -10,22 +10,27 @@
 #   shell commands in ACTION-IF-TRUE are executed. If not the shell
 #   commands in ACTION-IF-FALSE are run. Note if $GUILE is not set (for
 #   example by running AC_CHECK_PROG or AC_PATH_PROG),
-#   AC_CHECK_PROG(GUILE, guile, guile) will be run.
 #
 #   Example:
 #
+#     AC_PATH_PROG([GUILE],[guile])
 #     AC_PROG_GUILE_VERSION([1.6.0],[ ... ],[ ... ])
 #
 #   This will check to make sure that the guile you have supports at
 #   least version 1.6.0.
 #
+# NOTE
+#
+#   This macro uses the GUILE variable to perform the check. The GUILE_VERSION
+#   variable will be valorized with the detected version
+#
 # LAST MODIFICATION
 #
-#   2007-12-07
+#   2008-01-27
 #
 # COPYLEFT
 #
-#   Copyright (c) 2007 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#   Copyright (c) 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 #
 #   This program is free software; you can redistribute it and/or
 #   modify it under the terms of the GNU General Public License as
@@ -69,6 +74,8 @@ AC_DEFUN([AX_PROG_GUILE_VERSION],[
         changequote([,])
         AC_MSG_RESULT($guile_version)
 
+	AC_SUBST([GUILE_VERSION],[$guile_version])
+
         AX_COMPARE_VERSION([$ax_guile_version],[le],[$guile_version],[
 	    :
             $2
@@ -77,7 +84,7 @@ AC_DEFUN([AX_PROG_GUILE_VERSION],[
             $3
         ])
     ],[
-        AC_MSG_WARN([could not find guile interpreter])
+        AC_MSG_WARN([could not find the guile interpreter])
         $3
     ])
 ])
