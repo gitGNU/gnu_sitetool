@@ -58,7 +58,18 @@ AS_IF([test -z "$GUILE"],[
 ])
 
 AX_WITH_PYTHON
+AS_IF([test -z "$PYTHON"],[
+	:
+],[
+	AX_PROG_PYTHON_VERSION([2.4.4],[],[])
+])
+
 AX_WITH_RUBY
+AS_IF([test -z "$RUBY"],[
+	:
+],[
+	AX_PROG_RUBY_VERSION([1.8.6],[],[])
+])
 
 AC_PATH_PROG([TIDY],   [tidy])
 AC_PATH_PROG([WPUT],   [wput])
@@ -137,9 +148,9 @@ cat <<EOF
 
   ${PACKAGE_NAME} ${PACKAGE_VERSION} configuration summary
 
-    Perl   : ${PERL}
-    Guile  : ${GUILE}
-    Ruby   : ${RUBY}
-    Python : ${PYTHON}
+    Perl   : ${PERL} (${PERL_VERSION})
+    Guile  : ${GUILE} (${GUILE_VERSION})
+    Ruby   : ${RUBY} (${RUBY_VERSION})
+    Python : ${PYTHON} (${PYTHON_VERSION})
 
 EOF
