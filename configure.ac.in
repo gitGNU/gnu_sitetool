@@ -40,7 +40,7 @@ AS_IF([test -z "$PERL"],[
 		AC_MSG_ERROR([Missing required Perl interpreter version >= 5.8.0])
 	])
 
-	AX_PROG_PERL_MODULES([File::Path Cwd],[],[
+	AX_PROG_PERL_MODULES([File::Copy Data::Dumper File::Spec File::Temp File::Path File::Basename Cwd],[],[
 		AC_MSG_ERROR([Missing required Perl module])
 	])
 ])
@@ -146,11 +146,11 @@ AC_OUTPUT
 
 cat <<EOF
 
-  ${PACKAGE_NAME} ${PACKAGE_VERSION} configuration summary
+  ${PACKAGE_NAME} ${API_VERSION} (${PACKAGE_VERSION}) configuration summary
 
-    Perl   : ${PERL} (${PERL_VERSION})
-    Guile  : ${GUILE} (${GUILE_VERSION})
-    Ruby   : ${RUBY} (${RUBY_VERSION})
-    Python : ${PYTHON} (${PYTHON_VERSION})
+    Perl     : ${PERL} (${PERL_VERSION})
+    Guile    : ${GUILE} (${GUILE_VERSION})
+    Ruby     : ${RUBY} (${RUBY_VERSION})
+    Python   : ${PYTHON} (${PYTHON_VERSION})
 
 EOF
