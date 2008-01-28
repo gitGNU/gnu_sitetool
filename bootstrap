@@ -37,7 +37,9 @@ echo "$PROGNAME: Perl autofrisk ..."
 # Autofrisk guile modules
 #
 echo "$PROGNAME: Guile autofrisk ..."
-guile-tools autofrisk ./guile.af && mv ./guile.af.m4 ./tools/autotools/m4/guile_autofrisk.m4 || {
+guile-tools autofrisk ./guile.af && \
+cat ./guile.af.m4 | sed -e 's/AUTOFRISK_/GUILE_AUTOFRISK_/g' > ./tools/autotools/m4/guile_autofrisk.m4 && \
+rm -f guile.af.m4 || {
     rm -f guile.af.m4
     rm -f ./tools/autotools/m4/guile_autofrisk.m4
     exit 1

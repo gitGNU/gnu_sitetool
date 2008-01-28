@@ -1,4 +1,4 @@
-AC_DEFUN([AUTOFRISK_CHECKS],[
+AC_DEFUN([GUILE_AUTOFRISK_CHECKS],[
 
 
 probably_wont_work=""
@@ -7,7 +7,7 @@ AC_SUBST(probably_wont_work)
 ])
 
 
-AC_DEFUN([AUTOFRISK_SUMMARY],[
+AC_DEFUN([GUILE_AUTOFRISK_SUMMARY],[
 if test ! "$probably_wont_work" = "" ; then
     p="         ***"
     echo "$p"
