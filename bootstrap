@@ -28,7 +28,10 @@ rm -rf autom4te.cache                                || exit 1
 # Autofrisk perl modules
 #
 echo "$PROGNAME: Perl autofrisk ..."
-./tools/scripts/perl-autofrisk ./perl.af > ./tools/autotools/m4/perl_autofrisk.m4 || {
+./tools/scripts/perl-autofrisk ./perl.af && \
+cat ./perl.af.m4 > ./tools/autotools/m4/perl_autofrisk.m4 && \
+rm -f ./perl.af.m4 || {
+    rm -f ./perl.af.m4
     rm -f ./tools/autotools/m4/perl_autofrisk.m4
     exit 1
 }
@@ -39,8 +42,8 @@ echo "$PROGNAME: Perl autofrisk ..."
 echo "$PROGNAME: Guile autofrisk ..."
 guile-tools autofrisk ./guile.af && \
 cat ./guile.af.m4 | sed -e 's/AUTOFRISK_/GUILE_AUTOFRISK_/g' > ./tools/autotools/m4/guile_autofrisk.m4 && \
-rm -f guile.af.m4 || {
-    rm -f guile.af.m4
+rm -f ./guile.af.m4 || {
+    rm -f ./guile.af.m4
     rm -f ./tools/autotools/m4/guile_autofrisk.m4
     exit 1
 }
