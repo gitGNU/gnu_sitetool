@@ -25,6 +25,13 @@ rm -f  config.guess config.sub ltmain.sh             || exit 1
 rm -rf autom4te.cache                                || exit 1
 
 #
+# Autofrisk perl modules
+#
+./tools/scripts/perl-autofrisk ./perl.af > ./tools/autotools/m4/perl_autofrisk.m4 || {
+    exit 1
+}
+
+#
 # configure.ac
 #
 echo "$PROGNAME: Building configure.ac from configure.ac.in"

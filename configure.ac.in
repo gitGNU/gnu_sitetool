@@ -44,6 +44,8 @@ AS_IF([test -z "$PERL"],[
 		AC_MSG_ERROR([Missing required Perl module])
 	])
 ])
+PERL_AUTOFRISK_CHECKS
+PERL_AUTOFRISK_SUMMARY
 
 AX_WITH_GUILE
 AS_IF([test -z "$GUILE"],[
