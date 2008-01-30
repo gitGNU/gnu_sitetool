@@ -1,5 +1,5 @@
 ##
-## (C) 2003-2005 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+## (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 ##
 ## Input file for automake
 ##
