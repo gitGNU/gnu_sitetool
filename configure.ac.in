@@ -40,12 +40,9 @@ AS_IF([test -z "$PERL"],[
 		AC_MSG_ERROR([Missing required Perl interpreter version >= 5.8.0])
 	])
 
-	AX_PROG_PERL_MODULES([File::Copy Data::Dumper File::Spec File::Temp File::Path File::Basename Cwd],[],[
-		AC_MSG_ERROR([Missing required Perl module])
-	])
+	PERL_AUTOFRISK_CHECKS
+	PERL_AUTOFRISK_SUMMARY
 ])
-PERL_AUTOFRISK_CHECKS
-PERL_AUTOFRISK_SUMMARY
 
 AX_WITH_GUILE
 AS_IF([test -z "$GUILE"],[
@@ -57,9 +54,10 @@ AS_IF([test -z "$GUILE"],[
 	
 	GUILE_MODULE_REQUIRED([sxml simple])
 	GUILE_MODULE_REQUIRED([sxml transform])
+
+	GUILE_AUTOFRISK_CHECKS
+	GUILE_AUTOFRISK_SUMMARY
 ])
-GUILE_AUTOFRISK_CHECKS
-GUILE_AUTOFRISK_SUMMARY
 
 AX_WITH_PYTHON
 AS_IF([test -z "$PYTHON"],[
