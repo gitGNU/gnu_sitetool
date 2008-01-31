@@ -43,7 +43,9 @@ EXTRA_DIST =						\
 	Makefile.sub					\
 	$(CHANGELOGS)					\
 	configure.ac.in					\
-	bootstrap
+	bootstrap					\
+	guile.af					\
+	perl.af
 
 ##
 ## distribution related target
