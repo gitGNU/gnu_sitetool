@@ -1,5 +1,5 @@
 #
-# Environment.pm
+# Options.pm
 #
 # (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 #
@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-package Sitetool::OS::Options;
+package Sitetool::Base::Options;
 
 use 5.8.0;
 
