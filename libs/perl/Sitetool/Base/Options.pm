@@ -2,6 +2,7 @@
 # Options.pm
 #
 # (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#                Alessandro Massignan <ff0000.it@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
