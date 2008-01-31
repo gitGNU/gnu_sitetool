@@ -5,7 +5,11 @@ files-glob libs/perl/Sitetool/Misc/.*pm
 files-glob libs/perl/Sitetool/OS/.*pm
 files-glob libs/perl/Sitetool/WWW/.*pm
 
-non-critical-internal Sitetool::
-non-critical-external strict
-non-critical-external vars[ \t]+.*
+non-critical-internal Sitetool::.*
+
+non-critical-external strict[ \t]*.*
+non-critical-external diagnostics[ \t]*.*
+non-critical-external warnings[ \t]*.*
+non-critical-external vars[ \t]*.*
 non-critical-external [0-9]\..*
+non-critical-external POSIX[ \t]*.*
