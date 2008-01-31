@@ -27,6 +27,9 @@ tools/autotools/missing
 tools/autotools/mdate-sh
 tools/autotools/texinfo.tex
 
+tools/autotools/m4/perl_autofrisk.m4
+tools/autotools/m4/guile_autofrisk.m4
+
 tests/defs
 tests/wrapper
 tests/test-args
