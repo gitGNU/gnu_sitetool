@@ -29,6 +29,10 @@ use Cwd;
 
 my $program = "perl-autofrisk";
 
+#
+# Utilities
+#
+
 my $debug_enabled = 0;
 
 sub debug($)
@@ -62,10 +66,17 @@ sub bug($)
     exit(1);
 }
 
-my @regexps = ();
-my @files   = ();
-my $base    = "";
+#
+# Global variables
+#
+my @module_regexps = (); # Exclusive
+my @file_regexps = ();   # Inclusive
+my @files        = ();
+my $base         = "";
 
+#
+# Misc
+#
 sub file_filter($)
 {
     my $abs_name;
@@ -81,7 +92,7 @@ sub file_filter($)
 	return;
     }
     if (-l $abs_name) {
-	warning("File \`" . $rel_name . "' is a link ... \n");
+	debug("Skipping, \`" . $rel_name . "' is a link ... \n");
 	return;
     }
     if (! -f $abs_name) {
@@ -98,7 +109,7 @@ sub file_filter($)
 
     # And it is readable
 
-    for my $regexp (@regexps) {
+    for my $regexp (@file_regexps) {
 	debug("Checking \`" . $regexp . "' against \`" . $rel_name . "'\n");
 	my $s;
 	my $t;
@@ -158,12 +169,12 @@ while (<$rules_handle>) {
 	my $regexp;
 
 	$regexp = $1;
-	push(@regexps, $regexp);
+	push(@file_regexps, $regexp);
 	debug("$regexp\n");
     } elsif ($line =~ /^[ \t]*non-critical-external[ \t](.*)/) {
-	#push(@regexps, $1);
+	push(@module_regexps, $1);
     } elsif ($line =~ /^[ \t]*non-critical-internal[ \t](.*)/) {
-	#push(@regexps, $1);
+	push(@module_regexps, $1);
     } else {
 	error("Unknown line \`" . $line . "' " .
 	      "found in file " . $rules_file . ":" . $line_number . "\n");
@@ -175,9 +186,13 @@ while (<$rules_handle>) {
 
 close($rules_handle);
 
-debug("Regexps:\n");
-for my $regexp (@regexps) {
-    debug("regexp = \`" . $regexp . "'\n");
+debug("Files-glob regexps (inclusive):\n");
+for my $regexp (@file_regexps) {
+    debug("  regexp = \`" . $regexp . "'\n");
+}
+debug("Modules-glob regexps (exclusive):\n");
+for my $regexp (@module_regexps) {
+    debug("  regexp = \`" . $regexp . "'\n");
 }
 
 #
@@ -205,9 +220,12 @@ for my $filename (@files) {
 	error("Unable to open \`$filename' for reading ($!)\n");
 	exit 1;
     }
-
+    
     while (<$filehandle>) {
-	if ($_ =~ /^use[ \t]*(.*);$/) {
+	my $line;
+
+	$line = $_;
+	if ($line =~ /^use[ \t]*(.*);$/) {
 	    $modules{$1} = "INCLUDE";
 	}
     }
@@ -218,6 +236,15 @@ for my $filename (@files) {
 #
 # Remove non-critical-internal and non-critical-external modules
 #
+for my $key (keys(%modules)) {
+    for my $regexp (@module_regexps) {
+	if ($key =~ /^$regexp$/) {
+	    $modules{$key} = "EXCLUDE";
+	    debug("Perl \`use " . $key . "' excluded\n");
+	    next;
+	}
+    }
+}
 
 #
 # Write output file
