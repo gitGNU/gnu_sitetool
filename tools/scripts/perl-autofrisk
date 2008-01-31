@@ -29,11 +29,15 @@ use Cwd;
 
 my $program = "perl-autofrisk";
 
+my $debug_enabled = 0;
+
 sub debug($)
 {
-    my $message = shift;
+    if ($debug_enabled) {
+	my $message = shift;
 
-    print STDERR "$program: $message";
+	print STDERR "$program: $message";
+    }
 }
 
 sub warning($)
@@ -77,7 +81,7 @@ sub file_filter($)
 	return;
     }
     if (-l $abs_name) {
-	warning("FIle \`" . $rel_name . "' is a link ... \n");
+	warning("File \`" . $rel_name . "' is a link ... \n");
 	return;
     }
     if (! -f $abs_name) {
