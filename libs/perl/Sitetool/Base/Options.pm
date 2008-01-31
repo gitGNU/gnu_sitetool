@@ -38,4 +38,61 @@ BEGIN {
     @EXPORT = qw();
 }
 
+sub new($)
+{
+    my $class = shift;
+    my $self  = { };
+
+    $self->{'SHORT'}     = { };
+    $self->{'LONG'}      = { };
+    $self->{'CALLBACK'}  = { };
+    $self->{'ARGSCOUNT'} = { };
+ 
+    bless $self, $class;
+
+    return $self;
+}
+
+sub add($$$$$$)
+{
+    my $self      = shift;
+    my $id        = shift;
+    my $short     = shift;
+    my $long      = shift;
+    my $callback  = shift;
+    my $argscount = shift;
+
+    assert(defined($self));
+    assert(defined($id));
+    assert(defined($short) || defined($long));
+    assert($argscount >= 0);
+    assert(defined($callback));
+
+    if (defined($long)) {
+	assert(length($long) > 1);
+	
+	$self->{'LONG'}->{$id} = $long;
+    }
+
+    if (defined($short)) {
+	assert(length($short) == 1);
+	
+	$self->{'SHORT'}->{$id} = $short;
+    }
+
+    $self->{'CALLBACK'}->{$id}  = $callback;
+    $self->{'ARGSCOUNT'}->{$id} = $args;
+
+     return 1;
+}
+
+sub parse($)
+{
+    my $self = shift;
+    
+    assert(defined($self));
+
+    return 1;
+}
+
 1;
