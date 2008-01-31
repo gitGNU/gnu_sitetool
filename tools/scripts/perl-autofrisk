@@ -96,7 +96,7 @@ sub file_filter($)
 	return;
     }
 
-    # The file is readable
+    # And it is readable
 
     for my $regexp (@regexps) {
 	debug("Checking \`" . $regexp . "' against \`" . $rel_name . "'\n");
@@ -116,7 +116,8 @@ sub file_filter($)
 	}
     }
 
-    debug("Dropped, it doesn't matches regexps\n");
+    debug("File \`" . $rel_name . "' has been dropped, " .
+	  "it doesn't matches regexps\n");
     return;
 }
 
@@ -195,8 +196,8 @@ for my $filename (@files) {
 # Scan each file for modules
 #
 my %modules;
-%modules   = ();
 
+%modules = ();
 for my $filename (@files) {
     my $filehandle;
 
@@ -248,9 +249,9 @@ print $output_handle "\n";
 print $output_handle "AC_DEFUN([PERL_AUTOFRISK_CHECKS],[\n";
 for my $key (keys(%modules)) {
     if ($modules{$key} =~ /^INCLUDE$/) {
-	print $output_handle "AX_PROG_PERL_MODULES([$key])\n";
+	print $output_handle "\tAX_PROG_PERL_MODULES([$key])\n";
     } elsif ($modules{$key} =~ /^EXCLUDE$/) {
-	print $output_handle "# AX_PROG_PERL_MODULES([$key])\n";
+	print $output_handle "#\tAX_PROG_PERL_MODULES([$key])\n";
     } else {
 	bug("Unknown module type");
     }
