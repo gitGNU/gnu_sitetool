@@ -6,8 +6,7 @@
 #
 # DESCRIPTION
 #
-#   This macro compares two version strings. It is used heavily in the
-#   macro _AX_PATH_BDB for library checking. Due to the various number
+#   This macro compares two version strings. Due to the various number
 #   of minor-version numbers that can exist, and the fact that string
 #   comparisons are not compatible with numeric comparisons, this is
 #   not necessarily trivial to do in a autoconf script. This macro
@@ -75,7 +74,7 @@
 #
 # COPYLEFT
 #
-#   Copyright (c) 2007 Tim Toolan <toolan@ele.uri.edu>
+#   Copyright (c) 2008 Tim Toolan <toolan@ele.uri.edu>
 #
 #   Copying and distribution of this file, with or without
 #   modification, are permitted in any medium without royalty provided
@@ -83,7 +82,7 @@
 
 dnl #########################################################################
 AC_DEFUN([AX_COMPARE_VERSION], [
-  AC_REQUIRE([AC_PROG_AWK])
+  AC_PROG_AWK
 
   # Used to indicate true or false condition
   ax_compare_version=false
