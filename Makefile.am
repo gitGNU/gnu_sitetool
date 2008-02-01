@@ -91,4 +91,7 @@ ChangeLog: $(srcdir)/NEWS
 #		exit 1 ;			\
 #	}
 
+update:
+	(cd tools && $(MAKE) $(AM_MAKEFLAGS) update)
+
 DISTCLEANFILES =

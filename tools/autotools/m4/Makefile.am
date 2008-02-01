@@ -18,18 +18,34 @@
 ## 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ##
 
-include $(top_srcdir)/Makefile.sub
+HOST="http://autoconf-archive.cryp.to"
 
-SUBDIRS =					\
-	scripts					\
-	autotools
+MACROS =					\
+	ax_compare_version.m4			\
+	ax_missing_prog.m4			\
+	ax_path_missing.m4			\
+	ax_prog_guile_version.m4		\
+	ax_prog_perl_modules.m4			\
+	ax_prog_perl_version.m4			\
+	ax_prog_python_version.m4		\
+	ax_prog_ruby_version.m4			\
+	ax_split_version.m4			\
+	ax_with_guile.m4			\
+	ax_with_perl.m4				\
+	ax_with_prog.m4				\
+	ax_with_python.m4			\
+	ax_with_ruby.m4
 
-##
-## NOTE:
-##     autotools dir is already shipped by autotools ... :-)
-##
-##EXTRA_DIST =                                  \
-##      autotools
+WGET_FLAGS = -r --no-verbose
 
 update:
-	(cd autotools && $(MAKE) $(AM_MAKEFLAGS) update)
+	rm -r -f fetch > /dev/null 2>&1 && \
+	mkdir fetch && \
+	(cd fetch && \
+	for i in $(MACROS) ; do \
+		$(WGET) $(WGET_FLAGS) $(HOST)/$$i ; \
+	done) && \
+	rm -r -f fetch || { \
+		rm -r -f fetch ; \
+		exit 1 ; \
+	}

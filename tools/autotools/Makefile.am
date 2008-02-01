@@ -18,18 +18,8 @@
 ## 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ##
 
-include $(top_srcdir)/Makefile.sub
-
 SUBDIRS =					\
-	scripts					\
-	autotools
-
-##
-## NOTE:
-##     autotools dir is already shipped by autotools ... :-)
-##
-##EXTRA_DIST =                                  \
-##      autotools
+	m4
 
 update:
-	(cd autotools && $(MAKE) $(AM_MAKEFLAGS) update)
+	(cd m4 && $(MAKE) $(AM_MAKEFLAGS) update)
