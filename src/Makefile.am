@@ -23,7 +23,8 @@ include $(top_srcdir)/Makefile.sub
 SUBDIRS = filters
 
 bin_SCRIPTS =					\
-	sitetool
+	sitetool				\
+	sitetool-config
 
 pkgvbin_SCRIPTS =				\
 	sitetool-initialize			\
@@ -57,6 +58,9 @@ uninstall-hook:
 	  rm -f $(DESTDIR)$(bindir)/$$fv; \
 	done
 
+SITETOOL_SHELL_SRCS =				\
+	sitetool-config.in
+
 SITETOOL_PERL_SRCS =				\
         sitetool.in				\
 	sitetool-initialize.in			\
@@ -70,15 +74,25 @@ SITETOOL_PERL_SRCS =				\
 	sitetool-validate.in			\
 	sitetool-digest.in
 
-SITETOOL_SRCS = $(SITETOOL_PERL_SRCS)
+SITETOOL_SRCS = $(SITETOOL_PERL_SRCS) $(SITETOOL_SHELL_SRCS)
 
-EXTRA_DIST = $(SITETOOL_SRCS) 
+EXTRA_DIST = $(SITETOOL_SRCS)
 
 CLEANFILES = $(bin_SCRIPTS) $(pkgvbin_SCRIPTS)
 
 sitetool: $(srcdir)/sitetool.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/sitetool.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+sitetool-config: $(srcdir)/sitetool-config.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/sitetool-config.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \

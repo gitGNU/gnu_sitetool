@@ -1,0 +1,74 @@
+#! @SHELL@
+
+#
+# sitetool-config
+#
+# (C) 2007, 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+me="sitetool-config"
+
+usage="\
+Usage: sitetool-config [--filters-check] [--filters-dir] [--styles-dir] [--version] [--help]"
+
+if test $# -eq 0; then
+    echo "${usage}" 1>&2
+    exit 1
+fi
+
+while test $# -gt 0; do
+    case "$1" in
+	-*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+	*) optarg= ;;
+    esac
+
+    case $1 in
+	--help)
+	    echo "${usage}" 1>&2
+	    exit 0
+	    ;;
+	--filters-check)
+	    if test ! -d @pkgvbindir@/filters ; then
+		echo "$me: Missing filters directory"
+		exit 1
+	    fi
+	    for filter in `find @pkgvbindir@/filters/*` ; do
+		echo `basename "$filter"`": OK"
+	    done
+	    exit 0
+	    ;;
+	--filters-dir)
+	    echo @pkgvbindir@/filters
+	    exit 0
+	    ;;
+	--styles-dir)
+	    echo @pkgvdatadir@/styles
+	    exit 0
+	    ;;
+	--version)
+	    echo @PACKAGE_VERSION@
+	    exit 0
+	    ;;
+	*)
+	    echo "${usage}" 1>&2
+	    exit 1
+	    ;;
+    esac
+    shift
+done
+
+exit 0;
