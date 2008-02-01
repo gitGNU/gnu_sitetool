@@ -1,3 +1,5 @@
+# Input file for perl-autofrisk
+
 files-glob src/.*in
 files-glob libs/perl/Sitetool/.*pm
 files-glob libs/perl/Sitetool/Base/.*pm

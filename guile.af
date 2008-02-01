@@ -1,1 +1,3 @@
+;; Input file for guile-autofrisk
+
 (files-glob libs/scheme/*.scm)
