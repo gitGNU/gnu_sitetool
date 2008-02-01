@@ -53,6 +53,7 @@ docs/man/sitetool.1
 docs/info/sitetool.info
 
 src/sitetool
+src/sitetool-config
 src/sitetool-initialize
 src/sitetool-preprocess
 src/sitetool-parse
