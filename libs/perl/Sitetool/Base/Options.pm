@@ -72,31 +72,33 @@ sub add($$$$$$)
 
     debug("Adding option");
 
-    debug("  option id: `" . $id ."\'");
-
     if (defined($long)) {
 	assert(length($long) > 1);
-
 	$self->{'LONG'}->{$id} = $long;
-
-	debug("  option long: `"     .
-	      $self->{'LONG'}->{$id} .
-	      "\'");
     }
 
     if (defined($short)) {
 	assert(length($short) == 1);
-
 	$self->{'SHORT'}->{$id} = $short;
-
-	debug("  option short: `"     .
-	      $self->{'SHORT'}->{$id} .
-	      "\'");
     }
 
     $self->{'CALLBACK'}->{$id}  = $callback;
     $self->{'ARGSCOUNT'}->{$id} = $argscount;
 
+    debug("  option id:              `" .
+	  $id                           .
+	  "\'");
+    debug("  option long:            `"    .
+	  defined($self->{'LONG'}->{$id})  ?
+	  $self->{'LONG'}->{$id} : "undef" .
+	  "\'");
+    debug("  option short:           `"     .
+	  defined($self->{'SHORT'}->{$id})) ?
+	  $self->{'SHORT'}->{$id} : "undef"  .
+	  "\'");
+    debug("  option callback:        `" .
+	  $self->{'CALLBACK'}->{$id}    .
+	  "\'");
     debug("  option arguments count: `" .
 	  $self->{'ARGSCOUNT'}->{$id}   .
 	  "\'");
@@ -104,6 +106,8 @@ sub add($$$$$$)
     return 1;
 }
 
+# XXX FIXME: We need a get_id_from_short() and a get_id_from_long() cause we
+#            could eventually have -v and --v ...
 sub get_id($)
 {
     my $self = shift;
@@ -192,6 +196,7 @@ sub parse($$)
 	    } else {
 
 		if (length($token) > 2) {
+		    # XXX FIXME: Use bug()
 		    error("Options\' bundling isn\'t supported");
 		    return 1
 		}
