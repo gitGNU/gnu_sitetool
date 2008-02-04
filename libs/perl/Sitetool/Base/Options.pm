@@ -43,6 +43,8 @@ sub new($)
     my $class = shift;
     my $self  = { };
 
+    debug("Creating object for options handling");
+
     $self->{'SHORT'}     = { };
     $self->{'LONG'}      = { };
     $self->{'CALLBACK'}  = { };
@@ -68,31 +70,201 @@ sub add($$$$$$)
     assert($argscount >= 0);
     assert(defined($callback));
 
+    debug("Adding option");
+
+    debug("  option id: `"       .
+	  $self->{'LONG'}->{$id} .
+	  "\'");
+
     if (defined($long)) {
 	assert(length($long) > 1);
 	
 	$self->{'LONG'}->{$id} = $long;
+
+	debug("  option long: `"     .
+	      $self->{'LONG'}->{$id} .
+	      "\'");
     }
 
     if (defined($short)) {
 	assert(length($short) == 1);
 	
 	$self->{'SHORT'}->{$id} = $short;
+
+	debug("  option short: `"     .
+	      $self->{'SHORT'}->{$id} .
+	      "\'");
     }
 
     $self->{'CALLBACK'}->{$id}  = $callback;
-    $self->{'ARGSCOUNT'}->{$id} = $args;
 
-     return 1;
-}
+    $self->{'ARGSCOUNT'}->{$id} = $argscount;
 
-sub parse($)
-{
-    my $self = shift;
-    
-    assert(defined($self));
+    debug("  option arguments' count: `" .
+	  $self->{'ARGSCOUNT'}->{$id}    .
+	  "\'");
 
     return 1;
+}
+
+sub get_id($)
+{
+    my $self = shift;
+    my $opt  = shift;
+
+    assert(defined($self));
+    assert(defined($opt));
+
+    for my $k (keys $self->{'LONG'}) {
+
+	if ($self->{'LONG'}->{$k} eq $opt) {
+	    debug("Found option with id `" .
+		  $k                       .
+		  "\'");
+
+    	    return $k;
+	}
+    }
+
+    for my $k (keys $self->{'SHORT'}) {
+
+	if ($self->{'SHORT'}->{$k} eq $opt) {
+	    debug("Found option with id `" .
+		  $k                       .
+		  "\'");
+
+	    return $k;
+	}
+    }
+
+    return undef;
+}
+
+sub parse($$)
+{
+    my $self   = shift;
+    my $string = shift;
+
+    assert(defined($self));
+    assert(defined($string));
+
+    $string =~ s/^\s+//;
+    $string =~ s/\s+$//;
+
+    debug("Parsing options\' string `" .
+	  $string                      .
+	  "\'");
+
+
+    if (length($string) < 2) {
+	return $string;
+    }
+
+    while ($string =~ s/([^\s]+)//) {
+	my $token = $1;
+
+	debug("Current token is `" .
+	      $token               .
+	      "\'");
+
+	if ($token eq "--") {
+	    # Options' end
+	    return $string;
+	}
+
+	my $tmp;
+	my $id;
+
+	($tmp) = $token =~ /^(.)/;
+
+	if ($tmp eq "-") {
+	    ($tmp) = $token =~ /^.(.)/;
+
+	    if ($tmp eq "-") {
+
+		($tmp) = $token =~ /^..(.*)/;
+		$id    = get_id($tmp);
+
+		if (!defined($id)) {
+		    error("Unknown long option `" . 
+			  $token                  .
+			  "\'");
+		    return undef;
+		}
+
+	    } else {
+
+		if (length($token) > 2) {
+		    error("Options\' bundling isn\'t supported");
+		    return 1
+		}
+
+		($tmp) = $token =~ /^.(.)/;
+		$id    = get_id($tmp);
+
+		if (!defined($id)) {
+		    error("Unknown short option `" . 
+			  $token                   .
+			  "\'");
+		    return undef;
+		}
+	    }
+	} else {
+
+	    error("Unknown option `" . 
+		  $token             .
+		  "\'");
+	    return undef;
+
+	}
+
+	debug("Getting options\' parameters");
+
+	my @params;
+
+	for (my $i = 0; $i < $self->{'ARGSCOUNT'}->{$id}; $i++) {
+	    $string =~ s/([^\s]+)//;
+
+	    if (!defined($1)) {
+		error("Missing parameter for option `" .
+		      $token                           .
+		      "\'");
+		return undef;
+	    }
+
+	    my $param = $1;
+
+	    if ($param =~ /^\"/) {
+
+		while ($string =~ s/([^\"]+)//) {
+
+		    if (!defined($1)) {
+			error("Unterminated option parameter `" .
+			      $string                           .
+			      "\'");
+			return undef;
+		    }
+
+		    my $tmp = $1;
+
+		    if ($tmp =~ /\\$/) {
+			$string = s/^(.)//;
+			$tmp    = $tmp . $1;
+		    }
+
+		    $param = $param . $tmp;
+		}
+
+	    }
+	    $params[$i] = $param;
+	}
+
+	if ($self->{'ARGSCOUNT'}->{$id} > 0) {
+	    assert($#params == ($self->{'ARGSCOUNT'}->{$id} - 1));
+	}
+    }
+
+    return $string;
 }
 
 1;
