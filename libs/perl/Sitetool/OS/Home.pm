@@ -54,7 +54,6 @@ sub home ()
 	bug("MacOS9 not yet supported")
     } else {
 	$homedir = $ENV{HOME};
-	bug("Cannot detect home directory, architecture unsupported")
     }
 
     assert(defined($homedir));
