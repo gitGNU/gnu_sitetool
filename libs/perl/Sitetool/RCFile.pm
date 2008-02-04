@@ -105,6 +105,17 @@ sub write ($)
     $filename = $self->{FILENAME};
     assert(defined($filename));
 
+    my $filehandle;
+
+    if (!open($filehandle, "<", $filename)) {
+	error("Cannot open \`$filename' for input");
+	return 0;
+    }
+
+    print $filehandle "";
+
+    close($filehandle);
+
     return 1;
 }
 
