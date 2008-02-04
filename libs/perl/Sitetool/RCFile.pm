@@ -71,13 +71,23 @@ sub read ($)
     }
 
     my $string;
-#    my $section;
+    my $lineno;
+    my $host;
 
+    $host   = undef;
+    $lineno = 0;
     while (<$filehandle>) {
 	$string = $_;
-#	if ($string =~ /\[(.*)\]/) {
-#	    # Got a section
-#	    $section = $1;
+	if ($string =~ /[ \t]*\#.*$/) {
+	    # Skip comments
+	} elsif ($string =~ /[ \t]+/) {
+	    # Skip empty lines
+	} elsif ($string =~ /[ \t]*host[ \t]+(.*)/) {
+	    # Got a host keyword
+
+	    my $host;
+	    $host = $1;
+
 #	    $section = s/^[ \t]*//;
 #	    $section = s/[ \t]*$//;
 #	} elsif ($string =~ /[](.*)[]=[](.*)[]/) {
@@ -86,7 +96,13 @@ sub read ($)
 #
 #	    $variable = $1;
 #	    $value    = $2;
-#	}
+	} else {
+	    error("Unknown input line " . $lineno . " in file " .
+		  "\`" . $filename . "'");
+	    return 0;
+	}
+
+	$lineno++;
     }
 
     close($filehandle);
