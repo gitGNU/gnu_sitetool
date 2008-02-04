@@ -30,14 +30,6 @@ use diagnostics;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Trace;
 
-BEGIN {
-    use Exporter ();
-    our ($VERSION, @ISA, @EXPORT);
-    
-    @ISA    = qw(Exporter);
-    @EXPORT = qw();
-}
-
 sub new ($)
 {
     my $class = shift;
