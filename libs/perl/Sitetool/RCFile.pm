@@ -25,19 +25,10 @@ use 5.8.0;
 use warnings;
 use strict;
 use diagnostics;
-use Config;
 
 use Sitetool::Autoconfig;
 use Sitetool::Base::Debug;
 use Sitetool::OS::File;
-
-BEGIN {
-    use Exporter ();
-    our ($VERSION, @ISA, @EXPORT);
-    
-    @ISA    = qw(Exporter);
-    @EXPORT = qw(&home);
-}
 
 sub new ($$)
 {
