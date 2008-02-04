@@ -41,6 +41,9 @@ BEGIN {
 sub new ($)
 {
     my $class = shift;
+
+    assert(defined($class));
+
     my $self  = { };
 
     debug("Creating object for options handling");
