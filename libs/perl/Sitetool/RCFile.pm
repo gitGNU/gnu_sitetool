@@ -67,6 +67,34 @@ sub read ($)
 	return 0;
     }
 
+    my $filehandle;
+
+    if (!open($filehandle, "<", $filename)) {
+	error("Cannot open \`$filename' for input");
+	return 0;
+    }
+
+    my $string;
+#    my $section;
+
+    while (<$filehandle>) {
+	$string = $_;
+#	if ($string =~ /\[(.*)\]/) {
+#	    # Got a section
+#	    $section = $1;
+#	    $section = s/^[ \t]*//;
+#	    $section = s/[ \t]*$//;
+#	} elsif ($string =~ /[](.*)[]=[](.*)[]/) {
+#	    my $variable;
+#	    my $value;
+#
+#	    $variable = $1;
+#	    $value    = $2;
+#	}
+    }
+
+    close($filehandle);
+
     return 1;
 }
 
