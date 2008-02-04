@@ -72,9 +72,7 @@ sub add($$$$$$)
 
     debug("Adding option");
 
-    debug("  option id: `"       .
-	  $self->{'LONG'}->{$id} .
-	  "\'");
+    debug("  option id: `" . $id ."\'");
 
     if (defined($long)) {
 	assert(length($long) > 1);
@@ -97,11 +95,10 @@ sub add($$$$$$)
     }
 
     $self->{'CALLBACK'}->{$id}  = $callback;
-
     $self->{'ARGSCOUNT'}->{$id} = $argscount;
 
-    debug("  option arguments' count: `" .
-	  $self->{'ARGSCOUNT'}->{$id}    .
+    debug("  option arguments count: `" .
+	  $self->{'ARGSCOUNT'}->{$id}   .
 	  "\'");
 
     return 1;
