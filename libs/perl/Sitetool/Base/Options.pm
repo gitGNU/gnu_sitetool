@@ -78,7 +78,7 @@ sub add($$$$$$)
 
     if (defined($long)) {
 	assert(length($long) > 1);
-	
+
 	$self->{'LONG'}->{$id} = $long;
 
 	debug("  option long: `"     .
@@ -88,7 +88,7 @@ sub add($$$$$$)
 
     if (defined($short)) {
 	assert(length($short) == 1);
-	
+
 	$self->{'SHORT'}->{$id} = $short;
 
 	debug("  option short: `"     .
@@ -186,7 +186,7 @@ sub parse($$)
 		$id    = get_id($tmp);
 
 		if (!defined($id)) {
-		    error("Unknown long option `" . 
+		    error("Unknown long option `" .
 			  $token                  .
 			  "\'");
 		    return undef;
@@ -203,7 +203,7 @@ sub parse($$)
 		$id    = get_id($tmp);
 
 		if (!defined($id)) {
-		    error("Unknown short option `" . 
+		    error("Unknown short option `" .
 			  $token                   .
 			  "\'");
 		    return undef;
@@ -211,7 +211,7 @@ sub parse($$)
 	    }
 	} else {
 
-	    error("Unknown option `" . 
+	    error("Unknown option `" .
 		  $token             .
 		  "\'");
 	    return undef;
