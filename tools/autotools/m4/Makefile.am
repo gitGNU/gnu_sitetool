@@ -18,14 +18,13 @@
 ## 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ##
 
-HOST="http://autoconf-archive.cryp.to"
+HOST = "http://autoconf-archive.cryp.to"
 
-MACROS =					\
+DOWNLOAD = 					\
 	ax_compare_version.m4			\
 	ax_missing_prog.m4			\
 	ax_path_missing.m4			\
 	ax_prog_guile_version.m4		\
-	ax_prog_perl_modules.m4			\
 	ax_prog_perl_version.m4			\
 	ax_prog_python_version.m4		\
 	ax_prog_ruby_version.m4			\
@@ -36,16 +35,24 @@ MACROS =					\
 	ax_with_python.m4			\
 	ax_with_ruby.m4
 
-WGET_FLAGS = -r --no-verbose
+MACROS =					\
+	ax_prog_perl_modules.m4			\
+	$(DOWNLOAD)
+
+FETCH = $(top_builddir)/tools/scripts/fetch
 
 update:
-	rm -r -f fetch > /dev/null 2>&1 && \
-	mkdir fetch && \
-	(cd fetch && \
-	for i in $(MACROS) ; do \
-		$(WGET) $(WGET_FLAGS) $(HOST)/$$i ; \
-	done) && \
-	rm -r -f fetch || { \
-		rm -r -f fetch ; \
-		exit 1 ; \
-	}
+	rm -r -f fetch-dir && \
+	mkdir fetch-dir && \
+	for i in $(DOWNLOAD) ; do \
+		$(FETCH) $(HOST)/$$i fetch-dir/$$i || { \
+			rm -f fetch-dir/$$i ; \
+			exit 1 ; \
+		} \
+	done && \
+	for i in $(DOWNLOAD) ; do \
+		mv fetch-dir/$$i $$i || { \
+			exit 1 ; \
+		} \
+	done && \
+	rm -r -f fetch-dir

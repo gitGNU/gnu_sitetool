@@ -21,11 +21,13 @@
 include $(top_srcdir)/Makefile.sub
 
 EXTRA_DIST =					\
+	fetch.in				\
 	gitlog2ChangeLog.in			\
 	NEWS-query.in				\
 	perl-autofrisk
 
 noinst_SCRIPTS =				\
+	fetch					\
 	gitlog2ChangeLog			\
 	NEWS-query
 
@@ -44,6 +46,16 @@ NEWS-query: NEWS-query.in Makefile
 gitlog2ChangeLog: gitlog2ChangeLog.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/gitlog2ChangeLog.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+fetch: fetch.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/fetch.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \

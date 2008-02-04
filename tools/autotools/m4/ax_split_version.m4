@@ -1,38 +1,36 @@
-# AX_SPLIT_VERSION(VERSION)
+##### http://autoconf-archive.cryp.to/ax_split_version.html
 #
-# Splits a version number in the format MAJOR[.MINOR[.MICRO[-EXTRA]]] into
-# its separeate components and sets the variables AX_MAJOR_VERSION,
-# AX_MINOR_VERSION, AX_MICRO_VERSION and AX_EXTRA_VERSION.
+# SYNOPSIS
 #
-# This macro is based upon AX_SPLIT_VERSION macro by Tom Howard
+#   AX_SPLIT_VERSION
 #
-# (C) 2007 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+# DESCRIPTION
 #
-#   This program is free software; you can redistribute it and/or
-#   modify it under the terms of the GNU General Public License as
-#   published by the Free Software Foundation; either version 2 of the
-#   License, or (at your option) any later version.
+#   Splits a version number in the format MAJOR.MINOR.POINT into it's
+#   separeate components.
 #
-#   This program is distributed in the hope that it will be useful, but
-#   WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-#   General Public License for more details.
+#   Sets the variables.
 #
-#   You should have received a copy of the GNU General Public License
-#   along with this program; if not, write to the Free Software
-#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-#   02111-1307, USA.
+# LAST MODIFICATION
 #
+#   2005-01-14
+#
+# COPYLEFT
+#
+#   Copyright (c) 2005 Tom Howard <tomhoward@users.sf.net>
+#
+#   Copying and distribution of this file, with or without
+#   modification, are permitted in any medium without royalty provided
+#   the copyright notice and this notice are preserved.
 
-AC_DEFUN([AX_SPLIT_VERSION],[dnl
-    AX_VERSION=$1
-
-    AX_MAJOR_VERSION=`echo "$AX_VERSION" | \
-	sed 's/^\([[0-9]]*\).*$/\1/'`
-    AX_MINOR_VERSION=`echo "$AX_VERSION" | \
-        sed 's/^[[0-9]]*\.\([[0-9]]*\).*$/\1/'`
-    AX_MICRO_VERSION=`echo "$AX_VERSION" | \
-        sed 's/^[[0-9]]*\.[[0-9]]*\.\([[0-9]]*\).*$/\1/'`
-    AX_EXTRA_VERSION=`echo "$AX_VERSION" | \
-        sed 's/^[[0-9]]*\.[[0-9]]*\.[[0-9]]*-\?\(.*\)$/\1/'`
+AC_DEFUN([AX_SPLIT_VERSION],[
+    AX_MAJOR_VERSION=`echo "$VERSION" | $SED 's/\([[^.]][[^.]]*\).*/\1/'`
+    AX_MINOR_VERSION=`echo "$VERSION" | $SED 's/[[^.]][[^.]]*.\([[^.]][[^.]]*\).*/\1/'`
+    AX_POINT_VERSION=`echo "$VERSION" | $SED 's/[[^.]][[^.]]*.[[^.]][[^.]]*.\(.*\)/\1/'`
+    AC_MSG_CHECKING([Major version])
+    AC_MSG_RESULT([$AX_MAJOR_VERSION])
+    AC_MSG_CHECKING([Minor version])
+    AC_MSG_RESULT([$AX_MINOR_VERSION])
+    AC_MSG_CHECKING([Point version])
+    AC_MSG_RESULT([$AX_POINT_VERSION])
 ])
