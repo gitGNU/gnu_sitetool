@@ -38,7 +38,7 @@ BEGIN {
     @EXPORT = qw();
 }
 
-sub new($)
+sub new ($)
 {
     my $class = shift;
     my $self  = { };
@@ -55,7 +55,7 @@ sub new($)
     return $self;
 }
 
-sub add($$$$$$)
+sub add ($$$$$$)
 {
     my $self      = shift;
     my $id        = shift;
@@ -106,8 +106,46 @@ sub add($$$$$$)
     return 1;
 }
 
-# XXX FIXME: We need a get_id_from_short() and a get_id_from_long() cause we
-#            could eventually have -v and --v ...
+sub get_long_from_id ($$)
+{
+    my $self = shift;
+    my $opt  = shift;
+
+    assert(defined($self));
+    assert(defined($opt));
+
+    for my $id (keys $self->{'LONG'}) {
+
+	if ($self->{'LONG'}->{$id} eq $opt) {
+	    debug("Got long option \`" . $opt . "' for id \`" . $id . "'");
+	    return $id;
+	}
+    }
+
+    return undef;
+}
+
+sub get_short_from_id ($)
+{
+    my $self = shift;
+    my $opt  = shift;
+
+    assert(defined($self));
+    assert(defined($opt));
+
+    for my $key (keys $self->{'SHORT'}) {
+
+	if ($self->{'SHORT'}->{$key} eq $opt) {
+	    debug("Got short option \`" . $opt . "' for id \`" . $id . "'");
+	    return $key;
+	}
+    }
+
+    return undef;
+}
+
+# XXX FIXME: We should use get_short_from_id() or get_long_from_id() in order
+#            to discriminate different type of options ...
 sub get_id($)
 {
     my $self = shift;
@@ -116,26 +154,16 @@ sub get_id($)
     assert(defined($self));
     assert(defined($opt));
 
-    for my $k (keys $self->{'LONG'}) {
+    my $id;
 
-	if ($self->{'LONG'}->{$k} eq $opt) {
-	    debug("Found option with id `" .
-		  $k                       .
-		  "\'");
-
-    	    return $k;
-	}
+    $id = get_long_from_id($opt);
+    if (defined($id)) {
+	return $id;
     }
 
-    for my $k (keys $self->{'SHORT'}) {
-
-	if ($self->{'SHORT'}->{$k} eq $opt) {
-	    debug("Found option with id `" .
-		  $k                       .
-		  "\'");
-
-	    return $k;
-	}
+    $id = get_short_from_id($opt);
+    if (defined($id)) {
+	return $id;
     }
 
     return undef;
@@ -152,10 +180,7 @@ sub parse($$)
     $string =~ s/^\s+//;
     $string =~ s/\s+$//;
 
-    debug("Parsing options\' string `" .
-	  $string                      .
-	  "\'");
-
+    debug("Parsing options\' string `" . $string . "\'");
 
     if (length($string) < 2) {
 	return $string;
@@ -164,12 +189,10 @@ sub parse($$)
     while ($string =~ s/([^\s]+)//) {
 	my $token = $1;
 
-	debug("Current token is `" .
-	      $token               .
-	      "\'");
+	debug("Current token is `" . $token . "\'");
 
 	if ($token eq "--") {
-	    # Options' end
+	    # Options end
 	    return $string;
 	}
 
@@ -182,22 +205,18 @@ sub parse($$)
 	    ($tmp) = $token =~ /^.(.)/;
 
 	    if ($tmp eq "-") {
-
 		($tmp) = $token =~ /^..(.*)/;
 		$id    = get_id($tmp);
 
 		if (!defined($id)) {
-		    error("Unknown long option `" .
-			  $token                  .
-			  "\'");
+		    error("Unknown long option `" . $token . "\'");
 		    return undef;
 		}
 
 	    } else {
-
 		if (length($token) > 2) {
 		    # XXX FIXME: Use bug()
-		    error("Options\' bundling isn\'t supported");
+		    error("Options bundling isn\'t supported");
 		    return 1
 		}
 
@@ -205,22 +224,16 @@ sub parse($$)
 		$id    = get_id($tmp);
 
 		if (!defined($id)) {
-		    error("Unknown short option `" .
-			  $token                   .
-			  "\'");
+		    error("Unknown short option `" . $token . "\'");
 		    return undef;
 		}
 	    }
 	} else {
-
-	    error("Unknown option `" .
-		  $token             .
-		  "\'");
+	    error("Unknown option `" . $token . "\'");
 	    return undef;
-
 	}
 
-	debug("Getting options\' parameters");
+	debug("Getting options parameters");
 
 	my @params;
 
@@ -228,22 +241,16 @@ sub parse($$)
 	    $string =~ s/([^\s]+)//;
 
 	    if (!defined($1)) {
-		error("Missing parameter for option `" .
-		      $token                           .
-		      "\'");
+		error("Missing parameter for option `" . $token . "\'");
 		return undef;
 	    }
 
 	    my $param = $1;
 
 	    if ($param =~ /^\"/) {
-
 		while ($string =~ s/([^\"]+)//) {
-
 		    if (!defined($1)) {
-			error("Unterminated option parameter `" .
-			      $string                           .
-			      "\'");
+			error("Missing parameter for `" . $string . "\'");
 			return undef;
 		    }
 
