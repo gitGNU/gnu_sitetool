@@ -28,4 +28,5 @@ dist_perllib_DATA =				\
 	File.pm					\
 	Filename.pm				\
 	Shell.pm				\
-	String.pm
+	String.pm				\
+	Home.pm
