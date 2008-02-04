@@ -29,6 +29,7 @@ use Config;
 
 use Sitetool::Autoconfig;
 use Sitetool::Base::Debug;
+use Sitetool::OS::File;
 
 BEGIN {
     use Exporter ();
@@ -38,10 +39,17 @@ BEGIN {
     @EXPORT = qw(&home);
 }
 
-sub new ($)
+sub new ($$)
 {
-    my $class = shift;
-    my $self  = { };
+    my $class    = shift;
+    my $filename = shift;
+
+    assert(defined($class));
+    assert(defined($filename));
+
+    my $self = { };
+
+    $self->{FILENAME} = $filename;
 
     bless $self, $class;
 
@@ -54,7 +62,12 @@ sub read ($)
 
     assert(defined($self));
 
-    return 0;
+    if (!file_is_present($filename)) {
+	error("File \`" . $filename . "' is not present");
+	return 0;
+    }
+
+    return 1;
 }
 
 sub write ($)
