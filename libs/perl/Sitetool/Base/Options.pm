@@ -48,10 +48,10 @@ sub new ($)
 
     debug("Creating object for options handling");
 
-    $self->{'SHORT'}     = { };
-    $self->{'LONG'}      = { };
-    $self->{'CALLBACK'}  = { };
-    $self->{'ARGSCOUNT'} = { };
+    $self->{SHORT}     = { };
+    $self->{LONG}      = { };
+    $self->{CALLBACK}  = { };
+    $self->{ARGSCOUNT} = { };
  
     bless $self, $class;
 
@@ -77,33 +77,33 @@ sub add ($$$$$$)
 
     if (defined($long)) {
 	assert(length($long) > 1);
-	$self->{'LONG'}->{$id} = $long;
+	$self->{LONG}->{$id} = $long;
     }
 
     if (defined($short)) {
 	assert(length($short) == 1);
-	$self->{'SHORT'}->{$id} = $short;
+	$self->{SHORT}->{$id} = $short;
     }
 
-    $self->{'CALLBACK'}->{$id}  = $callback;
-    $self->{'ARGSCOUNT'}->{$id} = $argscount;
+    $self->{CALLBACK}->{$id}  = $callback;
+    $self->{ARGSCOUNT}->{$id} = $argscount;
 
     debug("  option id:              `" .
 	  $id                           .
 	  "\'");
     debug("  option long:            `"    .
-	  defined($self->{'LONG'}->{$id})  ?
-	  $self->{'LONG'}->{$id} : "undef" .
+	  defined($self->{LONG}->{$id})  ?
+	  $self->{LONG}->{$id} : "undef" .
 	  "\'");
     debug("  option short:           `"     .
-	  defined($self->{'SHORT'}->{$id})) ?
-	  $self->{'SHORT'}->{$id} : "undef"  .
+	  defined($self->{SHORT}->{$id})) ?
+	  $self->{SHORT}->{$id} : "undef"  .
 	  "\'");
     debug("  option callback:        `" .
-	  $self->{'CALLBACK'}->{$id}    .
+	  $self->{CALLBACK}->{$id}    .
 	  "\'");
     debug("  option arguments count: `" .
-	  $self->{'ARGSCOUNT'}->{$id}   .
+	  $self->{ARGSCOUNT}->{$id}   .
 	  "\'");
 
     return 1;
@@ -117,9 +117,9 @@ sub get_long_from_id ($$)
     assert(defined($self));
     assert(defined($opt));
 
-    for my $id (keys $self->{'LONG'}) {
+    for my $id (keys $self->{LONG}) {
 
-	if ($self->{'LONG'}->{$id} eq $opt) {
+	if ($self->{LONG}->{$id} eq $opt) {
 	    debug("Got long option \`" . $opt . "' for id \`" . $id . "'");
 	    return $id;
 	}
@@ -136,9 +136,9 @@ sub get_short_from_id ($)
     assert(defined($self));
     assert(defined($opt));
 
-    for my $key (keys $self->{'SHORT'}) {
+    for my $key (keys $self->{SHORT}) {
 
-	if ($self->{'SHORT'}->{$key} eq $opt) {
+	if ($self->{SHORT}->{$key} eq $opt) {
 	    debug("Got short option \`" . $opt . "' for id \`" . $id . "'");
 	    return $key;
 	}
@@ -240,7 +240,7 @@ sub parse($$)
 
 	my @params;
 
-	for (my $i = 0; $i < $self->{'ARGSCOUNT'}->{$id}; $i++) {
+	for (my $i = 0; $i < $self->{ARGSCOUNT}->{$id}; $i++) {
 	    $string =~ s/([^\s]+)//;
 
 	    if (!defined($1)) {
@@ -271,8 +271,8 @@ sub parse($$)
 	    $params[$i] = $param;
 	}
 
-	if ($self->{'ARGSCOUNT'}->{$id} > 0) {
-	    assert($#params == ($self->{'ARGSCOUNT'}->{$id} - 1));
+	if ($self->{ARGSCOUNT}->{$id} > 0) {
+	    assert($#params == ($self->{ARGSCOUNT}->{$id} - 1));
 	}
     }
 
