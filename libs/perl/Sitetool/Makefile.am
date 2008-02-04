@@ -41,7 +41,8 @@ dist_perllib_DATA =				\
 	Tree.pm					\
 	Graphviz.pm				\
 	Stack.pm				\
-	Array.pm
+	Array.pm				\
+	RCFile.pm
 
 nodist_perllib_DATA =				\
 	Autoconfig.pm				\
