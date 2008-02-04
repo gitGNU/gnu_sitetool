@@ -21,7 +21,7 @@
 
 (p (@ (id "main_footer_info"))
    "Powered by "
-   (a (@ (href "http://autosite.sourceforge.net"))
+   (a (@ (href "http://savannah.nongnu.org/projects/sitetool"))
       ,as_site_variable_PROGRAMNAME)
    " and "
    (a (@ (href "http://okmij.org/ftp/Scheme/SXML.html"))
@@ -37,8 +37,8 @@
     )
    )
 (p (@ (id "main_footer_links"))
-   (a (@ (href "http://www.sourceforge.net"))
-      "SourceForge")
+   (a (@ (href "http://savannah.gnu.org"))
+      "Savannah")
    (a (@
        (href "http://validator.w3.org/check?uri=referer"))
       (img (@
