@@ -62,6 +62,11 @@ sub read ($)
 
     assert(defined($self));
 
+    my $filename;
+
+    $filename = $self->{FILENAME};
+    assert(defined($filename));
+
     if (!file_is_present($filename)) {
 	error("File \`" . $filename . "' is not present");
 	return 0;
@@ -104,7 +109,12 @@ sub write ($)
 
     assert(defined($self));
 
-    return 0;
+    my $filename;
+
+    $filename = $self->{FILENAME};
+    assert(defined($filename));
+
+    return 1;
 }
 
 1;

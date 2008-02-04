@@ -59,7 +59,9 @@ use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Program;
 use Sitetool::OS::Shell;
+use Sitetool::OS::Home;
 use Sitetool::Configuration;
+use Sitetool::RCFile;
 
 #
 # Globals
@@ -213,6 +215,26 @@ if ($WPUT eq "") {
 	  $PACKAGE_NAME . " has been configured");
     error("In order to use the \`install' functionality please install " .
 	  "wput and re-install " . $PACKAGE_NAME);
+    exit 1;
+}
+
+my $rc_filename;
+$rc_filename = File::Spec->catfile(home(),
+				   ".",
+				   $Sitetool::Autoconfig::PACKAGE_NAME);
+assert(defined($rc_filename));
+
+my $rc;
+$rc = Sitetool::RCFile->new($rc_filename);
+assert(defined($rc));
+
+if (!file_ispresent($rc_filename)) {
+    if (!$rc->save()) {
+	exit 1;
+    }
+}
+
+if (!$rc->load()) {
     exit 1;
 }
 
