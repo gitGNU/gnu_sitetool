@@ -62,3 +62,5 @@ fetch: fetch.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+
+update: fetch

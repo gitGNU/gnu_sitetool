@@ -29,7 +29,13 @@ SUBDIRS =					\
 ##     autotools dir is already shipped by autotools ... :-)
 ##
 ##EXTRA_DIST =                                  \
-##      autotools
+##	autotools
 
+##
+## NOTE:
+##     update target needs the fetch script, which could be re-built in the
+##     scripts by the update target itself
+##
 update:
+	(cd scripts   && $(MAKE) $(AM_MAKEFLAGS) update)
 	(cd autotools && $(MAKE) $(AM_MAKEFLAGS) update)
