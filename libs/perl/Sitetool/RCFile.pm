@@ -41,10 +41,20 @@ sub new ($$)
     my $self = { };
 
     $self->{FILENAME} = $filename;
+    $self->{HOSTS}    = { };
 
     bless $self, $class;
 
     return $self;
+}
+
+sub correct ()
+{
+    my $self = shift;
+
+    assert(defined($self));
+
+    return 0;
 }
 
 sub read ($)
@@ -73,8 +83,10 @@ sub read ($)
     my $string;
     my $lineno;
     my $host;
+    my $login;
 
     $host   = undef;
+    $login  = undef;
     $lineno = 0;
     while (<$filehandle>) {
 	$string = $_;
@@ -82,20 +94,52 @@ sub read ($)
 	    # Skip comments
 	} elsif ($string =~ /[ \t]+/) {
 	    # Skip empty lines
-	} elsif ($string =~ /[ \t]*host[ \t]+(.*)/) {
-	    # Got a host keyword
-
-	    my $host;
-	    $host = $1;
-
-#	    $section = s/^[ \t]*//;
-#	    $section = s/[ \t]*$//;
-#	} elsif ($string =~ /[](.*)[]=[](.*)[]/) {
-#	    my $variable;
-#	    my $value;
+#	} elsif ($string =~ /[ \t]*host[ \t]+(.*)/) {
 #
-#	    $variable = $1;
-#	    $value    = $2;
+#	    #
+#	    # Got a host keyword
+#	    #
+#
+#	    $host = $1;
+#
+#	    assert(defined($host));
+#
+#	    $self->{HOSTS}->{$host} = { };
+#	} elsif ($string =~ /[ \t]*login[ \t]+(.*)/) {
+#
+#	    #
+#	    # Got login keyword
+#	    #
+#
+#	    $login = $1;
+#
+#	    assert(defined($login));
+#	    
+#	    if (!defined($host)) {
+#		error("Wrong formatted input file \`" . $filename . "'");
+#		return 0;
+#	    }
+#
+#	    $self->{HOSTS}->{$host}->{LOGIN}->$login = { };
+#
+#	} elsif ($string =~ /[ \t]*password[ \t]+(.*)/) {
+#
+#	    #
+#	    # Got password keyword
+#	    #
+#
+#	    my $password;
+#	    $password = $1;
+#
+#	    assert(defined($password));
+#	    
+#	    if (!defined($host)) {
+#		error("Wrong formatted input file \`" . $filename . "'");
+#		return 0;
+#	    }
+#
+#	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
+#
 	} else {
 	    error("Unknown input line " . $lineno . " in file " .
 		  "\`" . $filename . "'");
@@ -107,6 +151,11 @@ sub read ($)
 
     close($filehandle);
 
+    if (!$self->correct()) {
+	error("File \`" . $filename . "' has an incorrect format");
+	return 0;
+    }
+
     return 1;
 }
 
@@ -115,6 +164,11 @@ sub write ($)
     my $self = shift;
 
     assert(defined($self));
+
+    if (!$self->correct()) {
+	error("RC Data contains inccorrect data");
+	return 0;
+    }
 
     my $filename;
 
@@ -128,7 +182,11 @@ sub write ($)
 	return 0;
     }
 
-    print $filehandle "";
+#    for my $host (keys($self->{HOSTS})) {
+#	print $filehandle "host     " . $host . "\n";
+#	print $filehandle "login    " . $self->{HOSTS}->{$host}->{LOGIN} . "\n";
+#	print $filehandle "password " . $self->{HOSTS}->{$host}->{PASSWORD} . "\n";
+#    }
 
     close($filehandle);
 
