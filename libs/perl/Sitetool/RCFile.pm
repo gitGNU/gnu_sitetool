@@ -48,13 +48,45 @@ sub new ($$)
     return $self;
 }
 
+#
+# XXX FIXME: This sub is only a sketch, we should output more clearer messages
+#
 sub correct ()
 {
     my $self = shift;
 
     assert(defined($self));
 
-    return 0;
+    my $found_host = 0;
+    for my $host (keys(%{$self->{HOSTS}})) {
+	$found_host = 1;
+
+	my $found_login = 0;
+	for my $login (keys(%{$self->{$host}->{LOGIN}})) {
+
+	    $found_login = 1;
+	    if (!defined(($self->{$host}->{LOGIN}->{$login}))) {
+		warning("Host "              .
+			"\`" . $host . "', " .
+			"login "             .
+			"\`" . $login . "' " .
+			"is without a password");
+		return 1;
+	    }
+	}
+
+	if (!$found_login) {
+	    warning("Host \`" . $host . "' is without a login");
+	    return 1;
+	}
+    }
+
+    if (!$found_host) {
+	warning("No hosts defined");
+	return 1;
+    }
+
+    return 1;
 }
 
 sub read ($)
