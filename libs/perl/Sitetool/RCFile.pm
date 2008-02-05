@@ -186,11 +186,14 @@ sub write ($)
 	return 0;
     }
 
-#    for my $host (keys($self->{HOSTS})) {
-#	print $filehandle "host     " . $host . "\n";
-#	print $filehandle "login    " . $self->{HOSTS}->{$host}->{LOGIN} . "\n";
-#	print $filehandle "password " . $self->{HOSTS}->{$host}->{PASSWORD} . "\n";
-#    }
+    for my $host (keys(%{$self->{HOSTS}})) {
+	print $filehandle "host     " .
+	    $host . "\n";
+	print $filehandle "login    " .
+	    $self->{HOSTS}->{$host}->{LOGIN} . "\n";
+	print $filehandle "password " .
+	    $self->{HOSTS}->{$host}->{PASSWORD} . "\n";
+    }
 
     close($filehandle);
 
