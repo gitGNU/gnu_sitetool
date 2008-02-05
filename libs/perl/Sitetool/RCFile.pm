@@ -128,24 +128,20 @@ sub read ($)
 	    # Skip empty lines
 	} elsif ($string =~ /[ \t]*host[ \t]+(.*)/) {
 
-	    #
-	    # Got a host keyword
-	    #
-
 	    $host = $1;
 
 	    assert(defined($host));
+	    debug("Got host keyword at line " . $lineno . ", " .
+		  "host = \`" . $host . "'");
 
 	    $self->{HOSTS}->{$host} = { };
 	} elsif ($string =~ /[ \t]*login[ \t]+(.*)/) {
 
-	    #
-	    # Got login keyword
-	    #
-
 	    $login = $1;
 
 	    assert(defined($login));
+	    debug("Got login keyword at line " . $lineno . ", " .
+		  "login = \`" . $login . "'");
 
 	    if (!defined($host)) {
 		error("Wrong formatted input file \`" . $filename . "'");
@@ -156,14 +152,12 @@ sub read ($)
 
 	} elsif ($string =~ /[ \t]*password[ \t]+(.*)/) {
 
-	    #
-	    # Got password keyword
-	    #
-
 	    my $password;
 	    $password = $1;
 
 	    assert(defined($password));
+	    debug("Got password keyword at line " . $lineno . ", " .
+		  "password = \`" . $password . "'");
 
 	    if (!defined($host)) {
 		error("Wrong formatted input file \`" . $filename . "'");
