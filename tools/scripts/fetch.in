@@ -40,7 +40,14 @@ if test "$FILE" = "" ; then
 fi
 
 echo "$me: Fetching $URL"
+rm -f $FILE
 $WGET --no-verbose -r -q -O $FILE -- $URL || {
+    echo "$me: Cannot fetch $URL"
+    rm -f $FILE
+    exit 1
+}
+
+if test ! -s $FILE || {
     echo "$me: Cannot fetch $URL"
     rm -f $FILE
     exit 1
