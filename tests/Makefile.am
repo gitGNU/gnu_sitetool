@@ -52,8 +52,8 @@ check_SCRIPTS =					\
 	wrapper
 
 TESTS =						\
-	test-dry-run				\
 	test-args				\
+	test-dry-run				\
 	test-helps				\
 	test-initialize				\
 	test-preprocess				\
