@@ -94,52 +94,56 @@ sub read ($)
 	    # Skip comments
 	} elsif ($string =~ /[ \t]+/) {
 	    # Skip empty lines
-#	} elsif ($string =~ /[ \t]*host[ \t]+(.*)/) {
-#
-#	    #
-#	    # Got a host keyword
-#	    #
-#
-#	    $host = $1;
-#
-#	    assert(defined($host));
-#
-#	    $self->{HOSTS}->{$host} = { };
-#	} elsif ($string =~ /[ \t]*login[ \t]+(.*)/) {
-#
-#	    #
-#	    # Got login keyword
-#	    #
-#
-#	    $login = $1;
-#
-#	    assert(defined($login));
-#	    
-#	    if (!defined($host)) {
-#		error("Wrong formatted input file \`" . $filename . "'");
-#		return 0;
-#	    }
-#
-#	    $self->{HOSTS}->{$host}->{LOGIN}->$login = { };
-#
-#	} elsif ($string =~ /[ \t]*password[ \t]+(.*)/) {
-#
-#	    #
-#	    # Got password keyword
-#	    #
-#
-#	    my $password;
-#	    $password = $1;
-#
-#	    assert(defined($password));
-#	    
-#	    if (!defined($host)) {
-#		error("Wrong formatted input file \`" . $filename . "'");
-#		return 0;
-#	    }
-#
-#	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
-#
+	} elsif ($string =~ /[ \t]*host[ \t]+(.*)/) {
+
+	    #
+	    # Got a host keyword
+	    #
+
+	    $host = $1;
+
+	    assert(defined($host));
+
+	    $self->{HOSTS}->{$host} = { };
+	} elsif ($string =~ /[ \t]*login[ \t]+(.*)/) {
+
+	    #
+	    # Got login keyword
+	    #
+
+	    $login = $1;
+
+	    assert(defined($login));
+
+	    if (!defined($host)) {
+		error("Wrong formatted input file \`" . $filename . "'");
+		return 0;
+	    }
+
+	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = { };
+
+	} elsif ($string =~ /[ \t]*password[ \t]+(.*)/) {
+
+	    #
+	    # Got password keyword
+	    #
+
+	    my $password;
+	    $password = $1;
+
+	    assert(defined($password));
+
+	    if (!defined($host)) {
+		error("Wrong formatted input file \`" . $filename . "'");
+		return 0;
+	    }
+	    if (!defined($login)) {
+		error("Wrong formatted input file \`" . $filename . "'");
+		return 0;
+	    }
+
+	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
+
 	} else {
 	    error("Unknown input line " . $lineno . " in file " .
 		  "\`" . $filename . "'");
