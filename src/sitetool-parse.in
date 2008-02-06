@@ -79,6 +79,7 @@ sub help_brief ()
 {
     print "  -i, --input=FILE            use FILE as input file\n";
     print "  -o, --output=FILE           use FILE as output file\n";
+    print "  -s, --style-dir=DIR         style directory is DIR\n";
     print "  -f, --force                 consider all files obsolete\n";
 }
 
@@ -117,6 +118,7 @@ trace_prefix_set($PROGRAM_NAME);
 my $input_file  = "";
 my $output_file = "";
 my $work_dir    = "";
+my $style_dir   = "";
 my $force_mode  = 0;
 
 debug_set(0);
@@ -135,6 +137,9 @@ while ($i <= $#ARGV) {
     } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output$/)) {
 	$i++;
 	$output_file = $ARGV[$i];
+    } elsif (($ARGV[$i] =~ /^\-s$/) || ($ARGV[$i] =~ /^\-\-style\-dir$/)) {
+	$i++;
+	$style_dir = $ARGV[$i];
     } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
 	$force_mode = 1;
     } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
@@ -184,6 +189,10 @@ if ($output_file eq "") {
     hint("Missing output file");
     exit 1;
 }
+if ($style_dir eq "") {
+    hint("Missing style directory");
+    exit 1;
+}
 
 #
 # Start the real work
@@ -219,10 +228,6 @@ if ($force_mode || file_isobsolete($input_file, $output_file)) {
     assert(defined($string));
 
     debug("Evaluating raw configuration");
-
-    my $style_dir;
-
-    $style_dir = File::Spec->catfile($data_dir, "styles", "default");
 
     assert(defined($style_dir));
 

@@ -104,7 +104,7 @@ my %tools = (
     "parse" => {
 	HANDLER        => "sitetool-parse",
 	DESCRIPTION    => "parse",
-	FLAGS          => "-i $preprocessed_file -w $work_dir -o $configuration_file",
+	FLAGS          => "-i $preprocessed_file -w $work_dir -o $configuration_file -s $style_dir",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess" ],
 	POST_REQUISITE => [ ],
