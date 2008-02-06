@@ -216,10 +216,16 @@ sub save ($)
     for my $host (keys(%{$self->{HOSTS}})) {
 	print $filehandle "host     " .
 	    $host . "\n";
-	print $filehandle "login    " .
-	    $self->{HOSTS}->{$host}->{LOGIN} . "\n";
-	print $filehandle "password " .
-	    $self->{HOSTS}->{$host}->{PASSWORD} . "\n";
+
+	for my $login (keys(%{$self->{HOSTS}->{$host}})) {
+	    print $filehandle "login    " .
+		$login . "\n";
+
+	    if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
+		print $filehandle "password " .
+		    $self->{HOSTS}->{$host}->{LOGIN}->{$login} . "\n";
+	    }
+	}
     }
 
     close($filehandle);
@@ -234,7 +240,14 @@ sub add ($$$$)
     my $login    = shift;
     my $password = shift;
 
-    return 0;
+    assert(defined($self));
+    assert(defined($host));
+    assert(defined($login));
+    assert(defined($password));
+
+    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
+
+    return 1;
 }
 
 sub remove ($$$)
@@ -243,7 +256,13 @@ sub remove ($$$)
     my $host     = shift;
     my $login    = shift;
 
-    return 0;
+    assert(defined($self));
+    assert(defined($host));
+    assert(defined($login));
+
+    delete $self->{HOSTS}->{$host}->{LOGIN}->{$login};
+
+    return 1;
 }
 
 sub foreach ($$$$) {
