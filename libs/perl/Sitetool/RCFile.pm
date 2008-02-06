@@ -96,6 +96,8 @@ sub load ($)
 
     assert(defined($self));
 
+    debug("Loading RC file");
+
     my $filename;
 
     $filename = $self->{FILENAME};
@@ -115,12 +117,14 @@ sub load ($)
 
     my $string;
     my $lineno;
+    my $count;
     my $host;
     my $login;
 
     $host   = undef;
     $login  = undef;
     $lineno = 0;
+    $count  = 0;
     while (<$filehandle>) {
 	$string = $_;
 	if ($string =~ /[ \t]*\#.*$/) {
@@ -136,6 +140,9 @@ sub load ($)
 		  "host = \`" . $host . "'");
 
 	    $self->{HOSTS}->{$host} = { };
+
+	    $count++;
+
 	} elsif ($string =~ /[ \t]*login[ \t]+(.*)/) {
 
 	    $login = $1;
@@ -150,6 +157,8 @@ sub load ($)
 	    }
 
 	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = { };
+
+	    $count++;
 
 	} elsif ($string =~ /[ \t]*password[ \t]+(.*)/) {
 
@@ -171,6 +180,8 @@ sub load ($)
 
 	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
 
+	    $count++;
+
 	} else {
 	    error("Unknown input line " . $lineno . " in file " .
 		  "\`" . $filename . "'");
@@ -187,6 +198,8 @@ sub load ($)
 	return 0;
     }
 
+    debug("Loaded " . $count . " nodes");
+
     return 1;
 }
 
@@ -195,6 +208,8 @@ sub save ($)
     my $self = shift;
 
     assert(defined($self));
+
+    debug("Saving RC file");
 
     if (!$self->correct()) {
 	error("RC Data contains inccorrect data");
@@ -213,20 +228,30 @@ sub save ($)
 	return 0;
     }
 
+    my $count;
+
+    $count = 0;
     for my $host (keys(%{$self->{HOSTS}})) {
 	print $filehandle "host     " .
 	    $host . "\n";
+
+	$count++;
 
 	for my $login (keys(%{$self->{HOSTS}->{$host}})) {
 	    print $filehandle "login    " .
 		$login . "\n";
 
+	    $count++;
+
 	    if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
 		print $filehandle "password " .
 		    $self->{HOSTS}->{$host}->{LOGIN}->{$login} . "\n";
+
+		$count++;
 	    }
 	}
     }
+    debug("Saved " . $count . " nodes");
 
     close($filehandle);
 
@@ -245,6 +270,9 @@ sub add ($$$$)
     assert(defined($login));
     assert(defined($password));
 
+    debug("Adding RC entry " .
+	  "(\`" . $host . "', \`" . $login . "', \`" . $password . "')");
+
     $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
 
     return 1;
@@ -259,6 +287,9 @@ sub remove ($$$)
     assert(defined($self));
     assert(defined($host));
     assert(defined($login));
+
+    debug("Removing RC entry " .
+	  "(\`" . $host . "', \`" . $login . "')");
 
     delete $self->{HOSTS}->{$host}->{LOGIN}->{$login};
 
