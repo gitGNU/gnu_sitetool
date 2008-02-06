@@ -78,10 +78,10 @@ our $PROGRAM_NAME = "sitetool-preprocess";
 
 sub help_brief ()
 {
-    print "  -D, --define=VAR=VALUE      Define variable VAR to value VALUE\n";
-    print "  -U, --undefine=VAR          Undefine variable VAR\n";
-    print "  -i, --input=FILE            Use FILE as input file\n";
-    print "  -o, --output=FILE           Use FILE as output file\n";
+    print "  -D, --define=VAR=VALUE      define variable VAR to value VALUE\n";
+    print "  -U, --undefine=VAR          undefine variable VAR\n";
+    print "  -i, --input=FILE            use FILE as input file\n";
+    print "  -o, --output=FILE           use FILE as output file\n";
     print "  -f, --force                 consider all files obsolete\n";
 }
 
