@@ -77,7 +77,7 @@ our $PROGRAM_NAME = "sitetool-digest";
 
 sub help_brief ()
 {
-    print "  -o, --output-dir=DIR        Use DIR as output directory\n";
+    print "  -o, --output-dir=DIR        use DIR as output directory\n";
     print "  -f, --force                 consider all files obsolete\n";
 }
 
