@@ -135,6 +135,7 @@ AC_CONFIG_FILES([
 	data/Makefile
 	data/styles/Makefile
 	data/styles/default/Makefile
+	data/styles/single-page/Makefile
 
 	src/Makefile
 	src/filters/Makefile
