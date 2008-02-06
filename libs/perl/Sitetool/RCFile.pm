@@ -120,11 +120,13 @@ sub load ($)
     my $count;
     my $host;
     my $login;
+    my $password;
 
-    $host   = undef;
-    $login  = undef;
-    $lineno = 0;
-    $count  = 0;
+    $host     = undef;
+    $login    = undef;
+    $password = undef;
+    $lineno   = 0;
+    $count    = 0;
     while (<$filehandle>) {
 	$string = $_;
 	if ($string =~ /^[ \t]*\#.*$/) {
@@ -133,7 +135,9 @@ sub load ($)
 	    # Skip empty lines
 	} elsif ($string =~ /^[ \t]*host[ \t]+(.*)$/) {
 
-	    $host = $1;
+	    $host     = $1;
+	    $login    = undef;
+	    $password = undef;
 
 	    assert(defined($host));
 	    debug("Got host keyword at line " . $lineno . ", " .
@@ -145,7 +149,8 @@ sub load ($)
 
 	} elsif ($string =~ /^[ \t]*login[ \t]+(.*)$/) {
 
-	    $login = $1;
+	    $login    = $1;
+	    $password = undef;
 
 	    assert(defined($login));
 	    debug("Got login keyword at line " . $lineno . ", " .
@@ -166,7 +171,6 @@ sub load ($)
 
 	} elsif ($string =~ /^[ \t]*password[ \t]+(.*)$/) {
 
-	    my $password;
 	    $password = $1;
 
 	    assert(defined($password));
