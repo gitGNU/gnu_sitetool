@@ -44,10 +44,8 @@ sub new ($)
     $self->{LONG}      = { };
     $self->{CALLBACK}  = { };
     $self->{ARGSCOUNT} = { };
- 
-    bless $self, $class;
 
-    return $self;
+    return bless($self, $class);
 }
 
 sub add ($$$$$$)
@@ -62,8 +60,8 @@ sub add ($$$$$$)
     assert(defined($self));
     assert(defined($id));
     assert(defined($short) || defined($long));
-    assert($argscount >= 0);
     assert(defined($callback));
+    assert($argscount >= 0);
 
     debug("Adding option");
 
@@ -84,18 +82,19 @@ sub add ($$$$$$)
 	  $id                           .
 	  "\'");
     debug("  option long:            `"    .
-	  defined($self->{LONG}->{$id})  ?
-	  $self->{LONG}->{$id} : "undef" .
+	  (defined($self->{LONG}->{$id})   ?
+	   $self->{LONG}->{$id} : "undef") .
 	  "\'");
     debug("  option short:           `"     .
-	  defined($self->{SHORT}->{$id})) ?
-	  $self->{SHORT}->{$id} : "undef"  .
+	  (defined($self->{SHORT}->{$id})   ?
+	   $self->{SHORT}->{$id} : "undef") .
 	  "\'");
-    debug("  option callback:        `" .
-	  $self->{CALLBACK}->{$id}    .
+    debug("  option callback:        `"       .
+	  (defined($self->{CALLBACK}->{$id})  ?
+	   $self->{CALLBACK}->{$id}: "undef") .
 	  "\'");
     debug("  option arguments count: `" .
-	  $self->{ARGSCOUNT}->{$id}   .
+	  $self->{ARGSCOUNT}->{$id}     .
 	  "\'");
 
     return 1;
@@ -109,7 +108,7 @@ sub get_long_from_id ($$)
     assert(defined($self));
     assert(defined($opt));
 
-    for my $id (keys $self->{LONG}) {
+    for my $id (keys %{$self->{LONG}}) {
 
 	if ($self->{LONG}->{$id} eq $opt) {
 	    debug("Got long option \`" . $opt . "' for id \`" . $id . "'");
@@ -120,7 +119,7 @@ sub get_long_from_id ($$)
     return undef;
 }
 
-sub get_short_from_id ($)
+sub get_short_from_id ($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -128,11 +127,11 @@ sub get_short_from_id ($)
     assert(defined($self));
     assert(defined($opt));
 
-    for my $key (keys $self->{SHORT}) {
+    for my $id (keys %{$self->{SHORT}}) {
 
-	if ($self->{SHORT}->{$key} eq $opt) {
+	if ($self->{SHORT}->{$id} eq $opt) {
 	    debug("Got short option \`" . $opt . "' for id \`" . $id . "'");
-	    return $key;
+	    return $id;
 	}
     }
 
@@ -141,7 +140,7 @@ sub get_short_from_id ($)
 
 # XXX FIXME: We should use get_short_from_id() or get_long_from_id() in order
 #            to discriminate different type of options ...
-sub get_id($)
+sub get_id($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -151,12 +150,12 @@ sub get_id($)
 
     my $id;
 
-    $id = get_long_from_id($opt);
+    $id = $self->get_long_from_id($opt);
     if (defined($id)) {
 	return $id;
     }
 
-    $id = get_short_from_id($opt);
+    $id = $self->get_short_from_id($opt);
     if (defined($id)) {
 	return $id;
     }
@@ -201,7 +200,7 @@ sub parse($$)
 
 	    if ($tmp eq "-") {
 		($tmp) = $token =~ /^..(.*)/;
-		$id    = get_id($tmp);
+		$id    = $self->get_id_from_long($tmp);
 
 		if (!defined($id)) {
 		    error("Unknown long option `" . $token . "\'");
@@ -209,14 +208,13 @@ sub parse($$)
 		}
 
 	    } else {
+
 		if (length($token) > 2) {
-		    # XXX FIXME: Use bug()
-		    error("Options bundling isn\'t supported");
-		    return 1
+		    bug("Options bundling isn\'t supported");
 		}
 
 		($tmp) = $token =~ /^.(.)/;
-		$id    = get_id($tmp);
+		$id    = $self->get_id_from_short($tmp);
 
 		if (!defined($id)) {
 		    error("Unknown short option `" . $token . "\'");
@@ -243,6 +241,7 @@ sub parse($$)
 	    my $param = $1;
 
 	    if ($param =~ /^\"/) {
+
 		while ($string =~ s/([^\"]+)//) {
 		    if (!defined($1)) {
 			error("Missing parameter for `" . $string . "\'");
