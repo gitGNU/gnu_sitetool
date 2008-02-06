@@ -76,8 +76,8 @@ our $PROGRAM_NAME = "sitetool-initialize";
 
 sub help_brief ()
 {
-    print "  -w, --work-dir=DIR          Working directory is DIR\n";
-    print "  -o, --output-dir=DIR        Output directory is DIR\n";
+    print "  -w, --work-dir=DIR          working directory is DIR\n";
+    print "  -o, --output-dir=DIR        output directory is DIR\n";
     print "  -f, --force                 consider all files obsolete\n";
 }
 
