@@ -28,6 +28,7 @@ use diagnostics;
 
 use Sitetool::Autoconfig;
 use Sitetool::Base::Debug;
+use Sitetool::Base::Trace;
 use Sitetool::OS::File;
 
 sub new ($$)
@@ -89,7 +90,7 @@ sub correct ()
     return 1;
 }
 
-sub read ($)
+sub load ($)
 {
     my $self = shift;
 
@@ -189,7 +190,7 @@ sub read ($)
     return 1;
 }
 
-sub write ($)
+sub save ($)
 {
     my $self = shift;
 
@@ -207,7 +208,7 @@ sub write ($)
 
     my $filehandle;
 
-    if (!open($filehandle, "<", $filename)) {
+    if (!open($filehandle, ">", $filename)) {
 	error("Cannot open \`$filename' for input");
 	return 0;
     }
@@ -224,6 +225,32 @@ sub write ($)
     close($filehandle);
 
     return 1;
+}
+
+sub add ($$$$)
+{
+    my $self     = shift;
+    my $host     = shift;
+    my $login    = shift;
+    my $password = shift;
+
+    return 0;
+}
+
+sub remove ($$$)
+{
+    my $self     = shift;
+    my $host     = shift;
+    my $login    = shift;
+
+    return 0;
+}
+
+sub foreach ($$$$) {
+    my $self            = shift;
+    my $cb_host_ref     = shift;
+    my $cb_login_ref    = shift;
+    my $cb_password_ref = shift;
 }
 
 1;
