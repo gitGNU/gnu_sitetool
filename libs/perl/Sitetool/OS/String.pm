@@ -34,7 +34,28 @@ BEGIN {
     our ($VERSION, @ISA, @EXPORT);
     
     @ISA    = qw(Exporter);
-    @EXPORT = qw(&string_tofile &string_obfuscate_email &string_purify);
+    @EXPORT = qw(&string_tofile
+                 &string_uppercase
+                 &string_lowercase
+                 &string_purify);
+}
+
+sub string_uppercase ($)
+{
+    my $string = shift;
+
+    assert(defined($string));
+
+    return uc($string);
+}
+
+sub string_lowercase ($)
+{
+    my $string = shift;
+
+    assert(defined($string));
+
+    return lc($string);
 }
 
 #
