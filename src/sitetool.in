@@ -90,7 +90,7 @@ my %tools = (
     "initialize" => {
 	HANDLER        => "sitetool-initialize",
 	DESCRIPTION    => "initialize",
-	FLAGS          => "-w $work_dir -o $output_dir",
+	FLAGS          => "-w $work_dir -o $output_dir -s $style_dir",
 	PRE_REQUISITE  => [ ],
  	POST_REQUISITE => [ ],
     },
