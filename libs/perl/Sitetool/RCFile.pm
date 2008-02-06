@@ -117,7 +117,7 @@ sub load ($)
 
     my $string;
     my $lineno;
-    my $count;
+    my $nodes;
     my $host;
     my $login;
     my $password;
@@ -126,7 +126,7 @@ sub load ($)
     $login    = undef;
     $password = undef;
     $lineno   = 0;
-    $count    = 0;
+    $nodes    = 0;
     while (<$filehandle>) {
 	$string = $_;
 	if ($string =~ /^[ \t]*\#.*$/) {
@@ -145,7 +145,7 @@ sub load ($)
 
 	    $self->{HOSTS}->{$host} = { };
 
-	    $count++;
+	    $nodes++;
 
 	} elsif ($string =~ /^[ \t]*login[ \t]+(.*)$/) {
 
@@ -167,7 +167,7 @@ sub load ($)
 	    #}
 	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = undef;
 
-	    $count++;
+	    $nodes++;
 
 	} elsif ($string =~ /^[ \t]*password[ \t]+(.*)$/) {
 
@@ -192,7 +192,7 @@ sub load ($)
 	    #}
 	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
 
-	    $count++;
+	    $nodes++;
 
 	} else {
 	    error("Unknown input line " . $lineno . " in file " .
@@ -210,7 +210,7 @@ sub load ($)
 	return 0;
     }
 
-    debug("Loaded " . $count . " nodes");
+    debug("Loaded " . $nodes . " nodes");
 
     return 1;
 }
@@ -223,7 +223,7 @@ sub save ($)
 
     debug("Saving RC file");
 
-    if (!$self->correct()) {
+    if (!$self->iscorrect()) {
 	error("RC Data contains incorrect data");
 	return 0;
     }
@@ -240,32 +240,32 @@ sub save ($)
 	return 0;
     }
 
-    my $count;
+    my $nodes;
 
-    $count = 0;
+    $nodes = 0;
     for my $host (keys(%{$self->{HOSTS}})) {
 	print $filehandle "host     " .
 	    $host . "\n";
 
-	$count++;
+	$nodes++;
 
 	for my $login (keys(%{$self->{HOSTS}->{$host}})) {
 	    print $filehandle "login    " .
 		$login . "\n";
 
-	    $count++;
+	    $nodes++;
 
 	    if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
 		print $filehandle "password " .
 		    $self->{HOSTS}->{$host}->{LOGIN}->{$login} . "\n";
 
-		$count++;
+		$nodes++;
 	    }
 	}
 
 	print $filehandle "\n";
     }
-    debug("Saved " . $count . " nodes");
+    debug("Saved " . $nodes . " nodes");
 
     close($filehandle);
 
