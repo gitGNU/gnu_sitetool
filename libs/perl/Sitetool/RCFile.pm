@@ -63,10 +63,10 @@ sub correct ()
 	$found_host = 1;
 
 	my $found_login = 0;
-	for my $login (keys(%{$self->{$host}->{LOGIN}})) {
+	for my $login (keys(%{$self->{HOSTS}->{$host}->{LOGIN}})) {
 
 	    $found_login = 1;
-	    if (!defined(($self->{$host}->{LOGIN}->{$login}))) {
+	    if (!defined(($self->{HOSTS}->{$host}->{LOGIN}->{$login}))) {
 		warning("Host "              .
 			"\`" . $host . "', " .
 			"login "             .
