@@ -137,16 +137,6 @@ my $map_file           = "site.map";
 my $dot_file           = "site.dot";
 my $force_mode         = 0;
 
-my %styles             = (
-			  "default" => {
-			      #HEADER => "header.sxml",
-			      #FOOTER => "footer.sxml",
-			      LAYOUT => "layout.sxml",
-			      CSS    => "site.css"
-			      }
-			  );
-my $style              = "default";
-
 debug_set(0);
 verbose_set(0);
 warning_set("none");
