@@ -20,6 +20,11 @@
 
 include $(top_srcdir)/Makefile.sub
 
-SUBDIRS =					\
-	default					\
-	single-page
+styledir = $(pkgvdatadir)/styles/single-page
+
+dist_style_DATA =				\
+	footer.sxml				\
+	header.sxml				\
+	layout.sxml				\
+	menu.scm				\
+	site.css
