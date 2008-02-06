@@ -66,6 +66,7 @@ src/sitetool-install
 src/sitetool-check
 src/sitetool-validate
 src/sitetool-digest
+src/sitetool-auths
 src/filters/changelog-wikitext
 src/filters/news-wikitext
 src/filters/svnlog-wikitext

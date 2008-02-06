@@ -30,5 +30,6 @@ $SITETOOL --dry-run --check      || exit 1
 $SITETOOL --dry-run --digest     || exit 1
 $SITETOOL --dry-run --preprocess || exit 1
 $SITETOOL --dry-run --validate   || exit 1
+$SITETOOL --dry-run --auths      || exit 1
 
 exit 0

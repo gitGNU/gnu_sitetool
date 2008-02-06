@@ -36,7 +36,8 @@ pkgvbin_SCRIPTS =				\
 	sitetool-uninstall			\
 	sitetool-check				\
 	sitetool-validate			\
-	sitetool-digest
+	sitetool-digest				\
+	sitetool-auths
 
 ## Make versioned links on bin_SCRIPTS.  We only run the transform on the
 ## root name; then we make a versioned link with the transformed base name.
@@ -193,6 +194,16 @@ sitetool-validate: $(srcdir)/sitetool-validate.in Makefile
 sitetool-digest: $(srcdir)/sitetool-digest.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/sitetool-digest.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+sitetool-auths: $(srcdir)/sitetool-auths.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/sitetool-auths.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
