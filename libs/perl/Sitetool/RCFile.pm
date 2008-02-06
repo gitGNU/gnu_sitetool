@@ -101,7 +101,7 @@ sub load ($)
     $filename = $self->{FILENAME};
     assert(defined($filename));
 
-    if (!file_is_present($filename)) {
+    if (!file_ispresent($filename)) {
 	error("File \`" . $filename . "' is not present");
 	return 0;
     }
