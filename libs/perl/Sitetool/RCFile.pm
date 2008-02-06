@@ -127,6 +127,8 @@ sub load ($)
     $password = undef;
     $lineno   = 0;
     $nodes    = 0;
+
+    debug("Parsing file \`" . $filename . "'");
     while (<$filehandle>) {
 	$string = $_;
 	if ($string =~ /^[ \t]*\#.*$/) {
@@ -139,6 +141,8 @@ sub load ($)
 	    $login    = undef;
 	    $password = undef;
 
+	    debug("Got $1");
+
 	    assert(defined($host));
 	    debug("Got host keyword at line " . $lineno . ", " .
 		  "host = \`" . $host . "'");
@@ -148,6 +152,8 @@ sub load ($)
 	    $nodes++;
 
 	} elsif ($string =~ /^[ \t]*login[ \t]+(.*)$/) {
+
+	    debug("Got $1");
 
 	    $login    = $1;
 	    $password = undef;
@@ -170,6 +176,8 @@ sub load ($)
 	    $nodes++;
 
 	} elsif ($string =~ /^[ \t]*password[ \t]+(.*)$/) {
+
+	    debug("Got $1");
 
 	    $password = $1;
 
@@ -202,6 +210,7 @@ sub load ($)
 
 	$lineno++;
     }
+    debug("Parsing of \`" . $filename . "' complete");
 
     close($filehandle);
 
@@ -244,20 +253,26 @@ sub save ($)
 
     $nodes = 0;
     for my $host (keys(%{$self->{HOSTS}})) {
-	print $filehandle "host     " .
-	    $host . "\n";
+	debug("Saving host \`" . $host . "'");
+
+	print $filehandle "host     " . $host . "\n";
 
 	$nodes++;
 
-	for my $login (keys(%{$self->{HOSTS}->{$host}})) {
-	    print $filehandle "login    " .
-		$login . "\n";
+	for my $login (keys(%{$self->{HOSTS}->{$host}->{LOGIN}})) {
+	    debug("Saving login \`" . $login . "'");
+
+	    print $filehandle "login    " . $login . "\n";
 
 	    $nodes++;
 
-	    if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
-		print $filehandle "password " .
-		    $self->{HOSTS}->{$host}->{LOGIN}->{$login} . "\n";
+	    my $password;
+
+	    $password = $self->{HOSTS}->{$host}->{LOGIN}->{$login};
+	    if (defined($password)) {
+		debug("Saving password \`" . $password . "'");
+
+		print $filehandle "password " . $password . "\n";
 
 		$nodes++;
 	    }
@@ -287,7 +302,22 @@ sub add ($$$$)
     debug("Adding RC entry " .
 	  "(\`" . $host . "', \`" . $login . "', \`" . $password . "')");
 
+    if (!defined($self->{HOSTS})) {
+	$self->{HOSTS} = { };
+	debug("HOSTS created")
+    }
+    if (!defined($self->{HOSTS}->{$host})) {
+	$self->{HOSTS}->{$host} = { };
+	debug("HOSTS \`" . $host . "' created")
+    }
+    if (!defined($self->{HOSTS}->{$host}->{LOGIN})) {
+	$self->{HOSTS}->{$host}->{LOGIN} = { };
+	debug("HOSTS \`" . $host . "' LOGIN created")
+    }
+
     $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
+    debug("HOSTS \`" . $host . "' LOGIN \`" . $login . "' password created " .
+	  " with value \`" . $self->{HOSTS}->{$host}->{LOGIN}->{$login} . "'");
 
     return 1;
 }
