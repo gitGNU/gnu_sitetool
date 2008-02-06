@@ -224,7 +224,7 @@ sub save ($)
     debug("Saving RC file");
 
     if (!$self->correct()) {
-	error("RC Data contains inccorrect data");
+	error("RC Data contains incorrect data");
 	return 0;
     }
 
