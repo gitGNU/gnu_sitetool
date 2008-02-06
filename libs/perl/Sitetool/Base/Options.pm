@@ -30,7 +30,7 @@ use diagnostics;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Trace;
 
-sub new ($)
+sub new($)
 {
     my $class = shift;
 
@@ -40,6 +40,7 @@ sub new ($)
 
     debug("Creating object for options handling");
 
+    $self->{IDS}       = ( );
     $self->{SHORT}     = { };
     $self->{LONG}      = { };
     $self->{CALLBACK}  = { };
@@ -48,7 +49,7 @@ sub new ($)
     return bless($self, $class);
 }
 
-sub add ($$$$$$)
+sub add($$$$$$)
 {
     my $self      = shift;
     my $id        = shift;
@@ -65,13 +66,35 @@ sub add ($$$$$$)
 
     debug("Adding option");
 
+    if ($self->check_id($id)) {
+	error("ID \`" . $id . "' is already present");
+	return 0;
+    }
+    push(@{$self->{IDS}}, $id);
+
     if (defined($long)) {
 	assert(length($long) > 1);
+
+	my $tmp = $self->get_id_from_long($long);
+
+	if (defined($tmp)) {
+	    error("Long option \`"    . $long . "' " .
+		  "has already id \`" . $tmp  . "'" );
+	    return 0;
+	}
 	$self->{LONG}->{$id} = $long;
     }
 
     if (defined($short)) {
 	assert(length($short) == 1);
+
+	my $tmp = $self->get_id_from_short($short);
+
+	if (defined($tmp)) {
+	    error("Short option \`"   . $short . "' " .
+		  "has already id \`" . $tmp   . "'" );
+	    return 0;
+	}
 	$self->{SHORT}->{$id} = $short;
     }
 
@@ -100,7 +123,7 @@ sub add ($$$$$$)
     return 1;
 }
 
-sub get_long_from_id ($$)
+sub get_id_from_long($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -119,7 +142,7 @@ sub get_long_from_id ($$)
     return undef;
 }
 
-sub get_short_from_id ($$)
+sub get_id_from_short($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -138,29 +161,22 @@ sub get_short_from_id ($$)
     return undef;
 }
 
-# XXX FIXME: We should use get_short_from_id() or get_long_from_id() in order
-#            to discriminate different type of options ...
-sub get_id($$)
+sub check_id($$)
 {
     my $self = shift;
-    my $opt  = shift;
+    my $id   = shift;
 
     assert(defined($self));
-    assert(defined($opt));
+    assert(defined($id));
 
-    my $id;
+    for my $i (@{$self->{IDS}}) {
 
-    $id = $self->get_long_from_id($opt);
-    if (defined($id)) {
-	return $id;
+	if ($id eq $self->{IDS}[$i]) {
+	    return 1;
+	}
     }
 
-    $id = $self->get_short_from_id($opt);
-    if (defined($id)) {
-	return $id;
-    }
-
-    return undef;
+    return 0;
 }
 
 sub parse($$)
@@ -207,6 +223,9 @@ sub parse($$)
 		    return undef;
 		}
 
+		debug("Found long option `" . $tmp .
+		      "\' with id `"        . $id  .
+		      "\'");
 	    } else {
 
 		if (length($token) > 2) {
@@ -220,13 +239,21 @@ sub parse($$)
 		    error("Unknown short option `" . $token . "\'");
 		    return undef;
 		}
+
+		debug("Found short option `" . $tmp .
+		      "\' with id `"         . $id  .
+		      "\'");
 	    }
 	} else {
 	    error("Unknown option `" . $token . "\'");
 	    return undef;
 	}
 
-	debug("Getting options parameters");
+	if ($self->{ARGSCOUNT}->{$id} > 0) {
+	    debug("Getting options parameters [" .
+		  $self->{ARGSCOUNT}->{$id}      .
+		  "]");
+	}
 
 	my @params;
 
@@ -234,7 +261,7 @@ sub parse($$)
 	    $string =~ s/([^\s]+)//;
 
 	    if (!defined($1)) {
-		error("Missing parameter for option `" . $token . "\'");
+		error("Missing parameter for option `" . $tmp . "\'");
 		return undef;
 	    }
 
@@ -260,6 +287,8 @@ sub parse($$)
 
 	    }
 	    $params[$i] = $param;
+
+	    debug("Found parameter `" . $params[$i] . "\'");
 	}
 
 	if ($self->{ARGSCOUNT}->{$id} > 0) {
