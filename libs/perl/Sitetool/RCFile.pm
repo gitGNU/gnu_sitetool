@@ -52,7 +52,7 @@ sub new ($$)
 #
 # XXX FIXME: This sub is only a sketch, we should output more clearer messages
 #
-sub correct ()
+sub iscorrect ()
 {
     my $self = shift;
 
@@ -205,7 +205,7 @@ sub load ($)
 
     close($filehandle);
 
-    if (!$self->correct()) {
+    if (!$self->iscorrect()) {
 	error("File \`" . $filename . "' has an incorrect format");
 	return 0;
     }
