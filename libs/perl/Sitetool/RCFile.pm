@@ -127,11 +127,11 @@ sub load ($)
     $count  = 0;
     while (<$filehandle>) {
 	$string = $_;
-	if ($string =~ /[ \t]*\#.*$/) {
+	if ($string =~ /^[ \t]*\#.*$/) {
 	    # Skip comments
-	} elsif ($string =~ /[ \t]+/) {
+	} elsif ($string =~ /^[ \t]+$/) {
 	    # Skip empty lines
-	} elsif ($string =~ /[ \t]*host[ \t]+(.*)/) {
+	} elsif ($string =~ /^[ \t]*host[ \t]+(.*)$/) {
 
 	    $host = $1;
 
@@ -143,7 +143,7 @@ sub load ($)
 
 	    $count++;
 
-	} elsif ($string =~ /[ \t]*login[ \t]+(.*)/) {
+	} elsif ($string =~ /^[ \t]*login[ \t]+(.*)$/) {
 
 	    $login = $1;
 
@@ -156,11 +156,15 @@ sub load ($)
 		return 0;
 	    }
 
-	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = { };
+	    #if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
+	    #	error("Login \`" . $login . "' already defined");
+	    #	return 0;
+	    #}
+	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = undef;
 
 	    $count++;
 
-	} elsif ($string =~ /[ \t]*password[ \t]+(.*)/) {
+	} elsif ($string =~ /^[ \t]*password[ \t]+(.*)$/) {
 
 	    my $password;
 	    $password = $1;
@@ -178,6 +182,10 @@ sub load ($)
 		return 0;
 	    }
 
+	    #if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
+	    #	error("Login \`" . $login . "' already defined");
+	    #	return 0;
+	    #}
 	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
 
 	    $count++;
