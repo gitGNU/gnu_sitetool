@@ -129,7 +129,7 @@ sub load ($)
 	$string = $_;
 	if ($string =~ /^[ \t]*\#.*$/) {
 	    # Skip comments
-	} elsif ($string =~ /^[ \t]+$/) {
+	} elsif ($string =~ /^[ \t]*$/) {
 	    # Skip empty lines
 	} elsif ($string =~ /^[ \t]*host[ \t]+(.*)$/) {
 
@@ -258,6 +258,8 @@ sub save ($)
 		$count++;
 	    }
 	}
+
+	print $filehandle "\n";
     }
     debug("Saved " . $count . " nodes");
 
