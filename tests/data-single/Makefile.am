@@ -20,8 +20,10 @@
 
 include $(top_srcdir)/Makefile.sub
 
-styledir = $(pkgvdatadir)/styles/single-page
-
-dist_style_DATA =				\
-	layout.sxml				\
-	site.css
+EXTRA_DIST =					\
+	contents.as				\
+	files.as				\
+	index.scm				\
+	map.as					\
+	pages.as				\
+	site.as
