@@ -71,7 +71,7 @@ test -z "$PERL" && PERL='@PERL@'
 test -z "$MAKE" && MAKE=make
 
 # Always issue warnings ...
-FLAGS="$FLAGS --warnings"
+FLAGS="$FLAGS --warnings all"
 
 test -n "$VERBOSE" && FLAGS="$FLAGS --verbose "
 test -n "$DEBUG"   && FLAGS="$FLAGS --debug "
