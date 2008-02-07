@@ -39,6 +39,7 @@ tests/test-dry-run
 tests/test-initialize
 tests/test-preprocess
 tests/test-parse
+tests/test-single
 tests/test-build
 tests/test-validate
 tests/testSubDir-*
