@@ -227,10 +227,14 @@ sub lexer_callback {
     }
 
     for ($parser->YYData->{INPUT}) {
-	s/^\s*//;
+	debug("Line is now: `" . $parser->YYData->{INPUT} . "'");
 
-	# Remove comments
+	# Remove initial spaces and tabs
+	s/^[ \t]*//;
+
+	# Remove line containing comments
 	s/\/\/.*\n//;
+
 
 	if ($_ =~ s/^id//) {
 	    return ("id", "id");
