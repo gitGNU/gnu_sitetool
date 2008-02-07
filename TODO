@@ -14,6 +14,9 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
+* Fix all the system() calls. A boom is assured if they don't find the
+  executable
+
 * Change tests structure in order to be able to specify a per-test data
   directory
 
