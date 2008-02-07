@@ -73,6 +73,7 @@ SITETOOL_PERL_SRCS =				\
 	sitetool-uninstall.in			\
 	sitetool-check.in			\
 	sitetool-validate.in			\
+	sitetool-auths.in			\
 	sitetool-digest.in
 
 SITETOOL_SRCS = $(SITETOOL_PERL_SRCS) $(SITETOOL_SHELL_SRCS)
