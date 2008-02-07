@@ -20,6 +20,15 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+# Be Bourne compatible
+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
+  emulate sh
+  NULLCMD=:
+  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # is contrary to our usage.  Disable this feature.
+  alias -g '${1+"$@"}'='"$@"'
+fi
+
 # We need perllibdir, pythonlibdir and guilelibdir in order to run our
 # scripts ...
 #
@@ -40,21 +49,12 @@
 #     generated (and go to builddir) sometimes they remain where they are (and
 #     remain to srcdir)
 #
-datadir=@abs_top_builddir@/data
-export datadir
-perllibdir=@abs_top_builddir@/lib/perl:@abs_top_srcdir@/lib/perl
-export perllibdir
-guilelibdir=@abs_top_builddir@/lib/guile
-export guilelibdir
-
-# Be Bourne compatible
-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-  emulate sh
-  NULLCMD=:
-  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
-  # is contrary to our usage.  Disable this feature.
-  alias -g '${1+"$@"}'='"$@"'
-fi
+#datadir=@abs_top_builddir@/data
+#export datadir
+#perllibdir=@abs_top_builddir@/lib/perl:@abs_top_srcdir@/lib/perl
+#export perllibdir
+#guilelibdir=@abs_top_builddir@/lib/guile
+#export guilelibdir
 
 program=$1
 
