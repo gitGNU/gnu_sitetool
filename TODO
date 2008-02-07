@@ -14,6 +14,8 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
+* Add possibility to choose a layout for each page (now we've a common one)
+
 * Add support for choosing the right page's DTD. We should have a global site
   DTD and the option to override it on each page.
 
