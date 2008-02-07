@@ -159,6 +159,7 @@ AC_CONFIG_FILES([
 
 	tests/Makefile
 	tests/data/Makefile
+	tests/data-single/Makefile
 ])
 
 AC_OUTPUT
