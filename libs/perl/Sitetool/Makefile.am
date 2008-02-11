@@ -42,6 +42,7 @@ dist_perllib_DATA =				\
 	Graphviz.pm				\
 	Stack.pm				\
 	Array.pm				\
+	RCDirectory.pm				\
 	RCFile.pm
 
 nodist_perllib_DATA =				\
