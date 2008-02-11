@@ -59,10 +59,9 @@ use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Program;
 use Sitetool::OS::Shell;
-use Sitetool::OS::Home;
 use Sitetool::OS::File;
-use Sitetool::OS::String;
 use Sitetool::Configuration;
+use Sitetool::RCDirectory;
 use Sitetool::RCFile;
 
 #
@@ -225,12 +224,13 @@ if (!defined($running_mode)) {
 # Start the real work
 #
 
-my $rc_filename;
-$rc_filename = File::Spec->catfile(home(),
-				   "." . $Sitetool::Autoconfig::PACKAGE_NAME);
-assert(defined($rc_filename));
+my $rc_directory;
+$rc_directory = Sitetool::RCDirectory->new();
+assert(defined($rc_directory));
 
-$rc_filename = string_lowercase($rc_filename);
+my $rc_filename;
+$rc_filename = File::Spec->catfile($rc_directory->dirname(), "auths");
+assert(defined($rc_filename));
 
 my $rc;
 $rc = Sitetool::RCFile->new($rc_filename);

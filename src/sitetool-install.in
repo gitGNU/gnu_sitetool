@@ -61,6 +61,7 @@ use Sitetool::Base::Program;
 use Sitetool::OS::Shell;
 use Sitetool::OS::Home;
 use Sitetool::Configuration;
+use Sitetool::RCDirectory;
 use Sitetool::RCFile;
 
 #
@@ -218,10 +219,12 @@ if ($WPUT eq "") {
     exit 1;
 }
 
+my $rc_directory;
+$rc_directory = Sitetool::RCDirectory->new();
+assert(defined($rc_directory));
+
 my $rc_filename;
-$rc_filename = File::Spec->catfile(home(),
-				   ".",
-				   $Sitetool::Autoconfig::PACKAGE_NAME);
+$rc_filename = File::Spec->catfile($rc_directory->dirname(), "auths");
 assert(defined($rc_filename));
 
 my $rc;
