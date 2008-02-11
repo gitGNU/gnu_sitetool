@@ -27,34 +27,34 @@ use strict;
 use diagnostics;
 
 sub new {
-  my $class = shift;
+    my $class = shift;
 
-  assert(defined($class));
+    assert(defined($class));
 
-  my $self        = {};
-  $self->{VALUES} = ();
-  
-  return bless($self, $class);
+    my $self        = {};
+    $self->{VALUES} = ();
+
+    return bless($self, $class);
 }
 
 sub push($$) {
-  my $self  = shift;
-  my $value = shift;
+    my $self  = shift;
+    my $value = shift;
 
-  assert(defined($self));
+    assert(defined($self));
 
-  push(@{$self->{VALUES}}, $value);
+    push(@{$self->{VALUES}}, $value);
 }
 
 sub pop($) {
-  my $self  = shift;
-  my $value;
+    my $self  = shift;
+    my $value;
 
-  assert(defined($self));
+    assert(defined($self));
 
-  $value = pop(@{$self->{VALUES}});
+    $value = pop(@{$self->{VALUES}});
 
-  return $value;
+    return $value;
 }
 
 #sub poke($) {
