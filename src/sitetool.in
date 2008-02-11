@@ -181,6 +181,13 @@ my %tools = (
 	PRE_REQUISITE  => [ ],
 	POST_REQUISITE => [ ],
     },
+    "styles" => {
+	HANDLER        => "sitetool-styles",
+	DESCRIPTION    => "manage styles",
+	FLAGS          => "", #"-c $configuration_file",
+	PRE_REQUISITE  => [ ],
+	POST_REQUISITE => [ ],
+    },
     );
 
 #
