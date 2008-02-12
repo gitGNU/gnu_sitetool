@@ -135,23 +135,22 @@ chmod -R a+rwx testSubDir-$testname > /dev/null 2>&1
 rm -rf testSubDir-$testname > /dev/null 2>&1
 mkdir testSubDir-$testname
 
+echo "=== Running test $0"
+
 # Copy in some files we need.
-cp -R $srcdir/data/* ./testSubDir-$testname
-chmod -R a+rw ./testSubDir-$testname/*
+if test -n "$datadir"
+then
+  echo "$me: copying test data directory..."
+  if test ! -d $srcdir/$datadir ; then
+    echo "$me: datadir $datadir not found" 1>&2
+    exit 1
+  fi
+  cp -R $srcdir/$datadir/* ./testSubDir-$testname
+  chmod -R a+rw ./testSubDir-$testname
+fi
 
 # Then jump into the created directory
 cd ./testSubDir-$testname
-
-# Unset some MAKE... variables that may cause $MAKE to act like a
-# recursively invoked sub-make.  Any $MAKE invocation in a test is
-# conceptually an independent invocation, not part of the main
-# 'automake' build.
-unset MFLAGS
-unset MAKEFLAGS
-unset MAKELEVEL
-unset DESTDIR
-
-echo "=== Running test $0"
 
 # POSIX no longer requires 'egrep' and 'fgrep',
 # but some hosts lack 'grep -E' and 'grep -F'.
