@@ -4,6 +4,8 @@ pages = {
 		destination = "index.html";
 		contents = {
 			body   = "p1_body";
+			header = "header";
+			footer = "footer";
 		};
 		vars = {
 			title = "Sitetool";

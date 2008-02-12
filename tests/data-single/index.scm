@@ -1,5 +1,6 @@
-(h3 "DESCRIPTION")
-(p "Sitetool is a (static) CMS that should work with (or without) 
+(div (@ (id "main_body"))
+ (h3 "DESCRIPTION")
+ (p "Sitetool is a (static) CMS that should work with (or without)
      the autotools."
     (br)
     "It aims to aid developers building their projects web-sites 
@@ -32,17 +33,14 @@
      translated from the choosen frontend to the backend via 
      filters-chain: the user writes its contents by choosing one (or 
      more) of the filters available then the content get translated to 
-     SXML, from SXML to scheme and finally to HTML."
- )
-(h3 "AUTHORS")
-(p
- "Francesco Salvestrini <salvestrini AT gmail DOT com>"
- (br)
- "Alessandro Massignan <ff0000 DOT it AT gmail DOT com>"
- )
-(h3 "RELEASE")
-(p
- "No public release for now... We're working hard :-)"
- (br)
- "Stay tuned!"
- )
+     SXML, from SXML to scheme and finally to HTML.")
+ (h3 "AUTHORS")
+ (p
+  "Francesco Salvestrini <salvestrini AT gmail DOT com>"
+  (br)
+  "Alessandro Massignan <ff0000 DOT it AT gmail DOT com>")
+ (h3 "RELEASE")
+  (p
+  "No public release yet... We're working hard :-)"
+  (br)
+  "Stay tuned!"))
