@@ -24,4 +24,6 @@ styledir = $(pkgvdatadir)/styles/single-page
 
 dist_style_DATA =				\
 	layout.sxml				\
+	header.sxml				\
+	footer.sxml				\
 	site.css

@@ -1,5 +1,5 @@
 ;;
-;; layout.sxml
+;; header.sxml
 ;;
 ;; Copyright (C) 2007, 2008 Francesco Salvestrini
 ;;                          Alessandro Massignan
@@ -19,28 +19,7 @@
 ;; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ;;
 
-(html (@ (xmlns "http://www.w3.org/1999/xhtml"))
- (head
-  (title ,as_page_variable_TITLE)
-
-  (meta (@ (http-equiv "content-type")
-	   (content    "text/html; charset=iso-8859-1")
-	   ))
-  (meta (@ (name    "author")
-	   (content "Francesco Salvestrini")))
-  (meta (@ (name    "author")
-	   (content "Alessandro Massignan")))
-  (meta (@ (name    "generator")
-	   (content ,as_site_variable_PROGRAMNAME)))
-  (link (@ (rel   "stylesheet")
-           (media "all")
-           (type  "text/css")
-           (href  ,as_page_variable_CSS)
-           (title "Base CSS")))
-  )
- (body
-  ,as_page_content_HEADER
-  ,as_page_content_BODY
-  ,as_page_content_FOOTER
-  )
+(div (@ (id "main_header"))
+ (h2 ,as_page_variable_SITENAME)
+ (hr)
  )

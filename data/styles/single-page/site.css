@@ -4,33 +4,42 @@ body {
 }
 
 #main_header h2 {
+  margin: 0px;
   padding: 0px 8px 0px 8px;
-  border-style: none none solid none;
-  border-width: 2px;
-  border-color: black;
+}
+
+#main_header hr {
+  margin: 0px 0px 16px 0px;
+  padding: 0px;
+  background-color: black;
+  border-style: none;
 }
 
 #main_body {
   margin: 0px 16px 0px 16px;
-  border-style: none;
 }
 
 #main_body h3 {
-  margin: 8px 0px 8px 0px;
-  border-style: none;
+  margin: 0px;
+  padding: 0px;
 }
 
 #main_body p {
-  margin: 0px 16px 0px 16px;
-  border-style: none;
+  margin: 0px 16px 8px 16px;
+  padding: 0px;
 }
 
 #main_footer p {
+  margin: 0px;
   padding: 0px 8px 0px 8px;
-  border-style: solid none none;
-  border-width: 2px;
-  border-color: black;
   font-size: small;
+}
+
+#main_footer hr {
+  margin: 16px 0px 0px 0px;
+  padding: 0px;
+  background-color: black;
+  border-style: none;
 }
 
 #main_footer img {
