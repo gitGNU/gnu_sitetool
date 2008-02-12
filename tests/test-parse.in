@@ -18,6 +18,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+datadir=data
+
 . @builddir@/defs
 
 $SITETOOL --parse || exit 1
