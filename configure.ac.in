@@ -132,11 +132,6 @@ AC_CONFIG_FILES([
 	docs/man/Makefile
 	docs/info/Makefile
 
-	data/Makefile
-	data/styles/Makefile
-	data/styles/default/Makefile
-	data/styles/single-page/Makefile
-
 	src/Makefile
 	src/filters/Makefile
 
