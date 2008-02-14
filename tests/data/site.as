@@ -4,7 +4,7 @@ common = {
 //	footer = "@style_dir@/footer.sxml";
 //	header = "@style_dir@/header.sxml";
 //	css    = "@style_dir@/site.css";
-	layout = "@style_dir@/layout.sxml";
+	layout = "./layout.sxml";
 };
 
 vars = {

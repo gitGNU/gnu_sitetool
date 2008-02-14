@@ -39,4 +39,8 @@ EXTRA_DIST =					\
 	site.as					\
 	svnlog.page				\
 	variables.page				\
-	wikitext.page
+	wikitext.page				\
+	footer.sxml				\
+	header.sxml				\
+	site.css				\
+	menu.scm

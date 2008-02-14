@@ -1,7 +1,7 @@
 contents = {
 	content = {
 		id     = "footer";
-		source = "@style_dir@/footer.sxml";
+		source = "./footer.sxml";
 		filters = {
 			filter[0] = {
 				source      = "sxml";
@@ -13,7 +13,7 @@ contents = {
 
 	content = {
 		id     = "header";
-		source = "@style_dir@/header.sxml";
+		source = "./header.sxml";
 		filters = {
 			filter[0] = {
 				source      = "sxml";
@@ -41,7 +41,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -64,7 +64,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -87,7 +87,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -115,7 +115,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -143,7 +143,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -171,7 +171,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -199,7 +199,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -222,7 +222,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -245,7 +245,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -273,7 +273,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -296,7 +296,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -324,7 +324,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
@@ -352,7 +352,7 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l @style_dir@/menu.scm";
+				parameters  = "-l ./menu.scm";
 			};
 		};
 	};
