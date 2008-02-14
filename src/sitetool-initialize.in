@@ -78,7 +78,7 @@ sub help_brief ()
 {
     print "  -w, --work-dir=DIR          working directory is DIR\n";
     print "  -o, --output-dir=DIR        output directory is DIR\n";
-    print "  -s, --style-dir=DIR         style directory is DIR\n";
+#    print "  -s, --style-dir=DIR         style directory is DIR\n";
     print "  -f, --force                 consider all files obsolete\n";
 }
 
@@ -116,7 +116,7 @@ trace_prefix_set($PROGRAM_NAME);
 
 my $work_dir           = "";
 my $output_dir         = "";
-my $style_dir          = "";
+#my $style_dir          = "";
 my $force_mode         = 0;
 
 debug_set(0);
@@ -132,9 +132,9 @@ while ($i <= $#ARGV) {
     } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output\-dir$/)) {
 	$i++;
 	$output_dir = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-s$/) || ($ARGV[$i] =~ /^\-\-style\-dir$/)) {
-	$i++;
-	$style_dir = $ARGV[$i];
+#    } elsif (($ARGV[$i] =~ /^\-s$/) || ($ARGV[$i] =~ /^\-\-style\-dir$/)) {
+#	$i++;
+#	$style_dir = $ARGV[$i];
     } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
 	$force_mode = 1;
     } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
@@ -176,21 +176,21 @@ if ($output_dir eq "") {
     hint("Missing output directory");
     exit 1;
 }
-if ($style_dir eq "") {
-    hint("Missing style directory");
-    exit 1;
-}
+#if ($style_dir eq "") {
+#    hint("Missing style directory");
+#    exit 1;
+#}
 
 #
 # Create work and output directories
 #
 $work_dir   = filename_rel2abs($work_dir);
 $output_dir = filename_rel2abs($output_dir);
-$style_dir  = filename_rel2abs($style_dir);
+#$style_dir  = filename_rel2abs($style_dir);
 
 debug("Working directory is \`" . $work_dir . "'");
 debug("Output directory is  \`" . $output_dir . "'");
-debug("Style directory is   \`" . $style_dir . "'");
+#debug("Style directory is   \`" . $style_dir . "'");
 
 #
 # Remove old directories
@@ -226,8 +226,8 @@ if (!directory_create($output_dir)) {
 my $maps_dir      = File::Spec->catdir($work_dir,  "maps");
 my $contents_dir  = File::Spec->catdir($work_dir,  "contents");
 my $pages_dir     = File::Spec->catdir($work_dir,  "pages");
-my $src_style_dir = $style_dir;
-my $dst_style_dir = File::Spec->catfile($work_dir, "style");
+#my $src_style_dir = $style_dir;
+#my $dst_style_dir = File::Spec->catfile($work_dir, "style");
 
 if (!directory_create($maps_dir)     ||
     !directory_create($contents_dir) ||
@@ -236,10 +236,10 @@ if (!directory_create($maps_dir)     ||
     exit 1;
 }
 
-if (!directory_link($src_style_dir, $dst_style_dir)) {
-    directory_remove($work_dir);
-    exit 1;
-}
+#if (!directory_link($src_style_dir, $dst_style_dir)) {
+#    directory_remove($work_dir);
+#    exit 1;
+#}
 
 #
 # Check the setup
