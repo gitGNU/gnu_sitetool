@@ -152,6 +152,8 @@ AC_CONFIG_FILES([
 	libs/scheme/Makefile
 	libs/shell/Makefile
 
+	site/Makefile
+
 	tools/Makefile
 	tools/scripts/Makefile
 	tools/autotools/Makefile
