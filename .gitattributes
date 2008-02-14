@@ -4,3 +4,5 @@
 *.pm		 crlf
 src/sitetool*.in crlf
 *.pm.in		 crlf
+*.scm		 crlf
+.as		 crlf
