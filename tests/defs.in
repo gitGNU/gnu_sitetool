@@ -73,11 +73,8 @@ test -z "$MAKE" && MAKE=make
 # Always issue warnings ...
 FLAGS="$FLAGS --warnings all"
 
-test -n "$VERBOSE" && FLAGS="$FLAGS --verbose "
-test -n "$DEBUG"   && FLAGS="$FLAGS --debug "
-
-# We need the wrapper to call the package suite of programs because their
-# calls are relative to the testSubDir-<testname> directory (see below)
+test -n "$VERBOSE"  && FLAGS="$FLAGS --verbose"
+test -n "$DEBUG"    && FLAGS="$FLAGS --debug"
 test -z "$SITETOOL" && SITETOOL="wrapper sitetool $FLAGS"
 
 PATH=`pwd`:$PATH
