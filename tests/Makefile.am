@@ -21,8 +21,7 @@
 include $(top_srcdir)/Makefile.sub
 
 SUBDIRS =					\
-	data					\
-	data-single
+	data
 
 ##
 ## NOTE:
@@ -47,7 +46,6 @@ EXTRA_DIST =					\
 	test-preprocess.in			\
 	test-parse.in				\
 	test-validate.in			\
-	test-single.in				\
 	test-build.in
 
 check_SCRIPTS =					\
@@ -62,7 +60,6 @@ TESTS =						\
 	test-preprocess				\
 	test-parse				\
 	test-validate				\
-	test-single				\
 	test-build
 
 noinst_SCRIPTS = $(TESTS)
@@ -145,16 +142,6 @@ test-preprocess: $(srcdir)/test-preprocess.in Makefile
 test-parse: $(srcdir)/test-parse.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/test-parse.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-
-test-single: $(srcdir)/test-single.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-single.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
