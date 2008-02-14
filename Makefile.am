@@ -28,7 +28,8 @@ SUBDIRS =					\
 	libs					\
 	src					\
 	docs					\
-	tests
+	tests					\
+	site
 
 # Base directories
 TOOLSDIR   = $(top_builddir)/tools
