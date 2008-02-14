@@ -143,8 +143,8 @@ then
     exit 1
   fi
   cp -R $srcdir/$datadir/* ./testSubDir-$testname
-  chmod -R a+rw ./testSubDir-$testname
 fi
+chmod -R a+rw ./testSubDir-$testname
 
 # Then jump into the created directory
 cd ./testSubDir-$testname
