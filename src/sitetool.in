@@ -80,7 +80,7 @@ my $output_dir         = File::Spec->catdir(File::Spec->curdir(),
 					    "." . $PROGRAM_NAME,
 					    "site.out");
 
-my $style_dir          = File::Spec->catfile($data_dir, "styles",  "default");
+#my $style_dir          = File::Spec->catfile($data_dir, "styles",  "default");
 
 my $input_file         = File::Spec->catfile(File::Spec->curdir(), "site.as");
 my $preprocessed_file  = File::Spec->catfile($work_dir, 	   "site.pp");
@@ -90,21 +90,24 @@ my %tools = (
     "initialize" => {
 	HANDLER        => "sitetool-initialize",
 	DESCRIPTION    => "initialize",
-	FLAGS          => "-w $work_dir -o $output_dir -s $style_dir",
+#	FLAGS          => "-w $work_dir -o $output_dir -s $style_dir",
+	FLAGS          => "-w $work_dir -o $output_dir",
 	PRE_REQUISITE  => [ ],
  	POST_REQUISITE => [ ],
     },
     "preprocess" => {
 	HANDLER        => "sitetool-preprocess",
 	DESCRIPTION    => "preprocess",
-	FLAGS          => "-i $input_file -o $preprocessed_file -D work_dir $work_dir -D style_dir $style_dir",
+#	FLAGS          => "-i $input_file -o $preprocessed_file -D work_dir $work_dir -D style_dir $style_dir",
+	FLAGS          => "-i $input_file -o $preprocessed_file -D work_dir $work_dir",
 	PRE_REQUISITE  => [ "initialize" ],
 	POST_REQUISITE => [ ],
     },
     "parse" => {
 	HANDLER        => "sitetool-parse",
 	DESCRIPTION    => "parse",
-	FLAGS          => "-i $preprocessed_file -w $work_dir -o $configuration_file -s $style_dir",
+#	FLAGS          => "-i $preprocessed_file -w $work_dir -o $configuration_file -s $style_dir",
+	FLAGS          => "-i $preprocessed_file -w $work_dir -o $configuration_file",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess" ],
 	POST_REQUISITE => [ ],
@@ -185,13 +188,13 @@ my %tools = (
 	PRE_REQUISITE  => [ ],
 	POST_REQUISITE => [ ],
     },
-    "styles" => {
-	HANDLER        => "sitetool-styles",
-	DESCRIPTION    => "manage styles",
-	FLAGS          => "", #"-c $configuration_file",
-	PRE_REQUISITE  => [ ],
-	POST_REQUISITE => [ ],
-    },
+#    "styles" => {
+#	HANDLER        => "sitetool-styles",
+#	DESCRIPTION    => "manage styles",
+#	FLAGS          => "", #"-c $configuration_file",
+#	PRE_REQUISITE  => [ ],
+#	POST_REQUISITE => [ ],
+#    },
     );
 
 #
