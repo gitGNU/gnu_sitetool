@@ -23,7 +23,32 @@ include $(top_srcdir)/Makefile.sub
 EXTRA_DIST =					\
 	contents.as				\
 	files.as				\
+	footer.sxml				\
+	header.sxml				\
 	index.scm				\
+	layout.sxml				\
 	map.as					\
 	pages.as				\
-	site.as
+	site.as					\
+	site.css
+
+site:
+	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
+	export SITETOOL_LIBRARY_PATH ; \
+	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
+	export SITETOOL_BINARY_PATH ; \
+	SITETOOL="$(top_builddir)/src/sitetool" ; \
+	$$SITETOOL -v --initialize && \
+	$$SITETOOL -v --build || { \
+		exit 1 ; \
+	}
+
+maintainer-clean-local:
+	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
+	export SITETOOL_LIBRARY_PATH ; \
+	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
+	export SITETOOL_BINARY_PATH ; \
+	SITETOOL="$(top_builddir)/src/sitetool" ; \
+	$$SITETOOL -v --clean || { \
+		exit 1 ; \
+	}
