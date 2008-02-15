@@ -26,17 +26,18 @@
    ", hosted at "
    (a (@ (href "http://savannah.gnu.org"))
       "Savannah")
-   (br )
+   (br)
+
    "Please send broken links and other web page suggestions to "
    "sitetool-bug AT nongnu.org"
    ", thank you."
-   (br )
-   (
-    "This page was last modified on "
-    ,(strftime "%A %d %B %Y" (localtime (current-time)))
-    ,(string-append " by " (getenv "USER"))
-    )
+   (br)
+
+   "This page was last modified on "
+   ,(strftime "%A %d %B %Y" (localtime (current-time)))
+   ,(string-append " by " (getenv "USER"))
    )
+
 (p (@ (id "main_footer_links"))
    (a (@
        (href "http://validator.w3.org/check?uri=referer"))
