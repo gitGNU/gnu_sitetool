@@ -23,12 +23,13 @@
    "Powered by "
    (a (@ (href "http://savannah.nongnu.org/projects/sitetool"))
       ,as_site_variable_PROGRAMNAME)
-   " and "
-   (a (@ (href "http://okmij.org/ftp/Scheme/SXML.html"))
-      "SXML")
+   ", hosted at "
+   (a (@ (href "http://savannah.gnu.org"))
+      "Savannah")
    (br )
    "Please send broken links and other web page suggestions to "
-   "Alessandro Massignan, thank you."
+   "sitetool-bug AT nongnu.org"
+   ", thank you."
    (br )
    (
     "This page was last modified on "
@@ -37,8 +38,6 @@
     )
    )
 (p (@ (id "main_footer_links"))
-   (a (@ (href "http://savannah.gnu.org"))
-      "Savannah")
    (a (@
        (href "http://validator.w3.org/check?uri=referer"))
       (img (@
