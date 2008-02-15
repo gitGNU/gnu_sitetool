@@ -124,8 +124,8 @@ export SITETOOL_LIBRARY_PATH
 SITETOOL_DATA_PATH=@abs_top_srcdir@/data
 export SITETOOL_DATA_PATH
 
-SITETOOL=@abs_top_builddir@/src/sitetool
-export SITETOOL
+#SITETOOL=@abs_top_builddir@/src/sitetool
+#export SITETOOL
 
 testname=`basename $0 .test`
 chmod -R a+rwx testSubDir-$testname > /dev/null 2>&1
