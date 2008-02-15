@@ -29,33 +29,6 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   alias -g '${1+"$@"}'='"$@"'
 fi
 
-# We need perllibdir, pythonlibdir and guilelibdir in order to run our
-# scripts ...
-#
-# Declare and export useful variables
-#
-# KEEP ATTENTION: The following declarations are duplicated
-#                 in defs.in script
-#
-
-#
-# NOTE:
-#     Some files are in the build directory (created by configure in a VPATH
-#     build) while some others are in the source directory ... 
-#
-# NOTE:
-#     Not all variable have both srcdir and builddir because the programs that
-#     use the variables should be updated ... sometimes they are automatically 
-#     generated (and go to builddir) sometimes they remain where they are (and
-#     remain to srcdir)
-#
-#datadir=@abs_top_builddir@/data
-#export datadir
-#perllibdir=@abs_top_builddir@/lib/perl:@abs_top_srcdir@/lib/perl
-#export perllibdir
-#guilelibdir=@abs_top_builddir@/lib/guile
-#export guilelibdir
-
 program=$1
 
 shift
