@@ -1,7 +1,7 @@
 autogen definitions sitetool;
 
 common = {
-	layout = "$style_dir/layout.sxml";
+	layout = "./layout.sxml";
 };
 
 vars = {

@@ -13,7 +13,7 @@ contents = {
 
         content = {
                 id     = "footer";
-                source = "$style_dir/footer.sxml";
+                source = "./footer.sxml";
                 filters = {
                         filter[0] = {
                                 source      = "sxml";
@@ -25,7 +25,7 @@ contents = {
 
         content = {
                 id     = "header";
-                source = "$style_dir/header.sxml";
+                source = "./header.sxml";
                 filters = {
                         filter[0] = {
                                 source      = "sxml";
