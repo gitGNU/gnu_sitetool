@@ -35,7 +35,7 @@ BEGIN
 
     unshift(@INC, map(File::Spec->catfile($_, "perl"),
 		      (split '@PATH_SEPARATOR@', $perllibdir)));
-    
+
     # Override SHELL.  This is required on DJGPP so that system() uses
     # bash, not COMMAND.COM which doesn't quote arguments properly.
     # Other systems aren't expected to use $SHELL when Automake
@@ -64,6 +64,7 @@ use Sitetool::Configuration;
 use Sitetool::OS::File;
 use Sitetool::OS::Filename;
 use Sitetool::OS::Shell;
+use Sitetool::OS::Environment;
 
 #
 # Globals
@@ -215,32 +216,32 @@ sub help ()
     print "  -h, --help                 print this help, then exit\n";
     print "  -V, --version              print version number, then exit\n";
     print "\n";
-    
+
     print "Warning categories include:\n";
     print "  \`all'                      all the warnings\n";
     print "  \`none'                     turn off all the warnings\n";
     print "\n";
-    
+
     print "MODE must be one of the following:\n";
     for my $tool (keys(%tools)) {
 	assert(defined($tools{$tool}{DESCRIPTION}));
-	
+
 	printf("      --%-11s          %-s\n",
 	       $tool,
 	       $tools{$tool}{DESCRIPTION});
     }
     print "\n";
-    
+
     print "MODE-ARGS vary depending on the MODE.  Try \`" . $PROGRAM_NAME. " --help MODE' for a\n";
     print "more detailed description of MODE.\n";
     print "\n";
-    
+
     print "The environment variables SITETOOL_BIN_PATH, SITETOOL_LIBRARY_PATH and\n";
     print "SITETOOL_DATA_PATH are honored.\n";
     print "\n";
 
     print "Report bugs to <$PACKAGE_BUGREPORT>\n";
-    
+
     return 1;
 }
 
@@ -254,21 +255,21 @@ sub run_tool ($$@)
     assert(defined($dry_run));
 
     verbose("Running \`" . $tool . "'");
-    
+
     my $handler;
 
     $handler = $tools{$tool}{HANDLER};
     debug("Handler is `$handler'");
     assert(defined($handler));
-    
+
     my $flags;
-    
+
     $flags = $tools{$tool}{FLAGS} . " @args";
     debug("Flags are `$flags'");
     assert(defined($flags));
 
     my $command;
-    
+
     $command = File::Spec->catfile($bin_dir, $handler) . " " . $flags;
 
     if ($dry_run) {
@@ -319,7 +320,7 @@ while ($i <= $#ARGV) {
 		    last;
 		}
 	    }
-	
+
 	    if (!defined($running_mode)) {
 		error("Unknown MODE \`" . $ARGV[$i] . "'");
 		exit 1;
@@ -370,7 +371,7 @@ while ($i <= $#ARGV) {
 		last;
 	    }
 	}
-	
+
 	if (!defined($running_mode)) {
 	    error("Unknown option \`" . $ARGV[$i] . "'");
 	    exit 1;
@@ -418,18 +419,37 @@ debug("Running mode is \`$running_mode'");
     debug("Changing per-tool flags:");
     for my $tool (keys(%tools)) {
 	debug("Tool "                          .
-	      "\`" . $tool . "'"               .
+	      "\`" . $tool . "' "              .
 	      "flags are "                     .
 	      "\`" . $tools{$tool}{FLAGS} . "'");
 
 	assert(defined($tools{$tool}{FLAGS}));
 	$tools{$tool}{FLAGS} = $flags . " " . $tools{$tool}{FLAGS};
-	
+
 	debug("Modified flags  for tool "      .
 	      "\`" . $tool . "' "              .
 	      "are "                           .
 	      "\`" . $tools{$tool}{FLAGS} . "'");
     }
+}
+
+#
+# Dump the environment, useful for debugging purposes
+#
+{
+    sub callback ($$) {
+	my $key   = shift;
+	my $value = shift;
+
+	if (!defined($key)) {
+	    $key = "undef";
+	}
+	if (!defined($value)) {
+	    $value = "undef";
+	}
+	debug("Environment `" . $key . "' = `" . $value . "'")
+    }
+    environment_foreach(\&callback)
 }
 
 #
