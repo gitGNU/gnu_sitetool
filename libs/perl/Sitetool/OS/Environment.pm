@@ -37,7 +37,19 @@ BEGIN {
     @EXPORT = qw(&environment_get
  		 &environment_set
  		 &environment_remove
-		 &environment_clear);
+		 &environment_clear
+		 &environment_foreach);
+}
+
+sub environment_foreach ($)
+{
+    my $callback_ref = shift;
+
+    assert(defined($callback_ref));
+
+    for my $key (keys(%ENV)) {
+	$callback_ref->($key, $ENV{$key});
+    }
 }
 
 sub environment_get ($)
