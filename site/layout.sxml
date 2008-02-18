@@ -40,22 +40,11 @@
 	   (title "Base CSS")))
   )
  (body
-  (table (@ (width "100%") (border "0") (summary "Main layout container"))
-   (thead
-    (tr (@ (valign "top"))
-     (td (@ (colspan "2"))
-      (div (@ (id "main_header"))
-       ,as_page_content_HEADER
-      ))))
-   (tbody
-    (tr (@ (valign "top"))
-     (td
-      (div (@ (id "main_body"))
-       ,as_page_content_BODY
-      ))))
-   (tfoot
-    (tr (@ (valign "top"))
-     (td (@ (colspan "2"))
-      (div (@ (id "main_footer"))
-       ,as_page_content_FOOTER
-      )))))))
+  (div (@ (id "main_header"))
+   ,as_page_content_HEADER)
+  (div (@ (id "main_body"))
+   ,as_page_content_BODY)
+  (div (@ (id "main_footer"))
+   ,as_page_content_FOOTER)
+  )
+ )
