@@ -60,6 +60,7 @@ use Sitetool::Autoconfig;
 use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Program;
+use Sitetool::Base::Options;
 use Sitetool::Configuration;
 use Sitetool::OS::File;
 use Sitetool::OS::Filename;
@@ -298,6 +299,19 @@ my @options_slack;
 debug_set(0);
 verbose_set(0);
 warning_set("none");
+
+my $options = Sitetool::Base::Options->new();
+assert(defined($options));
+
+my @options_list = (
+    [ "f", "force",    sub { $force_mode = 1; }, 0, 0 ],
+    [ "h", "help",     sub { },                  0, 1 ], # FIXME
+    [ "W", "warnings", sub { warning_set($_); }, 0, 1 ],
+    [ "d", "debug",    sub { debug_set(1);    }, 0, 0 ],
+    [ "v", "verbose",  sub { verbose_set(1); },  0, 0 ],
+    [ "V", "version",  \&version(),              0, 0 ],
+    [ "n", "dry-run",  sub { $dry_run = 1 },     0, 0 ],
+    );
 
 # Parse options
 my $i = 0;
