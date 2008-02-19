@@ -55,23 +55,27 @@ sub clean($)
     $self->{SHORT}     = { };
     $self->{LONG}      = { };
     $self->{CALLBACK}  = { };
-    $self->{ARGSCOUNT} = { };
+    $self->{ARGSMIN}   = { };
+    $self->{ARGSMAX}   = { };
 }
 
-sub add($$$$$$)
+sub add($$$$$$$)
 {
     my $self      = shift;
     my $id        = shift;
     my $short     = shift;
     my $long      = shift;
     my $callback  = shift;
-    my $argscount = shift;
+    my $argsmin   = shift;
+    my $argsmax   = shift;
 
     assert(defined($self));
     assert(defined($id));
     assert(defined($short) || defined($long));
     assert(defined($callback));
-    assert($argscount >= 0);
+    assert($argsmin >= 0);
+    assert($argsmax >= 0);
+    assert($argsmin <= $argsmax);
 
     debug("Adding option");
 
@@ -107,8 +111,9 @@ sub add($$$$$$)
 	$self->{SHORT}->{$id} = $short;
     }
 
-    $self->{CALLBACK}->{$id}  = $callback;
-    $self->{ARGSCOUNT}->{$id} = $argscount;
+    $self->{CALLBACK}->{$id} = $callback;
+    $self->{ARGSMIN}->{$id}  = $argsmin;
+    $self->{ARGSMAX}->{$id}  = $argsmax;
 
     debug("  option id:              `" .
 	  $id                           .
@@ -125,8 +130,11 @@ sub add($$$$$$)
 	  (defined($self->{CALLBACK}->{$id})  ?
 	   $self->{CALLBACK}->{$id}: "undef") .
 	  "\'");
-    debug("  option arguments count: `" .
-	  $self->{ARGSCOUNT}->{$id}     .
+    debug("  option arguments min:   `" .
+	  $self->{ARGSMIN}->{$id}     .
+	  "\'");
+    debug("  option arguments max:   `" .
+	  $self->{ARGSMAX}->{$id}     .
 	  "\'");
 
     return 1;
@@ -280,15 +288,18 @@ sub parse($$)
 	    return undef;
 	}
 
-	if ($self->{ARGSCOUNT}->{$id} > 0) {
-	    debug("Getting options parameters [" .
-		  $self->{ARGSCOUNT}->{$id}      .
+	if ($self->{ARGSMIN}->{$id} > 0) {
+	    debug("Getting options parameters "  .
+		  "["                            .
+		  $self->{ARGSMIN}->{$id}        .
+		  ", "                           .
+		  $self->{ARGSMAX}->{$id}        .
 		  "]");
 	}
 
 	my @params;
 
-	for (my $i = 0; $i < $self->{ARGSCOUNT}->{$id}; $i++) {
+	for (my $i = 0; $i < $self->{ARGSMIN}->{$id}; $i++) {
 	    $string =~ s/([^\s]+)//;
 
 	    if (!defined($1)) {
