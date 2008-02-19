@@ -36,17 +36,26 @@ sub new($)
 
     assert(defined($class));
 
-    my $self  = { };
+    my $self = { };
 
-    debug("Creating object for options handling");
+    bless($self, $class);
+
+    $self->clean();
+
+    return $self;
+}
+
+sub clean($)
+{
+    my $self = shift;
+
+    assert(defined($self));
 
     $self->{IDS}       = ( );
     $self->{SHORT}     = { };
     $self->{LONG}      = { };
     $self->{CALLBACK}  = { };
     $self->{ARGSCOUNT} = { };
-
-    return bless($self, $class);
 }
 
 sub add($$$$$$)
@@ -119,6 +128,28 @@ sub add($$$$$$)
     debug("  option arguments count: `" .
 	  $self->{ARGSCOUNT}->{$id}     .
 	  "\'");
+
+    return 1;
+}
+
+sub config($)
+{
+    my $self      = shift;
+    my $array_ref = shift;
+
+    assert(defined($self));
+    assert(defined($array_ref));
+
+    $self->clean();
+
+    my $id;
+    $id = 0;
+    for my $entry (@{$array_ref}) {
+	if (!$self->add($id, $entry)) {
+	    return 0;
+	}
+	$id++;
+    }
 
     return 1;
 }
