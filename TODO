@@ -14,14 +14,14 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
+* Add code into the libs/perl/Sitetool/Options.pm module in order to have a
+  cleaner option parsing method
+
 * Add to preprocessor the capability to evaluate expressions in its
   macros with environment variables translation.
 
 * Fix all the system() calls. A boom is assured if they don't find the
   executable
-
-* Change tests structure in order to be able to specify a per-test data
-  directory
 
 * Add a feature to choose a global layout via command line switch
 
@@ -33,13 +33,13 @@ TO-BE-DONE:
 * Oversimplify site configuration (having it in a single file would be a 
   good thing); at the same time think, add and handle a site map indexing.
 
-* Add code into the libs/perl/Sitetool/Options.pm module in order to wrap
-  Perl's Getopt::Long.
-
+DONE:
 * Develop tools/script/perl-autofrisk in order to mimic the Guile's autofrisk
   script. The script should be integrated into the bootstrap script.
 
-DONE:
+* Change tests structure in order to be able to specify a per-test data
+  directory
+
 0.1.107:
 * Add /libs/site/layout.scm in order to handle a generic layout to be used 
   if a specific layout is not defined. Its structure should be like the one 
