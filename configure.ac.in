@@ -67,8 +67,31 @@ AS_IF([test -z "$GUILE"],[
 		AC_MSG_ERROR([Missing required Guile interpreter version >= 1.6.4])
 	])
 	
-	GUILE_MODULE_REQUIRED([sxml simple])
-	GUILE_MODULE_REQUIRED([sxml transform])
+	guile_modules=yes
+	#GUILE_MODULE_REQUIRED([sxml simple])
+        GUILE_MODULE_AVAILABLE(guile_module_sxml_simple, (sxml simple))
+        AS_IF([test "$guile_module_sxml_simple" = "no"],[
+		guile_modules=no
+	])
+
+	#GUILE_MODULE_REQUIRED([sxml transform])
+        GUILE_MODULE_AVAILABLE(guile_module_sxml_transform, (sxml transform))
+        AS_IF([test "$guile_module_sxml_transform" = "no"],[
+		guile_modules=no
+	])
+
+        AS_IF([test "$guile_modules" = "no"],[
+		AC_MSG_WARN([your system seems to be lacking of guile-lib support])
+		AC_MSG_WARN([try installing it from http://home.gna.org/guile-lib])
+		AC_MSG_WARN([if it is missing, tweak environment variable and/or])
+		AC_MSG_WARN([use configure script parameters if it is present or])
+		AC_MSG_WARN([report the bug otherwise to:])
+		AC_MSG_WARN([])
+		AC_MSG_WARN([    <$PACKAGE_BUGREPORT>])
+		AC_MSG_WARN([])
+		AC_MSG_WARN([Thank you])
+		AC_MSG_ERROR([required guile module(s) not found])
+	])
 
 	GUILE_AUTOFRISK_CHECKS
 	GUILE_AUTOFRISK_SUMMARY
