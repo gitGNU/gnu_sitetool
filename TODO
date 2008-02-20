@@ -14,18 +14,21 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
+* Strenghten libs/perl/Sitetool/Options.pm module with argument shifter in
+  order to give place to some options amongst the other.
+
 * Add code into the libs/perl/Sitetool/Options.pm module in order to have a
-  cleaner option parsing method
+  cleaner option parsing method.
 
 * Add to preprocessor the capability to evaluate expressions in its
   macros with environment variables translation.
 
 * Fix all the system() calls. A boom is assured if they don't find the
-  executable
+  executable.
 
-* Add a feature to choose a global layout via command line switch
+* Add a feature to choose a global layout via command line switch.
 
-* Add a feature to choose a layout for each page (now we've a common one)
+* Add a feature to choose a layout for each page (now we've a common one).
 
 * Add support for choosing the right page's DTD. We should have a global site
   DTD and the option to override it on each page.
@@ -38,7 +41,7 @@ DONE:
   script. The script should be integrated into the bootstrap script.
 
 * Change tests structure in order to be able to specify a per-test data
-  directory
+  directory.
 
 0.1.107:
 * Add /libs/site/layout.scm in order to handle a generic layout to be used 
