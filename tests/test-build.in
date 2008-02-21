@@ -22,6 +22,6 @@ datadir=data
 
 . @builddir@/defs
 
-$SITETOOL --build || exit 1
+$SITETOOL --mode build || exit 1
 
 exit 0

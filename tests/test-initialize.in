@@ -20,6 +20,6 @@
 
 . @builddir@/defs
 
-$SITETOOL --initialize || exit 1
+$SITETOOL --mode initialize || exit 1
 
 exit 0

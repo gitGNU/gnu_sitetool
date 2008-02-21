@@ -20,16 +20,16 @@
 
 . @builddir@/defs
 
-$SITETOOL --dry-run --install    || exit 1
-$SITETOOL --dry-run --parse      || exit 1
-$SITETOOL --dry-run --initialize || exit 1
-$SITETOOL --dry-run --uninstall  || exit 1
-$SITETOOL --dry-run --clean      || exit 1
-$SITETOOL --dry-run --build      || exit 1
-$SITETOOL --dry-run --check      || exit 1
-$SITETOOL --dry-run --digest     || exit 1
-$SITETOOL --dry-run --preprocess || exit 1
-$SITETOOL --dry-run --validate   || exit 1
-$SITETOOL --dry-run --auths      || exit 1
+$SITETOOL --dry-run --mode install    || exit 1
+$SITETOOL --dry-run --mode parse      || exit 1
+$SITETOOL --dry-run --mode initialize || exit 1
+$SITETOOL --dry-run --mode uninstall  || exit 1
+$SITETOOL --dry-run --mode clean      || exit 1
+$SITETOOL --dry-run --mode build      || exit 1
+$SITETOOL --dry-run --mode check      || exit 1
+$SITETOOL --dry-run --mode digest     || exit 1
+$SITETOOL --dry-run --mode preprocess || exit 1
+$SITETOOL --dry-run --mode validate   || exit 1
+$SITETOOL --dry-run --mode auths      || exit 1
 
 exit 0
