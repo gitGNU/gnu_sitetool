@@ -37,7 +37,8 @@ BEGIN {
     
     @ISA    = qw(Exporter);
     @EXPORT = qw(&bug
-		 &assert);
+		 &assert
+		 &missing);
 }
 
 sub bug ($)
@@ -67,6 +68,11 @@ sub assert ($)
     if ($expression == 0) {
 	bug("Assertion failed !!!");
     }
+}
+
+sub missing ()
+{
+    bug("Missing code");
 }
 
 1;
