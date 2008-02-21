@@ -294,7 +294,7 @@ sub parse($$)
  	    return 0;
 	}
 
-	if ($self->{ARGSMIN}->{$id} > 0) {
+	if (($self->{ARGSMAX}->{$id} - $self->{ARGSMIN}->{$id}) == 0) {
 	    # Parsing for options arguments
 
 	    debug("Getting options arguments "   .
