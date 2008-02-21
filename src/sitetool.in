@@ -205,10 +205,11 @@ my %tools = (
 
 sub help ()
 {
-    print "Usage: $PROGRAM_NAME [OPTION]... [MODE] [MODE-ARG]...\n";
+    print "Usage: $PROGRAM_NAME [OPTION]... [-- [MODE-ARG]...]\n";
     print "\n";
 
     print "Options:\n";
+    print "  -M, --mode=MODE            Running mode is MODE\n";
     print "  -n, --dry-run              display commands without modifying any files\n";
     print "  -f, --force                consider all files obsolete\n";
     print "  -W, --warnings=CATEGORY    report the warnings falling in CATEGORY\n";
@@ -227,7 +228,7 @@ sub help ()
     for my $tool (keys(%tools)) {
 	assert(defined($tools{$tool}{DESCRIPTION}));
 
-	printf("      --%-11s          %-s\n",
+	printf("        %-11s          %-s\n",
 	       $tool,
 	       $tools{$tool}{DESCRIPTION});
     }
@@ -237,7 +238,7 @@ sub help ()
     print "more detailed description of MODE.\n";
     print "\n";
 
-    print "The environment variables SITETOOL_BIN_PATH, SITETOOL_LIBRARY_PATH and\n";
+    print "The environment variables SITETOOL_BINARY_PATH, SITETOOL_LIBRARY_PATH and\n";
     print "SITETOOL_DATA_PATH are honored.\n";
     print "\n";
 
@@ -285,6 +286,44 @@ sub run_tool ($$@)
     return 1;
 }
 
+sub help_mode ($)
+{
+    my $mode = shift;
+
+    if (defined($mode)) {
+	debug("Producing help for mode \`" . $mode . "'");
+	my $found;
+
+	# Yes, let us provide help for that mode
+	debug("Mode should be \`" . $mode . "'");
+	$found = 0;
+	for my $tool (keys(%tools)) {
+	    debug("Tool = \`" . $tool . "'");
+	    if ($tool =~ $mode) {
+		debug("Got tool \`" . $tool . "' for the requested mode");
+		$found = 1;
+		last;
+	    }
+	}
+	
+	if (!$found) {
+	    error("Unknown MODE \`" . $mode . "'");
+	    return 0;
+	}
+	
+	if (!run_tool($mode, 0, "-h")) {
+	    error("Cannot get help for MODE \`" . $mode . "'");
+	    return 0;
+	}
+    } else {
+	debug("Mode is not defined, producing generic help");
+	# No, let us provide the generic help
+	help();
+    }
+    
+    return 1;
+}
+
 #
 # Main
 #
@@ -303,110 +342,71 @@ warning_set("none");
 my $options = Sitetool::Base::Options->new();
 assert(defined($options));
 
+my $run = 0;
+
 my @options_list = (
-    [ "f", "force",    sub { $force_mode = 1; }, 0, 0 ],
-    [ "h", "help",     sub { },                  0, 1 ], # FIXME
-    [ "W", "warnings", sub { warning_set($_); }, 0, 1 ],
-    [ "d", "debug",    sub { debug_set(1);    }, 0, 0 ],
-    [ "v", "verbose",  sub { verbose_set(1); },  0, 0 ],
-    [ "V", "version",  \&version(),              0, 0 ],
-    [ "n", "dry-run",  sub { $dry_run = 1 },     0, 0 ],
+    [ "M", "mode",
+      sub { $running_mode = $_[0]; $run = 1; return 1; },
+      1,   1 ],
+    [ "n", "dry-run",
+      sub { $dry_run = 1;          $run = 1; return 1; },
+      0,   0 ],
+    [ "f", "force",
+      sub { $force_mode = 1;       $run = 1; return 1; },
+      0,   0 ],
+    [ "W", "warnings",
+      sub { warning_set($_[0]);    $run = 1; return 1; },
+      1,   1 ],
+    [ "d", "debug",
+      sub { debug_set(1);          $run = 1; return 1; },
+      0,   0 ],
+    [ "v", "verbose",
+      sub { verbose_set(1);        $run = 1; return 1; },
+      0,   0 ],
+    [ "h", "help",
+      sub { help_mode($_[0]);      $run = 0; return 1; },
+      0,   1 ],
+    [ "V", "version",
+      sub { version();             $run = 0; return 1; },
+      0,   0 ],
     );
 
-# Parse options
-my $i = 0;
-while ($i <= $#ARGV) {
-    debug("ARGV[$i] = \`" . $ARGV[$i] . "'");
+if (!$options->config(\@options_list)) {
+    bug("Options configuration problem");
+}
 
-    if (($ARGV[$i] =~ /^\-f$/)      || ($ARGV[$i] =~ /^\-\-force$/)) {
-	$force_mode = 1;
-    } elsif (($ARGV[$i] =~ /^\-h$/) || ($ARGV[$i] =~ /^\-\-help$/)) {
-	# Is there any known MODE after the help argument ?
-	$i++;
-	if (defined($ARGV[$i])) {
-	    # Yes, let us provide help for that mode
-	    debug("Mode should be \`" . $ARGV[$i] . "'");
-	    for my $tool (keys(%tools)) {
-		debug("Tool = \`" . $tool . "'");
-		if ($ARGV[$i] =~ /^\-\-$tool$/) {
-		    debug("Got tool \`" . $tool . "' for the requested mode");
-		    $running_mode = $tool;
-		    last;
-		}
-	    }
-
-	    if (!defined($running_mode)) {
-		error("Unknown MODE \`" . $ARGV[$i] . "'");
-		exit 1;
-	    }
-
-	    if (!run_tool($running_mode, 0, "-h")) {
-		error("Cannot get help for MODE \`" . $running_mode . "'");
-		exit 1;
-	    }
-	} else {
-	    # No, let us provide the generic help
-	    help();
-	}
-	exit 0;
-    } elsif (($ARGV[$i] =~ /^\-W$/) || ($ARGV[$i] =~ /^\-\-warnings$/)) {
-	$i++;
-	if (!defined($ARGV[$i])) {
-	  hint("Missing warning level");
-	  exit 1;
-	}
-	warning_set($ARGV[$i]);
-    } elsif (($ARGV[$i] =~ /^\-d$/) || ($ARGV[$i] =~ /^\-\-debug$/)) {
-	debug_set(1);
-    } elsif (($ARGV[$i] =~ /^\-v$/) || ($ARGV[$i] =~ /^\-\-verbose$/)) {
-	verbose_set(1);
-    } elsif (($ARGV[$i] =~ /^\-V$/) || ($ARGV[$i] =~ /^\-\-version$/)) {
-	version();
-	exit 0;
-#    } elsif ($ARGV[$i] =~ /^\-\-$/) {
-#	$i++;
-#	last;
-    } elsif (($ARGV[$i] =~ /^\-n$/) || ($ARGV[$i] =~ /^\-\-dry\-run$/)) {
-	$dry_run = 1;
-    } else {
-	#
-	# Mode handling
-	#
-	debug("Mode should be \`" . $ARGV[$i] . "'");
-	for my $tool (keys(%tools)) {
-	    debug("Tool = \`" . $tool . "'");
-	    if ($ARGV[$i] =~ /^\-\-$tool$/) {
-		debug("Got tool \`" . $tool . "' for the requested mode");
-		if (defined($running_mode)) {
-		    hint("Too many running MODEs");
-		    exit 1;
-		}
-		$running_mode = $tool;
-		last;
-	    }
-	}
-
-	if (!defined($running_mode)) {
-	    error("Unknown option \`" . $ARGV[$i] . "'");
-	    exit 1;
-	}
-
-	$i++;
-	last;
-    }
-
-    $i++;
+@options_slack = @ARGV;
+if(!$options->parse(\@options_slack)) {
+    hint("Option parsing failed");
+    exit 1;
 }
 
 debug("Running \`" . $PACKAGE_NAME . "' version \`" . $PACKAGE_VERSION . "'");
 
-@options_slack = @ARGV[$i .. $#ARGV];
-debug("Options slack is \`@options_slack'");
+if (!$run) {
+    exit 0;
+}
 
 if (!defined($running_mode)) {
-    hint("Missing running MODE");
+    hint("Missing running mode");
     exit 1;
 }
+
+debug("Mode should be \`" . $running_mode . "'");
+my $found = 0;
+for my $tool (keys(%tools)) {
+    debug("Tool = \`" . $tool . "'");
+    if ($running_mode =~ $tool) {
+	debug("Got tool \`" . $tool . "' for the requested mode");
+	$found = 1;
+	last;
+    }
+}
+if (!$found) {
+    error("Unknown option \`" . $running_mode . "'");
+    exit 1;
+}
+
 debug("Running mode is \`$running_mode'");
 
 #
