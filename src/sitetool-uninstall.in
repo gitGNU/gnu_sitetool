@@ -58,6 +58,7 @@ use Sitetool::Autoconfig;
 use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Program;
+use Sitetool::Base::Options;
 use Sitetool::Configuration;
 
 #
@@ -120,65 +121,63 @@ my $host_name          = "";
 my $host_user          = "";
 my $host_password      = "";
 my $force_mode         = 0;
+my $run                = 0;
+my $dry_run            = 0;
 
 debug_set(0);
 verbose_set(0);
 warning_set("none");
 
-# Parse options
-my $i = 0;
-while ($i <= $#ARGV) {
-    if (($ARGV[$i] =~ /^\-c$/)      || ($ARGV[$i] =~ /^\-\-configuration$/)) {
-	$i++;
-	$configuration_file = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-i$/) || ($ARGV[$i] =~ /^\-\-input\-dir$/)) {
-	$i++;
-	$input_dir = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-H$/) || ($ARGV[$i] =~ /^\-\-hname$/)) {
-	$i++;
-	$host_name = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-P$/) || ($ARGV[$i] =~ /^\-\-hpassword$/)) {
-	$i++;
-	$host_password = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-U$/) || ($ARGV[$i] =~ /^\-\-huser$/)) {
-	$i++;
-	$host_user = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-hdir$/)) {
-	$i++;
-	$host_dir = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
-	$force_mode = 1;
-    } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
-	help_brief();
-	exit 0;
-    } elsif (($ARGV[$i] =~ /^\-h$/) || ($ARGV[$i] =~ /^\-\-help$/)) {
-	help();
-	exit 0;
-    } elsif (($ARGV[$i] =~ /^\-W$/) || ($ARGV[$i] =~ /^\-\-warnings$/)) {
-	$i++;
-	if (!defined($ARGV[$i])) {
-	  hint("Missing warning level");
-	  exit 1;
-	}
-	warning_set($ARGV[$i]);
-    } elsif (($ARGV[$i] =~ /^\-d$/) || ($ARGV[$i] =~ /^\-\-debug$/)) {
-	debug_set(1);
-    } elsif (($ARGV[$i] =~ /^\-v$/) || ($ARGV[$i] =~ /^\-\-verbose$/)) {
-	verbose_set(1);
-    } elsif (($ARGV[$i] =~ /^\-V$/) || ($ARGV[$i] =~ /^\-\-version$/)) {
-	version();
-	exit 0;
-    } else {
-	error("Unknown option \`" . $ARGV[$i] . "'");
-	exit 1;
-    }
+my $options = Sitetool::Base::Options->new();
+assert(defined($options));
 
-    $i++;
+my @options_list = (
+    [ "c", "configuration",
+      sub { $configuration_file = $_[0]; $run = 1; return 1; },
+      1,   1 ],
+    [ "i", "input-dir",
+      sub { $input_dir = $_[0];          $run = 1; return 1; },
+      1,   1 ],
+    [ "H", "hname",
+      sub { $host_name = $_[0];          $run = 1; return 1; },
+      1,   1 ],
+    [ "P", "hpassword",
+      sub { $host_password = $_[0];      $run = 1; return 1; },
+      1,   1 ],
+    [ "U", "huser",
+      sub { $host_user = $_[0];          $run = 1; return 1; },
+      1,   1 ],
+    [ "o", "hdir",
+      sub { $host_dir = $_[0];           $run = 1; return 1; },
+      1,   1 ],
+
+    [ "n", "dry-run",    sub { $dry_run = 1;       $run = 1; return 1; }, 0,0 ],
+    [ "f", "force",      sub { $force_mode = 1;    $run = 1; return 1; }, 0,0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]); $run = 1; return 1; }, 1,1 ],
+    [ "d", "debug",      sub { debug_set(1);       $run = 1; return 1; }, 0,0 ],
+    [ "v", "verbose",    sub { verbose_set(1);     $run = 1; return 1; }, 0,0 ],
+    [ "h", "help",       sub { help_mode($_[0]);   $run = 0; return 1; }, 0,1 ],
+    [ "B", "help-brief", sub { help_brief();       $run = 0; return 1; }, 0,0 ],
+    [ "V", "version",    sub { version();          $run = 0; return 1; }, 0,0 ],
+    );
+
+if (!$options->config(\@options_list)) {
+    bug("Options configuration problem");
+}
+
+my @options_slack = @ARGV;
+if(!$options->parse(\@options_slack)) {
+    hint("Option parsing failed");
+    exit 1;
 }
 
 #
 # Parameters check
 #
+
+if (!$run) {
+    exit 0;
+}
 
 if ($configuration_file eq "") {
     hint("Missing configuration file");
@@ -203,6 +202,10 @@ if ($host_user eq "") {
 if ($host_password eq "") {
     hint("Missing password");
     exit 1;
+}
+
+if ($dry_run) {
+    exit 0;
 }
 
 #
