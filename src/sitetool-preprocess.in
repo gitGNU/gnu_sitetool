@@ -58,6 +58,7 @@ use Sitetool::Autoconfig;
 use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Program;
+use Sitetool::Base::Options;
 use Sitetool::OS::Directory;
 use Sitetool::OS::Filename;
 use Sitetool::OS::File;
@@ -120,92 +121,93 @@ trace_prefix_set($PROGRAM_NAME);
 my $input_file  = "";
 my $output_file = "";
 my $force_mode  = 0;
+my $run         = 0;
+my $dry_run     = 0;
 
 debug_set(0);
 verbose_set(0);
 warning_set("none");
 
-# Preprocess options
-my $i = 0;
-while ($i <= $#ARGV) {
-    if (($ARGV[$i] =~ /^\-i$/)      || ($ARGV[$i] =~ /^\-\-input$/)) {
-	$i++;
-	$input_file = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output$/)) {
-	$i++;
-	$output_file = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-D$/) || ($ARGV[$i] =~ /^\-\-define$/)) {
-	$i++;
+my $options = Sitetool::Base::Options->new();
+assert(defined($options));
 
-	my $variable;
-	$variable = $ARGV[$i];
-	if (!defined($variable)) {
-	    hint("Missing environment variable name");
-	    exit 1;
-	}
-	
-	$i++;
-	
-	my $value;
-	$value = $ARGV[$i];
-	if (!defined($value)) {
-	    hint("Missing environment variable value");
-	    exit 1;
-	}
+my @options_list = (
+    [ "i", "input",
+      sub { $input_file = $_[0];        $run = 1; return 1; },
+      1,   1 ],
+    [ "o", "output",
+      sub { $output_file = $_[0];       $run = 1; return 1; },
+      1,   1 ],
+    [ "D", "define",
+      sub {
+	  my $variable;
+	  $variable = $_[0];
+	  if (!defined($variable)) {
+	      hint("Missing environment variable name");
+	      return 0;
+	  }
 
-	if (!environment_set($variable, $value)) {
-	    error("Cannot set environment variable \`" . $variable . "'");
-	    exit 1;
-	}
+	  my $value;
+	  $value = $_[1];
+	  if (!defined($value)) {
+	      hint("Missing environment variable value");
+	      return 0;
+	  }
 
-    } elsif (($ARGV[$i] =~ /^\-U$/) || ($ARGV[$i] =~ /^\-\-undefine$/)) {
-	$i++;
+	  if (!environment_set($variable, $value)) {
+	      error("Cannot set environment variable \`" . $variable . "'");
+	      exit 1;
+	  }
+	  $run = 1;
+	  return 1;
+      },
+      2,   2 ],
+    [ "U", "undefine",
+      sub {
+	  my $variable;
+	  $variable = $_[0];
+	  if (!defined($variable)) {
+	      hint("Missing environment variable name");
+	      return 0;
+	  }
 
-	my $variable;
-	$variable = $ARGV[$i];
-	if (!defined($variable)) {
-	    hint("Missing environment variable name");
-	    exit 1;
-	}
+	  if (!environment_remove($variable)) {
+	      error("Cannot remove environment variable \`" . $variable . "'");
+	      return 0;
+	  }
 
-	if (!environment_remove($variable)) {
-	    error("Cannot remove environment variable \`" . $variable . "'");
-	    exit 1;
-	}
+	  $run = 1;
+	  return 1;
+      },
+      1,   1 ],
+    [ "n", "dry-run",    sub { $dry_run = 1;       $run = 1; return 1; }, 0,0 ],
+    [ "f", "force",      sub { $force_mode = 1;    $run = 1; return 1; }, 0,0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]); $run = 1; return 1; }, 1,1 ],
+    [ "d", "debug",      sub { debug_set(1);       $run = 1; return 1; }, 0,0 ],
+    [ "v", "verbose",    sub { verbose_set(1);     $run = 1; return 1; }, 0,0 ],
+    [ "h", "help",       sub { help_mode($_[0]);   $run = 0; return 1; }, 0,1 ],
+    [ "B", "help-brief", sub { help_brief();       $run = 0; return 1; }, 0,0 ],
+    [ "V", "version",    sub { version();          $run = 0; return 1; }, 0,0 ],
+    );
 
-    } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
-	$force_mode = 1;
-    } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
-	help_brief();
-	exit 0;
-    } elsif (($ARGV[$i] =~ /^\-h$/) || ($ARGV[$i] =~ /^\-\-help$/)) {
-	help();
-	exit 0;
-    } elsif (($ARGV[$i] =~ /^\-W$/) || ($ARGV[$i] =~ /^\-\-warnings$/)) {
-	$i++;
-	if (!defined($ARGV[$i])) {
-	  hint("Missing warning level");
-	  exit 1;
-	}
-	warning_set($ARGV[$i]);
-    } elsif (($ARGV[$i] =~ /^\-d$/) || ($ARGV[$i] =~ /^\-\-debug$/)) {
-	debug_set(1);
-    } elsif (($ARGV[$i] =~ /^\-v$/) || ($ARGV[$i] =~ /^\-\-verbose$/)) {
-	verbose_set(1);
-    } elsif (($ARGV[$i] =~ /^\-V$/) || ($ARGV[$i] =~ /^\-\-version$/)) {
-	version();
-	exit 0;
-    } else {
-	error("Unknown option \`" . $ARGV[$i] . "'");
-	exit 1;
-    }
+if (!$options->config(\@options_list)) {
+    bug("Options configuration problem");
+}
 
-    $i++;
+my @options_slack = @ARGV;
+if(!$options->parse(\@options_slack)) {
+    hint("Option parsing failed");
+    exit 1;
 }
 
 #
 # Parameters check
 #
+
+if (!$run) {
+    exit 0;
+}
+
 if ($input_file eq "") {
     hint("Missing input file");
     exit 1;
@@ -217,6 +219,10 @@ if (!file_ispresent($input_file)) {
 if ($output_file eq "") {
     hint("Missing output file");
     exit 1;
+}
+
+if ($dry_run) {
+    exit 0;
 }
 
 #
