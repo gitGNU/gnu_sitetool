@@ -33,21 +33,27 @@ EXTRA_DIST =					\
 	site.css
 
 site:
+	rm -f site.stamp ; \
 	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
 	export SITETOOL_LIBRARY_PATH ; \
 	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
 	export SITETOOL_BINARY_PATH ; \
 	SITETOOL="$(top_builddir)/src/sitetool" ; \
 	$$SITETOOL -v --mode initialize && \
-	$$SITETOOL -v --mode build || { \
+	$$SITETOOL -v --mode build && \
+	touch site.stamp || { \
 		$$SITETOOL -v --mode clean ; \
+		rm -f site.stamp \
 		exit 1 ; \
 	}
 
 maintainer-clean-local:
-	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
-	export SITETOOL_LIBRARY_PATH ; \
-	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
-	export SITETOOL_BINARY_PATH ; \
-	SITETOOL="$(top_builddir)/src/sitetool" ; \
-	$$SITETOOL -v --mode clean || exit 1
+	if test -e site.stamp ; then \
+		SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
+		export SITETOOL_LIBRARY_PATH ; \
+		SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
+		export SITETOOL_BINARY_PATH ; \
+		SITETOOL="$(top_builddir)/src/sitetool" ; \
+		$$SITETOOL -v --mode clean || exit 1 ; \
+		rm -f site.stamp ; \
+	fi
