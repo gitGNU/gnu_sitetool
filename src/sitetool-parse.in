@@ -58,6 +58,7 @@ use Sitetool::Autoconfig;
 use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Program;
+use Sitetool::Base::Options;
 use Sitetool::OS::Directory;
 use Sitetool::OS::Filename;
 use Sitetool::OS::File;
@@ -79,7 +80,6 @@ sub help_brief ()
 {
     print "  -i, --input=FILE            use FILE as input file\n";
     print "  -o, --output=FILE           use FILE as output file\n";
-#    print "  -s, --style-dir=DIR         style directory is DIR\n";
     print "  -f, --force                 consider all files obsolete\n";
 }
 
@@ -118,61 +118,55 @@ trace_prefix_set($PROGRAM_NAME);
 my $input_file  = "";
 my $output_file = "";
 my $work_dir    = "";
-#my $style_dir   = "";
 my $force_mode  = 0;
+my $run         = 0;
+my $dry_run     = 0;
 
 debug_set(0);
 verbose_set(0);
 warning_set("none");
 
-# Parse options
-my $i = 0;
-while ($i <= $#ARGV) {
-    if (($ARGV[$i] =~ /^\-w$/)      || ($ARGV[$i] =~ /^\-\-work-dir$/)) {
-	$i++;
-	$work_dir = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-i$/) || ($ARGV[$i] =~ /^\-\-input$/)) {
-	$i++;
-	$input_file = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-o$/) || ($ARGV[$i] =~ /^\-\-output$/)) {
-	$i++;
-	$output_file = $ARGV[$i];
-#    } elsif (($ARGV[$i] =~ /^\-s$/) || ($ARGV[$i] =~ /^\-\-style\-dir$/)) {
-#	$i++;
-#	$style_dir = $ARGV[$i];
-    } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
-	$force_mode = 1;
-    } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
-	help_brief();
-	exit 0;
-    } elsif (($ARGV[$i] =~ /^\-h$/) || ($ARGV[$i] =~ /^\-\-help$/)) {
-	help();
-	exit 0;
-    } elsif (($ARGV[$i] =~ /^\-W$/) || ($ARGV[$i] =~ /^\-\-warnings$/)) {
-	$i++;
-	if (!defined($ARGV[$i])) {
-	  hint("Missing warning level");
-	  exit 1;
-	}
-	warning_set($ARGV[$i]);
-    } elsif (($ARGV[$i] =~ /^\-d$/) || ($ARGV[$i] =~ /^\-\-debug$/)) {
-	debug_set(1);
-    } elsif (($ARGV[$i] =~ /^\-v$/) || ($ARGV[$i] =~ /^\-\-verbose$/)) {
-	verbose_set(1);
-    } elsif (($ARGV[$i] =~ /^\-V$/) || ($ARGV[$i] =~ /^\-\-version$/)) {
-	version();
-	exit 0;
-    } else {
-	error("Unknown option \`" . $ARGV[$i] . "'");
-	exit 1;
-    }
+my $options = Sitetool::Base::Options->new();
+assert(defined($options));
 
-    $i++;
+my @options_list = (
+    [ "w", "work-dir",
+      sub { $work_dir = $_[0];          $run = 1; return 1; },
+      1,   1 ],
+    [ "i", "input",
+      sub { $input_file = $_[0];        $run = 1; return 1; },
+      1,   1 ],
+    [ "o", "output",
+      sub { $output_file = $_[0];       $run = 1; return 1; },
+      1,   1 ],
+    [ "n", "dry-run",    sub { $dry_run = 1;       $run = 1; return 1; }, 0,0 ],
+    [ "f", "force",      sub { $force_mode = 1;    $run = 1; return 1; }, 0,0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]); $run = 1; return 1; }, 1,1 ],
+    [ "d", "debug",      sub { debug_set(1);       $run = 1; return 1; }, 0,0 ],
+    [ "v", "verbose",    sub { verbose_set(1);     $run = 1; return 1; }, 0,0 ],
+    [ "h", "help",       sub { help_mode($_[0]);   $run = 0; return 1; }, 0,1 ],
+    [ "B", "help-brief", sub { help_brief();       $run = 0; return 1; }, 0,0 ],
+    [ "V", "version",    sub { version();          $run = 0; return 1; }, 0,0 ],
+    );
+
+if (!$options->config(\@options_list)) {
+    bug("Options configuration problem");
+}
+
+my @options_slack = @ARGV;
+if(!$options->parse(\@options_slack)) {
+    hint("Option parsing failed");
+    exit 1;
 }
 
 #
 # Parameters check
 #
+
+if (!$run) {
+    exit 0;
+}
+
 if ($work_dir eq "") {
     hint("Missing working directory");
     exit 1;
@@ -189,10 +183,10 @@ if ($output_file eq "") {
     hint("Missing output file");
     exit 1;
 }
-#if ($style_dir eq "") {
-#    hint("Missing style directory");
-#    exit 1;
-#}
+
+if ($dry_run) {
+    exit 0;
+}
 
 #
 # Start the real work
@@ -209,22 +203,22 @@ if ($force_mode || file_isobsolete($input_file, $output_file)) {
     }
     assert(defined($string));
     $string = "\%configuration = (\n" . $string . ");\n";
- 
+
     my $temp1_filename;
     $temp1_filename = filename_mktemp();
-    
+
     debug("Dumping string to file \`" . $temp1_filename . "'");
     if (!string_tofile($string, $temp1_filename)) {
 	file_remove($temp1_filename);
 	exit 1;
     }
 
-    debug("Reading back configuration from \`" . $temp1_filename . "'");    
+    debug("Reading back configuration from \`" . $temp1_filename . "'");
     $string = "";
     if (!file_tostring($temp1_filename, \$string)) {
 	exit 1;
     }
-    
+
     assert(defined($string));
 
     debug("Evaluating raw configuration");
@@ -254,7 +248,7 @@ if ($force_mode || file_isobsolete($input_file, $output_file)) {
 	    exit 1;
 	}
     }
-	
+
     debug("Configuration parsed successfully");
 
     #
@@ -266,7 +260,7 @@ if ($force_mode || file_isobsolete($input_file, $output_file)) {
 
     # Remove useless file
     file_remove($temp1_filename);
-    
+
     if (!configuration_freeze(\%configuration, $output_file)) {
 	exit 1;
     }
