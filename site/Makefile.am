@@ -38,9 +38,9 @@ site:
 	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
 	export SITETOOL_BINARY_PATH ; \
 	SITETOOL="$(top_builddir)/src/sitetool" ; \
-	$$SITETOOL -v --initialize && \
-	$$SITETOOL -v --build || { \
-		$$SITETOOL -v --clean ; \
+	$$SITETOOL -v --mode initialize && \
+	$$SITETOOL -v --mode build || { \
+		$$SITETOOL -v --mode clean ; \
 		exit 1 ; \
 	}
 
@@ -50,4 +50,4 @@ maintainer-clean-local:
 	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
 	export SITETOOL_BINARY_PATH ; \
 	SITETOOL="$(top_builddir)/src/sitetool" ; \
-	$$SITETOOL -v --clean || exit 1
+	$$SITETOOL -v --mode clean || exit 1
