@@ -366,7 +366,7 @@ if(!$options->parse(\@options_slack)) {
     exit 1;
 }
 
-debug("Running \`" . $PACKAGE_NAME . "' version \`" . $PACKAGE_VERSION . "'");
+debug("Running \`" . $PROGRAM_NAME . "' version \`" . $PACKAGE_VERSION . "'");
 
 #
 # Parameters check

@@ -160,6 +160,8 @@ if (!$run) {
     exit 0;
 }
 
+debug("Running \`" . $PROGRAM_NAME . "' version \`" . $PACKAGE_VERSION . "'");
+
 #
 # Parameters check
 #
