@@ -39,8 +39,19 @@ TESTS_ENVIRONMENT =					\
 EXTRA_DIST =					\
 	defs.in					\
 	wrapper.in				\
-	test-dry-run.in				\
 	test-args.in				\
+	test-dry-run.in				\
+	test-args-auths.in			\
+	test-args-build.in			\
+	test-args-check.in			\
+	test-args-clean.in			\
+	test-args-digest.in			\
+	test-args-initialize.in			\
+	test-args-install.in			\
+	test-args-parse.in			\
+	test-args-preprocess.in			\
+	test-args-uninstall.in			\
+	test-args-validate.in			\
 	test-helps.in				\
 	test-initialize.in			\
 	test-preprocess.in			\
@@ -54,6 +65,17 @@ check_SCRIPTS =					\
 
 TESTS =						\
 	test-args				\
+	test-args-auths				\
+	test-args-build				\
+	test-args-check				\
+	test-args-clean				\
+	test-args-digest			\
+	test-args-initialize			\
+	test-args-install			\
+	test-args-parse				\
+	test-args-preprocess			\
+	test-args-uninstall			\
+	test-args-validate			\
 	test-dry-run				\
 	test-helps				\
 	test-initialize				\
@@ -102,6 +124,116 @@ test-dry-run: $(srcdir)/test-dry-run.in Makefile
 test-args: $(srcdir)/test-args.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/test-args.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-auths: $(srcdir)/test-args-auths.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-auths.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-build: $(srcdir)/test-args-build.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-build.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-check: $(srcdir)/test-args-check.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-check.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-clean: $(srcdir)/test-args-clean.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-clean.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-digest: $(srcdir)/test-args-digest.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-digest.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-initialize: $(srcdir)/test-args-initialize.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-initialize.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-install: $(srcdir)/test-args-install.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-install.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-parse: $(srcdir)/test-args-parse.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-parse.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-preprocess: $(srcdir)/test-args-preprocess.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-preprocess.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-uninstall: $(srcdir)/test-args-uninstall.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-uninstall.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+test-args-validate: $(srcdir)/test-args-validate.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-validate.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
