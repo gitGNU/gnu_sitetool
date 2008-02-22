@@ -58,6 +58,7 @@ use Sitetool::Autoconfig;
 use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Program;
+use Sitetool::Base::Options;
 use Sitetool::OS::Shell;
 use Sitetool::OS::File;
 use Sitetool::Configuration;
@@ -122,102 +123,80 @@ my $running_mode       = undef;
 my $host               = undef;
 my $login              = undef;
 my $password           = undef;
+my $run                = 0;
+my $dry_run            = 0;
 
 debug_set(0);
 verbose_set(0);
 warning_set("none");
 
-# Parse options
-my $i = 0;
-while ($i <= $#ARGV) {
-#    if (($ARGV[$i] =~ /^\-c$/)      || ($ARGV[$i] =~ /^\-\-configuration$/)) {
-#	$i++;
-#	$configuration_file = $ARGV[$i];
-#    } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
-    if (($ARGV[$i] =~ /^\-i$/) || ($ARGV[$i] =~ /^\-\-initialize$/)) {
-	$running_mode = "initialize";
-    } elsif (($ARGV[$i] =~ /^\-A$/) || ($ARGV[$i] =~ /^\-\-add$/)) {
-	$running_mode = "add";
+my $options = Sitetool::Base::Options->new();
+assert(defined($options));
 
-	$i++;
-	if (!defined($ARGV[$i])) {
-	    hint("Missing host");
-	    exit 1;
-	}
-	$host = $ARGV[$i];
+my @options_list = (
+    [ "i", "initialize",
+      sub { $running_mode = "initialize"; $run = 1; return 1; },
+      0,   0 ],
+    [ "A", "add",
+      sub {
+	  $host         = $_[0];
+	  $login        = $_[1];
+	  $password     = $_[2];
+	  $running_mode = "add";
+	  $run          = 1;
+	  return 1;
+      },
+      3,   3 ],
+    [ "D", "delete",
+      sub {
+	  $running_mode = "delete";
+	  $host         = $_[0];
+	  $login        = $_[1];
+	  $run          = 1;
+	  return 1; },
+      2,   2 ],
+    [ "S", "show",
+      sub { $running_mode = "show";       $run = 1; return 1; },
+      0,   0 ],
+    [ "C", "clear",
+      sub { $running_mode = "clear";      $run = 1; return 1; },
+      0,   0 ],
 
-	$i++;
-	if (!defined($ARGV[$i])) {
-	    hint("Missing login");
-	    exit 1;
-	}
-	$login = $ARGV[$i];
+    [ "n", "dry-run",    sub { $dry_run = 1;       $run = 1; return 1; }, 0,0 ],
+    [ "f", "force",      sub { $force_mode = 1;    $run = 1; return 1; }, 0,0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]); $run = 1; return 1; }, 1,1 ],
+    [ "d", "debug",      sub { debug_set(1);       $run = 1; return 1; }, 0,0 ],
+    [ "v", "verbose",    sub { verbose_set(1);     $run = 1; return 1; }, 0,0 ],
+    [ "h", "help",       sub { help_mode($_[0]);   $run = 0; return 1; }, 0,1 ],
+    [ "B", "help-brief", sub { help_brief();       $run = 0; return 1; }, 0,0 ],
+    [ "V", "version",    sub { version();          $run = 0; return 1; }, 0,0 ],
+    );
 
-	$i++;
-	if (!defined($ARGV[$i])) {
-	    hint("Missing password");
-	    exit 1;
-	}
-	$password = $ARGV[$i];
+if (!$options->config(\@options_list)) {
+    bug("Options configuration problem");
+}
 
-    } elsif (($ARGV[$i] =~ /^\-D$/) || ($ARGV[$i] =~ /^\-\-delete$/)) {
-	$running_mode = "delete";
-
-	$i++;
-	if (!defined($ARGV[$i])) {
-	    hint("Missing host");
-	    exit 1;
-	}
-	$host = $ARGV[$i];
-
-	$i++;
-	if (!defined($ARGV[$i])) {
-	    hint("Missing login");
-	    exit 1;
-	}
-	$login = $ARGV[$i];
-
-    } elsif (($ARGV[$i] =~ /^\-S$/) || ($ARGV[$i] =~ /^\-\-show$/)) {
-	$running_mode = "show";
-    } elsif (($ARGV[$i] =~ /^\-C$/) || ($ARGV[$i] =~ /^\-\-clear$/)) {
-	$running_mode = "clear";
-    } elsif (($ARGV[$i] =~ /^\-f$/) || ($ARGV[$i] =~ /^\-\-force$/)) {
-	$force_mode = 1;
-    } elsif (($ARGV[$i] =~ /^\-B$/) || ($ARGV[$i] =~ /^\-\-brief\-help$/)) {
-	help_brief();
-	exit 0;
-    } elsif (($ARGV[$i] =~ /^\-h$/) || ($ARGV[$i] =~ /^\-\-help$/)) {
-	help();
-	exit 0;
-    } elsif (($ARGV[$i] =~ /^\-W$/) || ($ARGV[$i] =~ /^\-\-warnings$/)) {
-	$i++;
-	if (!defined($ARGV[$i])) {
-	    hint("Missing warning level");
-	    exit 1;
-	}
-	warning_set($ARGV[$i]);
-    } elsif (($ARGV[$i] =~ /^\-d$/) || ($ARGV[$i] =~ /^\-\-debug$/)) {
-	debug_set(1);
-    } elsif (($ARGV[$i] =~ /^\-v$/) || ($ARGV[$i] =~ /^\-\-verbose$/)) {
-	verbose_set(1);
-    } elsif (($ARGV[$i] =~ /^\-V$/) || ($ARGV[$i] =~ /^\-\-version$/)) {
-	version();
-	exit 0;
-    } else {
-	error("Unknown option \`" . $ARGV[$i] . "'");
-	exit 1;
-    }
-
-    $i++;
+my @options_slack = @ARGV;
+if(!$options->parse(\@options_slack)) {
+    hint("Option parsing failed");
+    exit 1;
 }
 
 #
 # Parameters check
 #
 
+if (!$run) {
+    exit 0;
+}
+
 if (!defined($running_mode)) {
     hint("Missing running mode");
     exit 1;
+}
+
+if ($dry_run) {
+    exit 0;
 }
 
 #
