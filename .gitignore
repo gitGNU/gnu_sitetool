@@ -34,6 +34,17 @@ tools/autotools/m4/guile_autofrisk.m4
 tests/defs
 tests/wrapper
 tests/test-args
+tests/test-args-auths
+tests/test-args-build
+tests/test-args-check
+tests/test-args-clean
+tests/test-args-digest
+tests/test-args-initialize
+tests/test-args-install
+tests/test-args-parse
+tests/test-args-preprocess
+tests/test-args-uninstall
+tests/test-args-validate
 tests/test-helps
 tests/test-dry-run
 tests/test-initialize
