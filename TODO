@@ -30,11 +30,15 @@ TO-BE-DONE:
 
 * Add a feature to choose a layout for each page (now we've a common one).
 
+* Add RSS generation
+
 * Add support for choosing the right page's DTD. We should have a global site
   DTD and the option to override it on each page.
 
 * Oversimplify site configuration (having it in a single file would be a 
   good thing); at the same time think, add and handle a site map indexing.
+
+* Add option bundling in libs/perl/Sitetool/Base/Options.pm module
 
 DONE:
 * Develop tools/script/perl-autofrisk in order to mimic the Guile's autofrisk
