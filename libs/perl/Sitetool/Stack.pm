@@ -26,6 +26,9 @@ use warnings;
 use strict;
 use diagnostics;
 
+use Sitetool::Base::Debug;
+use Sitetool::Base::Trace;
+
 sub new {
     my $class = shift;
 
