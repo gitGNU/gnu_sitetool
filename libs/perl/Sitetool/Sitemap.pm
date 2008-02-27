@@ -35,7 +35,7 @@ use Sitetool::OS::File;
 use Sitetool::OS::Filename;
 use Sitetool::OS::String;
 #use Sitetool::OS::Directory;
-use Sitetool::Tree;
+use Sitetool::Data::Tree;
 
 BEGIN {
     use Exporter ();
@@ -85,7 +85,7 @@ BEGIN {
 #	debug($prefix . "Working on directory item \`" . $item . "'");
 #
 #	my $child;
-#	$child = Sitetool::Tree->new("");
+#	$child = Sitetool::Data::Tree->new("");
 #	assert(defined($child));
 #	
 #	$child->parent(\$tree);
@@ -163,7 +163,7 @@ BEGIN {
 #    #
 #    debug("Creating tree for \`$input_directory'");
 #    my $tree;
-#    $tree = Sitetool::Tree->new("");
+#    $tree = Sitetool::Data::Tree->new("");
 #    $tree->data("type", "directory");
 #    $tree->data("href", ".");
 #    if (!tree_create($tree, $input_directory, \@exclusions, 0)) {
@@ -319,7 +319,7 @@ sub sitemap_create_helper ($$)
     my $tree;
     
     # Create the root node
-    $tree = Sitetool::Tree->new("");
+    $tree = Sitetool::Data::Tree->new("");
     if (!defined($tree)) {
 	error("Cannot create root for tree");
 	return 0;
@@ -338,7 +338,7 @@ sub sitemap_create_helper ($$)
 	warning("Page \`" . $page_id . "' is orphan, adopted now by root");
 	    
 	my $node;
-	$node = Sitetool::Tree->new($page_id);
+	$node = Sitetool::Data::Tree->new($page_id);
 	if (!defined($node)) {
 	    error("Cannot create tree node for page \`" . $page_id . "'");
 	    return 0;
@@ -404,7 +404,7 @@ sub sitemap_create_helper ($$)
 		  "\`" . $parent->id() . "'");
 
 	    my $node;
-	    $node = Sitetool::Tree->new($page_id);
+	    $node = Sitetool::Data::Tree->new($page_id);
 	    if (!defined($node)) {
 		error("Cannot create tree node for page " .
 		      "\`" . $page_id . "'");

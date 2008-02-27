@@ -31,7 +31,7 @@ use Sitetool::Base::Debug;
 use Sitetool::Base::Trace;
 use Sitetool::OS::Shell;
 use Sitetool::OS::File;
-use Sitetool::Stack;
+use Sitetool::Data::Stack;
 
 BEGIN {
     use Exporter ();
@@ -56,7 +56,7 @@ sub scheme_indent ($)
 #
 #    $string_out = "";
 #    @strings    = split(/\n/, $string_in);
-#    $stack      = Sitetool::Stack->new();
+#    $stack      = Sitetool::Data::Stack->new();
 #    assert(defined($stack));
 #
 #    for my $line (@strings) {

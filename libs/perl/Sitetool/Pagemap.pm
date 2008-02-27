@@ -37,7 +37,7 @@ use Sitetool::WWW::HREF;
 use Sitetool::OS::File;
 use Sitetool::OS::Filename;
 use Sitetool::OS::String;
-use Sitetool::Tree;
+use Sitetool::Data::Tree;
 use Sitetool::Scheme;
 
 BEGIN {

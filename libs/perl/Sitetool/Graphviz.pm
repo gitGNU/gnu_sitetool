@@ -29,7 +29,7 @@ use diagnostics;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Trace;
 use Sitetool::OS::File;
-use Sitetool::Tree;
+use Sitetool::Data::Tree;
 
 BEGIN {
     use Exporter ();
