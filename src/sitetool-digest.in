@@ -141,7 +141,7 @@ my @options_list = (
     [ "W", "warnings",   sub { warning_set($_[0]); $run = 1; return 1; }, 1,1 ],
     [ "d", "debug",      sub { debug_set(1);       $run = 1; return 1; }, 0,0 ],
     [ "v", "verbose",    sub { verbose_set(1);     $run = 1; return 1; }, 0,0 ],
-    [ "h", "help",       sub { help_mode($_[0]);   $run = 0; return 1; }, 0,1 ],
+    [ "h", "help",       sub { help();             $run = 0; return 1; }, 0,0 ],
     [ "B", "help-brief", sub { help_brief();       $run = 0; return 1; }, 0,0 ],
     [ "V", "version",    sub { version();          $run = 0; return 1; }, 0,0 ],
     );
