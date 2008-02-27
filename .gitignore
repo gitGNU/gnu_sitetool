@@ -86,3 +86,5 @@ src/filters/svnlog-wikitext
 src/filters/sxml-sxml
 src/filters/wikitext-sxml
 src/filters/map-sxml
+
+site/site.stamp
