@@ -60,6 +60,22 @@ sub pop($) {
     return $value;
 }
 
+sub size($) {
+    my $self = shift;
+
+    assert(defined($self));
+
+    return ($#{@{$self->{VALUES}}} + 1);
+}
+
+sub is_empty($) {
+    my $self = shift;
+
+    assert(defined($self));
+
+    return (($self->size() == 0) ? 1 : 0);
+}
+
 #sub poke($) {
 #  my $self  = shift;
 #  my $value;
