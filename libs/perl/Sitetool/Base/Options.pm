@@ -30,7 +30,7 @@ use diagnostics;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Trace;
 
-sub new($)
+sub new ($)
 {
     my $class = shift;
 
@@ -45,7 +45,7 @@ sub new($)
     return $self;
 }
 
-sub clean($)
+sub clean ($)
 {
     my $self = shift;
 
@@ -59,7 +59,7 @@ sub clean($)
     $self->{ARGSMAX}   = { };
 }
 
-sub add($$$$$$$)
+sub add ($$$$$$$)
 {
     my $self      = shift;
     my $id        = shift;
@@ -140,7 +140,7 @@ sub add($$$$$$$)
     return 1;
 }
 
-sub config($$)
+sub config ($$)
 {
     my $self      = shift;
     my $array_ref = shift;
@@ -164,7 +164,7 @@ sub config($$)
     return 1;
 }
 
-sub get_id_from_long($$)
+sub get_id_from_long ($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -183,7 +183,7 @@ sub get_id_from_long($$)
     return undef;
 }
 
-sub get_id_from_short($$)
+sub get_id_from_short ($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -202,7 +202,7 @@ sub get_id_from_short($$)
     return undef;
 }
 
-sub check_id($$)
+sub check_id ($$)
 {
     my $self = shift;
     my $id   = shift;
@@ -220,7 +220,7 @@ sub check_id($$)
     return 0;
 }
 
-sub parse($$)
+sub parse ($$)
 {
     my $self        = shift;
     my $options_ref = shift;

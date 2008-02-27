@@ -40,7 +40,7 @@ BEGIN {
 }
 
 
-sub graphviz_helper($$)
+sub graphviz_helper ($$)
 {
     my $node_ref      = shift;
     my $output_handle = shift;
@@ -84,7 +84,7 @@ sub graphviz_helper($$)
     return 1;
 }
 
-sub sitemap2graphviz($$)
+sub sitemap2graphviz ($$)
 {
     my $input_filename   = shift;
     my $output_filename  = shift;
