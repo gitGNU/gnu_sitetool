@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-package Sitetool::Tree;
+package Sitetool::Data::Tree;
 
 use 5.8.0;
 
@@ -180,7 +180,7 @@ sub pack ($) {
 	debug("Child ref is \`" . $child_ref . "'");
 
 	if (ref($child_ref)) {
-	    assert(UNIVERSAL::isa(${$child_ref}, "Sitetool::Tree"));
+	    assert(UNIVERSAL::isa(${$child_ref}, "Sitetool::Data::Tree"));
 
 	    debug("Packed children are now \`@tmp'");
 	    push(@tmp, $child_ref);
@@ -210,7 +210,7 @@ sub child () {
 
     if (defined($index)) {
 	assert(ref($node_ref) ne "");
-	assert(UNIVERSAL::isa(${$node_ref}, "Sitetool::Tree"));
+	assert(UNIVERSAL::isa(${$node_ref}, "Sitetool::Data::Tree"));
 
 	$self->{CHILDREN}->[$index] = $node_ref;
     }
@@ -266,7 +266,7 @@ sub parent () {
 	debug("Passed parent is \`" . $parent . "'");
 
 	assert(ref($parent) eq "REF");
-	assert(UNIVERSAL::isa(${$parent}, "Sitetool::Tree"));
+	assert(UNIVERSAL::isa(${$parent}, "Sitetool::Data::Tree"));
 
 	$self->{PARENT} = $parent;
 	
@@ -318,7 +318,7 @@ sub foreach ($$) {
     # And for all its children
     for my $child_ref (@{$self->{CHILDREN}}) {
 	if (ref($child_ref)) {
-	    assert(UNIVERSAL::isa(${$child_ref}, "Sitetool::Tree"));
+	    assert(UNIVERSAL::isa(${$child_ref}, "Sitetool::Data::Tree"));
 
 	    my $child;
 	    $child = ${$child_ref};
@@ -341,7 +341,7 @@ sub relink ($$) {
 
     for my $child_ref (@{$self->{CHILDREN}}) {
 	if (ref($child_ref)) {
-	    assert(UNIVERSAL::isa(${$child_ref}, "Sitetool::Tree"));
+	    assert(UNIVERSAL::isa(${$child_ref}, "Sitetool::Data::Tree"));
 	    
 	    my $child;
 	    $child = ${$child_ref};
