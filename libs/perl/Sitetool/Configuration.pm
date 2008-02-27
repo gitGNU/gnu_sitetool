@@ -58,7 +58,7 @@ sub configuration_freeze ($$)
 	return 0;
     }
 
-    verbose("Freezing configuration in file \`" . $output_filename . "'");
+    verbose("Freezing configuration to file \`" . $output_filename . "'");
 
     my %configuration;
 
