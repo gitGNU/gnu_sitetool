@@ -164,6 +164,7 @@ AC_CONFIG_FILES([
 	libs/perl/Sitetool/Makefile
 	libs/perl/Sitetool/Misc/Makefile
 	libs/perl/Sitetool/Base/Makefile
+	libs/perl/Sitetool/Data/Makefile
 	libs/perl/Sitetool/OS/Makefile
 	libs/perl/Sitetool/WWW/Makefile
 	libs/python/Makefile
