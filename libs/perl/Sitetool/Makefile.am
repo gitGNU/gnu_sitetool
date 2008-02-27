@@ -22,6 +22,7 @@ include $(top_srcdir)/Makefile.sub
 
 SUBDIRS =					\
 	Base					\
+	Data					\
 	Misc					\
 	OS					\
 	WWW
@@ -38,9 +39,7 @@ dist_perllib_DATA =				\
 	Pagemap.pm				\
 	Sitemap.pm				\
 	Variable.pm				\
-	Tree.pm					\
 	Graphviz.pm				\
-	Stack.pm				\
 	Array.pm				\
 	RCDirectory.pm				\
 	RCFile.pm
