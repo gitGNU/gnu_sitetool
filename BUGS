@@ -7,3 +7,6 @@ KNOWN BUGS:
   while it accepts comment like:
 
      // This is a comment
+
+* The main script get confused by an input file name different from the
+  standard one ...
