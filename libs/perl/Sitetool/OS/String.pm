@@ -37,7 +37,48 @@ BEGIN {
     @EXPORT = qw(&string_tofile
                  &string_uppercase
                  &string_lowercase
-                 &string_purify);
+                 &string_purify
+		 &string_replace
+		 &string_replace_many);
+}
+
+sub string_replace ($$$)
+{
+    my $string = shift;
+    my $from   = shift;
+    my $to     = shift;
+
+    assert(defined($string));
+    assert(defined($from));
+    assert(defined($to));
+
+    $string =~ s/$from/$to/g;
+
+    return $string;
+}
+
+sub string_replace_many ($$)
+{
+    my $string   = shift;
+    my $hash_ref = shift;
+
+    assert(defined($string));
+    assert(defined($hash_ref));
+
+    my %hash;
+    %hash = %{$hash_ref};
+
+    for my $key (keys(%hash)) {
+        my $value;
+
+        $value = $hash{$key};
+
+        assert(defined($value));
+
+        $string = string_replace($string, $key, $value);
+    }
+
+    return $string;
 }
 
 sub string_uppercase ($)
