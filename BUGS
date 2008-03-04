@@ -7,8 +7,3 @@ KNOWN BUGS:
   while it accepts comment like:
 
      // This is a comment
-
-* The main script get confused by an input file name different from the
-  standard one ... the motivation resides in the %tool variable. It is
-  composed by concatenated strings and they get concatenated at "compilation"
-  time. Probably we should use refs to these strings instead ...

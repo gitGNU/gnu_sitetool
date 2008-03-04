@@ -64,6 +64,7 @@ use Sitetool::Base::Options;
 use Sitetool::Configuration;
 use Sitetool::OS::File;
 use Sitetool::OS::Filename;
+use Sitetool::OS::String;
 use Sitetool::OS::Shell;
 use Sitetool::OS::Environment;
 
@@ -92,24 +93,29 @@ my %tools = (
     "initialize" => {
 	HANDLER        => "sitetool-initialize",
 	DESCRIPTION    => "initialize",
-#	FLAGS          => "-w $work_dir -o $output_dir -s $style_dir",
-	FLAGS          => "-w $work_dir -o $output_dir",
+	FLAGS          =>
+	    "-w %work_dir% " .
+	    "-o %output_dir%",
 	PRE_REQUISITE  => [ ],
  	POST_REQUISITE => [ ],
     },
     "preprocess" => {
 	HANDLER        => "sitetool-preprocess",
 	DESCRIPTION    => "preprocess",
-#	FLAGS          => "-i $input_file -o $preprocessed_file -D work_dir $work_dir -D style_dir $style_dir",
-	FLAGS          => "-i $input_file -o $preprocessed_file -D work_dir $work_dir",
+	FLAGS          =>
+	    "-i %input_file% "        .
+	    "-o %preprocessed_file% " .
+	    "-D work_dir %work_dir%",
 	PRE_REQUISITE  => [ "initialize" ],
 	POST_REQUISITE => [ ],
     },
     "parse" => {
 	HANDLER        => "sitetool-parse",
 	DESCRIPTION    => "parse",
-#	FLAGS          => "-i $preprocessed_file -w $work_dir -o $configuration_file -s $style_dir",
-	FLAGS          => "-i $preprocessed_file -w $work_dir -o $configuration_file",
+	FLAGS          =>
+	    "-i %preprocessed_file% " .
+	    "-w %work_dir% "          .
+	    "-o %configuration_file%",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess" ],
 	POST_REQUISITE => [ ],
@@ -117,7 +123,10 @@ my %tools = (
     "build" => {
 	HANDLER        => "sitetool-build",
 	DESCRIPTION    => "build site",
-	FLAGS          => "-c $configuration_file -w $work_dir -o $output_dir",
+	FLAGS          =>
+	    "-c %configuration_file% " .
+	    "-w %work_dir% "           .
+	    "-o %output_dir%",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess",
 			    "parse" ],
@@ -126,7 +135,9 @@ my %tools = (
     "check" => {
 	HANDLER        => "sitetool-check",
 	DESCRIPTION    => "check links in a previously built site",
-	FLAGS          => "-c $configuration_file -o $output_dir",
+	FLAGS          =>
+	    "-c %configuration_file% " .
+	    "-o %output_dir%",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess",
 			    "parse",
@@ -136,7 +147,9 @@ my %tools = (
     "validate" => {
 	HANDLER        => "sitetool-validate",
 	DESCRIPTION    => "validate previously built site",
-	FLAGS          => "-c $configuration_file -o $output_dir",
+	FLAGS          =>
+	    "-c %configuration_file% " .
+	    "-o %output_dir%",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess",
 			    "parse",
@@ -146,7 +159,9 @@ my %tools = (
     "digest" => {
 	HANDLER        => "sitetool-digest",
 	DESCRIPTION    => "compute digest for each previously built page",
-	FLAGS          => "-c $configuration_file -o $output_dir",
+	FLAGS          =>
+	    "-c %configuration_file% " .
+	    "-o %output_dir%",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess",
 			    "parse",
@@ -156,7 +171,8 @@ my %tools = (
     "install" => {
 	HANDLER        => "sitetool-install",
 	DESCRIPTION    => "install previously built site",
-	FLAGS          => "-c $configuration_file",
+	FLAGS          =>
+	    "-c %configuration_file%",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess",
 			    "parse",
@@ -168,7 +184,10 @@ my %tools = (
     "clean" => {
 	HANDLER        => "sitetool-clean",
 	DESCRIPTION    => "remove built files",
-	FLAGS          => "-c $configuration_file -o $output_dir -w $work_dir",
+	FLAGS          =>
+	    "-c %configuration_file% " .
+	    "-o %output_dir% "         .
+	    "-w %work_dir%",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess",
 			    "parse" ],
@@ -177,7 +196,8 @@ my %tools = (
     "uninstall" => {
 	HANDLER        => "sitetool-uninstall",
 	DESCRIPTION    => "uninstall site from remote host",
-	FLAGS          => "-c $configuration_file",
+	FLAGS          =>
+	    "-c %configuration_file%",
 	PRE_REQUISITE  => [ "initialize",
 			    "preprocess",
 			    "parse" ],
@@ -186,16 +206,18 @@ my %tools = (
     "auths" => {
 	HANDLER        => "sitetool-auths",
 	DESCRIPTION    => "manage authorizations",
-	FLAGS          => "", #"-c $configuration_file",
+	FLAGS          =>
+	    "", #"-c %configuration_file%",
 	PRE_REQUISITE  => [ ],
 	POST_REQUISITE => [ ],
     },
 #    "styles" => {
 #	HANDLER        => "sitetool-styles",
 #	DESCRIPTION    => "manage styles",
-#	FLAGS          => "", #"-c $configuration_file",
-#	PRE_REQUISITE  => [ ],
-#	POST_REQUISITE => [ ],
+#	FLAGS          =>
+#	    "", #"-c %configuration_file%",
+#	    PRE_REQUISITE  => [ ],
+#	    POST_REQUISITE => [ ],
 #    },
     );
 
@@ -376,6 +398,31 @@ if (!$run) {
     exit 0;
 }
 
+#
+# Fixups tools flags
+#
+
+for my $tool (keys(%tools)) {
+    my $string;
+
+    $string = $tools{$tool}->{FLAGS};
+    assert(defined($string));
+
+    $string = string_replace_many($string, {
+	"%work_dir%"           => $work_dir,
+	"%output_dir%"         => $output_dir,
+	"%input_file%"         => $input_file,
+	"%preprocessed_file%"  => $preprocessed_file,
+	"%configuration_file%" => $configuration_file});
+
+    assert(defined($string));
+    $tools{$tool}->{FLAGS} = $string;
+}
+
+#
+# Some checks
+#
+
 if (!defined($running_mode)) {
     hint("Missing running mode");
     exit 1;
@@ -401,6 +448,7 @@ debug("Running mode is \`$running_mode'");
 #
 # Setup flags (used later on)
 #
+
 {
     debug("Handling flags");
 
@@ -439,6 +487,7 @@ debug("Running mode is \`$running_mode'");
 #
 # Dump the environment, useful for debugging purposes
 #
+
 {
     sub callback ($$) {
 	my $key   = shift;
