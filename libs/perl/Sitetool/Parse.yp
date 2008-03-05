@@ -20,61 +20,64 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-use 5.8.0;
+    use 5.8.0;
 
-use warnings;
-use strict;
-use diagnostics;
+    use warnings;
+    use strict;
+    use diagnostics;
 
-use Sitetool::Autoconfig;
-use Sitetool::Base::Trace;
-use Sitetool::Base::Debug;
-use Sitetool::OS::Shell;
-use Sitetool::OS::File;
-use Sitetool::OS::Filename;
+    use Sitetool::Autoconfig;
+    use Sitetool::Base::Trace;
+    use Sitetool::Base::Debug;
+    use Sitetool::OS::Shell;
+    use Sitetool::OS::File;
+    use Sitetool::OS::Filename;
 
-BEGIN {
-    use Exporter ();
-    our ($VERSION, @ISA, @EXPORT);
-    
-    @ISA    = qw(Exporter);
-    @EXPORT = qw(&parse);
-}
+    BEGIN {
+	use Exporter ();
+	our ($VERSION, @ISA, @EXPORT);
 
-my $parsed_string   = "";
-my $indentation     = "";
-my $container_start = 0;
-my $container_type  = "GROUP";
-my $output_handler  = "";
-my $line_number     = 1;
-my $o_curly         = '{';
-my $c_curly         = '}';
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(&parse);
+    }
+
+    my $parsed_string   = "";
+    my $indentation     = "";
+    my $container_start = 0;
+    my $container_type  = "GROUP";
+    my $output_handler  = "";
+    my $file_name       = undef;
+    my $line_number     = 0;
+    my $o_curly         = '{';
+    my $c_curly         = '}';
 
 
-%}
+    %}
 
 %start syntax
 
-%%
+    %%
 
-syntax:
-      | main_groups
-      ;
+syntax: header body ;
 
-main_groups: main_group
-           | main_group main_groups
-           ;
+header: AUTOGEN DEFINITIONS SYMBOL ';' ;
 
-main_group: LABEL '=' '{' {
+body: | main_groups
+    ;
 
-    $_[1] =~ y/[a-z]/[A-Z]/; 
+main_groups: main_group | main_group main_groups
+    ;
 
-    $parsed_string .= $indentation . 
-	              "\'"         . 
-		      $_[1]        . 
-		      "\' => "     .
-		      $o_curly     .
-		      "\n";
+main_group: SYMBOL '=' '{' {
+
+    $_[1] =~ y/[a-z]/[A-Z]/;
+
+    $parsed_string .= $indentation .
+	"\'"         .
+	$_[1]        .
+	"\' => "     .
+	$o_curly     .
+	"\n";
 
     $indentation .= "\t";
 
@@ -87,16 +90,13 @@ main_group: LABEL '=' '{' {
 }
 ;
 
-main_group_items: main_group_item
-                | main_group_item main_group_items
-                ;
+main_group_items: main_group_item | main_group_item main_group_items
+    ;
 
-main_group_item: sub_variable
-               | sub_group
-               | sub_indexed
-               ;
+main_group_item: sub_variable | sub_group | sub_indexed
+    ;
 
-sub_variable: LABEL '=' STRING ';' {
+sub_variable: SYMBOL '=' QUOTEDSTRING ';' {
 
     if ($container_start == 1) {
 	$container_start = 0;
@@ -109,16 +109,16 @@ sub_variable: LABEL '=' STRING ';' {
     $_[1] =~ s/^VAR\-//;
 
     $parsed_string .= $indentation .
- 	              "\'"         .
-		      $_[1]        .
-		      "\' => \""   .
-		      $_[3]        .
-		      "\",\n";
+	"\'"         .
+	$_[1]        .
+	"\' => \""   .
+	$_[3]        .
+	"\",\n";
 
 }
 ;
 
-sub_group: LABEL '=' '{' sub_group_id sub_group_items '}' ';' {
+sub_group: SYMBOL '=' '{' sub_group_id sub_group_items '}' ';' {
 
     $indentation =~ s/.//;
 
@@ -127,37 +127,35 @@ sub_group: LABEL '=' '{' sub_group_id sub_group_items '}' ';' {
 }
 ;
 
-sub_group_id: 'id' '=' STRING ';' {
+sub_group_id: 'id' '=' QUOTEDSTRING ';' {
 
     $parsed_string .= $indentation .
-	              "\'"         .
-		      $_[3]        .
-		      "\' => "     .
-		      $o_curly     .
-		      "\n";
+	"\'"         .
+	$_[3]        .
+	"\' => "     .
+	$o_curly     .
+	"\n";
 
     $indentation .= "\t";
 
 };
 
-sub_group_items: sub_group_item
-               | sub_group_item sub_group_items
-               ; 
+sub_group_items: sub_group_item | sub_group_item sub_group_items
+    ;
 
-sub_group_item: sub_variable
-              | sub_container
-              ;
+sub_group_item: sub_variable | sub_container
+    ;
 
-sub_container: LABEL '=' '{' {
+sub_container: SYMBOL '=' '{' {
 
-    $_[1] =~ y/[a-z]/[A-Z]/; 
+    $_[1] =~ y/[a-z]/[A-Z]/;
 
     $parsed_string .= $indentation . "\'" . $_[1] . "\' => ";
 
     $container_start = 1;
 
     $indentation .= "\t";
- 
+
 } sub_container_items '}' ';' {
 
     $indentation =~ s/.//;
@@ -171,15 +169,13 @@ sub_container: LABEL '=' '{' {
 }
 ;
 
-sub_container_items: sub_indexed_items
-                   | sub_group_items
-                   ;
+sub_container_items: sub_indexed_items | sub_group_items
+    ;
 
-sub_indexed_items: sub_indexed_item
-                 | sub_indexed_item sub_indexed_items
-                 ;
+sub_indexed_items: sub_indexed_item | sub_indexed_item sub_indexed_items
+    ;
 
-sub_indexed_item: LABEL '[' DECIMAL ']' '=' '{' {
+sub_indexed_item: SYMBOL '[' DECIMAL ']' '=' '{' {
 
     if ($container_start == 1) {
 	$container_start = 0;
@@ -203,61 +199,118 @@ sub_indexed_item: LABEL '[' DECIMAL ']' '=' '{' {
 
 %%
 
-sub lexer_callback {
+sub lexer_callback
+{
     my $parser = shift;
-    
+
     assert(defined($parser));
+    assert(defined($parser->YYData->{INPUT}));
 
-    # Remove useless whites
-    $parser->YYData->{INPUT} =~ s/^\s+//;
-    $parser->YYData->{INPUT} =~ s/\s+$//;
+    while (length($parser->YYData->{INPUT}) >= 0) {
+	debug("Parsing " . $file_name . ":" . $line_number . " "  .
+	      "(" . length($parser->YYData->{INPUT}) . " to go)");
 
-    # Remove autogen initial proclamation
-    if ($line_number == 1) {
-	$parser->YYData->{INPUT} =~ s/autogen\s+definitions[^\n]+\;[\t ]*\n//;
-	$line_number = 0;
-    } 
+	# Remove leading whitespaces
+	$parser->YYData->{INPUT} =~ s/^[ \t]+//;
 
-    if (!defined($parser->YYData->{INPUT})) {
-	return ('', undef);
-    }
+	if ($parser->YYData->{INPUT} =~ s/^\n//) {
 
-    if ($parser->YYData->{INPUT} eq "") {
-	return ('', undef);
-    }
+	    debug("Eating newline");
+	    $line_number++;
 
-    for ($parser->YYData->{INPUT}) {
-	debug("Line is now: `" . $parser->YYData->{INPUT} . "'");
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^\/\/.*\n//) {
 
-	# Remove initial spaces and tabs
-	s/^[ \t]*//;
+	    debug("Eating comment and newline");
+	    $line_number++;
 
-	# Remove line containing comments
-	s/\/\/.*\n//;
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^id[ \t]*//) {
 
+	    debug("Got id");
 
-	if ($_ =~ s/^id//) {
 	    return ("id", "id");
-	} elsif ($_ =~ s/^([a-zA-Z][a-zA-Z0-9_\-]*)//) {
-	    return ("LABEL", $1);
-	} elsif ($_ =~ s/^([0-9]+)//) {
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^autogen[ \t]*//) {
+
+	    debug("Got autogen keyword");
+
+	    return ("AUTOGEN", undef);
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^definitions[ \t]*//) {
+
+	    debug("Got definitions keyword");
+
+	    return ("DEFINITIONS", undef);
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^\#[ \t]*line[ \t]+([0-9]+)[ \t]*//) {
+
+	    debug("Got line \`" . $1 . "' directive");
+	    $line_number = $1;
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^\#[ \t]*file[ \t]+\"(.*)"[ \t]*//) {
+
+	    debug("Got file \`" . $1 . "' directive");
+	    $file_name = $1;
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^([a-zA-Z_][a-zA-Z0-9_\-]*)[ \t]*//) {
+
+	    debug("Got symbol \`" . $1 . "'");
+
+	    return ("SYMBOL", $1);
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^([0-9]+)[ \t]*//) {
+
+	    debug("Got decimal");
+
 	    return ("DECIMAL", $1);
-	} elsif ($_ =~ s/^\"(.*)\"//) {
-	    return ("STRING", $1);
-	} elsif ($_ =~ s/^([\{\}\[\]\;\=])//) {
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^\"(.*)\"[ \t]*//) {
+
+	    debug("Got quoted string \`" . $1 . "'");
+
+	    return ("QUOTEDSTRING", $1);
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^([\{\}\[\]\;\=])[ \t]*//) {
+
+	    debug("Got punctuation \`" . $1 . "'");
+
 	    return ($1, $1);
-	} elsif ($_ =~ s/^(.)//) {
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^(.)//) {
+
+	    debug("Got character \`" . $1 . "'");
+
 	    return ($1, $1);
+
+	} elsif ($parser->YYData->{INPUT} =~
+		 s/^$//) {
+
+	    debug("Got END-OF-FILE");
+
+	    return (undef, undef);
+
 	} else {
-	    bug("Undefined lexer input `"              . 
-		substr($parser->YYData->{INPUT}, 0, 1) .
+	    bug("Undefined lexer input `" .
+		substr($parser->YYData->{INPUT}, 0, 1)     .
 		"\'");
 	}
     }
-    bug("Unreacheable lexer code");
+
+    bug("Unreachable code");
 }
 
-sub syntax_error {
+sub syntax_error
+{
     my $message = shift;
     my $lineno  = shift;
 
@@ -268,7 +321,8 @@ sub syntax_error {
     exit 1;
 }
 
-sub error_callback {
+sub error_callback
+{
     my $parser = shift;
 
     assert(defined($parser));
@@ -284,6 +338,9 @@ sub parse ($$)
     my $input_filename = shift;
     my $string_ref     = shift;
 
+    assert(defined($input_filename));
+    assert(defined($string_ref));
+
     debug("Parsing file \`" . $input_filename . "'");
 
     if (!file_ispresent($input_filename)) {
@@ -296,25 +353,33 @@ sub parse ($$)
 	return 0;
     }
 
-    # Parse !
+    # Setup useful variables used later on
+    $file_name   = $input_filename;
+    $line_number = 1;
+
     my $parser;
     $parser = Sitetool::Parse->new();
     assert(defined($parser));
 
     $parser->YYData->{INPUT} = $string;
 
+    my $debug_level;
+#    $debug_level = debug_get() ? 0x1F : 0x00);
+    $debug_level = 0;
+
     my $result;
     $result = $parser->YYParse(yylex   => \&lexer_callback,
-			       yyerror => \&error_callback);
-    
+			       yyerror => \&error_callback,
+			       yydebug => $debug_level);
+
     if ($parser->YYNberr() > 0) {
 	error("Cannot parse input file \`" . $input_filename . "'");
 	return 0;
     }
-    
+
     debug("Parsing completed successfully");
 
     ${$string_ref} = $parsed_string;
-    
+
     return 1;
 }
