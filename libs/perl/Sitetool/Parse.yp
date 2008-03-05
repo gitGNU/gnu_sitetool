@@ -297,7 +297,7 @@ sub lexer_callback
 
 	    debug("Got END-OF-FILE");
 
-	    return (undef, undef);
+	    return ('', undef);
 
 	} else {
 	    bug("Undefined lexer input `" .
