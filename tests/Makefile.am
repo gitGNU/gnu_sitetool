@@ -30,11 +30,7 @@ SUBDIRS =					\
 ##     
 ##       TESTS_ENVIRONMENT = testdir=@abs_builddir@ DEBUG=x VERBOSE=x
 ##
-TESTS_ENVIRONMENT =					\
-	testdir=@abs_builddir@				\
-	SITETOOL_BINARY_PATH="@abs_top_builddir@/src"	\
-	SITETOOL_LIBRARY_PATH="@abs_top_builddir@/libs"	\
-	SITETOOL_DATA_PATH="@abs_top_builddir@/data"
+TESTS_ENVIRONMENT = testdir=@abs_builddir@
 
 EXTRA_DIST =					\
 	defs.in					\
@@ -58,10 +54,6 @@ EXTRA_DIST =					\
 	test-parse.in				\
 	test-validate.in			\
 	test-build.in
-
-check_SCRIPTS =					\
-	defs					\
-	wrapper
 
 TESTS =						\
 	test-args				\
@@ -92,6 +84,14 @@ CLEANFILES = $(noinst_SCRIPTS) $(check_SCRIPTS)
 ##   defs should not be made executable because it should be only included by
 ##   test-cases
 ##
+
+scripts =					\
+	defs					\
+	wrapper
+
+all-local: $(scripts)
+
+# defs
 defs: $(srcdir)/defs.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/defs.in > $@.tmp && \
@@ -100,7 +100,10 @@ defs: $(srcdir)/defs.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+CLEANFILES += defs
+EXTRA_DIST += defs.in
 
+# wrapper
 wrapper: $(srcdir)/wrapper.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/wrapper.in > $@.tmp && \
@@ -110,6 +113,8 @@ wrapper: $(srcdir)/wrapper.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+CLEANFILES += wrapper
+EXTRA_DIST += wrapper.in
 
 test-dry-run: $(srcdir)/test-dry-run.in Makefile
 	( rm -f $@ $@.tmp && \
