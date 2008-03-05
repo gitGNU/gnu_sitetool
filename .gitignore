@@ -4,6 +4,7 @@
 .dirstamp
 *.o
 *.a
+TAGS
 
 build
 
