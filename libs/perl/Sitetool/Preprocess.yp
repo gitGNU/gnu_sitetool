@@ -35,7 +35,7 @@ use Sitetool::OS::Environment;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&preprocess);
 }
@@ -46,8 +46,7 @@ BEGIN {
 
 %%
 
-syntax:
-      | syntax
+syntax: | syntax
       ;
 
 %%
@@ -72,21 +71,21 @@ sub preprocessor_expander($)
 
     my $tmp    = ${$ref};
     my $expand = 0;
-    
+
     while ($tmp =~ s/\@(.*)\@//) {
 	my $variable = $1;
 
 	debug("Found variable `" . $variable . "\'");
-	
+
 	my $value = environment_get($variable);
-	
+
 	if (!defined($value)) {
 	    debug("Variable `" . $variable . "\' is not defined");
 	    next;
 	}
 
-	debug("Variable `" . $variable . 
-	      "\' value `" . $value    . 
+	debug("Variable `" . $variable .
+	      "\' value `" . $value    .
 	      "\'");
 
 	${$ref}   =~ s/\@$variable\@/$value/;
@@ -119,12 +118,17 @@ sub preprocess_helper ($$)
 	error("Cannot open file \`" . $file . "' for reading");
 	return 0;
     }
-    
-    my $line;
-    my $string;
 
-    $line   = 0;
+    my $line;
+    $line = 0;
+
+    my $string;
     $string = "";
+
+    # Place marker
+    $string = $string . "#file \"" . $file . "\"\n";
+    $string = $string . "#line "   . $line . "\n";
+
     while (<$filehandle>) {
 	$line++;
 
@@ -133,33 +137,39 @@ sub preprocess_helper ($$)
 	chomp($tmp);
 
 	debug("  Got line \`" . $tmp . "'");
-	
+
 	if (!preprocessor_expander(\$tmp)) {
 	    error("Failed to expand environment variables");
 	    exit 1;
 	}
 
-	if ($tmp =~ m/^[ \t]*$/) {
-	    # Skip empty lines
-	} elsif ($tmp =~ m/^[ \t]*\#.*$/) {
-	    # Skip comments
-	} elsif ($tmp =~ m/^[ \t]*include[ \t]*\"(.*)\"[ \t]*$/) {
+	if ($tmp =~ m/^[ \t]*include[ \t]*\"(.*)\"[ \t]*$/) {
 	    # Handle file inclusion
 
 	    assert(defined($1));
 
 	    my $include_file;
 	    $include_file = File::Spec->rel2abs($1);
-		
+
 	    debug("Including file \`" . $1 . "'");
+
+	    # Place marker
+	    $string = $string . "#file \"" . $file . "\"\n";
+	    $string = $string . "#line "   . $line . "\n";
+
+	    $line++;
+
 	    if (!&preprocess_helper($include_file, \$string)) {
 		error("Cannot include file \`" . $include_file . "'");
 		return 0;
 	    }
-	} elsif ($tmp =~ m/^.*\\[ \t]*$/) {
-	    # Handle multi-line as a single line
-	    $tmp =~ s/\\[ \t]*$//;
-	    $string = $string . $tmp;
+
+	    $line++;
+
+	    # Place marker
+	    $string = $string . "#file \"" . $file . "\"\n";
+	    $string = $string . "#line "   . $line . "\n";
+
 	} else {
 	    # Get the line as it is
 	    $string = $string . $tmp . "\n";
