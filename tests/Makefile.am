@@ -20,42 +20,67 @@
 
 include $(top_srcdir)/Makefile.sub
 
+CLEANFILES =
+EXTRA_DIST =
+
 SUBDIRS =					\
 	data
 
 ##
 ## NOTE:
-##     In order to debug the tests during the 'distcheck' target use the 
+##     In order to debug the tests during the 'distcheck' target use the
 ##     following TESTS_ENVIRONMENT:
-##     
+##
 ##       TESTS_ENVIRONMENT = testdir=@abs_builddir@ DEBUG=x VERBOSE=x
 ##
 TESTS_ENVIRONMENT = testdir=@abs_builddir@
 
-EXTRA_DIST =					\
-	defs.in					\
-	wrapper.in				\
-	test-args.in				\
-	test-dry-run.in				\
-	test-args-auths.in			\
-	test-args-build.in			\
-	test-args-check.in			\
-	test-args-clean.in			\
-	test-args-digest.in			\
-	test-args-initialize.in			\
-	test-args-install.in			\
-	test-args-parse.in			\
-	test-args-preprocess.in			\
-	test-args-uninstall.in			\
-	test-args-validate.in			\
-	test-helps.in				\
-	test-initialize.in			\
-	test-preprocess.in			\
-	test-parse.in				\
-	test-validate.in			\
-	test-build.in
+scripts =					\
+	wrapper					\
+	defs
 
-TESTS =						\
+all-local: $(scripts)
+
+# wrapper
+wrapper: $(srcdir)/wrapper.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/wrapper.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+CLEANFILES += wrapper
+EXTRA_DIST += wrapper.in
+
+##
+## NOTE:
+##   defs should not be made executable because it should be only included by
+##   test-cases
+##
+
+# defs
+defs: $(srcdir)/defs.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/defs.in > $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+CLEANFILES += defs
+EXTRA_DIST += defs.in
+
+# Tests
+FAIL_TESTS    =
+SUCCESS_TESTS =
+
+FAIL_TESTS +=					\
+	test-fail
+
+SUCCESS_TESTS +=				\
+	test-success				\
 	test-args				\
 	test-args-auths				\
 	test-args-build				\
@@ -76,45 +101,8 @@ TESTS =						\
 	test-validate				\
 	test-build
 
-noinst_SCRIPTS = $(TESTS)
-CLEANFILES = $(noinst_SCRIPTS) $(check_SCRIPTS)
-
-##
-## NOTE:
-##   defs should not be made executable because it should be only included by
-##   test-cases
-##
-
-scripts =					\
-	defs					\
-	wrapper
-
-all-local: $(scripts)
-
-# defs
-defs: $(srcdir)/defs.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/defs.in > $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-CLEANFILES += defs
-EXTRA_DIST += defs.in
-
-# wrapper
-wrapper: $(srcdir)/wrapper.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/wrapper.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-CLEANFILES += wrapper
-EXTRA_DIST += wrapper.in
+XFAIL_TESTS  = $(FAIL_TESTS)
+TESTS        = $(FAIL_TESTS) $(SUCCESS_TESTS)
 
 test-dry-run: $(srcdir)/test-dry-run.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -125,6 +113,32 @@ test-dry-run: $(srcdir)/test-dry-run.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-dry-run.in
+CLEANFILES += test-dry-run
+
+test-success: $(srcdir)/test-success.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-success.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-success.in
+CLEANFILES += test-success
+
+test-fail: $(srcdir)/test-fail.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-fail.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-fail.in
+CLEANFILES += test-fail
 
 test-args: $(srcdir)/test-args.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -135,6 +149,8 @@ test-args: $(srcdir)/test-args.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args.in
+CLEANFILES += test-args
 
 test-args-auths: $(srcdir)/test-args-auths.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -145,6 +161,8 @@ test-args-auths: $(srcdir)/test-args-auths.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-auths.in
+CLEANFILES += test-args-auths
 
 test-args-build: $(srcdir)/test-args-build.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -155,6 +173,8 @@ test-args-build: $(srcdir)/test-args-build.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-build.in
+CLEANFILES += test-args-build
 
 test-args-check: $(srcdir)/test-args-check.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -165,6 +185,8 @@ test-args-check: $(srcdir)/test-args-check.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-check.in
+CLEANFILES += test-args-check
 
 test-args-clean: $(srcdir)/test-args-clean.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -175,6 +197,8 @@ test-args-clean: $(srcdir)/test-args-clean.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-clean.in
+CLEANFILES += test-args-clean
 
 test-args-digest: $(srcdir)/test-args-digest.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -185,6 +209,8 @@ test-args-digest: $(srcdir)/test-args-digest.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-digest.in
+CLEANFILES += test-args-digest
 
 test-args-initialize: $(srcdir)/test-args-initialize.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -195,6 +221,8 @@ test-args-initialize: $(srcdir)/test-args-initialize.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-initialize.in
+CLEANFILES += test-args-initialize
 
 test-args-install: $(srcdir)/test-args-install.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -205,6 +233,8 @@ test-args-install: $(srcdir)/test-args-install.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-install.in
+CLEANFILES += test-args-install
 
 test-args-parse: $(srcdir)/test-args-parse.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -215,6 +245,8 @@ test-args-parse: $(srcdir)/test-args-parse.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-parse.in
+CLEANFILES += test-args-parse
 
 test-args-preprocess: $(srcdir)/test-args-preprocess.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -225,6 +257,8 @@ test-args-preprocess: $(srcdir)/test-args-preprocess.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-preprocess.in
+CLEANFILES += test-args-preprocess
 
 test-args-uninstall: $(srcdir)/test-args-uninstall.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -235,6 +269,8 @@ test-args-uninstall: $(srcdir)/test-args-uninstall.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-uninstall.in
+CLEANFILES += test-args-uninstall
 
 test-args-validate: $(srcdir)/test-args-validate.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -245,6 +281,8 @@ test-args-validate: $(srcdir)/test-args-validate.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-args-validate.in
+CLEANFILES += test-args-validate
 
 test-helps: $(srcdir)/test-helps.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -255,6 +293,8 @@ test-helps: $(srcdir)/test-helps.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-helps.in
+CLEANFILES += test-helps
 
 test-initialize: $(srcdir)/test-initialize.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -265,6 +305,8 @@ test-initialize: $(srcdir)/test-initialize.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-initialize.in
+CLEANFILES += test-initialize
 
 test-preprocess: $(srcdir)/test-preprocess.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -275,6 +317,8 @@ test-preprocess: $(srcdir)/test-preprocess.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-preprocess.in
+CLEANFILES += test-preprocess
 
 test-parse: $(srcdir)/test-parse.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -285,6 +329,8 @@ test-parse: $(srcdir)/test-parse.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-parse.in
+CLEANFILES += test-parse
 
 test-build: $(srcdir)/test-build.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -295,6 +341,8 @@ test-build: $(srcdir)/test-build.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-build.in
+CLEANFILES += test-build
 
 test-validate: $(srcdir)/test-validate.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -305,6 +353,8 @@ test-validate: $(srcdir)/test-validate.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+EXTRA_DIST += test-validate.in
+CLEANFILES += test-validate
 
 clean-local:
 	rm -rf testSubDir-*
