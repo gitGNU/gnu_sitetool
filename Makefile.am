@@ -43,7 +43,7 @@ AUTOMAKE_OPTIONS = check-news
 
 ##
 ## NOTE:
-##     ChangeLogs are shipped by this directory Makefile.am even if they lies on
+##     ChangeLogs are shipped by this directory Makefile.am even if they lie on
 ##     child directory ... CHANGELOGS variable is needed here for distribution
 ##     purposes ...
 ##
