@@ -230,7 +230,8 @@ sub parse ($$)
 
     debug("Options string \`" . "@{$options_ref}" . "'");
 
-    if ($$options_ref[0] !~ /^\-/) {
+    if (($#{$options_ref} == -1)    ||
+	($$options_ref[0] !~ /^\-/)) {
 	# No options to parse
 	return 1;
     }
