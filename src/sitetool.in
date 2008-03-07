@@ -383,7 +383,7 @@ if (!$options->config(\@options_list)) {
 }
 
 my @options_slack = @ARGV;
-if(!$options->parse(\@options_slack)) {
+if (!$options->parse(\@options_slack)) {
     hint("Option parsing failed");
     exit 1;
 }
