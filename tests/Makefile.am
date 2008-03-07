@@ -77,11 +77,12 @@ FAIL_TESTS    =
 SUCCESS_TESTS =
 
 FAIL_TESTS +=					\
+	test-args-2				\
 	test-fail
 
 SUCCESS_TESTS +=				\
 	test-success				\
-	test-args				\
+	test-args-1				\
 	test-args-auths				\
 	test-args-build				\
 	test-args-check				\
@@ -140,17 +141,29 @@ test-fail: $(srcdir)/test-fail.in Makefile
 EXTRA_DIST += test-fail.in
 CLEANFILES += test-fail
 
-test-args: $(srcdir)/test-args.in Makefile
+test-args-1: $(srcdir)/test-args-1.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-1.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args.in
-CLEANFILES += test-args
+EXTRA_DIST += test-args-1.in
+CLEANFILES += test-args-1
+
+test-args-2: $(srcdir)/test-args-2.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-2.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-args-2.in
+CLEANFILES += test-args-2
 
 test-args-auths: $(srcdir)/test-args-auths.in Makefile
 	( rm -f $@ $@.tmp && \
