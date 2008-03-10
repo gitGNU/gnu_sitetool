@@ -177,7 +177,10 @@ sub pack ($) {
 
     debug("Self children is \`" . $self->{CHILDREN} . "'");
     for my $child_ref (@{$self->{CHILDREN}}) {
-	debug("Child ref is \`" . $child_ref . "'");
+        debug("Child ref is "                                  .
+              "\`"                                             .
+              (defined($child_ref) ? $child_ref : "undefined") .
+              "'");
 
 	if (ref($child_ref)) {
 	    assert(UNIVERSAL::isa(${$child_ref}, "Sitetool::Data::Tree"));
