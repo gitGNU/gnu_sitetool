@@ -1,8 +1,11 @@
 guile-lib authors
 
-SXML 
+SXML authors
 
 autotools people
 
-Emanuele Bassi
+Emanuele Bassi:
 	 author of gitlog2ChangeLog script
+
+        Thank you all,
+                Francesco
