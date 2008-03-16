@@ -52,9 +52,12 @@ CHANGELOGS =					\
 	$(srcdir)/docs/ChangeLog-2007.1		\
 	$(srcdir)/docs/ChangeLog-2007.0
 
+##
+## NOTE:
+##     Makefile.sub is automatically distributed by automake rules
+##
 EXTRA_DIST =							\
 	TODO BUGS README NEWS COPYING AUTHORS INSTALL THANKS	\
-	Makefile.sub						\
 	$(CHANGELOGS)						\
 	configure.ac.in						\
 	bootstrap						\
