@@ -210,15 +210,37 @@ sub child () {
     my $node_ref = shift;
 
     assert(defined($self));
+    assert(defined($index));
 
-    if (defined($index)) {
-	assert(ref($node_ref) ne "");
-	assert(UNIVERSAL::isa(${$node_ref}, "Sitetool::Data::Tree"));
-
-	$self->{CHILDREN}->[$index] = $node_ref;
-    }
-    
     return $self->{CHILDREN}->[$index];
+}
+
+sub add_child ($$$) {
+    my $self     = shift;
+    my $index    = shift;
+    my $node_ref = shift;
+
+    assert(defined($self));
+    assert(defined($index));
+    assert(defined($node_ref));
+    assert(ref($node_ref) ne "");
+    assert(UNIVERSAL::isa(${$node_ref}, "Sitetool::Data::Tree"));
+
+    $self->{CHILDREN}->[$index] = $node_ref;
+
+    return 1;
+}
+
+sub remove_child ($$) {
+    my $self     = shift;
+    my $index    = shift;
+
+    assert(defined($self));
+    assert(defined($index));
+
+    $self->{CHILDREN}->[$index] = undef;
+    
+    return 1;
 }
 
 sub children ($) {
