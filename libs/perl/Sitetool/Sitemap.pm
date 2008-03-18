@@ -91,7 +91,7 @@ BEGIN {
 #	$child->parent(\$tree);
 #	$child->data("href", $item);
 #	
-#	$tree->child($i, \$child);
+#	$tree->add_child($i, \$child);
 #	$i++;
 #
 #	if (directory_ispresent($item)) {
@@ -353,7 +353,12 @@ sub sitemap_create_helper ($$)
 	$node->parent(\$tree);
 
 	my @children = $tree->children();
-	$tree->child($#children + 1, \$node);
+	if (!$tree->add_child($#children + 1, \$node)) {
+	    assert(defined($tree->id()));
+	    error("Cannot add child node to page " .
+		  "\`" . $tree->id() . "'");
+	    return 0;
+	}
 
 	$configuration{MAP}{$page_id}{LINKED} = 1;
 	debug("Page \`" . $page_id . "' has been linked")
@@ -414,7 +419,12 @@ sub sitemap_create_helper ($$)
 	    $node->parent(\$parent);
 	    
 	    my @children = $parent->children();
-	    $parent->child($#children + 1, \$node);
+	    if (!$parent->add_child($#children + 1, \$node)) {
+		assert(defined($parent->id()));
+		error("Cannot add child node to page " .
+		      "\`" . $parent->id() . "'");
+		return 0;
+	    }
 	    
 	    $configuration{MAP}{$page_id}{LINKED} = 1;
 	}
