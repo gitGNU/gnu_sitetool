@@ -126,8 +126,8 @@ trace_prefix_set($PROGRAM_NAME);
 my $output_dir         = "";
 my $configuration_file = "";
 my $force_mode         = 0;
-my $run                = 0;
 my $dry_run            = 0;
+my $run                = 1;
 
 debug_set(0);
 verbose_set(0);
@@ -138,16 +138,14 @@ assert(defined($options));
 
 my @options_list = (
     [ "c", "configuration",
-      sub { $configuration_file = $_[0];           $run = 1; return 1; },
-      1,   1 ],
+      sub { $configuration_file = $_[0];                     return 1; }, 1,1 ],
     [ "o", "output-dif",
-      sub { $output_dir = $_[0];                   $run = 1; return 1; },
-      1,   1 ],
-    [ "n", "dry-run",    sub { $dry_run = 1;       $run = 1; return 1; }, 0,0 ],
-    [ "f", "force",      sub { $force_mode = 1;    $run = 1; return 1; }, 0,0 ],
-    [ "W", "warnings",   sub { warning_set($_[0]); $run = 1; return 1; }, 1,1 ],
-    [ "d", "debug",      sub { debug_set(1);       $run = 1; return 1; }, 0,0 ],
-    [ "v", "verbose",    sub { verbose_set(1);     $run = 1; return 1; }, 0,0 ],
+      sub { $output_dir = $_[0];                             return 1; }, 1,1 ],
+    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0,0 ],
+    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0,0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1,1 ],
+    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0,0 ],
+    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0,0 ],
     [ "h", "help",       sub { help();             $run = 0; return 1; }, 0,0 ],
     [ "B", "help-brief", sub { help_brief();       $run = 0; return 1; }, 0,0 ],
     [ "V", "version",    sub { version();          $run = 0; return 1; }, 0,0 ],

@@ -123,8 +123,8 @@ my $running_mode       = undef;
 my $host               = undef;
 my $login              = undef;
 my $password           = undef;
-my $run                = 0;
 my $dry_run            = 0;
+my $run                = 1;
 
 debug_set(0);
 verbose_set(0);
@@ -134,39 +134,28 @@ my $options = Sitetool::Base::Options->new();
 assert(defined($options));
 
 my @options_list = (
-    [ "i", "initialize",
-      sub { $running_mode = "initialize"; $run = 1; return 1; },
-      0,   0 ],
-    [ "A", "add",
-      sub {
-	  $host         = $_[0];
-	  $login        = $_[1];
-	  $password     = $_[2];
-	  $running_mode = "add";
-	  $run          = 1;
-	  return 1;
+    [ "i", "initialize", sub { $running_mode = "initialize"; return 1; }, 0,0 ],
+    [ "A", "add",        sub {
+	$host         = $_[0];
+	$login        = $_[1];
+	$password     = $_[2];
+	$running_mode = "add";
+	return 1;
       },
-      3,   3 ],
-    [ "D", "delete",
-      sub {
-	  $running_mode = "delete";
-	  $host         = $_[0];
-	  $login        = $_[1];
-	  $run          = 1;
-	  return 1; },
-      2,   2 ],
-    [ "S", "show",
-      sub { $running_mode = "show";       $run = 1; return 1; },
-      0,   0 ],
-    [ "C", "clear",
-      sub { $running_mode = "clear";      $run = 1; return 1; },
-      0,   0 ],
-
-    [ "n", "dry-run",    sub { $dry_run = 1;       $run = 1; return 1; }, 0,0 ],
-    [ "f", "force",      sub { $force_mode = 1;    $run = 1; return 1; }, 0,0 ],
-    [ "W", "warnings",   sub { warning_set($_[0]); $run = 1; return 1; }, 1,1 ],
-    [ "d", "debug",      sub { debug_set(1);       $run = 1; return 1; }, 0,0 ],
-    [ "v", "verbose",    sub { verbose_set(1);     $run = 1; return 1; }, 0,0 ],
+      3,3 ],
+    [ "D", "delete",     sub {
+	$running_mode = "delete";
+	$host         = $_[0];
+	$login        = $_[1];
+	return 1; },
+      2,2 ],
+    [ "S", "show",       sub { $running_mode = "show";       return 1; }, 0,0 ],
+    [ "C", "clear",      sub { $running_mode = "clear";      return 1; }, 0,0 ],
+    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0,0 ],
+    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0,0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1,1 ],
+    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0,0 ],
+    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0,0 ],
     [ "h", "help",       sub { help();             $run = 0; return 1; }, 0,0 ],
     [ "B", "help-brief", sub { help_brief();       $run = 0; return 1; }, 0,0 ],
     [ "V", "version",    sub { version();          $run = 0; return 1; }, 0,0 ],

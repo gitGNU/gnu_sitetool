@@ -121,8 +121,8 @@ trace_prefix_set($PROGRAM_NAME);
 my $input_file  = "";
 my $output_file = "";
 my $force_mode  = 0;
-my $run         = 0;
 my $dry_run     = 0;
+my $run         = 1;
 
 debug_set(0);
 verbose_set(0);
@@ -133,11 +133,9 @@ assert(defined($options));
 
 my @options_list = (
     [ "i", "input",
-      sub { $input_file = $_[0];        $run = 1; return 1; },
-      1,   1 ],
+      sub { $input_file = $_[0];                             return 1; }, 1,1 ],
     [ "o", "output",
-      sub { $output_file = $_[0];       $run = 1; return 1; },
-      1,   1 ],
+      sub { $output_file = $_[0];                            return 1; }, 1,1 ],
     [ "D", "define",
       sub {
 	  my $variable;
@@ -158,10 +156,9 @@ my @options_list = (
 	      error("Cannot set environment variable \`" . $variable . "'");
 	      exit 1;
 	  }
-	  $run = 1;
 	  return 1;
       },
-      2,   2 ],
+      2,2 ],
     [ "U", "undefine",
       sub {
 	  my $variable;
@@ -176,15 +173,14 @@ my @options_list = (
 	      return 0;
 	  }
 
-	  $run = 1;
 	  return 1;
       },
-      1,   1 ],
-    [ "n", "dry-run",    sub { $dry_run = 1;       $run = 1; return 1; }, 0,0 ],
-    [ "f", "force",      sub { $force_mode = 1;    $run = 1; return 1; }, 0,0 ],
-    [ "W", "warnings",   sub { warning_set($_[0]); $run = 1; return 1; }, 1,1 ],
-    [ "d", "debug",      sub { debug_set(1);       $run = 1; return 1; }, 0,0 ],
-    [ "v", "verbose",    sub { verbose_set(1);     $run = 1; return 1; }, 0,0 ],
+      1,1 ],
+    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0,0 ],
+    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0,0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1,1 ],
+    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0,0 ],
+    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0,0 ],
     [ "h", "help",       sub { help();             $run = 0; return 1; }, 0,0 ],
     [ "B", "help-brief", sub { help_brief();       $run = 0; return 1; }, 0,0 ],
     [ "V", "version",    sub { version();          $run = 0; return 1; }, 0,0 ],
