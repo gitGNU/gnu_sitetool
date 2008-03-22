@@ -23,6 +23,7 @@
 MODE=clean
 SITETOOL="$SITETOOL --mode $MODE"
 
+$SITETOOL                                  >/dev/null 2>&1 && exit 1
 $SITETOOL --dry-run -h                     >/dev/null 2>&1 || exit 1
 $SITETOOL --dry-run --verbose -h           >/dev/null 2>&1 || exit 1
 $SITETOOL --dry-run --debug   -h           >/dev/null 2>&1 || exit 1
