@@ -513,7 +513,7 @@ for my $tool (@{$tools{$running_mode}{PRE_REQUISITE}}) {
     push(@tools_chain, $tool);
 }
 
-# The requiested tool
+# The requested tool
 push(@tools_chain, $running_mode);
 
 # Post-requisites last
