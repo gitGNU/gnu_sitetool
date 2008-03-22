@@ -23,10 +23,10 @@
 MODE=auths
 SITETOOL="$SITETOOL --mode $MODE"
 
-$SITETOOL                                  >/dev/null 2>&1 && exit 1
-$SITETOOL --dry-run -h                     >/dev/null 2>&1 || exit 1
-$SITETOOL --dry-run --verbose -h           >/dev/null 2>&1 || exit 1
-$SITETOOL --dry-run --debug   -h           >/dev/null 2>&1 || exit 1
-$SITETOOL --dry-run --debug   --verbose -h >/dev/null 2>&1 || exit 1
+$SITETOOL                                  && exit 1
+$SITETOOL --dry-run -h                     || exit 1
+$SITETOOL --dry-run --verbose -h           || exit 1
+$SITETOOL --dry-run --debug   -h           || exit 1
+$SITETOOL --dry-run --debug   --verbose -h || exit 1
 
 exit 0
