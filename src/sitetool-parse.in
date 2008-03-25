@@ -190,7 +190,7 @@ if ($dry_run) {
 #
 # Start the real work
 #
-if ($force_mode || file_isobsolete($input_file, $output_file)) {
+if ($force_mode || file_isnewer($input_file, $output_file)) {
     debug("Output file is obsolete or the user is requesting a forced update");
     file_remove($output_file);
 

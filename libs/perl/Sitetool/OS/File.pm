@@ -47,10 +47,10 @@ BEGIN {
 		 &file_tostring
 		 &file_ispresent
 		 &file_isexecutable
-		 &file_isobsolete);
+		 &file_isnewer);
 }
 
-sub file_isobsolete ($$)
+sub file_isnewer ($$)
 {
     my $input_filename  = shift;
     my $output_filename = shift;

@@ -405,7 +405,10 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
     $destination = File::Spec->catfile($contents_dir,
 				       $content . ".sxml");
 
-    if ($force_mode || file_isobsolete($source, $destination)) {
+    if ($force_mode || file_isnewer($source, $destination)) {
+	debug("Output file is obsolete or " .
+	      "the user is requesting a forced update");
+
 	my $temp_dir;
 
 	$temp_dir = File::Spec->catfile($contents_dir, $content);

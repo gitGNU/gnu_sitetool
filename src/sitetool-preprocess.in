@@ -226,7 +226,7 @@ if ($dry_run) {
 #
 # Start the real work
 #
-if ($force_mode || file_isobsolete($input_file, $output_file)) {
+if ($force_mode || file_isnewer($input_file, $output_file)) {
     my $string;
 
     $string = "";
