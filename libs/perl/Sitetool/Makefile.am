@@ -23,9 +23,9 @@ include $(top_srcdir)/Makefile.sub
 SUBDIRS =					\
 	Base					\
 	Data					\
-	Misc					\
 	OS					\
-	WWW
+	Misc					\
+	Net
 
 perllibdir = $(pkgvlibsdir)/perl/Sitetool
 

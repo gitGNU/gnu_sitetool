@@ -1,5 +1,5 @@
 #
-# MAILTO.pm
+# HTTP.pm
 #
 # Copyright (C) 2007, 2008 Francesco Salvestrini
 #
@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-package Sitetool::WWW::MAILTO;
+package Sitetool::Net::WWW::HTTP;
 
 use 5.8.0;
 
@@ -29,13 +29,42 @@ use diagnostics;
 use Sitetool::Autoconfig;
 use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
+use Sitetool::OS::Shell;
 
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
     
     @ISA    = qw(Exporter);
-    @EXPORT = qw();
+    @EXPORT = qw(&http_download);
+}
+
+sub http_download ($$)
+{
+    my $href     = shift;
+    my $filename = shift;
+
+    assert(defined($href));
+    assert(defined($filename));
+
+    # XXX FIXME: Replace with a proper check
+    assert(defined($WGET));
+    if ($WGET eq "") {
+	error("The wget executable was not available in your system when "   .
+	      $PACKAGE_NAME . " has been configured");
+	error("In order to use the \`install' functionality please install " .
+          "wget and re-install " . $PACKAGE_NAME);
+	exit 1;
+    }
+
+    my $command;
+
+    $command = "$WGET -q --timeout 1 -l 1 -O $filename -- $href";
+    if (!shell_execute($command)) {
+	return 0;
+    }
+
+    return 1;
 }
 
 1;

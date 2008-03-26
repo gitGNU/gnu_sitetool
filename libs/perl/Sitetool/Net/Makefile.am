@@ -20,11 +20,10 @@
 
 include $(top_srcdir)/Makefile.sub
 
-perllibdir = $(pkgvlibsdir)/perl/Sitetool/WWW
+SUBDIRS =					\
+	WWW
+
+perllibdir = $(pkgvlibsdir)/perl/Sitetool/Net
 
 dist_perllib_DATA =				\
-	FTP.pm					\
-	HTTP.pm					\
-	HTTPS.pm				\
-	MAILTO.pm				\
-	HREF.pm
+	Email.pm

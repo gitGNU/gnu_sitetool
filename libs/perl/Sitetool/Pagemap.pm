@@ -33,7 +33,7 @@ use File::Spec;
 use Sitetool::Autoconfig;
 use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
-use Sitetool::WWW::HREF;
+use Sitetool::Net::WWW::HREF;
 use Sitetool::OS::File;
 use Sitetool::OS::Filename;
 use Sitetool::OS::String;

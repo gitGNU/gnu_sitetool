@@ -1,5 +1,5 @@
 #
-# HTTP.pm
+# Email.pm
 #
 # Copyright (C) 2007, 2008 Francesco Salvestrini
 #
@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-package Sitetool::WWW::HTTP;
+package Sitetool::Net::Email;
 
 use 5.8.0;
 
@@ -26,45 +26,42 @@ use warnings;
 use strict;
 use diagnostics;
 
-use Sitetool::Autoconfig;
-use Sitetool::Base::Trace;
 use Sitetool::Base::Debug;
-use Sitetool::OS::Shell;
+use Sitetool::Base::Trace;
 
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
     
     @ISA    = qw(Exporter);
-    @EXPORT = qw(&http_download);
+    @EXPORT = qw(&obfuscate_email);
 }
 
-sub http_download ($$)
+#
+# Obfuscate email address from an input string
+#
+sub email_obfuscate ($)
 {
-    my $href     = shift;
-    my $filename = shift;
+  my $string = shift;
 
-    assert(defined($href));
-    assert(defined($filename));
+  assert(defined($string));
 
-    # XXX FIXME: Replace with a proper check
-    assert(defined($WGET));
-    if ($WGET eq "") {
-	error("The wget executable was not available in your system when "   .
-	      $PACKAGE_NAME . " has been configured");
-	error("In order to use the \`install' functionality please install " .
-          "wget and re-install " . $PACKAGE_NAME);
-	exit 1;
-    }
+  if ($string =~ /^(.*?)\@(.*?)$/) {
+      my $name;
+      my $domain;
 
-    my $command;
+      $name   = $1;
+      $domain = $2;
+      
+      assert(defined($name));
+      assert(defined($domain));
+      
+      $string = $name . " DOT " . $domain;    
+  }
 
-    $command = "$WGET -q --timeout 1 -l 1 -O $filename -- $href";
-    if (!shell_execute($command)) {
-	return 0;
-    }
+  assert(defined($string));
 
-    return 1;
+  return $string;
 }
 
 1;
