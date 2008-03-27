@@ -274,8 +274,37 @@ sub parse ($$)
 		      "'");
 
 	    } else {
+
 		if (length($option) > 2) {
-		    bug("Options bundling isn't supported");
+		    # Handling options bundling
+
+		    my @opts;
+		    my @bundle;
+
+		    for my $i (0..($index - 1)) {
+			push(@opts, $$options_ref[$i]);
+		    }
+
+		    $option =~ s/^\-//;
+		    @bundle = split(//, $option);
+
+		    for my $i (0..$#bundle) {
+			$bundle[$i] = "-" . $bundle[$i];
+		    }
+
+		    debug("Bundled options \`-" . $option   . 
+			  "' expanded as \`"    . "@bundle" .
+			  "'");
+
+		    push(@opts, @bundle);
+
+		    for my $i (($index + 1)..$#$options_ref) {
+			push(@opts, $$options_ref[$i]);
+		    }
+
+
+		    @{$options_ref} = @opts;
+		    next;
 		}
 
 		(my $tmp) = $option =~ /^.(.)/;
