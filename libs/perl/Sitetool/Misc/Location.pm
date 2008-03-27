@@ -28,15 +28,70 @@ use diagnostics;
 
 use Sitetool::Base::Debug;
 use Sitetool::Base::Trace;
+use Sitetool::Data::Stack;
 
-sub new {
+sub new
+{
     my $class = shift;
 
     assert(defined($class));
 
-    my $self        = {};
+    my $self = {};
+
+    $self->{POSITION} = undef;
+    $self->{CONTEXTS} = Sitetool::Data::Stack->new();
+    assert(defined($self->{CONTEXTS}));
 
     return bless($self, $class);
 }
+
+sub position_set ($$)
+{
+    my $self     = shift;
+    my $position = shift;
+
+    assert(defined($self));
+    assert(defined($position));
+
+    $self->{POSITION} = $position;
+
+    return 1;
+}
+
+sub position_get ($)
+{
+    my $self = shift;
+
+    assert(defined($self));
+
+    return $self->{POSITION};
+}
+
+sub context_push ($$)
+{
+    my $self    = shift;
+    my $context = shift;
+
+    assert(defined($self));
+    assert(defined($context));
+
+    return $self->{CONTEXTS}->push($context)
+}
+
+sub context_pop ($)
+{
+    my $self = shift;
+
+    assert(defined($self));
+
+    return $self->{CONTEXTX}->pop();
+}
+
+#sub contexts_get ($)
+#{
+#    my $self = shift;
+#
+#    assert(defined($self));
+#}
 
 1;
