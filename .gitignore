@@ -38,6 +38,7 @@ tests/test-fail
 tests/test-success
 tests/test-args-1
 tests/test-args-2
+tests/test-args-3
 tests/test-args-auths
 tests/test-args-build
 tests/test-args-check

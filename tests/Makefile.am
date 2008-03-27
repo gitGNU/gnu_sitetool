@@ -83,6 +83,7 @@ FAIL_TESTS +=					\
 SUCCESS_TESTS +=				\
 	test-success				\
 	test-args-1				\
+	test-args-3				\
 	test-args-auths				\
 	test-args-build				\
 	test-args-check				\
@@ -164,6 +165,18 @@ test-args-2: $(srcdir)/test-args-2.in Makefile
 	}
 EXTRA_DIST += test-args-2.in
 CLEANFILES += test-args-2
+
+test-args-3: $(srcdir)/test-args-3.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-3.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-args-3.in
+CLEANFILES += test-args-3
 
 test-args-auths: $(srcdir)/test-args-auths.in Makefile
 	( rm -f $@ $@.tmp && \
