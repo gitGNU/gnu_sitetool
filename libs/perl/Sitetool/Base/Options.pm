@@ -292,7 +292,7 @@ sub parse ($$)
 			$bundle[$i] = "-" . $bundle[$i];
 		    }
 
-		    debug("Bundled options \`-" . $option   . 
+		    debug("Bundled options \`-" . $option   .
 			  "' expanded as \`"    . "@bundle" .
 			  "'");
 
@@ -301,7 +301,6 @@ sub parse ($$)
 		    for my $i (($index + 1)..$#$options_ref) {
 			push(@opts, $$options_ref[$i]);
 		    }
-
 
 		    @{$options_ref} = @opts;
 		    next;
