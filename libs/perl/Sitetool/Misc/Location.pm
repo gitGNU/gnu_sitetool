@@ -67,7 +67,7 @@ sub position_get ($)
     return $self->{POSITION};
 }
 
-sub context_push ($$)
+sub contexts_push ($$)
 {
     my $self    = shift;
     my $context = shift;
@@ -78,20 +78,22 @@ sub context_push ($$)
     return $self->{CONTEXTS}->push($context)
 }
 
-sub context_pop ($)
+sub contexts_pop ($)
 {
     my $self = shift;
 
     assert(defined($self));
 
-    return $self->{CONTEXTX}->pop();
+    return $self->{CONTEXTS}->pop();
 }
 
-#sub contexts_get ($)
-#{
-#    my $self = shift;
-#
-#    assert(defined($self));
-#}
+sub contexts_size ($)
+{
+    my $self = shift;
+
+    assert(defined($self));
+
+    return $self->{CONTEXTS}->size();
+}
 
 1;
