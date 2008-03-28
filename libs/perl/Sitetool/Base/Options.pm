@@ -261,61 +261,54 @@ sub parse ($$)
 	    # Found option syntax, check if it is short or long
 
 	    if ($option =~ /^\-\-.*/) {
-		(my $tmp) = $option =~ /^\-\-(.*)/;
-		$id       = $self->get_id_from_long($tmp);
+		$option =~ s/^\-\-//;
+		$id     = $self->get_id_from_long($option);
 
 		if (!defined($id)) {
-		    error("Unknown option \`" . $option . "'");
+		    error("Unknown long option \`" . $option . "'");
 		    return 0;
 		}
 
-		debug("Found long option \`" . $tmp .
-		      "' with id \`"         . $id  .
+		debug("Found long option \`" . $option .
+		      "' with id \`"         . $id     .
 		      "'");
 
 	    } else {
+		$option =~ s/^\-//;
 
-		if (length($option) > 2) {
+		if (length($option) > 1) {
 		    # Handling options bundling
 
-		    my @opts;
 		    my @bundle;
 
-		    for my $i (0..($index - 1)) {
-			push(@opts, $$options_ref[$i]);
-		    }
+		    $option = join(" -", split(/\ */, $option));
+		    $option = "-" . $option;
+		    @bundle = split(/\ /, $option);
 
-		    $option =~ s/^\-//;
-		    @bundle = split(//, $option);
-
-		    for my $i (0..$#bundle) {
-			$bundle[$i] = "-" . $bundle[$i];
-		    }
-
-		    debug("Bundled options \`-" . $option   .
-			  "' expanded as \`"    . "@bundle" .
+		    debug("Bundled options \`" . $option   .
+			  "' expanded as \`"   . "@bundle" .
 			  "'");
 
-		    push(@opts, @bundle);
-
-		    for my $i (($index + 1)..$#$options_ref) {
-			push(@opts, $$options_ref[$i]);
+		    if (!&parse($self, \@bundle)) {
+			error("Failed to parse bundled options `-" .
+			      $option                              .
+			      "'");
+			return 0;
 		    }
 
-		    @{$options_ref} = @opts;
+		    $index++;
 		    next;
 		}
 
-		(my $tmp) = $option =~ /^.(.)/;
-		$id = $self->get_id_from_short($tmp);
+		$id = $self->get_id_from_short($option);
 
 		if (!defined($id)) {
 		    error("Unknown option \`" . $option . "'");
 		    return 0;
 		}
 
-		debug("Found short option \`" . $tmp .
-		      "' with id \`"          . $id  .
+		debug("Found short option \`" . $option .
+		      "' with id \`"          . $id     .
 		      "'");
 	    }
 	} else {
