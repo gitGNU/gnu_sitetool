@@ -38,8 +38,8 @@ DOWNLOAD = 					\
 	ax_with_ruby.m4
 
 MACROS =					\
-	ax_prog_perl_modules.m4			\
-	$(DOWNLOAD)
+	$(DOWNLOAD)				\
+	ax_prog_perl_modules.m4
 
 FETCH = $(top_builddir)/tools/scripts/fetch
 
