@@ -42,6 +42,7 @@ tests/test-args-3
 tests/test-args-4
 tests/test-args-5
 tests/test-args-long-1
+tests/test-args-long-2
 tests/test-args-multiple-1
 tests/test-args-multiple-2
 tests/test-args-auths
