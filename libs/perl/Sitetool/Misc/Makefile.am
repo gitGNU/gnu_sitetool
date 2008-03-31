@@ -23,4 +23,5 @@ include $(top_srcdir)/Makefile.sub
 perllibdir = $(pkgvlibsdir)/perl/Sitetool/Misc
 
 dist_perllib_DATA =				\
-	Location.pm
+	Location.pm				\
+	Text.pm
