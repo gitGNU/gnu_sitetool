@@ -87,6 +87,7 @@ SUCCESS_TESTS +=				\
 	test-args-1				\
 	test-args-3				\
 	test-args-4				\
+	test-args-long-1			\
 	test-args-multiple-1			\
 	test-args-auths				\
 	test-args-build				\
@@ -205,6 +206,18 @@ test-args-5: $(srcdir)/test-args-5.in Makefile
 	}
 EXTRA_DIST += test-args-5.in
 CLEANFILES += test-args-5
+
+test-args-long-1: $(srcdir)/test-args-long-1.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-args-long-1.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-args-long-1.in
+CLEANFILES += test-args-long-1
 
 test-args-multiple-1: $(srcdir)/test-args-multiple-1.in Makefile
 	( rm -f $@ $@.tmp && \
