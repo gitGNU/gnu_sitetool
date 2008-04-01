@@ -24,4 +24,5 @@ perllibdir = $(pkgvlibsdir)/perl/Sitetool/Misc
 
 dist_perllib_DATA =				\
 	Location.pm				\
-	Text.pm
+	Text.pm					\
+	Terminal.pm
