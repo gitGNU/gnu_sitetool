@@ -80,7 +80,6 @@ FAIL_TESTS +=					\
 	test-args-2				\
 	test-args-5				\
 	test-args-long-2			\
-	test-args-multiple-2			\
 	test-fail
 
 SUCCESS_TESTS +=				\
@@ -90,6 +89,7 @@ SUCCESS_TESTS +=				\
 	test-args-4				\
 	test-args-long-1			\
 	test-args-multiple-1			\
+	test-args-multiple-2			\
 	test-args-auths				\
 	test-args-build				\
 	test-args-check				\
