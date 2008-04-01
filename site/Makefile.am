@@ -30,6 +30,6 @@ site-copy:
 	if test ! -d out ; then \
 		mkdir out ; \
 	fi
-	cp in/.sitetool/site.out/* out
+	cp -R in/.sitetool/site.out/* out
 
 site: all site-build site-copy
