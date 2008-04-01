@@ -32,14 +32,43 @@ use Sitetool::Base::Trace;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&string_tofile
-                 &string_uppercase
-                 &string_lowercase
-                 &string_purify
+		 &string_uppercase
+		 &string_lowercase
+		 &string_purify
 		 &string_replace
-		 &string_replace_many);
+		 &string_replace_many
+		 &string_isnumber
+		 &string_tonumber);
+}
+
+sub string_isnumber ($)
+{
+    my $string = shift;
+
+    assert(defined($string));
+
+    if ($string == "$string") {
+	return 1;
+    }
+
+    return 0;
+}
+
+sub string_tonumber ($)
+{
+    my $string = shift;
+
+    assert(defined($string));
+
+    my $t;
+    foreach my $d (split(//, shift())) {
+	$t = $t * 10 + $d;
+    }
+
+    return $t;
 }
 
 sub string_replace ($$$)
@@ -69,13 +98,13 @@ sub string_replace_many ($$)
     %hash = %{$hash_ref};
 
     for my $key (keys(%hash)) {
-        my $value;
+	my $value;
 
-        $value = $hash{$key};
+	$value = $hash{$key};
 
-        assert(defined($value));
+	assert(defined($value));
 
-        $string = string_replace($string, $key, $value);
+	$string = string_replace($string, $key, $value);
     }
 
     return $string;
@@ -131,7 +160,7 @@ sub string_tofile ($$)
     }
 
     print $filehandle $string;
-    
+
     close($filehandle);
 
     return 1;
