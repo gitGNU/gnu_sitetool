@@ -20,39 +20,16 @@
 
 include $(top_srcdir)/Makefile.sub
 
-EXTRA_DIST =					\
-	contents.as				\
-	files.as				\
-	footer.sxml				\
-	header.sxml				\
-	index.scm				\
-	layout.sxml				\
-	map.as					\
-	pages.as				\
-	site.as					\
-	site.css
+SUBDIRS =					\
+	in
 
-site:
-	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
-	export SITETOOL_LIBRARY_PATH ; \
-	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
-	export SITETOOL_BINARY_PATH ; \
-	SITETOOL="$(top_builddir)/src/sitetool" ; \
-	$$SITETOOL -v --mode initialize && \
-	$$SITETOOL -v --mode build && \
-	touch site.stamp || { \
-		$$SITETOOL -v --mode clean ; \
-		rm -f site.stamp \
-		exit 1 ; \
-	}
+site-build:
+	(cd in && $(MAKE) $(AM_MAKEFLAGS) site)
 
-maintainer-clean-local:
-	if test -e site.stamp ; then \
-		SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
-		export SITETOOL_LIBRARY_PATH ; \
-		SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
-		export SITETOOL_BINARY_PATH ; \
-		SITETOOL="$(top_builddir)/src/sitetool" ; \
-		$$SITETOOL -v --mode clean || exit 1 ; \
-		rm -f site.stamp ; \
+site-copy:
+	if test ! -d out ; then \
+		mkdir out ; \
 	fi
+	cp in/.sitetool/site.out/* out
+
+site: all site-build site-copy

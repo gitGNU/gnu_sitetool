@@ -98,4 +98,6 @@ src/filters/sxml-sxml
 src/filters/wikitext-sxml
 src/filters/map-sxml
 
-site/site.stamp
+site/in/.sitetool
+site/in/site.stamp
+site/out/*
