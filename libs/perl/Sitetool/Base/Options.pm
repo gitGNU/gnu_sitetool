@@ -312,8 +312,8 @@ sub parse ($$)
 		      "'");
 	    }
 	} else {
- 	    error("Unknown option \`" . $option . "'");
- 	    return 0;
+	    error("Unknown option \`" . $option . "'");
+	    return 0;
 	}
 
 	if ($self->{ARGSMAX}->{$id} > 0) {
@@ -370,10 +370,9 @@ sub parse ($$)
 	debug("Executing callback");
 
 	if (!&{$self->{CALLBACK}->{$id}}(@arguments)) {
-	    error("Failed to execute callback for option \`" .
-		  $option                                    .
-		  "'");
-	    return 0;
+	    debug("Callback for option \`" . $option . "' " .
+		  "requested a premature quit");
+	    return 1;
 	}
     }
 
