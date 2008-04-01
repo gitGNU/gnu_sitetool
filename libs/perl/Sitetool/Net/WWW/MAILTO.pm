@@ -33,7 +33,7 @@ use Sitetool::Base::Debug;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw();
 }

@@ -34,7 +34,7 @@ use Sitetool::OS::Shell;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&http_download);
 }
@@ -53,7 +53,7 @@ sub http_download ($$)
 	error("The wget executable was not available in your system when "   .
 	      $PACKAGE_NAME . " has been configured");
 	error("In order to use the \`install' functionality please install " .
-          "wget and re-install " . $PACKAGE_NAME);
+	      "wget and re-install " . $PACKAGE_NAME);
 	exit 1;
     }
 

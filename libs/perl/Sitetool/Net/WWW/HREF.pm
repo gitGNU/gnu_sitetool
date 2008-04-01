@@ -37,7 +37,7 @@ use Sitetool::Base::Debug;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&href_compute
 		 &href_extract
@@ -52,11 +52,11 @@ sub href_isftp ($)
     my $link = shift;
 
     assert(defined($link));
-    
+
     if ($link =~ m/^[ \t]*ftp:\/\/.*$/) {
 	return 1;
     }
-    
+
     return 0;
 }
 
@@ -65,11 +65,11 @@ sub href_ishttp ($)
     my $link = shift;
 
     assert(defined($link));
-    
+
     if ($link =~ m/^[ \t]*http:\/\/.*$/) {
 	return 1;
     }
-    
+
     return 0;
 }
 
@@ -78,11 +78,11 @@ sub href_ishttps ($)
     my $link = shift;
 
     assert(defined($link));
-    
+
     if ($link =~ m/^[ \t]*https:\/\/.*$/) {
 	return 1;
     }
-    
+
     return 0;
 }
 
@@ -91,11 +91,11 @@ sub href_ismailto ($)
     my $link = shift;
 
     assert(defined($link));
-    
+
     if ($link =~ m/^[ \t]*mailto:.*$/) {
 	return 1;
     }
-    
+
     return 0;
 }
 
@@ -130,7 +130,7 @@ sub href_compute ($$)
 
     assert(defined($from));
     assert(defined($to));
-    
+
     debug("Computing relative link " .
 	  "from \`" . $from . "'"    .
 	  "to \`" . $to   . "'");
