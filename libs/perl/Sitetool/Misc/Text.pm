@@ -30,4 +30,119 @@ use diagnostics;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Trace;
 
+BEGIN {
+    use Exporter ();
+    our ($VERSION, @ISA, @EXPORT);
+
+    @ISA    = qw(Exporter);
+    @EXPORT = qw(&text_wrap
+		 &text_length);
+}
+
+sub text_length($)
+{
+    my $text   = shift;
+
+    assert(defined($text));
+
+    my $length;
+
+    while ($text =~ s/([^\n]+)//) {
+	my $s = $1;
+	my $l = length($s);
+	my $t = $s =~ s/\t/\t/sg;
+	$l   += 7 * $t;
+
+	if (defined($length)) {
+
+	    if ($l > $length) {
+		$length = $l;
+	    }
+	} else {
+	    $length = $l;
+	}
+    }
+
+    return $length;
+}
+
+sub text_wrap($$)
+{
+    my $text     = shift;
+    my $max_len  = shift;
+
+    assert(defined($text));
+    assert($max_len > 0);
+
+    if ($max_len >= text_length($text)) {
+	return $text;
+    }
+
+    my $result;
+
+    while ($text =~ s/([^\n]+)//) {
+	my $string = $1;
+
+	assert(defined($string));
+
+	my $buffer;
+
+	while (($string =~ s/^([^ \t]+)//) || ($string =~ s/^([ \t])//)) {
+	    my $token = $1;
+
+	    assert(defined($token));
+
+	    if (text_length($token) > $max_len) {
+
+		if (defined($result)) {
+		    $result = $result . "\n" . $token;
+		} else {
+		    $result = $token;
+		}
+		next;
+	    }
+
+	    if (defined($buffer)) {
+
+		if ((text_length($buffer) + text_length($token)) < $max_len) {
+			$buffer = $buffer . $token;
+		} else {
+
+		    if (defined($result)) {
+			$result = $result . "\n" . $buffer;
+			undef($buffer);
+		    } else {
+			$result = $buffer;
+			undef($buffer);
+		    }
+		    $buffer = $token;
+		}
+	    } else {
+		$buffer = $token;
+	    }
+
+	    if ($string eq "") {
+
+		if (defined($result)) {
+		    $result = $result . "\n" . $buffer;
+		} else {
+		    $result = $buffer;
+		}
+		undef($buffer);
+	    }
+	}
+
+	if (defined($buffer)) {
+
+	    if (defined($result)) {
+		$result = $result . $buffer;
+	    } else {
+		$result = $buffer;
+	    }
+	}
+    }
+
+    return $result;
+}
+
 1;
