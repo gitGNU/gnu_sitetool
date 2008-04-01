@@ -77,30 +77,30 @@ FAIL_TESTS    =
 SUCCESS_TESTS =
 
 FAIL_TESTS +=					\
-	test-args-2				\
-	test-args-5				\
-	test-args-long-2			\
+	test-arguments-2			\
+	test-arguments-5			\
+	test-arguments-long-2			\
 	test-fail
 
 SUCCESS_TESTS +=				\
 	test-success				\
-	test-args-1				\
-	test-args-3				\
-	test-args-4				\
-	test-args-long-1			\
-	test-args-multiple-1			\
-	test-args-multiple-2			\
-	test-args-auths				\
-	test-args-build				\
-	test-args-check				\
-	test-args-clean				\
-	test-args-digest			\
-	test-args-initialize			\
-	test-args-install			\
-	test-args-parse				\
-	test-args-preprocess			\
-	test-args-uninstall			\
-	test-args-validate			\
+	test-arguments-1			\
+	test-arguments-3			\
+	test-arguments-4			\
+	test-arguments-long-1			\
+	test-arguments-multiple-1		\
+	test-arguments-multiple-2		\
+	test-arguments-auths			\
+	test-arguments-build			\
+	test-arguments-check			\
+	test-arguments-clean			\
+	test-arguments-digest			\
+	test-arguments-initialize		\
+	test-arguments-install			\
+	test-arguments-parse			\
+	test-arguments-preprocess		\
+	test-arguments-uninstall		\
+	test-arguments-validate			\
 	test-dry-run				\
 	test-helps				\
 	test-initialize				\
@@ -148,245 +148,245 @@ test-fail: $(srcdir)/test-fail.in Makefile
 EXTRA_DIST += test-fail.in
 CLEANFILES += test-fail
 
-test-args-1: $(srcdir)/test-args-1.in Makefile
+test-arguments-1: $(srcdir)/test-arguments-1.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-1.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-1.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-1.in
-CLEANFILES += test-args-1
+EXTRA_DIST += test-arguments-1.in
+CLEANFILES += test-arguments-1
 
-test-args-2: $(srcdir)/test-args-2.in Makefile
+test-arguments-2: $(srcdir)/test-arguments-2.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-2.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-2.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-2.in
-CLEANFILES += test-args-2
+EXTRA_DIST += test-arguments-2.in
+CLEANFILES += test-arguments-2
 
-test-args-3: $(srcdir)/test-args-3.in Makefile
+test-arguments-3: $(srcdir)/test-arguments-3.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-3.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-3.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-3.in
-CLEANFILES += test-args-3
+EXTRA_DIST += test-arguments-3.in
+CLEANFILES += test-arguments-3
 
-test-args-4: $(srcdir)/test-args-4.in Makefile
+test-arguments-4: $(srcdir)/test-arguments-4.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-4.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-4.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-4.in
-CLEANFILES += test-args-4
+EXTRA_DIST += test-arguments-4.in
+CLEANFILES += test-arguments-4
 
-test-args-5: $(srcdir)/test-args-5.in Makefile
+test-arguments-5: $(srcdir)/test-arguments-5.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-5.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-5.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-5.in
-CLEANFILES += test-args-5
+EXTRA_DIST += test-arguments-5.in
+CLEANFILES += test-arguments-5
 
-test-args-long-1: $(srcdir)/test-args-long-1.in Makefile
+test-arguments-long-1: $(srcdir)/test-arguments-long-1.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-long-1.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-long-1.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-long-1.in
-CLEANFILES += test-args-long-1
+EXTRA_DIST += test-arguments-long-1.in
+CLEANFILES += test-arguments-long-1
 
-test-args-long-2: $(srcdir)/test-args-long-2.in Makefile
+test-arguments-long-2: $(srcdir)/test-arguments-long-2.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-long-2.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-long-2.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-long-2.in
-CLEANFILES += test-args-long-2
+EXTRA_DIST += test-arguments-long-2.in
+CLEANFILES += test-arguments-long-2
 
-test-args-multiple-1: $(srcdir)/test-args-multiple-1.in Makefile
+test-arguments-multiple-1: $(srcdir)/test-arguments-multiple-1.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-multiple-1.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-multiple-1.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-multiple-1.in
-CLEANFILES += test-args-multiple-1
+EXTRA_DIST += test-arguments-multiple-1.in
+CLEANFILES += test-arguments-multiple-1
 
-test-args-multiple-2: $(srcdir)/test-args-multiple-2.in Makefile
+test-arguments-multiple-2: $(srcdir)/test-arguments-multiple-2.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-multiple-2.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-multiple-2.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-multiple-2.in
-CLEANFILES += test-args-multiple-2
+EXTRA_DIST += test-arguments-multiple-2.in
+CLEANFILES += test-arguments-multiple-2
 
-test-args-auths: $(srcdir)/test-args-auths.in Makefile
+test-arguments-auths: $(srcdir)/test-arguments-auths.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-auths.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-auths.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-auths.in
-CLEANFILES += test-args-auths
+EXTRA_DIST += test-arguments-auths.in
+CLEANFILES += test-arguments-auths
 
-test-args-build: $(srcdir)/test-args-build.in Makefile
+test-arguments-build: $(srcdir)/test-arguments-build.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-build.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-build.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-build.in
-CLEANFILES += test-args-build
+EXTRA_DIST += test-arguments-build.in
+CLEANFILES += test-arguments-build
 
-test-args-check: $(srcdir)/test-args-check.in Makefile
+test-arguments-check: $(srcdir)/test-arguments-check.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-check.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-check.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-check.in
-CLEANFILES += test-args-check
+EXTRA_DIST += test-arguments-check.in
+CLEANFILES += test-arguments-check
 
-test-args-clean: $(srcdir)/test-args-clean.in Makefile
+test-arguments-clean: $(srcdir)/test-arguments-clean.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-clean.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-clean.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-clean.in
-CLEANFILES += test-args-clean
+EXTRA_DIST += test-arguments-clean.in
+CLEANFILES += test-arguments-clean
 
-test-args-digest: $(srcdir)/test-args-digest.in Makefile
+test-arguments-digest: $(srcdir)/test-arguments-digest.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-digest.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-digest.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-digest.in
-CLEANFILES += test-args-digest
+EXTRA_DIST += test-arguments-digest.in
+CLEANFILES += test-arguments-digest
 
-test-args-initialize: $(srcdir)/test-args-initialize.in Makefile
+test-arguments-initialize: $(srcdir)/test-arguments-initialize.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-initialize.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-initialize.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-initialize.in
-CLEANFILES += test-args-initialize
+EXTRA_DIST += test-arguments-initialize.in
+CLEANFILES += test-arguments-initialize
 
-test-args-install: $(srcdir)/test-args-install.in Makefile
+test-arguments-install: $(srcdir)/test-arguments-install.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-install.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-install.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-install.in
-CLEANFILES += test-args-install
+EXTRA_DIST += test-arguments-install.in
+CLEANFILES += test-arguments-install
 
-test-args-parse: $(srcdir)/test-args-parse.in Makefile
+test-arguments-parse: $(srcdir)/test-arguments-parse.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-parse.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-parse.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-parse.in
-CLEANFILES += test-args-parse
+EXTRA_DIST += test-arguments-parse.in
+CLEANFILES += test-arguments-parse
 
-test-args-preprocess: $(srcdir)/test-args-preprocess.in Makefile
+test-arguments-preprocess: $(srcdir)/test-arguments-preprocess.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-preprocess.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-preprocess.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-preprocess.in
-CLEANFILES += test-args-preprocess
+EXTRA_DIST += test-arguments-preprocess.in
+CLEANFILES += test-arguments-preprocess
 
-test-args-uninstall: $(srcdir)/test-args-uninstall.in Makefile
+test-arguments-uninstall: $(srcdir)/test-arguments-uninstall.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-uninstall.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-uninstall.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-uninstall.in
-CLEANFILES += test-args-uninstall
+EXTRA_DIST += test-arguments-uninstall.in
+CLEANFILES += test-arguments-uninstall
 
-test-args-validate: $(srcdir)/test-args-validate.in Makefile
+test-arguments-validate: $(srcdir)/test-arguments-validate.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-args-validate.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-arguments-validate.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-args-validate.in
-CLEANFILES += test-args-validate
+EXTRA_DIST += test-arguments-validate.in
+CLEANFILES += test-arguments-validate
 
 test-helps: $(srcdir)/test-helps.in Makefile
 	( rm -f $@ $@.tmp && \
