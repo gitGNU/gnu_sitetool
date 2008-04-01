@@ -32,11 +32,11 @@ use Sitetool::Base::Trace;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&environment_get
- 		 &environment_set
- 		 &environment_remove
+		 &environment_set
+		 &environment_remove
 		 &environment_clear
 		 &environment_foreach);
 }
@@ -79,7 +79,7 @@ sub environment_set ($$)
 
     assert(defined($variable));
     #assert(defined($value));
-    
+
     $ENV{$variable} = $value;
 
     return 1;
