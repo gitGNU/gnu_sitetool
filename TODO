@@ -14,12 +14,6 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
-* Strenghten libs/perl/Sitetool/Options.pm module with argument shifter in
-  order to give place to some options amongst the other.
-
-* Add code into the libs/perl/Sitetool/Options.pm module in order to have a
-  cleaner option parsing method.
-
 * Add to preprocessor the capability to evaluate expressions in its
   macros with environment variables translation.
 
@@ -38,9 +32,15 @@ TO-BE-DONE:
 * Oversimplify site configuration (having it in a single file would be a 
   good thing); at the same time think, add and handle a site map indexing.
 
+DONE:
+* Strenghten libs/perl/Sitetool/Options.pm module with argument shifter in
+  order to give place to some options amongst the other.
+
+* Add code into the libs/perl/Sitetool/Options.pm module in order to have a
+  cleaner option parsing method.
+
 * Add option bundling in libs/perl/Sitetool/Base/Options.pm module
 
-DONE:
 * Develop tools/script/perl-autofrisk in order to mimic the Guile's autofrisk
   script. The script should be integrated into the bootstrap script.
 
