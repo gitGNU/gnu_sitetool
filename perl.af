@@ -1,11 +1,14 @@
 # Input file for perl-autofrisk
 
 files-glob src/.*in
+
 files-glob libs/perl/Sitetool/.*pm
 files-glob libs/perl/Sitetool/Base/.*pm
+files-glob libs/perl/Sitetool/Data/.*pm
 files-glob libs/perl/Sitetool/Misc/.*pm
+files-glob libs/perl/Sitetool/Net/.*pm
+files-glob libs/perl/Sitetool/Net/WWW/.*pm
 files-glob libs/perl/Sitetool/OS/.*pm
-files-glob libs/perl/Sitetool/WWW/.*pm
 
 non-critical-internal Sitetool::.*
 
@@ -15,3 +18,4 @@ non-critical-external warnings[ \t]*.*
 non-critical-external vars[ \t]*.*
 non-critical-external [0-9]\..*
 non-critical-external POSIX[ \t]*.*
+non-critical-external base[ \t]*.*
