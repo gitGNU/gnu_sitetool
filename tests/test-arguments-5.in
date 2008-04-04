@@ -20,6 +20,6 @@
 
 . @builddir@/defs
 
-$SITETOOL -iodvV || exit 1
+$SITETOOL -MndvV || exit 1
 
 exit 0
