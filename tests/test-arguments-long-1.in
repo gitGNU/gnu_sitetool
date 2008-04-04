@@ -20,7 +20,9 @@
 
 . @builddir@/defs
 
-$SITETOOL --warnings=all || exit 1
-$SITETOOL --warnings all && exit 1
+touch ./site.as
+
+$SITETOOL --mode initialize --warnings=all || exit 1
+$SITETOOL --mode initialize --warnings all || exit 1
 
 exit 0
