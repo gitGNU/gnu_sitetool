@@ -220,6 +220,73 @@ sub check_id ($$)
     return 0;
 }
 
+sub _parse_sub_options ($$$$$)
+{
+    my $options_ref   = shift;
+    my $option        = shift;
+    my $args_min      = shift;
+    my $args_max      = shift;
+    my $arguments_ref = shift;
+
+    assert(defined($options_ref));
+    assert(defined($option));
+    assert($args_max >= 0);
+    assert($args_min <= $args_max);
+    assert($#$arguments_ref == -1);
+
+    if ((($#$options_ref == -1) || ($$options_ref[0] =~ /^\-/)) &&
+	($args_min == 0)) {
+	# No options to parse
+	return 1;
+    }
+
+    if ($args_max > 0) {
+	# Parsing for options arguments
+
+	debug("Getting options arguments "   .
+	      "["  . $args_min               .
+	      ", " . $args_max               .
+	      "]");
+
+	if ($args_min > ($#$options_ref + 1)) {
+	    error("Too few arguments for option \`" . $option . "'");
+	    return 0;
+	}
+
+	my $idx = 0;
+
+	while ($#$options_ref > -1) {
+	    my $argument = shift(@{$options_ref});
+
+	    if ($argument =~ /^\-..*/) {
+		# We encountered an option while parsing arguments.
+		# Check if we reach the minimum arguments number and
+		# then release the token
+
+		if ($idx < $args_min) {
+		    error("Too few arguments for option \`" . $option . "'");
+		    return 0;
+		}
+		unshift(@{$options_ref}, $argument);
+		last;
+	    }
+
+	    if ($idx == $args_max) {
+		# Reach max arguments number
+		last;
+	    }
+
+	    push(@{$arguments_ref}, $argument);
+
+	    debug("Found argument `" . $argument . "'");
+
+	    $idx++;
+	}
+    }
+
+    return 1;
+}
+
 sub parse ($$)
 {
     my $self        = shift;
@@ -228,32 +295,27 @@ sub parse ($$)
     assert(defined($self));
     assert(defined($options_ref));
 
-    debug("Options string \`" . "@{$options_ref}" . "'");
-
-    if (($#{$options_ref} == -1)    ||
-	($$options_ref[0] !~ /^\-/)) {
+    if (($#{$options_ref} == -1) || ($$options_ref[0] !~ /^\-/)) {
 	# No options to parse
 	return 1;
     }
 
-    my $index = 0;
+    debug("Options string \`" . "@{$options_ref}" . "'");
 
-    while ($index <= $#$options_ref) {
+    while ($#$options_ref > -1) {
 	my $id;
 	my $option;
-	my @arguments;
 
 	$id        = "";
-	$option    = $$options_ref[$index];
-	@arguments = ( );
+	$option    = shift(@{$options_ref});
+
+	assert(defined($option));
 
 	debug("Options token: \`" . $option . "'");
-	debug("Parsing index: " . $index . "'");
 
 	if ($option eq "--") {
 	    # Meet options terminator, close up
 	    debug("Found options terminator");
-	    $index++;
 	    last;
 	}
 
@@ -262,7 +324,20 @@ sub parse ($$)
 
 	    if ($option =~ /^\-\-.*/) {
 		$option =~ s/^\-\-//;
-		$id     = $self->get_id_from_long($option);
+
+		if ($option =~ /([^\=]+)\=(.*)/) {
+		    # Splitting option pattern "--option=params"
+
+		    assert(defined($1));
+
+		    $option = $1;
+
+		    if (defined($2)) {
+			unshift(@{$options_ref}, $2);
+		    }
+		}
+
+		$id = $self->get_id_from_long($option);
 
 		if (!defined($id)) {
 		    error("Unknown long option \`" . $option . "'");
@@ -280,14 +355,17 @@ sub parse ($$)
 		    # Handling options bundling
 
 		    my @bundle;
+		    my $tmp = $option;
 
-		    $option = join(" -", split(/\ */, $option));
-		    $option = "-" . $option;
-		    @bundle = split(/\ /, $option);
+		    $tmp = join(" -", split(/\ */, $tmp));
+		    $tmp = "-" . $tmp;
+		    @bundle = split(/\ /, $tmp);
 
 		    debug("Bundled options \`" . $option   .
 			  "' expanded as \`"   . "@bundle" .
 			  "'");
+
+		    $option = $tmp;
 
 		    if (!&parse($self, \@bundle)) {
 			error("Failed to parse bundled options `-" .
@@ -295,8 +373,6 @@ sub parse ($$)
 			      "'");
 			return 0;
 		    }
-
-		    $index++;
 		    next;
 		}
 
@@ -316,55 +392,19 @@ sub parse ($$)
 	    return 0;
 	}
 
-	if ($self->{ARGSMAX}->{$id} > 0) {
-	    # Parsing for options arguments
+	my @arguments;
 
-	    debug("Getting options arguments "   .
-		  "["                            .
-		  $self->{ARGSMIN}->{$id}        .
-		  ", "                           .
-		  $self->{ARGSMAX}->{$id}        .
-		  "]");
+	@arguments = qw( );
 
-	    if (($index + $self->{ARGSMIN}->{$id}) > $#$options_ref) {
-		error("Too few arguments for option \`" . $option . "'");
-		return 0;
-	    }
-	    $index++;
-
-	    my $pre_index = $index;
-
-	    for my $i ($index..$#$options_ref) {
-		my $argument = $$options_ref[$i];
-
-		if ($argument =~ /^\-..*/) {
-		    # We encountered an option while parsing arguments.
-		    # Check if we reach the minimum arguments number and
-		    # then release the token
-
-		    if (($i - $pre_index) < $self->{ARGSMIN}->{$id}) {
-			error("Too few arguments for option \`" .
-			      $option                           .
-			      "'");
-			return 0;
-		    }
-		    last;
-		}
-
-		if (($i - $pre_index) == $self->{ARGSMAX}->{$id}) {
-		    # Reach max arguments number
-		    last;
-		}
-
-		push(@arguments, $argument);
-
-		debug("Found argument `" . $argument . "'");
-
-		$index++;
-	    }
-
-	} else {
-	    $index++;
+	if (!_parse_sub_options($options_ref,
+			       $option,
+			       $self->{ARGSMIN}->{$id},
+			       $self->{ARGSMAX}->{$id},
+			       \@arguments)) {
+	    error("Failed to parse sub options " .
+		  "for option \`" . $option      .
+		  "\`");
+	    return 0;
 	}
 
 	debug("Executing callback");
@@ -374,12 +414,6 @@ sub parse ($$)
 		  "requested a premature quit");
 	    return 1;
 	}
-    }
-
-    if ($index > $#$options_ref) {
-	undef(@{$options_ref});
-    } else {
-	@{$options_ref} = "@{$options_ref}[$index..$#$options_ref]";
     }
 
     return 1;
