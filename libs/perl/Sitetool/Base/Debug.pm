@@ -34,7 +34,7 @@ use Sitetool::Autoconfig;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&bug
 		 &assert
@@ -44,7 +44,7 @@ BEGIN {
 sub bug ($)
 {
     my $string = shift;
-    
+
     print STDERR "\n";
     if (defined($string)) {
 	print STDERR "Bug hit: " . $string . "\n";
