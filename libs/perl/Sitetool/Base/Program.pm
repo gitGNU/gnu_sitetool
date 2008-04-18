@@ -32,7 +32,7 @@ use Sitetool::Base::Debug;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&version
 		 &hint
@@ -60,10 +60,11 @@ sub hint ($)
 {
     my $string = shift;
 
-    assert(defined($string));
-    assert($string ne "");
+    if (defined($string)) {
+	assert($string ne "");
 
-    print $::PROGRAM_NAME . ": " . $string . "\n";
+	print $::PROGRAM_NAME . ": " . $string . "\n";
+    }
     print "Try \`" . $::PROGRAM_NAME . " -h' for more information.\n";
 }
 
