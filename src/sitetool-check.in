@@ -62,11 +62,11 @@ use Sitetool::OS::Shell;
 use Sitetool::OS::Directory;
 use Sitetool::OS::Filename;
 use Sitetool::OS::File;
-use Sitetool::WWW::HREF;
-use Sitetool::WWW::HTTP;
-use Sitetool::WWW::HTTPS;
-use Sitetool::WWW::FTP;
-use Sitetool::WWW::MAILTO;
+use Sitetool::Net::WWW::HREF;
+use Sitetool::Net::WWW::HTTP;
+use Sitetool::Net::WWW::HTTPS;
+use Sitetool::Net::WWW::FTP;
+use Sitetool::Net::WWW::MAILTO;
 use Sitetool::Configuration;
 use Sitetool::Array;
 
