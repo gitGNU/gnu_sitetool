@@ -21,12 +21,11 @@
 . @builddir@/defs
 
 MODE=parse
-SITETOOL="$SITETOOL --mode $MODE"
 
-$WRAPPER  sitetool-$MODE                   && exit 1
-$SITETOOL --dry-run -h                     || exit 1
-$SITETOOL --dry-run --verbose -h           || exit 1
-$SITETOOL --dry-run --debug   -h           || exit 1
-$SITETOOL --dry-run --debug   --verbose -h || exit 1
+$WRAPPER  sitetool-$MODE                         && exit 1
+$SITETOOL --dry-run -h                     $MODE || exit 1
+$SITETOOL --dry-run --verbose -h           $MODE || exit 1
+$SITETOOL --dry-run --debug   -h           $MODE || exit 1
+$SITETOOL --dry-run --debug   --verbose -h $MODE || exit 1
 
 exit 0
