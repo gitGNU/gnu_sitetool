@@ -59,19 +59,36 @@ sub clean ($)
     $self->{HASARG}    = undef;
     $self->{OPTARG}    = undef;
     $self->{OPTIND}    = 0;
+    $self->{STRERROR}  = undef;
 
     # XXX Fix me:
     #   May we offer both 'opterr' and 'optopt' support?
 }
 
+sub _error($$)
+{
+    my $self   = shift;
+    my $string = shift;
+
+    chomp($string);
+    $self->{STRERROR} = $string;
+}
+
+sub strerror($)
+{
+    my $self = shift;
+
+    return $self->{STERROR};
+}
+
 sub add ($$$$$$)
 {
-    my $self      = shift;
-    my $id        = shift;
-    my $short     = shift;
-    my $long      = shift;
-    my $callback  = shift;
-    my $hasarg    = shift;
+    my $self     = shift;
+    my $id       = shift;
+    my $short    = shift;
+    my $long     = shift;
+    my $callback = shift;
+    my $hasarg   = shift;
 
     assert(defined($self));
     assert($id >= 0);
@@ -83,7 +100,7 @@ sub add ($$$$$$)
     debug("Adding option");
 
     if ($self->__check_id($id)) {
-	error("ID \`" . $id . "' is already present");
+	$self->_error("ID \`" . $id . "' is already present");
 	return 0;
     }
     push(@{$self->{IDS}}, $id);
@@ -94,8 +111,8 @@ sub add ($$$$$$)
 	my $tmp = $self->__get_id_from_long($long);
 
 	if (defined($tmp)) {
-	    error("Long option \`"    . $long . "' " .
-		  "has already id \`" . $tmp  . "'" );
+	    $self->_error("Long option \`"    . $long . "' " .
+			  "has already id \`" . $tmp  . "'" );
 	    return 0;
 	}
 	$self->{LONG}->{$id} = $long;
@@ -107,8 +124,8 @@ sub add ($$$$$$)
 	my $tmp = $self->__get_id_from_short($short);
 
 	if (defined($tmp)) {
-	    error("Short option \`"   . $short . "' " .
-		  "has already id \`" . $tmp   . "'" );
+	    $self->_error("Short option \`"   . $short . "' " .
+			  "has already id \`" . $tmp   . "'" );
 	    return 0;
 	}
 	$self->{SHORT}->{$id} = $short;
@@ -160,7 +177,7 @@ sub config ($$)
     for my $entry (@{$array_ref}) {
 
 	if (!$self->add($id, @{$entry})) {
-	    error("Failed to add option");
+	    $self->_error("Failed to add option");
 	    return 0;
 	}
 	$id++;
@@ -305,6 +322,7 @@ sub parse ($$)
 
 	if ($opt_id eq '?') {
 	    # Error found (error message already printed)
+	    assert(defined($self->{STRERROR}));
 	    return 0;
 	}
 
@@ -328,14 +346,18 @@ sub parse ($$)
 
 	my $callback_ret = &{$self->{CALLBACK}->{$opt_id}}(@option_args);
 
-	if ($callback_ret < 0) {
-	    return 0;
-	}
+	debug("Callback for option \`" . $option . "' " .
+	      "returned " . $callback_ret);
 
-	if ($callback_ret == 0) {
+	if ($callback_ret < 0) {
+	    debug("Callback returned with error");
+	    return 0;
+	} elsif ($callback_ret == 0) {
 	    debug("Callback for option \`" . $option . "' " .
 		  "requested a premature quit");
 	    return 1;
+	} else {
+	    debug("Callback returned correctly");
 	}
     }
 
@@ -395,7 +417,7 @@ sub __getopt_long ($$)
 	    $opt_id = $self->__get_id_from_abbr($tmp_opt);
 
 	    if (defined($opt_id) && $opt_id eq "-1") {
-		error("Option \`" . $curr_opt . "\` is ambiguous");
+		$self->_error("Option \`" . $curr_opt . "\` is ambiguous");
 		return '?';
 	    }
 	}
@@ -417,7 +439,7 @@ sub __getopt_long ($$)
     }
 
     if (!defined($opt_id)) {
-	error("Unrecognized option \`" . $ curr_opt . "\`");
+	$self->_error("Unrecognized option \`" . $ curr_opt . "\`");
 	return '?';
     }
 
@@ -427,7 +449,8 @@ sub __getopt_long ($$)
     } else {
 
 	if ($self->{HASARG}->{$opt_id} eq '0') {
-	    error("Option \`" . $tmp_opt . "\` doesn't allow an argument");
+	    $self->_error("Option \`" . $tmp_opt . "\` " .
+			  "does not allow an argument");
 	    return '?'
 	}
     }
@@ -439,7 +462,8 @@ sub __getopt_long ($$)
 
 	if ((!defined($tmp_arg))                &&
 	    (++$self->{OPTIND} > $#{$argv_ref})) {
-	    error("Missing arguments for option \`" . $curr_opt . "\`");
+	    $self->_error("Missing arguments for option " .
+			  "\`" . $curr_opt . "\`");
 	    return '?';
 	}
 	$self->{OPTARG} = $tmp_arg;
