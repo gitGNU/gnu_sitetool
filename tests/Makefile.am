@@ -77,10 +77,10 @@ FAIL_TESTS    =
 SUCCESS_TESTS =
 
 FAIL_TESTS +=					\
-	test-arguments-2			\
-	test-arguments-5			\
-	test-arguments-long-2			\
 	test-fail				\
+	test-options-2				\
+	test-options-3				\
+	test-arguments-long-2			\
 	test-options-short-3			\
 	test-options-short-4			\
 	test-options-long-3			\
@@ -95,9 +95,9 @@ FAIL_TESTS +=					\
 
 SUCCESS_TESTS +=				\
 	test-success				\
-	test-arguments-1			\
 	test-arguments-long-1			\
 	test-arguments-multiple-1		\
+	test-options-1				\
 	test-options-short-1			\
 	test-options-short-2			\
 	test-options-long-1			\
@@ -177,41 +177,41 @@ test-fail: $(srcdir)/test-fail.in Makefile
 EXTRA_DIST += test-fail.in
 CLEANFILES += test-fail
 
-test-arguments-1: $(srcdir)/test-arguments-1.in Makefile
+test-options-1: $(srcdir)/test-options-1.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-1.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-1.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-1.in
-CLEANFILES += test-arguments-1
+EXTRA_DIST += test-options-1.in
+CLEANFILES += test-options-1
 
-test-arguments-2: $(srcdir)/test-arguments-2.in Makefile
+test-options-2: $(srcdir)/test-options-2.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-2.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-2.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-2.in
-CLEANFILES += test-arguments-2
+EXTRA_DIST += test-options-2.in
+CLEANFILES += test-options-2
 
-test-arguments-5: $(srcdir)/test-arguments-5.in Makefile
+test-options-3: $(srcdir)/test-options-3.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-5.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-3.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-5.in
-CLEANFILES += test-arguments-5
+EXTRA_DIST += test-options-3.in
+CLEANFILES += test-options-3
 
 test-arguments-long-1: $(srcdir)/test-arguments-long-1.in Makefile
 	( rm -f $@ $@.tmp && \
