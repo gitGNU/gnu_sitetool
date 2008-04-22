@@ -30,6 +30,7 @@ use diagnostics;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Trace;
 
+
 sub new ($)
 {
     my $class = shift;
@@ -55,31 +56,33 @@ sub clean ($)
     $self->{SHORT}     = { };
     $self->{LONG}      = { };
     $self->{CALLBACK}  = { };
-    $self->{ARGSMIN}   = { };
-    $self->{ARGSMAX}   = { };
+    $self->{HASARG}    = undef;
+    $self->{OPTARG}    = undef;
+    $self->{OPTIND}    = 0;
+
+    # XXX Fix me:
+    #   May we offer both 'opterr' and 'optopt' support?
 }
 
-sub add ($$$$$$$)
+sub add ($$$$$$)
 {
     my $self      = shift;
     my $id        = shift;
     my $short     = shift;
     my $long      = shift;
     my $callback  = shift;
-    my $argsmin   = shift;
-    my $argsmax   = shift;
+    my $hasarg    = shift;
 
     assert(defined($self));
-    assert(defined($id));
+    assert($id >= 0);
     assert(defined($short) || defined($long));
     assert(ref($callback) eq 'CODE');
-    assert($argsmin >= 0);
-    assert($argsmax >= 0);
-    assert($argsmin <= $argsmax);
+    assert((ref($hasarg) eq "HASH")      ||
+	   ($hasarg >= 0 && $hasarg <= 2));
 
     debug("Adding option");
 
-    if ($self->check_id($id)) {
+    if ($self->__check_id($id)) {
 	error("ID \`" . $id . "' is already present");
 	return 0;
     }
@@ -88,7 +91,7 @@ sub add ($$$$$$$)
     if (defined($long)) {
 	assert(length($long) > 1);
 
-	my $tmp = $self->get_id_from_long($long);
+	my $tmp = $self->__get_id_from_long($long);
 
 	if (defined($tmp)) {
 	    error("Long option \`"    . $long . "' " .
@@ -101,7 +104,7 @@ sub add ($$$$$$$)
     if (defined($short)) {
 	assert(length($short) == 1);
 
-	my $tmp = $self->get_id_from_short($short);
+	my $tmp = $self->__get_id_from_short($short);
 
 	if (defined($tmp)) {
 	    error("Short option \`"   . $short . "' " .
@@ -112,8 +115,7 @@ sub add ($$$$$$$)
     }
 
     $self->{CALLBACK}->{$id} = $callback;
-    $self->{ARGSMIN}->{$id}  = $argsmin;
-    $self->{ARGSMAX}->{$id}  = $argsmax;
+    $self->{HASARG}->{$id}   = $hasarg;
 
     debug("  option id:              \`" .
 	  $id                            .
@@ -126,16 +128,19 @@ sub add ($$$$$$$)
 	  (defined($self->{SHORT}->{$id})   ?
 	   $self->{SHORT}->{$id} : "undef") .
 	  "'");
-    debug("  option callback:        \`"      .
-	  (defined($self->{CALLBACK}->{$id})  ?
-	   $self->{CALLBACK}->{$id}: "undef") .
+    debug("  option callback:        \`"       .
+	  (defined($self->{CALLBACK}->{$id})   ?
+	   $self->{CALLBACK}->{$id} : "undef") .
 	  "'");
-    debug("  option arguments min:   \`" .
-	  $self->{ARGSMIN}->{$id}        .
-	  "'");
-    debug("  option arguments max:   \`" .
-	  $self->{ARGSMAX}->{$id}        .
-	  "'");
+    debug("  option arguments:       \`"   .
+	  ($self->{HASARG}->{$id} eq '0'   ?
+	   "none"                          :
+	   ($self->{HASARG}->{$id} eq '1'  ?
+	    "required"                     :
+	    ($self->{HASARG}->{$id} eq '2' ?
+	     "optional"                    :
+	     "subopts")))	           .
+	  "\`");
 
     return 1;
 }
@@ -164,7 +169,42 @@ sub config ($$)
     return 1;
 }
 
-sub get_id_from_long ($$)
+sub __get_id_from_abbr ($$)
+{
+    my $self   = shift;
+    my $string = shift;
+
+    assert(defined($self));
+    assert(defined($string));
+
+    my $id;
+
+    #
+    # Checking for long options abbreviated form and return
+    #   '-1'      - if it founds the same abbreviation twice
+    #   'undef'   - if any option matches the abbreviation
+    #   option ID - if an option matches the abbreviation
+    #
+    for my $i (keys %{$self->{LONG}}) {
+
+	if ($self->{LONG}->{$i} =~ /^$string.+$/) {
+	    debug("Option \`"              . $self->{LONG}->{$i} .
+		  "\` with id \`"          . $i                  .
+		  "\` completes string \`" . $string             .
+		  "\`");
+
+	    if (defined($id)) {
+		return -1;
+	    }
+
+	    $id = $i;
+	}
+    }
+
+    return $id;
+}
+
+sub __get_id_from_long ($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -183,7 +223,7 @@ sub get_id_from_long ($$)
     return undef;
 }
 
-sub get_id_from_short ($$)
+sub __get_id_from_short ($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -202,7 +242,7 @@ sub get_id_from_short ($$)
     return undef;
 }
 
-sub check_id ($$)
+sub __check_id ($$)
 {
     my $self = shift;
     my $id   = shift;
@@ -220,203 +260,208 @@ sub check_id ($$)
     return 0;
 }
 
-sub _parse_sub_options ($$$$$)
-{
-    my $options_ref   = shift;
-    my $option        = shift;
-    my $args_min      = shift;
-    my $args_max      = shift;
-    my $arguments_ref = shift;
-
-    assert(defined($options_ref));
-    assert(defined($option));
-    assert($args_max >= 0);
-    assert($args_min <= $args_max);
-    assert($#$arguments_ref == -1);
-
-    if ((($#$options_ref == -1) || ($$options_ref[0] =~ /^\-/)) &&
-	($args_min == 0)) {
-	# No options to parse
-	return 1;
-    }
-
-    if ($args_max > 0) {
-	# Parsing for options arguments
-
-	debug("Getting options arguments "   .
-	      "["  . $args_min               .
-	      ", " . $args_max               .
-	      "]");
-
-	if ($args_min > ($#$options_ref + 1)) {
-	    error("Too few arguments for option \`" . $option . "'");
-	    return 0;
-	}
-
-	my $idx = 0;
-
-	while ($#$options_ref > -1) {
-	    my $argument = shift(@{$options_ref});
-
-	    if ($argument =~ /^\-..*/) {
-		# We encountered an option while parsing arguments.
-		# Check if we reach the minimum arguments number and
-		# then release the token
-
-		if ($idx < $args_min) {
-		    error("Too few arguments for option \`" . $option . "'");
-		    return 0;
-		}
-		unshift(@{$options_ref}, $argument);
-		last;
-	    }
-
-	    if ($idx == $args_max) {
-		# Reach max arguments number
-		last;
-	    }
-
-	    push(@{$arguments_ref}, $argument);
-
-	    debug("Found argument `" . $argument . "'");
-
-	    $idx++;
-	}
-    }
-
-    return 1;
-}
-
 sub parse ($$)
 {
-    my $self        = shift;
-    my $options_ref = shift;
+    my $self     = shift;
+    my $argv_ref = shift;
 
     assert(defined($self));
-    assert(defined($options_ref));
+    assert(defined($argv_ref));
 
-    if (($#{$options_ref} == -1) || ($$options_ref[0] !~ /^\-/)) {
+    debug("Parsing options string");
+
+    debug("Options string \`" . "@{$argv_ref}" . "'");
+
+    if (($#{$argv_ref} == -1)    ||
+	($$argv_ref[0] !~ /^\-/) ||
+	($$argv_ref[0] =~ /^.$/)) {
 	# No options to parse
 	return 1;
     }
 
-    debug("Options string \`" . "@{$options_ref}" . "'");
-
-    while ($#$options_ref > -1) {
-	my $id;
+    while ($self->{OPTIND} <= $#$argv_ref) {
+	my @option_args;
+	my $opt_id;
 	my $option;
+	my %subopts;
 
-	$id        = "";
-	$option    = shift(@{$options_ref});
+	# Cleaning up option argument variable
+	$self->{OPTARG} = undef;
 
-	assert(defined($option));
+	# Storing option from ARGV (for debugging purpose)
+	$option = $$argv_ref[$self->{OPTIND}];
 
-	debug("Options token: \`" . $option . "'");
+	# Getting option ID
+	$opt_id = $self->__getopt_long($argv_ref);
+	assert(defined($opt_id));
 
-	if ($option eq "--") {
-	    # Meet options terminator, close up
-	    debug("Found options terminator");
-	    last;
+	# Checking return value from getopt_long()
+	if ($opt_id eq '-1') {
+	    #
+	    # No more options
+	    #
+	    return 1;
 	}
 
-	if ($option =~ /^\-.*/) {
-	    # Found option syntax, check if it is short or long
-
-	    if ($option =~ /^\-\-.*/) {
-		$option =~ s/^\-\-//;
-
-		if ($option =~ /([^\=]+)\=(.*)/) {
-		    # Splitting option pattern "--option=params"
-
-		    assert(defined($1));
-
-		    $option = $1;
-
-		    if (defined($2)) {
-			unshift(@{$options_ref}, $2);
-		    }
-		}
-
-		$id = $self->get_id_from_long($option);
-
-		if (!defined($id)) {
-		    error("Unknown long option \`" . $option . "'");
-		    return 0;
-		}
-
-		debug("Found long option \`" . $option .
-		      "' with id \`"         . $id     .
-		      "'");
-
-	    } else {
-		$option =~ s/^\-//;
-
-		if (length($option) > 1) {
-		    # Handling options bundling
-
-		    my @bundle;
-		    my $tmp = $option;
-
-		    $tmp = join(" -", split(/\ */, $tmp));
-		    $tmp = "-" . $tmp;
-		    @bundle = split(/\ /, $tmp);
-
-		    debug("Bundled options \`" . $option   .
-			  "' expanded as \`"   . "@bundle" .
-			  "'");
-
-		    $option = $tmp;
-
-		    if (!&parse($self, \@bundle)) {
-			error("Failed to parse bundled options `-" .
-			      $option                              .
-			      "'");
-			return 0;
-		    }
-		    next;
-		}
-
-		$id = $self->get_id_from_short($option);
-
-		if (!defined($id)) {
-		    error("Unknown option \`" . $option . "'");
-		    return 0;
-		}
-
-		debug("Found short option \`" . $option .
-		      "' with id \`"          . $id     .
-		      "'");
-	    }
-	} else {
-	    error("Unknown option \`" . $option . "'");
+	if ($opt_id eq '?') {
+	    # Error found (error message already printed)
 	    return 0;
 	}
 
-	my @arguments;
+	assert(defined($opt_id));
 
-	@arguments = qw( );
+	#
+	# Arranging arguments for option callback
+	#
+	# XXX Fix me:
+	#  for the moment we handle callback's arguments with an
+	#  array, but when subopts code will raise: should we
+	#  handle it in a diferrent way?
+	#
+	if (defined($self->{OPTARG})) {
+	    debug("Option arguments: \`" . $self->{OPTARG} . "\`");
 
-	if (!_parse_sub_options($options_ref,
-			       $option,
-			       $self->{ARGSMIN}->{$id},
-			       $self->{ARGSMAX}->{$id},
-			       \@arguments)) {
-	    error("Failed to parse sub options " .
-		  "for option \`" . $option      .
-		  "\`");
-	    return 0;
+	    push(@option_args, $self->{OPTARG});
 	}
 
 	debug("Executing callback");
 
-	if (!&{$self->{CALLBACK}->{$id}}(@arguments)) {
+	my $callback_ret = &{$self->{CALLBACK}->{$opt_id}}(@option_args);
+
+	if ($callback_ret < 0) {
+	    return 0;
+	}
+
+	if ($callback_ret == 0) {
 	    debug("Callback for option \`" . $option . "' " .
 		  "requested a premature quit");
 	    return 1;
 	}
     }
 
+    debug("Options parsing complete");
+
     return 1;
+}
+
+sub __getopt_long ($$)
+{
+    my $self     = shift;
+    my $argv_ref = shift;
+
+    assert(defined($self));
+    assert(defined($argv_ref));
+    assert($self->{OPTIND} >= 0);
+
+    if ($$argv_ref[$self->{OPTIND}] =~ /^.$/) {
+	return -1;
+    }
+
+    my $curr_opt = $$argv_ref[$self->{OPTIND}];
+    assert($curr_opt =~ /\-.+/);
+
+    debug("Processing ARGV[" . $self->{OPTIND} .
+	  "]: \`"            . $curr_opt       .
+	  "\`");
+
+
+    # Matching the terminator we give up from getopt() moving
+    # the index on the next position
+    if ($curr_opt eq "--") {
+	debug("Found options terminator \`" . $curr_opt . "\`");
+	$self->{OPTIND}++;
+	return -1;
+    }
+
+    my $opt_id;
+    my $tmp_opt;
+    my $tmp_arg;
+
+    if ($curr_opt =~ /^\-\-/) {
+	debug("Checking current ARGV for long option");
+
+	$curr_opt =~ /^\-\-([^=]+)(=(.*))?$/;
+	assert(defined($1));
+
+	$tmp_opt = $1;
+
+	if (defined($3)) {
+	    $tmp_arg = $3;
+	}
+	$opt_id = $self->__get_id_from_long($tmp_opt);
+
+	# If long option matching failed, we move for abbreviated form
+	if(!defined($opt_id)) {
+	    $opt_id = $self->__get_id_from_abbr($tmp_opt);
+
+	    if (defined($opt_id) && $opt_id eq "-1") {
+		error("Option \`" . $curr_opt . "\` is ambiguous");
+		return '?';
+	    }
+	}
+    } else {
+	debug("Checking current ARGV for short option");
+
+	$curr_opt =~ /^\-(.*)$/;
+	assert(defined($1));
+
+	if (length($1) > 1) {
+	    $curr_opt =~ /^\-(.)(.*)$/;
+
+	    $tmp_opt = $1;
+	    $tmp_arg = $2;
+	} else {
+	    $tmp_opt = $1;
+	}
+	$opt_id = $self->__get_id_from_short($tmp_opt);
+    }
+
+    if (!defined($opt_id)) {
+	error("Unrecognized option \`" . $ curr_opt . "\`");
+	return '?';
+    }
+
+    # Option matching success... Going for its arguments
+    if (!defined($tmp_arg)) {
+	$tmp_arg = $$argv_ref[++$self->{OPTIND}];
+    } else {
+
+	if ($self->{HASARG}->{$opt_id} eq '0') {
+	    error("Option \`" . $tmp_opt . "\` doesn't allow an argument");
+	    return '?'
+	}
+    }
+
+    if (($self->{HASARG}->{$opt_id} eq '1')         ||
+	(ref($self->{HASARG}->{$opt_id}) eq "HASH")) {
+
+	debug("Checking for required argument");
+
+	if ((!defined($tmp_arg))                &&
+	    (++$self->{OPTIND} > $#{$argv_ref})) {
+	    error("Missing arguments for option \`" . $curr_opt . "\`");
+	    return '?';
+	}
+	$self->{OPTARG} = $tmp_arg;
+	$self->{OPTIND}++;
+    }
+
+    if ($self->{HASARG}->{$opt_id} eq '2') {
+
+	debug("Checking for optional argument");
+
+	# Skipping argument if we reach the end of options array or if it's
+	# another option
+	if ((++$self->{OPTIND} > $#{$argv_ref} + 1)       ||
+	    defined($self->__get_id_from_long($tmp_arg))  ||
+	    defined($self->__get_id_from_abbr($tmp_arg))  ||
+	    defined($self->__get_id_from_short($tmp_arg))) {
+	    return $opt_id;
+	}
+	$self->{OPTARG} = $tmp_arg;
+    }
+
+    return $opt_id;
 }
 
 1;
