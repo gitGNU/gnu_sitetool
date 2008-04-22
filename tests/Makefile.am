@@ -96,29 +96,8 @@ FAIL_TESTS +=					\
 SUCCESS_TESTS +=				\
 	test-success				\
 	test-arguments-1			\
-	test-arguments-3			\
-	test-arguments-4			\
 	test-arguments-long-1			\
 	test-arguments-multiple-1		\
-	test-arguments-multiple-2		\
-	test-arguments-auths			\
-	test-arguments-build			\
-	test-arguments-check			\
-	test-arguments-clean			\
-	test-arguments-digest			\
-	test-arguments-initialize		\
-	test-arguments-install			\
-	test-arguments-parse			\
-	test-arguments-preprocess		\
-	test-arguments-uninstall		\
-	test-arguments-validate			\
-	test-dry-run				\
-	test-helps				\
-	test-initialize				\
-	test-preprocess				\
-	test-parse				\
-	test-validate				\
-	test-build				\
 	test-options-short-1			\
 	test-options-short-2			\
 	test-options-long-1			\
@@ -138,7 +117,25 @@ SUCCESS_TESTS +=				\
 	test-options-multi-5			\
 	test-options-multi-6			\
 	test-options-multi-7			\
-	test-options-multi-8
+	test-options-multi-8			\
+	test-options-tool-auths			\
+	test-options-tool-build			\
+	test-options-tool-check			\
+	test-options-tool-clean			\
+	test-options-tool-digest		\
+	test-options-tool-initialize		\
+	test-options-tool-install		\
+	test-options-tool-parse			\
+	test-options-tool-preprocess		\
+	test-options-tool-uninstall		\
+	test-options-tool-validate		\
+	test-dry-run				\
+	test-helps				\
+	test-initialize				\
+	test-preprocess				\
+	test-parse				\
+	test-validate				\
+	test-build
 
 
 XFAIL_TESTS  = $(FAIL_TESTS)
@@ -204,30 +201,6 @@ test-arguments-2: $(srcdir)/test-arguments-2.in Makefile
 EXTRA_DIST += test-arguments-2.in
 CLEANFILES += test-arguments-2
 
-test-arguments-3: $(srcdir)/test-arguments-3.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-3.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-arguments-3.in
-CLEANFILES += test-arguments-3
-
-test-arguments-4: $(srcdir)/test-arguments-4.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-4.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-arguments-4.in
-CLEANFILES += test-arguments-4
-
 test-arguments-5: $(srcdir)/test-arguments-5.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/test-arguments-5.in > $@.tmp && \
@@ -276,149 +249,137 @@ test-arguments-multiple-1: $(srcdir)/test-arguments-multiple-1.in Makefile
 EXTRA_DIST += test-arguments-multiple-1.in
 CLEANFILES += test-arguments-multiple-1
 
-test-arguments-multiple-2: $(srcdir)/test-arguments-multiple-2.in Makefile
+test-options-tool-auths: $(srcdir)/test-options-tool-auths.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-multiple-2.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-auths.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-multiple-2.in
-CLEANFILES += test-arguments-multiple-2
+EXTRA_DIST += test-options-tool-auths.in
+CLEANFILES += test-options-tool-auths
 
-test-arguments-auths: $(srcdir)/test-arguments-auths.in Makefile
+test-options-tool-build: $(srcdir)/test-options-tool-build.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-auths.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-build.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-auths.in
-CLEANFILES += test-arguments-auths
+EXTRA_DIST += test-options-tool-build.in
+CLEANFILES += test-options-tool-build
 
-test-arguments-build: $(srcdir)/test-arguments-build.in Makefile
+test-options-tool-check: $(srcdir)/test-options-tool-check.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-build.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-check.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-build.in
-CLEANFILES += test-arguments-build
+EXTRA_DIST += test-options-tool-check.in
+CLEANFILES += test-options-tool-check
 
-test-arguments-check: $(srcdir)/test-arguments-check.in Makefile
+test-options-tool-clean: $(srcdir)/test-options-tool-clean.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-check.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-clean.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-check.in
-CLEANFILES += test-arguments-check
+EXTRA_DIST += test-options-tool-clean.in
+CLEANFILES += test-options-tool-clean
 
-test-arguments-clean: $(srcdir)/test-arguments-clean.in Makefile
+test-options-tool-digest: $(srcdir)/test-options-tool-digest.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-clean.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-digest.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-clean.in
-CLEANFILES += test-arguments-clean
+EXTRA_DIST += test-options-tool-digest.in
+CLEANFILES += test-options-tool-digest
 
-test-arguments-digest: $(srcdir)/test-arguments-digest.in Makefile
+test-options-tool-initialize: $(srcdir)/test-options-tool-initialize.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-digest.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-initialize.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-digest.in
-CLEANFILES += test-arguments-digest
+EXTRA_DIST += test-options-tool-initialize.in
+CLEANFILES += test-options-tool-initialize
 
-test-arguments-initialize: $(srcdir)/test-arguments-initialize.in Makefile
+test-options-tool-install: $(srcdir)/test-options-tool-install.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-initialize.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-install.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-initialize.in
-CLEANFILES += test-arguments-initialize
+EXTRA_DIST += test-options-tool-install.in
+CLEANFILES += test-options-tool-install
 
-test-arguments-install: $(srcdir)/test-arguments-install.in Makefile
+test-options-tool-parse: $(srcdir)/test-options-tool-parse.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-install.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-parse.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-install.in
-CLEANFILES += test-arguments-install
+EXTRA_DIST += test-options-tool-parse.in
+CLEANFILES += test-options-tool-parse
 
-test-arguments-parse: $(srcdir)/test-arguments-parse.in Makefile
+test-options-tool-preprocess: $(srcdir)/test-options-tool-preprocess.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-parse.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-preprocess.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-parse.in
-CLEANFILES += test-arguments-parse
+EXTRA_DIST += test-options-tool-preprocess.in
+CLEANFILES += test-options-tool-preprocess
 
-test-arguments-preprocess: $(srcdir)/test-arguments-preprocess.in Makefile
+test-options-tool-uninstall: $(srcdir)/test-options-tool-uninstall.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-preprocess.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-uninstall.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-preprocess.in
-CLEANFILES += test-arguments-preprocess
+EXTRA_DIST += test-options-tool-uninstall.in
+CLEANFILES += test-options-tool-uninstall
 
-test-arguments-uninstall: $(srcdir)/test-arguments-uninstall.in Makefile
+test-options-tool-validate: $(srcdir)/test-options-tool-validate.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-uninstall.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-tool-validate.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-arguments-uninstall.in
-CLEANFILES += test-arguments-uninstall
-
-test-arguments-validate: $(srcdir)/test-arguments-validate.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-validate.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-arguments-validate.in
-CLEANFILES += test-arguments-validate
+EXTRA_DIST += test-options-tool-validate.in
+CLEANFILES += test-options-tool-validate
 
 test-helps: $(srcdir)/test-helps.in Makefile
 	( rm -f $@ $@.tmp && \
