@@ -135,28 +135,32 @@ assert(defined($options));
 
 my @options_list = (
     [ "c", "configuration",
-      sub { $configuration_file = $_[0];                     return 1; }, 1,1 ],
+      sub { $configuration_file = $_[0];                     return 1; }, 1 ],
     [ "o", "output-dir",
-      sub { $output_dir = $_[0];                             return 1; }, 1,1 ],
-    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0,0 ],
-    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0,0 ],
-    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1,1 ],
-    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0,0 ],
-    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0,0 ],
-    [ "h", "help",       sub { help();             $run = 0; return 0; }, 0,0 ],
-    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0,0 ],
-    [ "V", "version",    sub { version();          $run = 0; return 0; }, 0,0 ],
+      sub { $output_dir = $_[0];                             return 1; }, 1 ],
+    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0 ],
+    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1 ],
+    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0 ],
+    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0 ],
+    [ "h", "help",       sub { help();             $run = 0; return 0; }, 0 ],
+    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0 ],
+    [ "V", "version",    sub { version();          $run = 0; return 0; }, 0 ],
     );
 
 if (!$options->config(\@options_list)) {
     bug("Options configuration problem");
 }
 
-my @options_slack = @ARGV;
-if(!$options->parse(\@options_slack)) {
+if(!$options->parse(\@ARGV)) {
     hint("Option parsing failed");
     exit 1;
 }
+
+my @options_slack;
+
+assert($options->{OPTIND} >= 0);
+@options_slack = @ARGV[$options->{OPTIND} .. $#ARGV];
 
 debug("Running \`" . $PROGRAM_NAME . "' version \`" . $PACKAGE_VERSION . "'");
 
@@ -223,12 +227,12 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
 	exit 1;
     }
     assert(defined($string));
-    
+
     my @page_links;
     @page_links = array_uniq(href_extract($string));
-    
+
     verbose("Page \`" . $page_id . "' links are \`@page_links'");
-	
+
     for my $link (@page_links) {
 	if (!defined($links{$link})) {
 	    $links{$link} = [ $page_id ];
@@ -250,12 +254,12 @@ verbose("Checking links");
 for my $link (keys(%links)) {
 
     my $filename;
-    
+
     $filename = filename_mktemp();
     assert(defined($filename));
-    
+
     my $downloaded;
-    
+
     $downloaded = 0;
     if (href_ishttp($link)) {
 	verbose("Checking http link \`" . $link . "'");
@@ -279,16 +283,16 @@ for my $link (keys(%links)) {
 	debug("Skipping local link \`" . $link . "'");
 	$downloaded = 1;
     }
-    
+
     file_remove($filename);
-    
+
     if (!$downloaded) {
 	my @involved_pages;
 
 	@involved_pages = @{$links{$link}};
 
 	my $err;
-	
+
 	$err =
 	    "Cannot download link \`" . $link . "' " .
 	    "(involved pages \`@involved_pages')";

@@ -144,30 +144,34 @@ assert(defined($options));
 
 my @options_list = (
     [ "c", "configuration",
-      sub { $configuration_file = $_[0];                     return 1; }, 1,1 ],
+      sub { $configuration_file = $_[0];                     return 1; }, 1 ],
     [ "o", "output-dir",
-      sub { $output_dir = $_[0];                             return 1; }, 1,1 ],
+      sub { $output_dir = $_[0];                             return 1; }, 1 ],
     [ "w", "work-dir",
-      sub { $work_dir = $_[0];                               return 1; }, 1,1 ],
-    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0,0 ],
-    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0,0 ],
-    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1,1 ],
-    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0,0 ],
-    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0,0 ],
-    [ "h", "help",       sub { help();             $run = 0; return 0; }, 0,0 ],
-    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0,0 ],
-    [ "V", "version",    sub { version();          $run = 0; return 0; }, 0,0 ],
+      sub { $work_dir = $_[0];                               return 1; }, 1 ],
+    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0 ],
+    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1 ],
+    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0 ],
+    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0 ],
+    [ "h", "help",       sub { help();             $run = 0; return 0; }, 0 ],
+    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0 ],
+    [ "V", "version",    sub { version();          $run = 0; return 0; }, 0 ],
     );
 
 if (!$options->config(\@options_list)) {
     bug("Options configuration problem");
 }
 
-my @options_slack = @ARGV;
-if(!$options->parse(\@options_slack)) {
+if(!$options->parse(\@ARGV)) {
     hint("Option parsing failed");
     exit 1;
 }
+
+my @options_slack;
+
+assert($options->{OPTIND} >= 0);
+@options_slack = @ARGV[$options->{OPTIND} .. $#ARGV];
 
 debug("Running \`" . $PROGRAM_NAME . "' version \`" . $PACKAGE_VERSION . "'");
 
@@ -263,7 +267,7 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
 
     $file      = File::Spec->catfile($output_dir, $destination);
     $directory = dirname($file);
-    
+
     if (!directory_create($directory)) {
 	directory_remove($directory);
 	exit 1;
@@ -289,7 +293,7 @@ verbose("Creating sitemap");
 #
 #    $file      = File::Spec->catfile($output_dir, $destination);
 ##    $directory = dirname($file);
-#    
+#
 #    if (!string_tofile($page_id, $file)) {
 #	file_remove($file);
 #	exit 1;
@@ -318,11 +322,11 @@ if (!sitemap2graphviz($sitemap_file, $graphviz_file)) {
 #    my $file;
 ##    my $directory;
 #    my $destination;
-#    
+#
 #    $destination = $configuration{PAGES}{$page_id}{DESTINATION};
 #    $file        = File::Spec->catfile($output_dir, $destination);
 ##    $directory   = dirname($file);
-#    
+#
 #    if (!file_remove($file)) {
 #	exit 1;
 #    }
@@ -333,11 +337,11 @@ assert(file_ispresent($sitemap_file));
 verbose("Creating pagemaps");
 for my $page_id (keys(%{$configuration{PAGES}})) {
     my $destination;
-    
+
     my $page;
     $page = variable_canonicalize($page_id);
     assert(defined($page));
-    
+
     $destination = File::Spec->catfile($maps_dir, $page . ".map");
 
 #    if ($destination eq $sitemap_file) {
@@ -393,7 +397,7 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
     my $content;
     $content = variable_canonicalize($content_id);
     assert(defined($content));
-    
+
     $source = $configuration{CONTENTS}{$content_id}{SOURCE};
     if (!file_ispresent($source)) {
 	error("Missing input file \`" . $source . "'");
@@ -425,7 +429,7 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
     } else {
 	debug("Destination file is not obsolete, skipping filtering");
     }
-    
+
     # Fill-in in order to use later in page processing phase
     $configuration{CONTENTS}{$content_id}{DESTINATION} = $destination;
 }
@@ -446,7 +450,7 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     my $output          = $configuration{PAGES}{$page_id}{DESTINATION};
     my $output_dirname  = dirname($output);
     my $output_basename = basename($output);
-    
+
     #
     # Page variables
     #
@@ -461,7 +465,7 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     }
 
     # Output all user defined variables (page local)
-    for my $var (keys(%{$configuration{PAGES}{$page_id}{VARS}})) {	    
+    for my $var (keys(%{$configuration{PAGES}{$page_id}{VARS}})) {
 	my $name  = $var;
 	my $value = $configuration{PAGES}{$page_id}{VARS}{$var};
 
@@ -477,7 +481,7 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
 	}
 	my $name  = $var;
 	my $value = $configuration{VARS}{$var};
-	
+
 	print $file_handle
 	    "(define as_page_variable_$name \"$value\")\n";
     }
@@ -495,12 +499,12 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     #
     debug("Building page contents");
     for my $key (keys(%{$configuration{PAGES}{$page_id}{CONTENTS}})) {
-	
+
 	my $content_id = $configuration{PAGES}{$page_id}{CONTENTS}{$key};
 	my $content    = variable_canonicalize($content_id);
 	assert(defined($content));
-	
-	debug("Content is "             . 
+
+	debug("Content is "             .
 	      "\`" . $content_id . "' " .
 	      "(canonicalized as "      .
 	      "\`" . $content . "')");
@@ -519,7 +523,7 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
 	    exit 1;
 	}
     }
-    
+
     #
     # Page layout
     #
@@ -572,7 +576,7 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
 	file_remove($destination);
 	exit 1;
     }
-    
+
     debug("Building XML file");
     $source      = $destination;
     $destination = File::Spec->catfile($pages_dir, $page . "-all.xml");
@@ -591,7 +595,7 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     if (!directory_create($destination_dir)) {
 	exit 1;
     }
-    
+
     $source      = $destination;
     $destination = File::Spec->catfile($destination_dir,
 				       $output_basename);

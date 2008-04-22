@@ -131,7 +131,7 @@ my $options = Sitetool::Base::Options->new();
 assert(defined($options));
 
 my @options_list = (
-    [ "i", "initialize", sub { $running_mode = "initialize"; return 1; }, 0,0 ],
+    [ "i", "initialize", sub { $running_mode = "initialize"; return 1; }, 0 ],
     [ "A", "add",        sub {
 	$host         = $_[0];
 	$login        = $_[1];
@@ -139,34 +139,38 @@ my @options_list = (
 	$running_mode = "add";
 	return 1;
       },
-      3,3 ],
+      1 ],
     [ "D", "delete",     sub {
 	$running_mode = "delete";
 	$host         = $_[0];
 	$login        = $_[1];
 	return 1; },
-      2,2 ],
-    [ "S", "show",       sub { $running_mode = "show";       return 1; }, 0,0 ],
-    [ "C", "clear",      sub { $running_mode = "clear";      return 1; }, 0,0 ],
-    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0,0 ],
-    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0,0 ],
-    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1,1 ],
-    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0,0 ],
-    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0,0 ],
-    [ "h", "help",       sub { help();             $run = 0; return 0; }, 0,0 ],
-    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0,0 ],
-    [ "V", "version",    sub { version();          $run = 0; return 0; }, 0,0 ],
+      1 ],
+    [ "S", "show",       sub { $running_mode = "show";       return 1; }, 0 ],
+    [ "C", "clear",      sub { $running_mode = "clear";      return 1; }, 0 ],
+    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0 ],
+    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1 ],
+    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0 ],
+    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0 ],
+    [ "h", "help",       sub { help();             $run = 0; return 0; }, 0 ],
+    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0 ],
+    [ "V", "version",    sub { version();          $run = 0; return 0; }, 0 ],
     );
 
 if (!$options->config(\@options_list)) {
     bug("Options configuration problem");
 }
 
-my @options_slack = @ARGV;
-if(!$options->parse(\@options_slack)) {
+if(!$options->parse(\@ARGV)) {
     hint("Option parsing failed");
     exit 1;
 }
+
+my @options_slack;
+
+assert($options->{OPTIND} >= 0);
+@options_slack = @ARGV[$options->{OPTIND} .. $#ARGV];
 
 debug("Running \`" . $PROGRAM_NAME . "' version \`" . $PACKAGE_VERSION . "'");
 

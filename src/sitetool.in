@@ -102,7 +102,7 @@ my %tools = (
 	FLAGS          =>
 	    "-i %input_file% "        .
 	    "-o %preprocessed_file% " .
-	    "-D work_dir %work_dir%",
+	    "-Dwork_dir=%work_dir%",
 	PRE_REQUISITE  => [ "initialize" ],
 	POST_REQUISITE => [ ],
     },
@@ -318,18 +318,18 @@ sub help_mode ($)
 	$found = 0;
 	for my $tool (keys(%tools)) {
 	    debug("Tool = \`" . $tool . "'");
-	    if ($tool =~ $mode) {
+	    if ($tool eq $mode) {
 		debug("Got tool \`" . $tool . "' for the requested mode");
 		$found = 1;
 		last;
 	    }
 	}
-	
+
 	if (!$found) {
 	    error("Unknown MODE \`" . $mode . "'");
 	    return 0;
 	}
-	
+
 	if (!run_tool($mode, 0, "-h")) {
 	    error("Cannot get help for MODE \`" . $mode . "'");
 	    return 0;
@@ -339,7 +339,7 @@ sub help_mode ($)
 	# No, let us provide the generic help
 	help();
     }
-    
+
     return 1;
 }
 
@@ -362,25 +362,36 @@ my $options = Sitetool::Base::Options->new();
 assert(defined($options));
 
 my @options_list = (
-    [ "M", "mode",     sub { $running_mode = $_[0];        return 1; }, 1, 1 ],
-    [ "n", "dry-run",  sub { $dry_run = 1;                 return 1; }, 0, 0 ],
-    [ "f", "force",    sub { $force_mode = 1;              return 1; }, 0, 0 ],
-    [ "W", "warnings", sub { warning_set($_[0]);           return 1; }, 1, 1 ],
-    [ "d", "debug",    sub { debug_set(1);                 return 1; }, 0, 0 ],
-    [ "v", "verbose",  sub { verbose_set(1);               return 1; }, 0, 0 ],
-    [ "h", "help",     sub { help_mode($_[0]);   $run = 0; return 0; }, 0, 1 ],
-    [ "V", "version",  sub { version();          $run = 0; return 0; }, 0, 0 ],
+    [ "M", "mode",     sub { $running_mode = $_[0];        return 1; }, 1 ],
+    [ "n", "dry-run",  sub { $dry_run = 1;                 return 1; }, 0 ],
+    [ "f", "force",    sub { $force_mode = 1;              return 1; }, 0 ],
+    [ "W", "warnings", sub { warning_set($_[0]);           return 1; }, 1 ],
+    [ "d", "debug",    sub { debug_set(1);                 return 1; }, 0 ],
+    [ "v", "verbose",  sub { verbose_set(1);               return 1; }, 0 ],
+    [ "h", "help",     sub {
+	if (help_mode($_[0])) {
+	    $run = 0;
+	    return 1;
+	} else {
+	    return 0;
+	}
+      }, 2 ],
+    [ "V", "version",  sub { version();          $run = 0; return 0; }, 0 ],
     );
 
 if (!$options->config(\@options_list)) {
     bug("Options configuration problem");
 }
 
-my @options_slack = @ARGV;
-if (!$options->parse(\@options_slack)) {
+if (!$options->parse(\@ARGV)) {
     hint("Option parsing failed");
     exit 1;
 }
+
+my @options_slack;
+
+assert($options->{OPTIND} >= 0);
+@options_slack = @ARGV[$options->{OPTIND} .. $#ARGV];
 
 debug("Running \`" . $PROGRAM_NAME . "' version \`" . $PACKAGE_VERSION . "'");
 
@@ -426,7 +437,7 @@ debug("Mode should be \`" . $running_mode . "'");
 my $found = 0;
 for my $tool (keys(%tools)) {
     debug("Tool = \`" . $tool . "'");
-    if ($running_mode =~ $tool) {
+    if ($running_mode eq $tool) {
 	debug("Got tool \`" . $tool . "' for the requested mode");
 	$found = 1;
 	last;

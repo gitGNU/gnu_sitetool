@@ -130,32 +130,42 @@ assert(defined($options));
 
 my @options_list = (
     [ "i", "input",
-      sub { $input_file = $_[0];                             return 1; }, 1,1 ],
+      sub { $input_file = $_[0];                             return 1; }, 1 ],
     [ "o", "output",
-      sub { $output_file = $_[0];                            return 1; }, 1,1 ],
+      sub { $output_file = $_[0];                            return 1; }, 1 ],
     [ "D", "define",
       sub {
-	  my $variable;
-	  $variable = $_[0];
-	  if (!defined($variable)) {
-	      hint("Missing environment variable name");
-	      return 0;
-	  }
+          assert(defined($_[0]));
 
-	  my $value;
-	  $value = $_[1];
-	  if (!defined($value)) {
-	      hint("Missing environment variable value");
-	      return 0;
-	  }
+          my $variable;
+          $variable =  $_[0];
+          $variable =~ s/^([^\=]+)(\=(.*))?/$1/;
 
-	  if (!environment_set($variable, $value)) {
-	      error("Cannot set environment variable \`" . $variable . "'");
-	      exit 1;
-	  }
-	  return 1;
+          my $value;
+
+          if (defined($3)) {
+              $value = $3;
+          } else {
+              $value = "";
+          }
+
+          if (!defined($variable)) {
+              hint("Missing environment variable name");
+              return 0;
+          }
+
+          if (!defined($value)) {
+              hint("Missing environment variable value");
+              return 0;
+          }
+
+          if (!environment_set($variable, $value)) {
+              error("Cannot set environment variable \`" . $variable . "'");
+              exit 1;
+          }
+          return 1;
       },
-      2,2 ],
+      1 ],
     [ "U", "undefine",
       sub {
 	  my $variable;
@@ -172,26 +182,30 @@ my @options_list = (
 
 	  return 1;
       },
-      1,1 ],
-    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0,0 ],
-    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0,0 ],
-    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1,1 ],
-    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0,0 ],
-    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0,0 ],
-    [ "h", "help",       sub { help();             $run = 0; return 0; }, 0,0 ],
-    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0,0 ],
-    [ "V", "version",    sub { version();          $run = 0; return 0; }, 0,0 ],
+      1 ],
+    [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0 ],
+    [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0 ],
+    [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1 ],
+    [ "d", "debug",      sub { debug_set(1);                 return 1; }, 0 ],
+    [ "v", "verbose",    sub { verbose_set(1);               return 1; }, 0 ],
+    [ "h", "help",       sub { help();             $run = 0; return 0; }, 0 ],
+    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0 ],
+    [ "V", "version",    sub { version();          $run = 0; return 0; }, 0 ],
     );
 
 if (!$options->config(\@options_list)) {
     bug("Options configuration problem");
 }
 
-my @options_slack = @ARGV;
-if(!$options->parse(\@options_slack)) {
+if(!$options->parse(\@ARGV)) {
     hint("Option parsing failed");
     exit 1;
 }
+
+my @options_slack;
+
+assert($options->{OPTIND} >= 0);
+@options_slack = @ARGV[$options->{OPTIND} .. $#ARGV];
 
 debug("Running \`" . $PROGRAM_NAME . "' version \`" . $PACKAGE_VERSION . "'");
 
