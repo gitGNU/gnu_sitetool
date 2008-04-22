@@ -80,7 +80,18 @@ FAIL_TESTS +=					\
 	test-arguments-2			\
 	test-arguments-5			\
 	test-arguments-long-2			\
-	test-fail
+	test-fail				\
+	test-options-short-3			\
+	test-options-short-4			\
+	test-options-long-3			\
+	test-options-long-4			\
+	test-options-abbr-3			\
+	test-options-shortargs-3		\
+	test-options-shortargs-4		\
+	test-options-longargs-3			\
+	test-options-longargs-4			\
+	test-options-abbrargs-3			\
+	test-options-abbrargs-4
 
 SUCCESS_TESTS +=				\
 	test-success				\
@@ -107,7 +118,28 @@ SUCCESS_TESTS +=				\
 	test-preprocess				\
 	test-parse				\
 	test-validate				\
-	test-build
+	test-build				\
+	test-options-short-1			\
+	test-options-short-2			\
+	test-options-long-1			\
+	test-options-long-2			\
+	test-options-abbr-1			\
+	test-options-abbr-2			\
+	test-options-shortargs-1		\
+	test-options-shortargs-2		\
+	test-options-longargs-1			\
+	test-options-longargs-2			\
+	test-options-abbrargs-1			\
+	test-options-abbrargs-2			\
+	test-options-multi-1			\
+	test-options-multi-2			\
+	test-options-multi-3			\
+	test-options-multi-4			\
+	test-options-multi-5			\
+	test-options-multi-6			\
+	test-options-multi-7			\
+	test-options-multi-8
+
 
 XFAIL_TESTS  = $(FAIL_TESTS)
 TESTS        = $(FAIL_TESTS) $(SUCCESS_TESTS)
@@ -459,6 +491,378 @@ test-validate: $(srcdir)/test-validate.in Makefile
 	}
 EXTRA_DIST += test-validate.in
 CLEANFILES += test-validate
+
+test-options-short-1: $(srcdir)/test-options-short-1.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-short-1.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-short-1.in
+CLEANFILES += test-options-short-1
+
+test-options-short-2: $(srcdir)/test-options-short-2.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-short-2.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-short-2.in
+CLEANFILES += test-options-short-2
+
+test-options-short-3: $(srcdir)/test-options-short-3.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-short-3.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-short-3.in
+CLEANFILES += test-options-short-3
+
+test-options-short-4: $(srcdir)/test-options-short-4.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-short-4.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-short-4.in
+CLEANFILES += test-options-short-4
+
+test-options-long-1: $(srcdir)/test-options-long-1.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-long-1.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-long-1.in
+CLEANFILES += test-options-long-1
+
+test-options-long-2: $(srcdir)/test-options-long-2.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-long-2.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-long-2.in
+CLEANFILES += test-options-long-2
+
+test-options-long-3: $(srcdir)/test-options-long-3.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-long-3.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-long-3.in
+CLEANFILES += test-options-long-3
+
+test-options-long-4: $(srcdir)/test-options-long-4.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-long-4.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-long-4.in
+CLEANFILES += test-options-long-4
+
+test-options-abbr-1: $(srcdir)/test-options-abbr-1.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-abbr-1.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-abbr-1.in
+CLEANFILES += test-options-abbr-1
+
+test-options-abbr-2: $(srcdir)/test-options-abbr-2.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-abbr-2.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-abbr-2.in
+CLEANFILES += test-options-abbr-2
+
+test-options-abbr-3: $(srcdir)/test-options-abbr-3.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-abbr-3.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-abbr-3.in
+CLEANFILES += test-options-abbr-3
+
+test-options-shortargs-1: $(srcdir)/test-options-shortargs-1.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-shortargs-1.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-shortargs-1.in
+CLEANFILES += test-options-shortargs-1
+
+test-options-shortargs-2: $(srcdir)/test-options-shortargs-2.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-shortargs-2.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-shortargs-2.in
+CLEANFILES += test-options-shortargs-2
+
+test-options-shortargs-3: $(srcdir)/test-options-shortargs-3.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-shortargs-3.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-shortargs-3.in
+CLEANFILES += test-options-shortargs-3
+
+test-options-shortargs-4: $(srcdir)/test-options-shortargs-4.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-shortargs-4.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-shortargs-4.in
+CLEANFILES += test-options-shortargs-4
+
+test-options-longargs-1: $(srcdir)/test-options-longargs-1.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-longargs-1.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-longargs-1.in
+CLEANFILES += test-options-longargs-1
+
+test-options-longargs-2: $(srcdir)/test-options-longargs-2.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-longargs-2.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-longargs-2.in
+CLEANFILES += test-options-longargs-2
+
+test-options-longargs-3: $(srcdir)/test-options-longargs-3.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-longargs-3.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-longargs-3.in
+CLEANFILES += test-options-longargs-3
+
+test-options-longargs-4: $(srcdir)/test-options-longargs-4.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-longargs-4.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-longargs-4.in
+CLEANFILES += test-options-longargs-4
+
+test-options-abbrargs-1: $(srcdir)/test-options-abbrargs-1.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-abbrargs-1.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-abbrargs-1.in
+CLEANFILES += test-options-abbrargs-1
+
+test-options-abbrargs-2: $(srcdir)/test-options-abbrargs-2.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-abbrargs-2.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-abbrargs-2.in
+CLEANFILES += test-options-abbrargs-2
+
+test-options-abbrargs-3: $(srcdir)/test-options-abbrargs-3.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-abbrargs-3.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-abbrargs-3.in
+CLEANFILES += test-options-abbrargs-3
+
+test-options-abbrargs-4: $(srcdir)/test-options-abbrargs-4.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-abbrargs-4.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-abbrargs-4.in
+CLEANFILES += test-options-abbrargs-4
+
+test-options-multi-1: $(srcdir)/test-options-multi-1.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-multi-1.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-multi-1.in
+CLEANFILES += test-options-multi-1
+
+test-options-multi-2: $(srcdir)/test-options-multi-2.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-multi-2.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-multi-2.in
+CLEANFILES += test-options-multi-2
+
+test-options-multi-3: $(srcdir)/test-options-multi-3.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-multi-3.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-multi-3.in
+CLEANFILES += test-options-multi-3
+
+test-options-multi-4: $(srcdir)/test-options-multi-4.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-multi-4.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-multi-4.in
+CLEANFILES += test-options-multi-4
+
+test-options-multi-5: $(srcdir)/test-options-multi-5.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-multi-5.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-multi-5.in
+CLEANFILES += test-options-multi-5
+
+test-options-multi-6: $(srcdir)/test-options-multi-6.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-multi-6.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-multi-6.in
+CLEANFILES += test-options-multi-6
+
+test-options-multi-7: $(srcdir)/test-options-multi-7.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-multi-7.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-multi-7.in
+CLEANFILES += test-options-multi-7
+
+test-options-multi-8: $(srcdir)/test-options-multi-8.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-multi-8.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-multi-8.in
+CLEANFILES += test-options-multi-8
 
 clean-local:
 	rm -rf testSubDir-*
