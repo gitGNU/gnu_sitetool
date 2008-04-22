@@ -80,7 +80,6 @@ FAIL_TESTS +=					\
 	test-fail				\
 	test-options-2				\
 	test-options-3				\
-	test-arguments-long-2			\
 	test-options-short-3			\
 	test-options-short-4			\
 	test-options-long-3			\
@@ -95,8 +94,6 @@ FAIL_TESTS +=					\
 
 SUCCESS_TESTS +=				\
 	test-success				\
-	test-arguments-long-1			\
-	test-arguments-multiple-1		\
 	test-options-1				\
 	test-options-short-1			\
 	test-options-short-2			\
@@ -212,42 +209,6 @@ test-options-3: $(srcdir)/test-options-3.in Makefile
 	}
 EXTRA_DIST += test-options-3.in
 CLEANFILES += test-options-3
-
-test-arguments-long-1: $(srcdir)/test-arguments-long-1.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-long-1.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-arguments-long-1.in
-CLEANFILES += test-arguments-long-1
-
-test-arguments-long-2: $(srcdir)/test-arguments-long-2.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-long-2.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-arguments-long-2.in
-CLEANFILES += test-arguments-long-2
-
-test-arguments-multiple-1: $(srcdir)/test-arguments-multiple-1.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-arguments-multiple-1.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-arguments-multiple-1.in
-CLEANFILES += test-arguments-multiple-1
 
 test-options-tool-auths: $(srcdir)/test-options-tool-auths.in Makefile
 	( rm -f $@ $@.tmp && \

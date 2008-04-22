@@ -36,9 +36,6 @@ tests/defs
 tests/wrapper
 tests/test-fail
 tests/test-success
-tests/test-arguments-long-1
-tests/test-arguments-long-2
-tests/test-arguments-multiple-1
 tests/test-helps
 tests/test-dry-run
 tests/test-initialize
