@@ -146,7 +146,7 @@ if (!$options->config(\@options_list)) {
 }
 
 if(!$options->parse(\@ARGV)) {
-    hint("Option parsing failed");
+    hint($options->strerror());
     exit 1;
 }
 
