@@ -78,7 +78,7 @@ sub strerror($)
 {
     my $self = shift;
 
-    return $self->{STERROR};
+    return $self->{STRERROR};
 }
 
 sub add ($$$$$$)
@@ -99,7 +99,7 @@ sub add ($$$$$$)
 
     debug("Adding option");
 
-    if ($self->__check_id($id)) {
+    if ($self->_check_id($id)) {
 	$self->_error("ID \`" . $id . "' is already present");
 	return 0;
     }
@@ -108,7 +108,7 @@ sub add ($$$$$$)
     if (defined($long)) {
 	assert(length($long) > 1);
 
-	my $tmp = $self->__get_id_from_long($long);
+	my $tmp = $self->_get_id_from_long($long);
 
 	if (defined($tmp)) {
 	    $self->_error("Long option \`"    . $long . "' " .
@@ -121,7 +121,7 @@ sub add ($$$$$$)
     if (defined($short)) {
 	assert(length($short) == 1);
 
-	my $tmp = $self->__get_id_from_short($short);
+	my $tmp = $self->_get_id_from_short($short);
 
 	if (defined($tmp)) {
 	    $self->_error("Short option \`"   . $short . "' " .
@@ -186,7 +186,7 @@ sub config ($$)
     return 1;
 }
 
-sub __get_id_from_abbr ($$)
+sub _get_id_from_abbr ($$)
 {
     my $self   = shift;
     my $string = shift;
@@ -221,7 +221,7 @@ sub __get_id_from_abbr ($$)
     return $id;
 }
 
-sub __get_id_from_long ($$)
+sub _get_id_from_long ($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -240,7 +240,7 @@ sub __get_id_from_long ($$)
     return undef;
 }
 
-sub __get_id_from_short ($$)
+sub _get_id_from_short ($$)
 {
     my $self = shift;
     my $opt  = shift;
@@ -259,7 +259,7 @@ sub __get_id_from_short ($$)
     return undef;
 }
 
-sub __check_id ($$)
+sub _check_id ($$)
 {
     my $self = shift;
     my $id   = shift;
@@ -293,6 +293,12 @@ sub parse ($$)
 	($$argv_ref[0] !~ /^\-/) ||
 	($$argv_ref[0] =~ /^.$/)) {
 	# No options to parse
+
+	if ($self->{OPTIND} <= $#$argv_ref) {
+	    verbose("Non-option ARGV-elements: \`"               .
+		    "@$argv_ref[$self->{OPTIND} .. $#$argv_ref]" .
+		    "\`");
+	}
 	return 1;
     }
 
@@ -309,7 +315,7 @@ sub parse ($$)
 	$option = $$argv_ref[$self->{OPTIND}];
 
 	# Getting option ID
-	$opt_id = $self->__getopt_long($argv_ref);
+	$opt_id = $self->_getopt_long($argv_ref);
 	assert(defined($opt_id));
 
 	# Checking return value from getopt_long()
@@ -317,6 +323,11 @@ sub parse ($$)
 	    #
 	    # No more options
 	    #
+	    if ($self->{OPTIND} <= $#$argv_ref) {
+		verbose("Non-option ARGV-elements: \`"               .
+			"@$argv_ref[$self->{OPTIND} .. $#$argv_ref]" .
+			"\`");
+	    }
 	    return 1;
 	}
 
@@ -366,7 +377,7 @@ sub parse ($$)
     return 1;
 }
 
-sub __getopt_long ($$)
+sub _getopt_long ($$)
 {
     my $self     = shift;
     my $argv_ref = shift;
@@ -399,10 +410,9 @@ sub __getopt_long ($$)
     my $tmp_opt;
     my $tmp_arg;
 
-    if ($curr_opt =~ /^\-\-/) {
+    if ($curr_opt =~ /^\-\-([^=]+)(=(.*))?$/) {
 	debug("Checking current ARGV for long option");
 
-	$curr_opt =~ /^\-\-([^=]+)(=(.*))?$/;
 	assert(defined($1));
 
 	$tmp_opt = $1;
@@ -410,21 +420,20 @@ sub __getopt_long ($$)
 	if (defined($3)) {
 	    $tmp_arg = $3;
 	}
-	$opt_id = $self->__get_id_from_long($tmp_opt);
+	$opt_id = $self->_get_id_from_long($tmp_opt);
 
 	# If long option matching failed, we move for abbreviated form
 	if(!defined($opt_id)) {
-	    $opt_id = $self->__get_id_from_abbr($tmp_opt);
+	    $opt_id = $self->_get_id_from_abbr($tmp_opt);
 
 	    if (defined($opt_id) && $opt_id eq "-1") {
 		$self->_error("Option \`" . $curr_opt . "\` is ambiguous");
 		return '?';
 	    }
 	}
-    } else {
+    } elsif ($curr_opt =~ /^\-(.+)$/) {
 	debug("Checking current ARGV for short option");
 
-	$curr_opt =~ /^\-(.*)$/;
 	assert(defined($1));
 
 	if (length($1) > 1) {
@@ -435,7 +444,9 @@ sub __getopt_long ($$)
 	} else {
 	    $tmp_opt = $1;
 	}
-	$opt_id = $self->__get_id_from_short($tmp_opt);
+	$opt_id = $self->_get_id_from_short($tmp_opt);
+    } else {
+	bug("Unreachable!");
     }
 
     if (!defined($opt_id)) {
@@ -476,10 +487,10 @@ sub __getopt_long ($$)
 
 	# Skipping argument if we reach the end of options array or if it's
 	# another option
-	if ((++$self->{OPTIND} > $#{$argv_ref} + 1)       ||
-	    defined($self->__get_id_from_long($tmp_arg))  ||
-	    defined($self->__get_id_from_abbr($tmp_arg))  ||
-	    defined($self->__get_id_from_short($tmp_arg))) {
+	if ((++$self->{OPTIND} > $#{$argv_ref} + 1)      ||
+	    defined($self->_get_id_from_long($tmp_arg))  ||
+	    defined($self->_get_id_from_abbr($tmp_arg))  ||
+	    defined($self->_get_id_from_short($tmp_arg))) {
 	    return $opt_id;
 	}
 	$self->{OPTARG} = $tmp_arg;
