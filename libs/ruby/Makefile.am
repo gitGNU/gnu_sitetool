@@ -21,3 +21,8 @@
 include $(top_srcdir)/Makefile.sub
 
 rubylibdir = $(pkgvlibsdir)/ruby
+
+##
+## Maintainer related targets
+##
+maintainer-check: Makefile

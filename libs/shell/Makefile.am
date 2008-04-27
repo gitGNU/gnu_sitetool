@@ -21,3 +21,8 @@
 include $(top_srcdir)/Makefile.sub
 
 shelllibdir = $(pkgvlibsdir)/shell
+
+##
+## Maintainer related targets
+##
+maintainer-check: Makefile

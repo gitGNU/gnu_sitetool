@@ -31,4 +31,8 @@ SUBDIRS =					\
 ## Maintainer related targets
 ##
 maintainer-check: Makefile
-	(cd perl && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
+	(cd scheme && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
+	(cd perl   && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
+	(cd python && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
+	(cd ruby   && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
+	(cd shell  && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)

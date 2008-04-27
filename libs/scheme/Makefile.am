@@ -29,3 +29,9 @@ dist_schemelib_DATA =				\
 	tree.scm				\
 	xhtml.scm				\
 	sxml.scm
+
+##
+## Maintainer related targets
+##
+maintainer-check: Makefile
+	$(WHITESPACE_DETECT) $(dist_schemelib_DATA)

@@ -21,3 +21,8 @@
 include $(top_srcdir)/Makefile.sub
 
 pythonlibdir = $(pkgvlibsdir)/python
+
+##
+## Maintainer related targets
+##
+maintainer-check: Makefile
