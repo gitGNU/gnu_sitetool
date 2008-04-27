@@ -100,8 +100,6 @@ DOWNLOAD =					\
 	INSTALL					\
 	COPYINGv2
 
-FETCH = $(top_builddir)/tools/scripts/fetch
-
 update-fixups:
 	mv -f COPYINGv2 COPYING
 
@@ -132,6 +130,11 @@ DISTCLEANFILES =
 ##
 ## Maintainer related targets
 ##
-maintainer-check: Makefile
-	(cd src  && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
-	(cd libs && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
+maintainer-check: Makefile maintainer-check-local maintainer-check-recursive
+
+maintainer-check-recursive: Makefile
+	@for i in $(SUBDIRS) ; do \
+		(cd $$i && $(MAKE) $(AM_MAKEFLAGS) maintainer-check) \
+	done
+
+maintainer-check-local: Makefile

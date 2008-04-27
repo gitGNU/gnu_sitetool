@@ -30,3 +30,16 @@ dist_perllib_DATA =				\
 	Shell.pm				\
 	String.pm				\
 	Home.pm
+
+##
+## Maintainer related targets
+##
+maintainer-check: Makefile maintainer-check-local maintainer-check-recursive
+
+maintainer-check-recursive: Makefile
+	@for i in $(SUBDIRS) ; do \
+		(cd $$i && $(MAKE) $(AM_MAKEFLAGS) maintainer-check) \
+	done
+
+maintainer-check-local: Makefile
+	$(WHITESPACE_DETECT) $(dist_perllib_DATA) $(nodist_perllib_DATA)

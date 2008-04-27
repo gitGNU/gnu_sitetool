@@ -30,9 +30,11 @@ SUBDIRS =					\
 ##
 ## Maintainer related targets
 ##
-maintainer-check: Makefile
-	(cd scheme && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
-	(cd perl   && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
-	(cd python && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
-	(cd ruby   && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
-	(cd shell  && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)
+maintainer-check: Makefile maintainer-check-local maintainer-check-recursive
+
+maintainer-check-recursive: Makefile
+	@for i in $(SUBDIRS) ; do \
+		(cd $$i && $(MAKE) $(AM_MAKEFLAGS) maintainer-check) \
+	done
+
+maintainer-check-local: Makefile

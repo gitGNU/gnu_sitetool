@@ -215,5 +215,12 @@ sitetool-auths: $(srcdir)/sitetool-auths.in Makefile
 ##
 ## Maintainer related targets
 ##
-maintainer-check: Makefile
+maintainer-check: Makefile maintainer-check-local maintainer-check-recursive
+
+maintainer-check-recursive: Makefile
+	@for i in $(SUBDIRS) ; do \
+		(cd $$i && $(MAKE) $(AM_MAKEFLAGS) maintainer-check) \
+	done
+
+maintainer-check-local: Makefile
 	$(WHITESPACE_DETECT) $(SITETOOL_PERL_SRCS)
