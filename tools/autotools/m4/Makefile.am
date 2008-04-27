@@ -41,8 +41,6 @@ MACROS =					\
 	$(DOWNLOAD)				\
 	ax_prog_perl_modules.m4
 
-FETCH = $(top_builddir)/tools/scripts/fetch
-
 update:
 	rm -r -f fetch-dir && \
 	mkdir fetch-dir && \

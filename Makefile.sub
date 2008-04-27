@@ -41,3 +41,6 @@ do_subst = sed \
   -e 's,[@]pkgvbindir[@],$(pkgvbindir),g' \
   -e 's,[@]pkgvlibsdir[@],$(pkgvlibsdir),g' \
   -e 's,[@]pkgvdatadir[@],$(pkgvdatadir),g'
+
+WHITESPACE_DETECT = $(top_builddir)/tools/scripts/whitespace-detect
+FETCH             = $(top_builddir)/tools/scripts/fetch
