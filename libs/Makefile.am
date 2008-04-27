@@ -26,3 +26,9 @@ SUBDIRS =					\
 	python					\
 	ruby					\
 	shell
+
+##
+## Maintainer related targets
+##
+maintainer-check: Makefile
+	(cd perl && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)

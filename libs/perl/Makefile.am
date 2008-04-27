@@ -22,3 +22,9 @@ include $(top_srcdir)/Makefile.sub
 
 SUBDIRS =					\
 	Sitetool
+
+##
+## Maintainer related targets
+##
+maintainer-check: Makefile
+	(cd Sitetool && $(MAKE) $(AM_MAKEFLAGS) maintainer-check)

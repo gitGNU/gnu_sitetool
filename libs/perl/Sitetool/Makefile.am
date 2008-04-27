@@ -107,3 +107,9 @@ EXTRA_DIST =					\
 	Parse.pm				\
 	Preprocess.yp				\
 	Preprocess.pm
+
+##
+## Maintainer related targets
+##
+maintainer-check: Makefile
+	$(WHITESPACE_DETECT) $(dist_perllib_DATA) $(nodist_perllib_DATA)

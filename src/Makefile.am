@@ -211,3 +211,9 @@ sitetool-auths: $(srcdir)/sitetool-auths.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+
+##
+## Maintainer related targets
+##
+maintainer-check: Makefile
+	$(WHITESPACE_DETECT) $(SITETOOL_PERL_SRCS)
