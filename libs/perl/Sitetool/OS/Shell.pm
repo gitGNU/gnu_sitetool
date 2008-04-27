@@ -32,7 +32,7 @@ use Sitetool::Base::Trace;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&shell_execute &shell_execute_and_report);
 }

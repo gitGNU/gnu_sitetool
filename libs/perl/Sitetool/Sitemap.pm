@@ -40,7 +40,7 @@ use Sitetool::Data::Tree;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&sitemap_create);
 }
@@ -87,10 +87,10 @@ BEGIN {
 #	my $child;
 #	$child = Sitetool::Data::Tree->new("");
 #	assert(defined($child));
-#	
+#
 #	$child->parent(\$tree);
 #	$child->data("href", $item);
-#	
+#
 #	$tree->add_child($i, \$child);
 #	$i++;
 #
@@ -139,7 +139,7 @@ BEGIN {
 #}
 
 #sub sitemap_create ($$$$)
-#{    
+#{
 #    my $configuration_ref  = shift;
 #    my $input_directory    = shift;
 #    my $exclusions_ref     = shift;
@@ -182,7 +182,7 @@ BEGIN {
 #    }
 #    print $output_handle Data::Dumper->Dump([\$tree],[qw(tree_ref)]);
 #    close($output_handle);
-#    
+#
 #    return 1;
 #}
 
@@ -191,9 +191,9 @@ my %sitemap_tree_check_helper_hash = ();
 sub sitemap_tree_check_helper ($)
 {
     my $node_ref = shift;
-    
+
     assert(defined($node_ref));
-    
+
     my $node;
     $node = ${$node_ref};
 
@@ -211,7 +211,7 @@ sub sitemap_tree_check ($)
     my $tree_ref = shift;
 
     assert(defined($tree_ref));
-    
+
     my $tree;
     $tree = ${$tree_ref};
 
@@ -258,22 +258,22 @@ sub sitemap_create_check ($)
     }
 
     return 1;
-}   
+}
 
 sub sitemap_create_prepare ($)
 {
     my $configuration_ref = shift;
-    
+
     assert(defined($configuration_ref));
 
     my %configuration;
     %configuration = %{ $configuration_ref };
-    
+
     # Check map consistency
     for my $page_id (keys(%{$configuration{MAP}})) {
 	assert(defined($page_id));
 	assert($page_id ne "");
-	
+
 	$configuration{MAP}{$page_id}{LINKED} = 0;
     }
 
@@ -294,7 +294,7 @@ sub sitemap_create_cleanup ($)
 
 	delete($configuration{MAP}{$page_id}{LINKED});
     }
-    
+
     return 1;
 }
 
@@ -315,9 +315,9 @@ sub sitemap_create_helper ($$)
     #       All page ids are defined and not equal to ""
     #       All pages are not linked
     #
-    
+
     my $tree;
-    
+
     # Create the root node
     $tree = Sitetool::Data::Tree->new("");
     if (!defined($tree)) {
@@ -334,9 +334,9 @@ sub sitemap_create_helper ($$)
 	if (defined($configuration{MAP}{$page_id}{PARENT})) {
 	    next;
 	}
-	
+
 	warning("Page \`" . $page_id . "' is orphan, adopted now by root");
-	    
+
 	my $node;
 	$node = Sitetool::Data::Tree->new($page_id);
 	if (!defined($node)) {
@@ -377,16 +377,16 @@ sub sitemap_create_helper ($$)
 	    if ($configuration{MAP}{$page_id}{LINKED}) {
 		next;
 	    }
-	    
+
 	    my $parent_id;
-	    
+
 	    $parent_id = $configuration{MAP}{$page_id}{PARENT};
 	    assert(defined($parent_id));
-	    
+
 	    debug("Linking page "             .
 		  "\`" . $page_id   . "' to " .
 		  "\`" . $parent_id . "'");
-	    
+
 	    my $parent_ref;
 	    $parent_ref = $tree->find($parent_id);
 	    if (!defined($parent_ref)) {
@@ -403,9 +403,9 @@ sub sitemap_create_helper ($$)
 
 	    assert($parent_id eq $parent->id());
 
-	    debug("Parent for node "          . 
-		  "\`" . $page_id . "' "      . 
-		  "should be "                . 
+	    debug("Parent for node "          .
+		  "\`" . $page_id . "' "      .
+		  "should be "                .
 		  "\`" . $parent->id() . "'");
 
 	    my $node;
@@ -415,9 +415,9 @@ sub sitemap_create_helper ($$)
 		      "\`" . $page_id . "'");
 		return 0;
 	    }
-	    
+
 	    $node->parent(\$parent);
-	    
+
 	    my @children = $parent->children();
 	    if (!$parent->add_child($#children + 1, \$node)) {
 		assert(defined($parent->id()));
@@ -425,7 +425,7 @@ sub sitemap_create_helper ($$)
 		      "\`" . $parent->id() . "'");
 		return 0;
 	    }
-	    
+
 	    $configuration{MAP}{$page_id}{LINKED} = 1;
 	}
 
@@ -460,7 +460,7 @@ sub sitemap_create_helper ($$)
 	assert(defined($href));
 	my $title = $configuration{PAGES}{$page_id}{VARS}{TITLE};
 	assert(defined($title));
-	
+
 	$node->data("href",  $href);
 	$node->data("title", $title);
     }

@@ -43,7 +43,7 @@ use Sitetool::Scheme;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&pagemap_create);
 }
@@ -53,7 +53,7 @@ sub tree_dump ($$$)
     my $tree_ref = shift;
     my $node_ref = shift;
     my $level    = shift;
- 
+
     assert(defined($tree_ref));
     assert(defined($node_ref));
     assert(defined($level));
@@ -67,23 +67,23 @@ sub tree_dump ($$$)
     assert(defined($node));
 
     debug("Handling sub-tree generation for node \`" . $tree->id() . "'");
-    
+
     my $string;
     $string = "";
 
     my $id;
     my $title;
     my $href;
-    
+
     $id = $tree->id();
     assert(defined($id));
     $title = $tree->data("title");
     assert(defined($title));
     $href = href_compute($node->data("href"), $tree->data("href"));
     assert(defined($href));
-    
+
     if ($tree->is_leaf()) {
-	
+
 	#
 	# The output the result
 	#
@@ -106,7 +106,7 @@ sub tree_dump ($$$)
 
 	    my $temp;
 	    $temp = "";
-	    
+
 	    debug("Child is \`" . $child_ref . "'");
 	    $temp = &tree_dump($child_ref, $node_ref, $level + 1);
 	    if (!defined($temp)) {
@@ -174,7 +174,7 @@ sub pagemap_create ($$$)
     if (!$tree->relink()) {
 	return 0;
     }
-    
+
     debug("Checking if page \`" . $page_id . "' is in site map");
 
     my $page_node_ref;
@@ -199,13 +199,13 @@ sub pagemap_create ($$$)
 
     $string = tree_dump(\$tree, \$page_node, 1);
     if (!defined($string)) {
-        error("Cannot build pagemap for page \`" . $page_id . "'");
-        return 0;
+	error("Cannot build pagemap for page \`" . $page_id . "'");
+	return 0;
     }
 
 #    $string = "(define page-map `(\"" . $page_id . "\"\n" . $string . "))\n";
     $string = "(\"" . $page_id . "\"\n" . $string . ")\n";
-    
+
     $string = scheme_indent($string);
     assert(defined($string));
 

@@ -35,7 +35,7 @@ use Sitetool::OS::File;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&xml2xhtml);
 }
@@ -47,7 +47,7 @@ sub xml2xhtml ($$)
 
     assert(defined($input_filename));
     assert(defined($output_filename));
-    
+
     debug("Transforming XML "            .
 	  "\`" . $input_filename  . "' " .
 	  "to XHTML "                    .
@@ -60,7 +60,7 @@ sub xml2xhtml ($$)
 
     my $string;
 
-    $string = 
+    $string =
 	"cp $input_filename $output_filename";
 
     if (!shell_execute($string)) {

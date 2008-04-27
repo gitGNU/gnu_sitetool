@@ -31,11 +31,11 @@ use Sitetool::Base::Debug;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&trace_prefix_set
 		 &error
-		 &warning &warning_set &warning_get 
+		 &warning &warning_set &warning_get
 		 &verbose &verbose_set &verbose_get
 		 &debug   &debug_set   &debug_get  );
 }
@@ -78,7 +78,7 @@ sub warning_get ()
 sub warning ($)
 {
     my $string = shift;
-    
+
     assert($warning_mode ne "");
     assert(defined($string));
 

@@ -21,7 +21,7 @@
 package Sitetool::Scheme;
 
 use 5.8.0;
- 
+
 use warnings;
 use strict;
 use diagnostics;
@@ -110,15 +110,15 @@ sub scheme2xml ($$$)
 	$libs_dir;
 
     my $scheme_env;
-    $scheme_env = join('@PATH_SEPARATOR@', 
+    $scheme_env = join('@PATH_SEPARATOR@',
 		       map(File::Spec->catfile($_, "scheme"),
 			   (split '@PATH_SEPARATOR@', $base)));
 
     my $guile_env;
-    $guile_env = join('@PATH_SEPARATOR@', 
+    $guile_env = join('@PATH_SEPARATOR@',
 		      map(File::Spec->catfile($_, "guile-lib"),
 			  (split '@PATH_SEPARATOR@', $scheme_env)));
-    
+
     debug("Base is:       \`" . $base       . "'");
     debug("Scheme ENV is: \`" . $scheme_env . "'");
     debug("Guile ENV is:  \`" . $guile_env  . "'");

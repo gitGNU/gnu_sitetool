@@ -74,7 +74,7 @@ sub is_root ($) {
     }
 
     debug("Node \`" . $self->{ID} . "' is not a tree root");
-    
+
     return 0;
 }
 
@@ -135,24 +135,24 @@ sub find ($$) {
 
 	assert(defined($child_ref));
 	assert(ref($child_ref) ne "");
-	
+
 	my $child;
 	$child = ${$child_ref};
-	
+
 	debug("Working on "             .
 	      "\`" . $self->{ID} . "' " .
 	      "child "                  .
 	      "\`" . $child->{ID} . "'");
-	
+
 	assert(defined($child));
-	
+
 	my $node_ref;
 	$node_ref = $child->find($id);
 	if (defined($node_ref)) {
 	    debug("Got the node matching id \`" . $id . "'");
-	    
+
 	    assert(${$node_ref}->{ID} eq $id);
-	    
+
 	    return $node_ref;
 	}
     }
@@ -177,10 +177,10 @@ sub pack ($) {
 
     debug("Self children is \`" . $self->{CHILDREN} . "'");
     for my $child_ref (@{$self->{CHILDREN}}) {
-        debug("Child ref is "                                  .
-              "\`"                                             .
-              (defined($child_ref) ? $child_ref : "undefined") .
-              "'");
+	debug("Child ref is "                                  .
+	      "\`"                                             .
+	      (defined($child_ref) ? $child_ref : "undefined") .
+	      "'");
 
 	if (ref($child_ref)) {
 	    assert(UNIVERSAL::isa(${$child_ref}, "Sitetool::Data::Tree"));
@@ -239,7 +239,7 @@ sub remove_child ($$) {
     assert(defined($index));
 
     $self->{CHILDREN}->[$index] = undef;
-    
+
     return 1;
 }
 
@@ -247,13 +247,13 @@ sub children ($) {
     my $self = shift;
 
     assert(defined($self));
-    
+
     return @{$self->{CHILDREN}};
 }
 
 sub root ($$) {
     my $self = shift;
-    
+
     assert(defined($self));
 
     debug("Looking for \`" . $self->{ID} . "' root");
@@ -286,7 +286,7 @@ sub parent () {
     my $parent = shift;
 
     assert(defined($self));
-    
+
     if (defined($parent)) {
 	debug("Passed parent is \`" . $parent . "'");
 
@@ -294,20 +294,20 @@ sub parent () {
 	assert(UNIVERSAL::isa(${$parent}, "Sitetool::Data::Tree"));
 
 	$self->{PARENT} = $parent;
-	
+
 	debug("Parent for node "                   .
 	      "\`" . $self->{ID} . "' "            .
 	      "is node "                           .
 	      "\`" . ${$self->{PARENT}}->{ID} . "'");
     }
-    
+
     if (defined($self->{PARENT})) {
 	debug("Node "                    .
 	      "\`" . $self->{ID} . "' "  .
 	      "parent is "               .
 	      "\`" . $self->{PARENT}. "'");
     }
-    
+
     return $self->{PARENT};
 }
 
@@ -318,7 +318,7 @@ sub data () {
 
     assert(defined($self));
     assert(defined($key));
-    
+
     if (defined($value)) {
 	$self->{DATA}->{$key} = $value;
     }
@@ -367,10 +367,10 @@ sub relink ($$) {
     for my $child_ref (@{$self->{CHILDREN}}) {
 	if (ref($child_ref)) {
 	    assert(UNIVERSAL::isa(${$child_ref}, "Sitetool::Data::Tree"));
-	    
+
 	    my $child;
 	    $child = ${$child_ref};
-	    
+
 	    $child->{PARENT} = \$self;
 	    if (!$child->relink()) {
 		return 0;

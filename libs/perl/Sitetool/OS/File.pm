@@ -35,7 +35,7 @@ use Sitetool::Base::Trace;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&file_remove
 		 &file_touch
@@ -58,11 +58,11 @@ sub file_isnewer ($$)
     assert(defined($input_filename));
     assert(defined($output_filename));
     assert(file_ispresent($input_filename));
-    
+
     if (!file_ispresent($output_filename)) {
 	return 1;
     }
-    
+
     if (file_mtime($input_filename) > file_mtime($output_filename)) {
 	return 1;
     }
@@ -111,14 +111,14 @@ sub file_tostring ($$)
 	error("Cannot open \`$filename' for input");
 	return 0;
     }
-    
+
     my $string;
 
     $string = "";
     while (<$filehandle>) {
 	$string = $string . $_;
     }
-    
+
     close($filehandle);
 
     ${$string_ref} = $string;
@@ -141,7 +141,7 @@ sub file_mtime ($)
 	$uid,   $gid,   $rdev,  $size,
 	$atime, $mtime, $ctime, $blksize,
 	$blocks) = stat($filename);
-    
+
     return $mtime;
 }
 
@@ -211,7 +211,7 @@ sub file_copy ($$)
 	error("Cannot copy \`" . $source . "' to \`" . $destination . "'");
 	return 0;
     }
-    
+
     return 1;
 }
 

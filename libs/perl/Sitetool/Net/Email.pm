@@ -32,7 +32,7 @@ use Sitetool::Base::Trace;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&obfuscate_email);
 }
@@ -52,11 +52,11 @@ sub email_obfuscate ($)
 
       $name   = $1;
       $domain = $2;
-      
+
       assert(defined($name));
       assert(defined($domain));
-      
-      $string = $name . " DOT " . $domain;    
+
+      $string = $name . " DOT " . $domain;
   }
 
   assert(defined($string));

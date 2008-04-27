@@ -34,7 +34,7 @@ use Sitetool::Data::Tree;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&sitemap2graphviz);
 }
@@ -69,12 +69,12 @@ sub graphviz_helper ($$)
     for my $child_ref (@children) {
 	assert(defined($child_ref));
 #	debug("Child ref is \`$child_ref'");
-	
+
 	my $child = $$child_ref;
 	print $output_handle
 	    "\t\"" . $id . "\" -- \"" . $child->id() . "\";\n";
 	if (!&graphviz_helper($child_ref, $output_handle)) {
-	    error("Cannot dump node "        . 
+	    error("Cannot dump node "        .
 		  "\`" . $child->id() . "' " .
 		  "graphviz structure");
 	    return 0;
@@ -103,7 +103,7 @@ sub sitemap2graphviz ($$)
     }
 
     my $tree_ref;
-    
+
     debug("Cross your fingers, we're starting evaluation");
 
     # XXX FIXME: We should use the former version of 'eval' ...

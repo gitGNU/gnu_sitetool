@@ -57,14 +57,14 @@ sub directory_ispresent ($)
 #sub directory_makepath ($)
 #{
 #    my $filename = shift;
-#    
+#
 #    assert(defined($filename));
-#    
+#
 #    $path = dirname($filename);
 #    if (!directory_create($path)) {
 #	return 0;
 #    }
-#    
+#
 #    return 1;
 #}
 
@@ -145,7 +145,7 @@ sub directory_items ($$)
 
     assert(defined($directory));
     assert(defined($exclusions_ref));
-    
+
     debug("Reading items for directory `" . $directory . "'");
 
     my $directory_handle;
@@ -153,7 +153,7 @@ sub directory_items ($$)
 	error("Cannot open directory \`" . $directory . "'");
 	return 0;
     }
-	
+
     my @items = [ ];
     my @dirty_items;
 
@@ -162,24 +162,24 @@ sub directory_items ($$)
     closedir($directory_handle);
 
     my @clean_items;
-    
+
     for my $item (@dirty_items) {
 	if (($item =~ /^\.$/) || ($item =~ /^\.\.$/)) {
 	    # Skip `.' and `..' items ...
 	    next;
 	}
-	    
+
 	if (patterns_match($exclusions_ref, $item)) {
 	    debug("Item \`" . $item . "' should be excluded");
 	    next;
 	}
-	
+
 	push(@clean_items, $item);
     }
     debug("Clean items are: `@clean_items'");
 
     @items = @clean_items;
-    
+
     return @items;
 }
 

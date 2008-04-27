@@ -32,7 +32,7 @@ use Sitetool::Base::Trace;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&variable_canonicalize);
 }

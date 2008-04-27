@@ -35,7 +35,7 @@ use Sitetool::OS::Shell;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&filterchain_apply);
 }
@@ -66,12 +66,12 @@ sub filterchain_apply ($$$$)
     my $name = undef;
     {
 	debug("Mangling content name \`" . $source . "'");
-	
+
 	# Split path in order to get the file name
 	my $volume;
 	my $directories;
 	my $file;
-	
+
 	($volume, $directories, $file) = File::Spec->splitpath($source);
 
 	# Now remove the extension
@@ -80,7 +80,7 @@ sub filterchain_apply ($$$$)
     }
     assert(defined($name));
     debug("Base content name is \`" . $name . "'");
-    
+
     my $input;
     my $output;
     my $filter_ref;
@@ -104,7 +104,7 @@ sub filterchain_apply ($$$$)
     $i = 0;
     while (defined($filter_ref->[$i])) {
 	%filter = %{ $filter_ref->[$i] };
-	
+
 	$input  = File::Spec->catfile($temp_dir,
 				      $name . "." . $filter{SOURCE});
 	assert(defined($input));
@@ -113,32 +113,32 @@ sub filterchain_apply ($$$$)
 	$output = File::Spec->catfile($temp_dir,
 				      $name . "." . $filter{DESTINATION});
 	assert(defined($output));
-	
+
 #	verbose("Filter $i: " . $filter{SOURCE}      . " ($input)" .
 #		" -> "        . $filter{DESTINATION} . " ($output)");
 	verbose("Filter $i: " . $filter{SOURCE}     .
 		" -> "        . $filter{DESTINATION});
-	
+
 	debug("Filter infos:");
 	debug("  Source:      \`" . $filter{SOURCE}      . "'");
 	debug("  Destination: \`" . $filter{DESTINATION} . "'");
 	debug("  Parameters:  \`" . $filter{PARAMETERS}  . "'");
-	
+
 	if ($filter{SOURCE} eq $filter{DESTINATION}) {
 	    debug("Skipping silly operation");
 	} else {
 	    my $binary;
 	    my $parameters;
-	
+
 	    $binary = File::Spec->catfile($bin_dir,
-					  "filters", 
+					  "filters",
 					  $filter{SOURCE}     .
 					  "-"                 .
 					  $filter{DESTINATION});
 
-	    $parameters = $filter{PARAMETERS};	    
+	    $parameters = $filter{PARAMETERS};
 	    assert(defined($parameters));
-	    
+
 	    # Build environment for filter execution
 	    my $perl_env   = "";
 	    my $scheme_env = "";
@@ -152,23 +152,23 @@ sub filterchain_apply ($$$$)
 		    File::Spec->catfile($ENV{'SITETOOL_LIBRARY_PATH'}) :
 		    $libs_dir;
 
-		$perl_env   = join('@PATH_SEPARATOR@', 
+		$perl_env   = join('@PATH_SEPARATOR@',
 				   map(File::Spec->catfile($_, "perl"),
 				       (split '@PATH_SEPARATOR@', $base)));
-		
-		$scheme_env = join('@PATH_SEPARATOR@', 
+
+		$scheme_env = join('@PATH_SEPARATOR@',
 				   map(File::Spec->catfile($_, "scheme"),
 				       (split '@PATH_SEPARATOR@', $base)));
-		
-		$python_env = join('@PATH_SEPARATOR@', 
+
+		$python_env = join('@PATH_SEPARATOR@',
 				   map(File::Spec->catfile($_, "python"),
 				       (split '@PATH_SEPARATOR@', $base)));
-		
-		$shell_env  = join('@PATH_SEPARATOR@', 
+
+		$shell_env  = join('@PATH_SEPARATOR@',
 				   map(File::Spec->catfile($_, "shell"),
 				       (split '@PATH_SEPARATOR@', $base)));
-		
-		$ruby_env   = join('@PATH_SEPARATOR@', 
+
+		$ruby_env   = join('@PATH_SEPARATOR@',
 				   map(File::Spec->catfile($_, "ruby"),
 				       (split '@PATH_SEPARATOR@', $base)));
 
@@ -188,7 +188,7 @@ sub filterchain_apply ($$$$)
 		"shelllibdir=$shell_env "           .
 		"rubylibdir=$ruby_env "             .
 		"$binary $input $output $parameters";
-	    
+
 	    if (!shell_execute($chain)) {
 		file_remove($destination);
 		return 0;
@@ -197,7 +197,7 @@ sub filterchain_apply ($$$$)
 
 	$i++;
     }
-    
+
     # Finally move the latest created file into the destination
     if (!file_move($output, $destination)) {
 	file_remove($destination);
