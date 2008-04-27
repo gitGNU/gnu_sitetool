@@ -36,7 +36,7 @@ use Sitetool::OS::Shell;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&digest_compute_md5
 		 &digest_compute_sha1
@@ -80,9 +80,9 @@ sub digest_compute ($$$)
 	file_remove($digest_file);
 	return 0;
     }
-    
+
     my $temp;
-    
+
     $temp = "";
     if (!file_tostring($digest_file, \$temp)) {
 	error("Cannot read digest back");

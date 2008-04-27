@@ -49,7 +49,7 @@
 
 (define (string->html str)
   (let ((s ""))
-    (for-each 
+    (for-each
      (lambda (c) (set! s (string-append s (char->html c))))
      (string->list str))
     s)

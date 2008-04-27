@@ -23,25 +23,25 @@
 ;; we could use built-in lists, for example,
 ;; '(3 (4 () ()) (5 () ())) can represent a tree with 3 at the root and
 ;; subtrees with data 4 and 5 on the left and right respectively, which
-;; in turn have empty subtrees.  Another way to have trees (or more 
+;; in turn have empty subtrees.  Another way to have trees (or more
 ;; complex structures in general, is to do it with lambda encapsulation
 ;; like we did above with "newcell", "head, and  "tail":
 
 ;; node takes a datum, and left and right branches to make a tree:
 ;; '() is again the empty tree (null)
 (define tree-node
-  (lambda (x l r) 
+  (lambda (x l r)
     (lambda (s)
       (if (equal? s 'right) r
-          (if (equal? s 'left) l x)))))
+	  (if (equal? s 'left) l x)))))
 
 ;; convenient data accessors:
 (define tree-data  (lambda (tree) (tree 'data)))
 (define tree-left  (lambda (tree) (tree 'left)))
 (define tree-right (lambda (tree) (tree 'right)))
 
-;; computes number of nodes in the tree - try this 
-;; without recursion, even without tail-recursion!  
+;; computes number of nodes in the tree - try this
+;; without recursion, even without tail-recursion!
 (define tree-size
   (lambda (tree)
     (if (null? tree) 0
@@ -51,7 +51,7 @@
 (define depth
   (lambda (tree)
     (if (null? tree) 0
-	(let ((ldepth (depth (left tree))) 
+	(let ((ldepth (depth (left tree)))
 	      (rdepth (depth (right tree))))
 	  (+ 1 (if (> ldepth rdepth) ldepth rdepth))))))
 ;; note that "if" expressions return a value, which we can then add 1 to

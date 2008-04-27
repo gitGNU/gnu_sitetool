@@ -34,7 +34,7 @@ use Sitetool::OS::String;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&sxml2scheme);
 }
@@ -44,7 +44,7 @@ sub sxml2scheme ($$$)
     my $input_filename  = shift;
     my $variable_name   = shift;
     my $output_filename = shift;
-    
+
     assert(defined($input_filename));
     assert(defined($variable_name));
     assert(defined($output_filename));

@@ -32,9 +32,9 @@
 ;;  return a list of all links in the parse tree
 ;(define (sxml->links sxml)
 ;  (match sxml
-;   [('a ('@ ((not 'href ) _) ... ('href url)  . more) text)            
+;   [('a ('@ ((not 'href ) _) ... ('href url)  . more) text)
 ;    (list (list url text))]
-;   [(item ...)           
-;    (apply append 
+;   [(item ...)
+;    (apply append
 ;           (map sxml->links sxml))]
 ;   [else '()]))
