@@ -23,6 +23,7 @@ config.status
 tools/scripts/gitlog2ChangeLog
 tools/scripts/NEWS-query
 tools/scripts/fetch
+tools/scripts/whitespace-detect
 
 tools/autotools/install-sh
 tools/autotools/missing
