@@ -39,7 +39,7 @@ use Sitetool::OS::String;
 BEGIN {
     use Exporter ();
     our ($VERSION, @ISA, @EXPORT);
-    
+
     @ISA    = qw(Exporter);
     @EXPORT = qw(&configuration_freeze
 		 &configuration_melt);
@@ -63,7 +63,7 @@ sub configuration_freeze ($$)
     my %configuration;
 
     %configuration = %{ $configuration_ref };
-    
+
     my $string;
     $string = Data::Dumper->Dump([ \%configuration ], [ qw(*configuration) ]);
 
@@ -105,7 +105,7 @@ sub configuration_check ($)
 
     debug("Configuration was freezed with package name " .
 	  "\`" . $configuration{INTERNAL}{PACKAGE_NAME} . "'");
-    if ($configuration{INTERNAL}{PACKAGE_NAME} ne 
+    if ($configuration{INTERNAL}{PACKAGE_NAME} ne
 	$Sitetool::Autoconfig::PACKAGE_NAME) {
 	error("Configuration was freezed with a wrong package ...");
 	return 0;
@@ -118,7 +118,7 @@ sub configuration_check ($)
 
     debug("Configuration was freezed with package version " .
 	  "\`" . $configuration{INTERNAL}{PACKAGE_VERSION} . "'");
-    if ($configuration{INTERNAL}{PACKAGE_VERSION} ne 
+    if ($configuration{INTERNAL}{PACKAGE_VERSION} ne
 	$Sitetool::Autoconfig::PACKAGE_VERSION) {
 	error("Configuration was freezed with package version "      .
 	      "\`" . $configuration{INTERNAL}{PACKAGE_VERSION} . "'" .
@@ -174,7 +174,7 @@ sub configuration_melt ($$)
     if (!file_tostring($input_filename, \$string)) {
 	return 0;
     }
-    
+
     debug("Cross your fingers, we're starting evaluation");
 
     # XXX FIXME: We should use the former version of 'eval' ...
@@ -196,7 +196,7 @@ sub configuration_melt ($$)
     debug("Configuration melted successfully");
 
     %{ $configuration_ref } = %configuration;
-    
+
     return 1;
 }
 
