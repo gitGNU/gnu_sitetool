@@ -26,11 +26,6 @@ SUBDIRS =					\
 ##
 ## Maintainer related targets
 ##
-maintainer-check: Makefile maintainer-check-local maintainer-check-recursive
-
-maintainer-check-recursive: Makefile
-	@for i in $(SUBDIRS) ; do \
-		(cd $$i && $(MAKE) $(AM_MAKEFLAGS) maintainer-check) \
-	done
+update-local: Makefile
 
 maintainer-check-local: Makefile

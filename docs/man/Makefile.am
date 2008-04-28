@@ -18,6 +18,8 @@
 ## 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ##
 
+include $(top_srcdir)/Makefile.sub
+
 dist_man_MANS = sitetool.1
 man_aux       = sitetool.x
 
@@ -38,11 +40,6 @@ sitetool.1: $(srcdir)/sitetool.x $(top_srcdir)/src/sitetool.in
 ##
 ## Maintainer related targets
 ##
-maintainer-check: Makefile maintainer-check-local maintainer-check-recursive
-
-maintainer-check-recursive: Makefile
-	@for i in $(SUBDIRS) ; do \
-		(cd $$i && $(MAKE) $(AM_MAKEFLAGS) maintainer-check) \
-	done
+update-local: Makefile
 
 maintainer-check-local: Makefile
