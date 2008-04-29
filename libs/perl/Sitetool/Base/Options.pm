@@ -94,7 +94,7 @@ sub add ($$$$$$)
     assert($id >= 0);
     assert(defined($short) || defined($long));
     assert(ref($callback) eq 'CODE');
-    assert((ref($hasarg) eq "HASH")      ||
+    assert((ref($hasarg) eq 'ARRAY')     ||
 	   ($hasarg >= 0 && $hasarg <= 2));
 
     debug("Adding option");
@@ -132,7 +132,15 @@ sub add ($$$$$$)
     }
 
     $self->{CALLBACK}->{$id} = $callback;
-    $self->{HASARG}->{$id}   = $hasarg;
+
+    if (ref($hasarg) eq 'ARRAY') {
+
+	if (!$self->_config_subopt($id, $hasarg)) {
+	    return 0;
+	}
+    } else {
+	$self->{HASARG}->{$id} = $hasarg;
+    }
 
     debug("  option id:              \`" .
 	  $id                            .
@@ -157,7 +165,7 @@ sub add ($$$$$$)
 	    ($self->{HASARG}->{$id} eq '2' ?
 	     "optional"                    :
 	     "subopts")))	           .
-	  "\`");
+	  "'");
 
     return 1;
 }
@@ -205,10 +213,10 @@ sub _get_id_from_abbr ($$)
     for my $i (keys %{$self->{LONG}}) {
 
 	if ($self->{LONG}->{$i} =~ /^$string.+$/) {
-	    debug("Option \`"              . $self->{LONG}->{$i} .
-		  "\` with id \`"          . $i                  .
-		  "\` completes string \`" . $string             .
-		  "\`");
+	    debug("Option \`"             . $self->{LONG}->{$i} .
+		  "' with id \`"          . $i                  .
+		  "' completes string \`" . $string             .
+		  "'");
 
 	    if (defined($id)) {
 		return -1;
@@ -297,7 +305,7 @@ sub parse ($$)
 	if ($self->{OPTIND} <= $#$argv_ref) {
 	    verbose("Non-option ARGV-elements: \`"               .
 		    "@$argv_ref[$self->{OPTIND} .. $#$argv_ref]" .
-		    "\`");
+		    "'");
 	}
 	return 1;
     }
@@ -326,7 +334,7 @@ sub parse ($$)
 	    if ($self->{OPTIND} <= $#$argv_ref) {
 		verbose("Non-option ARGV-elements: \`"               .
 			"@$argv_ref[$self->{OPTIND} .. $#$argv_ref]" .
-			"\`");
+			"'");
 	    }
 	    return 1;
 	}
@@ -339,16 +347,8 @@ sub parse ($$)
 
 	assert(defined($opt_id));
 
-	#
-	# Arranging arguments for option callback
-	#
-	# XXX Fix me:
-	#  for the moment we handle callback's arguments with an
-	#  array, but when subopts code will raise: should we
-	#  handle it in a diferrent way?
-	#
 	if (defined($self->{OPTARG})) {
-	    debug("Option arguments: \`" . $self->{OPTARG} . "\`");
+	    debug("Option arguments: \`" . $self->{OPTARG} . "'");
 
 	    push(@option_args, $self->{OPTARG});
 	}
@@ -466,19 +466,19 @@ sub _getopt_long ($$)
 	}
     }
 
-    if (($self->{HASARG}->{$opt_id} eq '1')         ||
-	(ref($self->{HASARG}->{$opt_id}) eq "HASH")) {
+    if ($self->{HASARG}->{$opt_id} eq '1') {
 
 	debug("Checking for required argument");
 
-	if ((!defined($tmp_arg))                &&
-	    (++$self->{OPTIND} > $#{$argv_ref})) {
+	$self->{OPTIND}++;
+
+	if ((!defined($tmp_arg))              &&
+	    ($self->{OPTIND} > $#{$argv_ref})) {
 	    $self->_error("Missing arguments for option " .
 			  "\`" . $curr_opt . "\`");
 	    return '?';
 	}
 	$self->{OPTARG} = $tmp_arg;
-	$self->{OPTIND}++;
     }
 
     if ($self->{HASARG}->{$opt_id} eq '2') {
@@ -494,9 +494,158 @@ sub _getopt_long ($$)
 	    return $opt_id;
 	}
 	$self->{OPTARG} = $tmp_arg;
+
+	return $opt_id;
     }
 
+    if (ref($self->{HASARG}->{$opt_id}) eq 'ARRAY') {
+
+	debug("Checking for suboptions");
+
+	# Processing suboptions
+	my %subopts;
+
+	if (!$self->_getsubopt($opt_id, $tmp_arg, \%subopts)) {
+	    $self->_error("Failed to process suboptions");
+	    return 0;
+	}
+
+	# Executing suboptions callbacks
+	while(my ($name, $value) = each(%subopts)) {
+	    assert(defined($name));
+
+	    my $idx = $self->_get_subopt_index($opt_id, $name);
+	    assert($idx >= 0);
+
+	    if (!defined($value)) {
+		$value = "";
+	    }
+
+	    debug("Executing suboption \`" . $name . "' callback");
+
+	    if (!&{$self->{HASARG}->{$opt_id}[$idx]->{CALLBACK}}($value)) {
+		$self->_error("Failed to execute suboption callback");
+		return '?';
+	    }
+	}
+	$self->{OPTIND}++;
+    }
     return $opt_id;
+}
+
+sub _add_subopt ($$$$)
+{
+    my $self     = shift;
+    my $id       = shift;
+    my $optionp  = shift;
+    my $callback = shift;
+
+    assert(defined($self));
+    assert($id >= 0);
+    assert(defined($optionp));
+    assert(ref($callback) eq 'CODE');
+
+    debug("  Adding suboption");
+
+    my $idx = $#{$self->{HASARG}->{$id}} + 1;
+
+    ${$self->{HASARG}->{$id}}[$idx]->{OPTIONP}  = $optionp;
+    ${$self->{HASARG}->{$id}}[$idx]->{CALLBACK} = $callback;
+
+    debug("    suboption reference id: \`" . $id     . "'");
+    debug("    suboption index:        \`" . $idx    . "'");
+    debug("    suboption name:         \`" .
+	  ${$self->{HASARG}->{$id}}[$idx]->{OPTIONP} . "'");
+    debug("    suboption callback:     \`" .
+	  (defined(${$self->{HASARG}->{$id}}[$idx]->{CALLBACK}) ?
+	   ${$self->{HASARG}->{$id}}[$idx]->{CALLBACK}          :
+	   "undef")                                  . "'");
+
+    return 1;
+}
+
+sub _config_subopt ($$$)
+{
+    my $self        = shift;
+    my $id          = shift;
+    my $subopts_ref = shift;
+
+    assert(defined($self));
+    assert($id >= 0);
+    assert(defined($subopts_ref));
+
+    $self->{HASARG}->{$id} = ( );
+
+    for my $entry (@{$subopts_ref}) {
+	assert($#$entry == 1);
+
+	if (!$self->_add_subopt($id, @{$entry})) {
+	    $self->_error("Failed to add suboption with ID \`" . $id . "'");
+	    return 0;
+	}
+    }
+
+    return 1;
+}
+
+sub _get_subopt_index ($$$)
+{
+    my $self = shift;
+    my $id   = shift;
+    my $name = shift;
+
+    assert(defined($self));
+    assert($id >= 0 && $id <= 2);
+    assert(defined($name));
+
+    for my $idx (0 .. $#{$self->{HASARG}->{$id}}) {
+
+	if (${$self->{HASARG}->{$id}}[$idx]->{OPTIONP} eq $name) {
+	    return $idx;
+	}
+    }
+
+    return undef;
+}
+
+sub _getsubopt ($$$$)
+{
+    my $self        = shift;
+    my $id          = shift;
+    my $string      = shift;
+    my $subopts_ref = shift;
+
+    assert(defined($self));
+    assert($id >= 0 && $id <= 2);
+    assert(defined($string));
+    assert(ref($subopts_ref) eq "HASH");
+
+    debug("Processing string \`" . $string . "' for suboptions");
+
+    for my $entry (split(/,/, $string)) {
+	assert(defined($entry));
+
+	$entry =~ /^([^\=]+)(\=(.*))?$/;
+
+	if (!defined($1)) {
+	    $self->_error("Unknown suboption \`" . $entry . "'");
+	    return 0;
+	}
+	my $name  = $1;
+	my $value = $3;
+	my $idx   = $self->_get_subopt_index($id, $name);
+
+	if (!defined($idx)) {
+	    $self->_error("Unknown suboption \`" . $entry . "'");
+	    return 0;
+	}
+
+	debug("Suboption \`" . $ name . "' found at index \'" . $idx . "'");
+
+	$subopts_ref->{$name} = $value;
+    }
+
+    return 1;
 }
 
 1;
