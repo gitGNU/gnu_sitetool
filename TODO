@@ -14,13 +14,13 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
-* Add handling for subopts in Options.pm module.
+* Remove the --brief option handling (out-dated)
 
 * Add to preprocessor the capability to evaluate expressions in its
   macros with environment variables translation.
 
 * Fix all the system() calls. A boom is assured if they don't find the
-  executable.
+  executable they are looking for.
 
 * Add a feature to choose a global layout via command line switch.
 
@@ -31,10 +31,12 @@ TO-BE-DONE:
 * Add support for choosing the right page's DTD. We should have a global site
   DTD and the option to override it on each page.
 
-* Oversimplify site configuration (having it in a single file would be a 
+* Simplify site configuration (having it in a single file would be a 
   good thing); at the same time think, add and handle a site map indexing.
 
 DONE:
+* Add handling for subopts in Options.pm module.
+
 * Strenghten libs/perl/Sitetool/Options.pm module with argument shifter in
   order to give place to some options amongst the other.
 
