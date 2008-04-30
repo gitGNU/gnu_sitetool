@@ -505,9 +505,12 @@ sub _getopt_long ($$)
 	# Processing suboptions
 	my %subopts;
 
+	if (!defined($tmp_arg)) {
+	    $tmp_arg= "";
+	}
+
 	if (!$self->_getsubopt($opt_id, $tmp_arg, \%subopts)) {
-	    $self->_error("Failed to process suboptions");
-	    return 0;
+	    return '?';
 	}
 
 	# Executing suboptions callbacks
