@@ -91,6 +91,17 @@ tests/test-options-tool-parse
 tests/test-options-tool-preprocess
 tests/test-options-tool-uninstall
 tests/test-options-tool-validate
+tests/test-options-subopts-1
+tests/test-options-subopts-2
+tests/test-options-subopts-3
+tests/test-options-subopts-4
+tests/test-options-subopts-5
+tests/test-options-subopts-6
+tests/test-options-subopts-7
+tests/test-options-subopts-8
+tests/test-options-subopts-9
+tests/test-options-subopts-10
+tests/test-options-subopts-11
 
 libs/perl/Sitetool/Autoconfig.pm
 libs/perl/Sitetool/Filterchain.pm
