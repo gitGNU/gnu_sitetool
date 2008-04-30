@@ -362,7 +362,7 @@ my $options = Sitetool::Base::Options->new();
 assert(defined($options));
 
 my @options_list = (
-    [ "M", "mode",     sub { $running_mode = $_[0];   return 1; }, 1 ],
+    [ "M", "mode",     sub { $running_mode = $_[0];   return 0; }, 1 ],
     [ "n", "dry-run",  sub { $dry_run = 1;            return 1; }, 0 ],
     [ "f", "force",    sub { $force_mode = 1;         return 1; }, 0 ],
     [ "W", "warnings", sub { warning_set($_[0]);      return 1; }, 1 ],
