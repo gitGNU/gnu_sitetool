@@ -108,7 +108,7 @@ sub file_tostring ($$)
     my $filehandle;
 
     if (!open($filehandle, "<", $filename)) {
-	error("Cannot open \`$filename' for input");
+	error("Cannot open \`" . $filename . "' for input");
 	return 0;
     }
 

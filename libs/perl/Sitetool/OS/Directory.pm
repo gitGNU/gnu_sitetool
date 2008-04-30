@@ -88,7 +88,7 @@ sub directory_create ($)
     };
     if ($@) {
 	debug("Evaluation returned `" . $@ . "'");
-	error("Cannot create directory \`$dirname'");
+	error("Cannot create directory \`" . $dirname . "'");
 	return 0;
     }
 
@@ -109,7 +109,7 @@ sub directory_remove ($)
     }
 
     if (rmtree($dirname, 0, 1) == 0) {
-	error("Cannot remove directory \`$dirname'");
+	error("Cannot remove directory \`" . $dirname . "'");
 	return 0;
     }
 
