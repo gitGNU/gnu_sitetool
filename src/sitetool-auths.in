@@ -132,20 +132,19 @@ assert(defined($options));
 
 my @options_list = (
     [ "i", "initialize", sub { $running_mode = "initialize"; return 1; }, 0 ],
-    [ "A", "add",        sub {
-	$host         = $_[0];
-	$login        = $_[1];
-	$password     = $_[2];
-	$running_mode = "add";
-	return 1;
-      },
-      1 ],
-    [ "D", "delete",     sub {
-	$running_mode = "delete";
-	$host         = $_[0];
-	$login        = $_[1];
-	return 1; },
-      1 ],
+    [ "A", "add", sub { $running_mode = "add"; return 1; },
+      [
+       [ "host",     sub { $host     = $_[0]; return 1; } ],
+       [ "login",    sub { $login    = $_[0]; return 1; } ],
+       [ "password", sub { $password = $_[0]; return 1; } ],
+      ]
+    ],
+    [ "D", "delete", sub { $running_mode = "delete"; return 1; },
+      [
+       [ "host",     sub { $host     = $_[0]; return 1; } ],
+       [ "login",    sub { $login    = $_[0]; return 1; } ],
+      ]
+    ],
     [ "S", "show",       sub { $running_mode = "show";       return 1; }, 0 ],
     [ "C", "clear",      sub { $running_mode = "clear";      return 1; }, 0 ],
     [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0 ],
