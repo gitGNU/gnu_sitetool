@@ -48,10 +48,10 @@ sub terminal_width ()
     $width = 80;
 
     if (!defined($value)) {
-        return $width;
+	return $width;
     }
     if (!string_isnumber($value)) {
-        return $width;
+	return $width;
     }
 
     return string_tonumber($value);
@@ -66,10 +66,10 @@ sub terminal_height ()
     $height = 25;
 
     if (!defined($value)) {
-        return $height;
+	return $height;
     }
     if (!string_isnumber($value)) {
-        return $height;
+	return $height;
     }
 
     return string_tonumber($value);
