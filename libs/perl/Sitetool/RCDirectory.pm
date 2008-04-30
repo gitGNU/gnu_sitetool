@@ -32,6 +32,7 @@ use Sitetool::Base::Trace;
 use Sitetool::OS::String;
 use Sitetool::OS::Directory;
 use Sitetool::OS::Home;
+use Sitetool::OS::Environment;
 
 sub new ($)
 {
@@ -42,10 +43,15 @@ sub new ($)
     my $self = { };
 
     my $directory;
-    $directory =
-	File::Spec->catfile(home(), "." . $Sitetool::Autoconfig::PACKAGE_NAME);
-    $directory = string_lowercase($directory);
-    assert(defined($directory));
+
+    $directory = environment_get("SITETOOL_RC_FILES");
+    if (!defined($directory)) {
+	$directory =
+	    File::Spec->catfile(home(),
+				"." . $Sitetool::Autoconfig::PACKAGE_NAME);
+	$directory = string_lowercase($directory);
+	assert(defined($directory));
+    }
 
     $self->{NAME} = $directory;
 
