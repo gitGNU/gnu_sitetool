@@ -136,6 +136,9 @@ chmod -R a+rwx testSubDir-$testname > /dev/null 2>&1
 rm -rf testSubDir-$testname > /dev/null 2>&1
 mkdir testSubDir-$testname
 
+SITETOOL_RC_FILES=`pwd`testSubDir-$testname
+export SITETOOL_RC_FILES
+
 echo "=== Running test $0"
 
 # Copy in some files we need.
