@@ -14,6 +14,9 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
+* Do a general clean-up of SITETOOL_BINARY_PATH, SITETOOL_DATA_PATH and
+  SITETOOL_LIBRARY_PATH environment variables
+
 * Remove the --brief option handling (out-dated)
 
 * Add to preprocessor the capability to evaluate expressions in its
