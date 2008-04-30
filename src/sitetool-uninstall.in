@@ -88,6 +88,12 @@ sub help_common ()
     print "  -V, --version               print version number, then exit\n";
 }
 
+sub help_environment ()
+{
+    print "The environment variables SITETOOL_BINARY_PATH, SITETOOL_LIBRARY_PATH,\n";
+    print "SITETOOL_DATA_PATH and SITETOOL_RC_FILES are honored.\n";
+}
+
 sub help ()
 {
     print "Usage: $PROGRAM_NAME [OPTIONS]\n";
@@ -101,6 +107,10 @@ sub help ()
     print "Warning categories include:\n";
     print "  \`all'           all the warnings\n";
     print "  \`none'          turn off all the warnings\n";
+    print "\n";
+
+    help_environment();
+
     print "\n";
     print "Report bugs to <$PACKAGE_BUGREPORT>\n";
 }

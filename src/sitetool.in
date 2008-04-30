@@ -222,6 +222,12 @@ my %tools = (
 # Utilities
 #
 
+sub help_environment ()
+{
+    print "The environment variables SITETOOL_BINARY_PATH, SITETOOL_LIBRARY_PATH,\n";
+    print "SITETOOL_DATA_PATH and SITETOOL_RC_FILES are honored.\n";
+}
+
 sub help ()
 {
     print "Usage: $PROGRAM_NAME [OPTION]... [-- [MODE-ARG]...]\n";
@@ -257,10 +263,9 @@ sub help ()
     print "more detailed description of MODE.\n";
     print "\n";
 
-    print "The environment variables SITETOOL_BINARY_PATH, SITETOOL_LIBRARY_PATH and\n";
-    print "SITETOOL_DATA_PATH are honored.\n";
-    print "\n";
+    help_environment();
 
+    print "\n";
     print "Report bugs to <$PACKAGE_BUGREPORT>\n";
 
     return 1;
