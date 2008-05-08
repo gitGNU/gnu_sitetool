@@ -139,6 +139,7 @@ SUCCESS_TESTS +=				\
 	test-options-subopts-5			\
 	test-dry-run				\
 	test-helps				\
+	test-auths				\
 	test-initialize				\
 	test-preprocess				\
 	test-parse				\
@@ -364,6 +365,18 @@ test-helps: $(srcdir)/test-helps.in Makefile
 	}
 EXTRA_DIST += test-helps.in
 CLEANFILES += test-helps
+
+test-auths: $(srcdir)/test-auths.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-auths.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-auths.in
+CLEANFILES += test-auths
 
 test-initialize: $(srcdir)/test-initialize.in Makefile
 	( rm -f $@ $@.tmp && \
