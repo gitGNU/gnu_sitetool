@@ -340,11 +340,27 @@ sub remove ($$$)
     return 1;
 }
 
-sub foreach ($$$$) {
-    my $self            = shift;
-    my $cb_host_ref     = shift;
-    my $cb_login_ref    = shift;
-    my $cb_password_ref = shift;
+sub foreach ($$) {
+    my $self     = shift;
+    my $callback = shift;
+
+    assert(defined($self));
+    assert(defined($callback));
+
+    for my $host (keys(%{$self->{HOSTS}})) {
+	debug("Iterating over host \`" . $host . "'");
+
+	for my $login (keys(%{$self->{HOSTS}->{$host}->{LOGIN}})) {
+	    debug("Iterating over login \`" . $login . "'");
+
+	    my $password;
+	    $password = $self->{HOSTS}->{$host}->{LOGIN}->{$login};
+
+	    if (!$callback->($host, $login, $password)) {
+		return;
+	    }
+	}
+    }
 }
 
 1;
