@@ -75,11 +75,16 @@ our $PROGRAM_NAME = "sitetool-auths";
 sub help_brief ()
 {
     print "  -i, --initialize            initialize the authorizations DB\n";
-    print "  -A, --add=HOST LOGIN PSWD   add a DB entry\n";
-    print "  -D, --delete=HOST LOGIN     remove a DB entry\n";
+    print "  -A, --add=HOST,LOGIN,PSWD   add a DB entry\n";
+    print "  -D, --delete=HOST,LOGIN     remove a DB entry\n";
     print "  -S, --show                  show all DB entries\n";
     print "  -C, --clear                 clear all DB entries\n";
     print "  -f, --force                 force operations, whenever possible\n";
+    print "\n";
+    print "    HOST  is host=HOSTNAME\n";
+    print "    LOGIN is login=LOGINNAME\n";
+    print "    PSWD  is password=PASSWORD\n";
+    print "\n";
 }
 
 sub help_common ()
@@ -232,7 +237,7 @@ if ($running_mode =~ /^initialize$/) {
     if (!$rc->save()) {
 	exit 1;
     }
-} elsif ($running_mode =~ /^remove$/) {
+} elsif ($running_mode =~ /^delete$/) {
     debug("Removing entry from DB");
     if (!$rc->load()) {
 	exit 1;
@@ -253,7 +258,20 @@ if ($running_mode =~ /^initialize$/) {
     if (!$rc->load()) {
 	exit 1;
     }
-    if (!$rc->foreach(undef, undef, undef)) {
+    {
+	sub callback($$$) {
+	    my $host   = shift;
+	    my $login  = shift;
+	    my $passwd = shift;
+
+	    if (!defined($host))     { $host     = "<UNDEFINED>"; }
+	    if (!defined($login))    { $login    = "<UNDEFINED>"; }
+	    if (!defined($password)) { $password = "<UNDEFINED>"; }
+
+	    print "  $host $login $password\n";
+	}
+
+	$rc->foreach(\&callback);
     }
 } else {
     hint("Unknown running mode");
