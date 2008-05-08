@@ -39,6 +39,7 @@ tests/test-fail
 tests/test-success
 tests/test-helps
 tests/test-dry-run
+tests/test-auths
 tests/test-initialize
 tests/test-preprocess
 tests/test-parse
