@@ -183,15 +183,14 @@ sub pack ($) {
 	      "'");
 
 	if (ref($child_ref)) {
-	    assert(${$child_ref}->isa("Sitetool::Data::Tree"));
-
 	    debug("Packed children are now \`@tmp'");
 	    push(@tmp, $child_ref);
 
 	    my $child;
 	    $child = ${$child_ref};
-	    $child->pack();
-
+	    if ($child->can('pack')) {
+		$child->pack();
+	    }
 	} elsif (!defined($child_ref)) {
 	    debug("Removing undefined child on node \`" . $self->{ID} . "'");
 	} else {
