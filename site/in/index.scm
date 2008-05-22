@@ -23,6 +23,12 @@
  to SXML. This layer is fully expandable with python, perl, shell scripts
  and so on."
  )
+(h4 "Copying")
+(p
+ "Sitetool is licensed under the "
+ (a (@ (href "http://www.gnu.org/licenses/licenses.html"))
+    "GNU General Public License, version 2")
+ )
 
 (h3 "MAINTAINERS")
 (p
