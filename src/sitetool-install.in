@@ -59,8 +59,8 @@ use Sitetool::Base::Options;
 use Sitetool::OS::Shell;
 use Sitetool::OS::Home;
 use Sitetool::Configuration;
-use Sitetool::RCDirectory;
-use Sitetool::RCFile;
+use Sitetool::RC::RCDirectory;
+use Sitetool::RC::RCFile;
 
 #
 # Globals
