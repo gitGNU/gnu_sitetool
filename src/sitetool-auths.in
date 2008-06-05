@@ -210,7 +210,7 @@ if ($dry_run) {
 #
 
 my $rc_directory;
-$rc_directory = Sitetool::RCDirectory->new();
+$rc_directory = Sitetool::RC::RCDirectory->new();
 assert(defined($rc_directory));
 
 my $rc_filename;
@@ -218,7 +218,7 @@ $rc_filename = File::Spec->catfile($rc_directory->dirname(), "auths");
 assert(defined($rc_filename));
 
 my $rc;
-$rc = Sitetool::RCFile->new($rc_filename);
+$rc = Sitetool::RC::RCFile->new($rc_filename);
 assert(defined($rc));
 
 if ($running_mode =~ /^initialize$/) {
