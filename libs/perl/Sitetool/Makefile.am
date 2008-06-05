@@ -24,6 +24,7 @@ SUBDIRS =					\
 	Base					\
 	Data					\
 	OS					\
+	RC					\
 	Misc					\
 	Net
 
@@ -40,9 +41,7 @@ dist_perllib_DATA =				\
 	Sitemap.pm				\
 	Variable.pm				\
 	Graphviz.pm				\
-	Array.pm				\
-	RCDirectory.pm				\
-	RCFile.pm
+	Array.pm
 
 nodist_perllib_DATA =				\
 	Autoconfig.pm				\
