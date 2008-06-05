@@ -14,6 +14,8 @@ NOTE:
         when that TODO has been declared completed ...
 
 TO-BE-DONE:
+* Add sitemap related plugin in order to generate sitemaps index files
+
 * Check all string-related assert
 
 * Do a general clean-up of SITETOOL_BINARY_PATH, SITETOOL_DATA_PATH and
