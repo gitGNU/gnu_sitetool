@@ -115,8 +115,8 @@ sub write_email($) {
 
     assert($text);
 
-    print OUTFILE "{{span|changelog_email " . 
-	          "[[email:" . $text . " ]] }}\n";
+    print OUTFILE "{{span|changelog_email " .
+		  "[[email:" . $text . " ]] }}\n";
 
     return 1;
 }
@@ -162,9 +162,9 @@ sub process_changelog_info($) {
     my $date;
     my $author;
     my $email;
-    
+
     assert($info);
-    
+
     $info =~ /^(\d{4}\-\d{2}\-\d{2})\ (.*)\ \<(.*)\>$/;
 
     $date   = $1;
@@ -175,12 +175,12 @@ sub process_changelog_info($) {
 	error("Failed to write date\n");
 	return 0;
     }
-    
+
     if (!write_author($author)) {
 	error("Failed to write author\n");
 	return 0;
     }
-    
+
     if (!write_email($email)) {
 	error("Failed to write e-mail\n");
 	return 0;
@@ -204,7 +204,7 @@ sub parse_buffer($) {
 
 	print OUTFILE "\n";
 
- 	if (!process_changelog_info($buffer)) {
+	if (!process_changelog_info($buffer)) {
 	    error("Failed to process ChangeLog info\n");
 	    return 0;
 	}
@@ -213,7 +213,7 @@ sub parse_buffer($) {
 
 	verbose("Found ChangeLog change\n");
 
- 	if (!process_changelog_change($buffer)) {
+	if (!process_changelog_change($buffer)) {
 	    error("Failed to process ChangeLog change\n");
 	    return 0;
 	}
@@ -237,7 +237,7 @@ sub process_infile() {
 	my $tmp = $_;
 
 	if ($tmp =~ /^\s*$/) {
-	    
+
 	    if (defined($input_buffer)) {
 
 		if (!parse_buffer($input_buffer)) {
@@ -255,7 +255,7 @@ sub process_infile() {
 	    }
 	}
     }
-    
+
     if (defined($input_buffer)) {
 
 	if (!parse_buffer($input_buffer)) {
@@ -271,7 +271,8 @@ sub process_infile() {
 # Script finalization, close input and output files handles
 #
 
-sub dispose () {
+sub dispose ()
+{
     verbose("Finalization\n");
 
     close(OUTFILE);
@@ -280,7 +281,7 @@ sub dispose () {
 }
 
 #
-# Script initialization, set default variables, open input file 
+# Script initialization, set default variables, open input file
 # for read and output file for write
 #
 
@@ -305,14 +306,14 @@ sub init($$) {
     debug("Input file: `" . $infile . "`\n");
     debug("Output file: `" . $outfile . "`\n");
 
-    if (!open(INFILE, "<", $infile)) { 
-	error("Failed to open file `" . $infile . 
+    if (!open(INFILE, "<", $infile)) {
+	error("Failed to open file `" . $infile .
 	      "` for read\n");
 	return 0;
     }
 
-    if (!open(OUTFILE, ">", $outfile)) { 
-	error("Failed to open file `" . $outfile . 
+    if (!open(OUTFILE, ">", $outfile)) {
+	error("Failed to open file `" . $outfile .
 	      "` for write\n");
 	return 0;
     }
@@ -330,7 +331,7 @@ if (!init($ARGV[0], $ARGV[1])) {
 }
 
 if (!process_infile()) {
-    error("Failed to process file `" . $ARGV[0] . "`\n"); 
+    error("Failed to process file `" . $ARGV[0] . "`\n");
     dispose();
     exit 1;
 }

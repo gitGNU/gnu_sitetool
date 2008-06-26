@@ -29,7 +29,8 @@ use diagnostics;
 use Sitetool::Base::Debug;
 use Sitetool::Base::Trace;
 
-sub new ($$) {
+sub new ($$)
+{
     my $class = shift;
     my $id    = shift;
 
@@ -50,7 +51,8 @@ sub new ($$) {
     return bless($self, $class);
 }
 
-sub id ($) {
+sub id ($)
+{
     my $self = shift;
     my $id   = shift;
 
@@ -63,7 +65,8 @@ sub id ($) {
     return $self->{ID};
 }
 
-sub is_root ($) {
+sub is_root ($)
+{
     my $self = shift;
 
     assert(defined($self));
@@ -78,7 +81,8 @@ sub is_root ($) {
     return 0;
 }
 
-sub is_leaf ($) {
+sub is_leaf ($)
+{
     my $self = shift;
 
     assert(defined($self));
@@ -95,7 +99,8 @@ sub is_leaf ($) {
     return 0;
 }
 
-sub rename ($$) {
+sub rename ($$)
+{
     my $self = shift;
     my $id   = shift;
 
@@ -107,7 +112,8 @@ sub rename ($$) {
     return 1;
 }
 
-sub find ($$) {
+sub find ($$)
+{
     my $self = shift;
     my $id   = shift;
 
@@ -166,7 +172,8 @@ sub find ($$) {
     return undef;
 }
 
-sub pack ($) {
+sub pack ($)
+{
     my $self = shift;
 
     assert(defined($self));
@@ -203,7 +210,8 @@ sub pack ($) {
     debug("Node \`" . $self->{ID} . "' packed");
 }
 
-sub child () {
+sub child ()
+{
     my $self     = shift;
     my $index    = shift;
     my $node_ref = shift;
@@ -214,7 +222,8 @@ sub child () {
     return $self->{CHILDREN}->[$index];
 }
 
-sub add_child ($$$) {
+sub add_child ($$$)
+{
     my $self     = shift;
     my $index    = shift;
     my $node_ref = shift;
@@ -230,7 +239,8 @@ sub add_child ($$$) {
     return 1;
 }
 
-sub remove_child ($$) {
+sub remove_child ($$)
+{
     my $self     = shift;
     my $index    = shift;
 
@@ -242,7 +252,8 @@ sub remove_child ($$) {
     return 1;
 }
 
-sub children ($) {
+sub children ($)
+{
     my $self = shift;
 
     assert(defined($self));
@@ -250,7 +261,8 @@ sub children ($) {
     return @{$self->{CHILDREN}};
 }
 
-sub root ($$) {
+sub root ($$)
+{
     my $self = shift;
 
     assert(defined($self));
@@ -280,7 +292,8 @@ sub root ($$) {
     return $parent->root();
 }
 
-sub parent () {
+sub parent ()
+{
     my $self   = shift;
     my $parent = shift;
 
@@ -310,7 +323,8 @@ sub parent () {
     return $self->{PARENT};
 }
 
-sub data () {
+sub data ()
+{
     my $self  = shift;
     my $key   = shift;
     my $value = shift;
@@ -325,7 +339,8 @@ sub data () {
     return $self->{DATA}->{$key};
 }
 
-sub foreach ($$) {
+sub foreach ($$)
+{
     my $self         = shift;
     my $callback_ref = shift;
 
@@ -356,7 +371,8 @@ sub foreach ($$) {
     }
 }
 
-sub relink ($$) {
+sub relink ($$)
+{
     my $self = shift;
 
     assert(defined($self));

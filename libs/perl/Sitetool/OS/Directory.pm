@@ -183,7 +183,7 @@ sub directory_items ($$)
     return @items;
 }
 
-sub directory_copy($$)
+sub directory_copy ($$)
 {
     my $source      = shift;
     my $destination = shift;

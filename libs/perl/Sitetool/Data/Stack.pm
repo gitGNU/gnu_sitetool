@@ -40,7 +40,8 @@ sub new {
     return bless($self, $class);
 }
 
-sub push ($$) {
+sub push ($$)
+{
     my $self  = shift;
     my $value = shift;
 
@@ -49,7 +50,8 @@ sub push ($$) {
     push(@{$self->{VALUES}}, $value);
 }
 
-sub pop ($) {
+sub pop ($)
+{
     my $self  = shift;
     my $value;
 
@@ -60,7 +62,8 @@ sub pop ($) {
     return $value;
 }
 
-sub size ($) {
+sub size ($)
+{
     my $self = shift;
 
     assert(defined($self));
@@ -68,7 +71,8 @@ sub size ($) {
     return ($#{@{$self->{VALUES}}} + 1);
 }
 
-sub is_empty ($) {
+sub is_empty ($)
+{
     my $self = shift;
 
     assert(defined($self));
@@ -76,7 +80,8 @@ sub is_empty ($) {
     return (($self->size() == 0) ? 1 : 0);
 }
 
-sub poke ($) {
+sub poke ($)
+{
   my $self  = shift;
   my $value;
 
@@ -91,7 +96,8 @@ sub poke ($) {
   return $value;
 }
 
-sub peek ($$) {
+sub peek ($$)
+{
   my $self  = shift;
   my $value = shift;
 

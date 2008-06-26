@@ -65,7 +65,7 @@ sub clean ($)
     #   May we offer both 'opterr' and 'optopt' support?
 }
 
-sub _error($$)
+sub _error ($$)
 {
     my $self   = shift;
     my $string = shift;
@@ -74,7 +74,7 @@ sub _error($$)
     $self->{STRERROR} = $string;
 }
 
-sub strerror($)
+sub strerror ($)
 {
     my $self = shift;
 

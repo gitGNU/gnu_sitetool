@@ -131,7 +131,8 @@ sub string_lowercase ($)
 #
 # Removes duplicated spaces and tabs from input string
 #
-sub string_purify ($) {
+sub string_purify ($)
+{
   my $string = shift;
 
   assert(defined($string));

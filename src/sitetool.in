@@ -493,7 +493,8 @@ debug("Running mode is \`$running_mode'");
 #
 
 {
-    sub callback ($$) {
+    sub callback ($$)
+    {
 	my $key   = shift;
 	my $value = shift;
 

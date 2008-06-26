@@ -39,7 +39,7 @@ BEGIN {
 		 &text_length);
 }
 
-sub text_length($)
+sub text_length ($)
 {
     my $text   = shift;
 
@@ -66,7 +66,7 @@ sub text_length($)
     return $length;
 }
 
-sub text_wrap($$)
+sub text_wrap ($$)
 {
     my $text     = shift;
     my $max_len  = shift;

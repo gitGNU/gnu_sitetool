@@ -173,7 +173,7 @@ sub write_text($) {
 	$text =~ s/^\s*([\.\,\:\;\!\?\)\]\}])/$1/;
 
 	$text =~ s/\\/\\\\/g; # Protection for SXML
-	$text =~ s/\"/\\\"/g; # 
+	$text =~ s/\"/\\\"/g; #
     }
 
     if ($tag_has_attributes) {
@@ -186,18 +186,18 @@ sub write_text($) {
 }
 
 #
-# For inline level elements, token is separated from each other by one or 
-# more space characters. Buffering the content of a tag is like 'pacman', 
-# so when a tag is encountered, buffer will eat every tokens until next 
+# For inline level elements, token is separated from each other by one or
+# more space characters. Buffering the content of a tag is like 'pacman',
+# so when a tag is encountered, buffer will eat every tokens until next
 # occurrence of tag is met.
-# Obviously we couldn't have same tag in a nested way... Maybe it will be 
-# a nonsence or maybe not... 
+# Obviously we couldn't have same tag in a nested way... Maybe it will be
+# a nonsence or maybe not...
 #
 
 sub parse_inline_level($) {
     my $inline = shift;
     my $token;
-    
+
     verbose("Process inline level\n");
 
     debug("Inline content: `" . $inline . "`\n");
@@ -311,7 +311,7 @@ sub parse_inline_level($) {
 	    error("Missing closing tag (`" . $tag . "`)\n");
 	    return 0;
 	}
-	
+
 	if (!defined($text) || $text =~ /^\s*$/) {
 	    $text = $source;
 	}
@@ -350,7 +350,7 @@ sub parse_inline_level($) {
 	$text_buffer = " ";
 
 	if (defined($inline) && $inline !~ /^\s*$/) {
-	    
+
 	    if (!parse_inline_level($inline)) {
 		error("Failed to process inline level\n");
 		return 0;
@@ -403,7 +403,7 @@ sub parse_inline_level($) {
 	    error("Failed to add tag attribute\n");
 	    return 0;
 	}
-	
+
 	if (!write_tag_attribute("alt", $text)) {
 	    error("Failed to add tag attribute\n");
 	    return 0;
@@ -445,7 +445,7 @@ sub parse_inline_level($) {
 	    error("Missing closing tag (`span`)\n");
 	    return 0;
 	}
-	
+
 	if (defined($text)) {
 
 	    if (defined($text_buffer)) {
@@ -500,8 +500,8 @@ sub parse_inline_level($) {
 	    error("Failed to inline container\n");
 	    return 0;
 	}
-	
-	if (defined($class) && 
+
+	if (defined($class) &&
 	    !write_tag_attribute("class", $class)) {
 	    error("Failed to add tag attribute\n");
 	    return 0;
@@ -566,7 +566,7 @@ sub parse_inline_level($) {
 		return 0;
 	    }
 	}
-    }    
+    }
 
     if (defined($text_buffer)) {
 	write_text($text_buffer);
@@ -764,7 +764,7 @@ sub write_close_list($) {
 	    return 0;
 	}
     } elsif (($type eq ";") || ($type eq ":")) {
-	
+
 	if (!write_close_tag("dl")) {
 	    error("Failed to close definition list\n");
 	    return 0;
@@ -911,12 +911,12 @@ sub process_list($) {
 	    }
 
 #
-# Checking list root type, it must be always the same, if we want 
-# another root type we could put such list on another block level 
+# Checking list root type, it must be always the same, if we want
+# another root type we could put such list on another block level
 # element
 #
 	    if (($current[0] ne $history[0])                     &&
-		((($current[0] ne ";") && ($current[0] ne ":"))  && 
+		((($current[0] ne ";") && ($current[0] ne ":"))  &&
 		 (($history[0] ne ";") && ($history[0] ne ":")))) {
 		error("List root mismatched with previous\n");
 		return 0;
@@ -944,7 +944,7 @@ sub process_list($) {
 			    error("Failed to ope list\n");
 			    return 0;
 			}
-			
+
 			if (!write_open_list_item($current[$i])) {
 			    error("Failed to open list item\n");
 			    return 0;
@@ -990,14 +990,14 @@ sub process_list($) {
 		}
 
 		if (!defined($tmp)) {
-		    
+
 		    for (my $i = $#history; $i >= 1; $i--) {
-			
+
 			if (!write_close_list_item($history[$i])) {
 			    error("Failed to close list item\n");
 			    return 0;
 			}
-			
+
 			if (!write_close_list($history[$i])) {
 			    error("Failed to close list\n");
 			    return 0;
@@ -1021,7 +1021,7 @@ sub process_list($) {
 			    error("Failed to close list item\n");
 			    return 0;
 			}
-			
+
 			if (!write_close_list($history[$i])) {
 			    error("Failed to close list\n");
 			    return 0;
@@ -1068,7 +1068,7 @@ sub process_list($) {
 			error("Failed to open list\n");
 			    return 0;
 		    }
-		    
+
 		    if (!write_open_list_item($current[$#current])) {
 			error("Failed to open list item\n");
 			return 0;
@@ -1081,7 +1081,7 @@ sub process_list($) {
 			    error("Failed to close list item\n");
 			    return 0;
 			}
-			
+
 			if (!write_close_list($history[$i])) {
 			    error("Failed to close list\n");
 			    return 0;
@@ -1092,7 +1092,7 @@ sub process_list($) {
 			error("Failed to open list\n");
 			    return 0;
 		    }
-		    
+
 		    if (!write_open_list_item($current[$tmp])) {
 			error("Failed to open list item\n");
 			return 0;
@@ -1104,7 +1104,7 @@ sub process_list($) {
 			    error("Failed to open list\n");
 			    return 0;
 			}
-			
+
 			if (!write_open_list_item($current[$i])) {
 			    error("Failed to open list item\n");
 			    return 0;
@@ -1121,10 +1121,10 @@ sub process_list($) {
 		$text = $line;
 	    }
 	}
-    }	
+    }
 
 #
-# Output remaining text and close remaining list items and 
+# Output remaining text and close remaining list items and
 # lists
 #
     if (defined($text)) {
@@ -1141,7 +1141,7 @@ sub process_list($) {
 	    error("Failed to close list item\n");
 	    return 0;
 	}
-	
+
 	if (!write_close_list($history[$i])) {
 	    error("Failed to close list\n");
 	    return 0;
@@ -1163,7 +1163,7 @@ sub parse_block_level($) {
     verbose("Parse block level elements\n");
 
     debug("Block value: `" . $block . "`\n");
-    
+
     if ($block =~ /^\s*[\*\#\;\:]+\s+/) {
 	verbose("Found list\n");
 
@@ -1214,9 +1214,9 @@ sub parse_block_level($) {
 }
 
 #
-# First processing: buffering all lines until an empty one is found. The 
-# only exception is represent when a line contains '[[pre]]' tag, in this 
-# case all lines until the next contains '[[pre]]' will be buffered; this 
+# First processing: buffering all lines until an empty one is found. The
+# only exception is represent when a line contains '[[pre]]' tag, in this
+# case all lines until the next contains '[[pre]]' will be buffered; this
 # is for preserving empty lines in preformatted text.
 #
 
@@ -1284,7 +1284,7 @@ sub process_infile() {
 	    }
 	}
     }
-    
+
     if (defined($input_buffer)) {
 
 	if (!parse_block_level($input_buffer)) {
@@ -1297,7 +1297,7 @@ sub process_infile() {
     debug("Check if all tags are closed\n");
 
     if ($#tags_stack != -1) {
-	error("Missing closing tags (" . 
+	error("Missing closing tags (" .
 	      $tags_stack[$#tags_stack] . ")\n");
 	return 0;
     }
@@ -1311,7 +1311,8 @@ sub process_infile() {
 # Script finalization, close input and output files handles
 #
 
-sub dispose () {
+sub dispose ()
+{
     verbose("Finalization\n");
 
     close(OUTFILE);
@@ -1320,7 +1321,7 @@ sub dispose () {
 }
 
 #
-# Script initialization, set default variables, open input file 
+# Script initialization, set default variables, open input file
 # for read and output file for write
 #
 
@@ -1346,14 +1347,14 @@ sub init($$) {
     debug("Input file: `" . $infile . "`\n");
     debug("Output file: `" . $outfile . "`\n");
 
-    if (!open(INFILE, "<", $infile)) { 
-	error("Failed to open file `" . $infile . 
+    if (!open(INFILE, "<", $infile)) {
+	error("Failed to open file `" . $infile .
 	      "` for read\n");
 	return 0;
     }
 
-    if (!open(OUTFILE, ">", $outfile)) { 
-	error("Failed to open file `" . $outfile . 
+    if (!open(OUTFILE, ">", $outfile)) {
+	error("Failed to open file `" . $outfile .
 	      "` for write\n");
 	return 0;
     }
@@ -1371,7 +1372,7 @@ if (!init($ARGV[0], $ARGV[1])) {
 }
 
 if (!process_infile()) {
-    error("Failed to process file `" . $ARGV[0] . "`\n"); 
+    error("Failed to process file `" . $ARGV[0] . "`\n");
     dispose();
     exit 1;
 }

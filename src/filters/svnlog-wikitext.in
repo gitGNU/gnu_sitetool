@@ -312,7 +312,8 @@ sub process_infile() {
 # Script finalization, close input and output files handles
 #
 
-sub dispose () {
+sub dispose ()
+{
     verbose("Finalization\n");
 
     close(OUTFILE);

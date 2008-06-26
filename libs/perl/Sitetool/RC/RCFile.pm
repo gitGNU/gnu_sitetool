@@ -340,7 +340,8 @@ sub remove ($$$)
     return 1;
 }
 
-sub foreach ($$) {
+sub foreach ($$)
+{
     my $self     = shift;
     my $callback = shift;
 
