@@ -25,7 +25,8 @@ perllibdir = $(pkgvlibsdir)/perl/Sitetool/Data
 dist_perllib_DATA =				\
 	Tree.pm					\
 	Stack.pm				\
-	Set.pm
+	Set.pm					\
+	Tuple.pm
 
 ##
 ## Maintainer related targets
