@@ -46,6 +46,15 @@
 (p "Sorry, no public release available at the moment.")
 
 (h3 "MAILING LISTS")
+;(p
+; "Sitetool has several moderated mailing lists, each with an archive.
+; For general Sitetool discussions, use <sitetool-user AT nongnu.org>.
+; Email bug reports to <sitetool-bug AT nongnu.org>. For more information on
+; submitting bugs, please see the section Report a Bug below.
+; If you have a patch for a bug in Sitetool that hasn't yet been fixed in the
+; latest repository sources, please send the patch (made for the git sources,
+; not the release sources) to <sitetool-patch AT nongnu.org>."
+; )
 (p
  "Sitetool has several moderated mailing lists, each with an archive.
  For general Sitetool discussions, use <sitetool-user AT nongnu.org>.
