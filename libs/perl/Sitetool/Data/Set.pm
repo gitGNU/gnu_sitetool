@@ -41,6 +41,15 @@ sub new {
     return bless($self, $class);
 }
 
+sub clear ($)
+{
+    my $self = shift;
+
+    assert(defined($self));
+
+    $self->{DATA} = { };
+}
+
 sub add ($$)
 {
     my $self = shift;

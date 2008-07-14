@@ -51,6 +51,18 @@ sub new ($$)
     return bless($self, $class);
 }
 
+sub clear ()
+{
+    my $self = shift;
+
+    assert(defined($self));
+
+    # $self->{ID}       = $id;
+    $self->{PARENT}   = undef;
+    $self->{CHILDREN} = [];
+    $self->{DATA}     = {};
+}
+
 sub id ($)
 {
     my $self = shift;

@@ -40,6 +40,15 @@ sub new {
     return bless($self, $class);
 }
 
+sub clear ($)
+{
+    my $self = shift;
+
+    assert(defined($self));
+
+    $self->{VALUES} = ();
+}
+
 sub push ($$)
 {
     my $self  = shift;

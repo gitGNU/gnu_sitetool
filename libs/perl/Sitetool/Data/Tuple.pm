@@ -48,6 +48,16 @@ sub new ($$)
     return $self;
 }
 
+sub clear ($)
+{
+    my $self = shift;
+
+    # $self->{SIZE} = $size;
+    $self->{DATA} = ( );
+
+    assert(defined($self));
+}
+
 sub size ($)
 {
     my $self = shift;
