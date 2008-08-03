@@ -74,7 +74,6 @@ our $PROGRAM_NAME = "sitetool-install";
 
 sub help_brief ()
 {
-    print "  -c, --configuration=FILE    use FILE as configuration\n";
     print "  -i, --input-dir=DIR         source directory is DIR\n";
     print "  -H, --hname=HOST            destination host is HOST\n";
     print "  -P, --hpassword=PASSWD      password for host HOST is PASSWD\n";
