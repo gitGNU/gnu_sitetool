@@ -21,15 +21,47 @@
 #
 
 me="sitetool-config"
+debug="no"
 
-usage="\
-Usage: sitetool-config [--filters-check] [--filters-dir] [--styles-dir] [--version] [--help]"
+function debug {
+    if test "$debug" == "yes" ; then
+        echo "$me: DEBUG: $1"
+    fi
+}
 
+function error {
+    echo "$me: $1"
+}
+
+function hint {
+    echo "Try \`$me -h' for more information."
+}
+
+function usage {
+    cat <<EOF 1>&2
+Usage: sitetool-config [OPTIONS]
+
+OPTIONS:
+    [-h|--help]
+    [--version]
+    [--filters-check]
+    [--filters-dir]
+    [--styles-dir]
+
+Report bugs to <@PACKAGE_BUGREPORT@>.
+EOF
+}
+
+#
+# Main
+#
 if test $# -eq 0; then
-    echo "${usage}" 1>&2
+    error "Missing parameter"
+    hint
     exit 1
 fi
 
+missing_action="yes"
 while test $# -gt 0; do
     case "$1" in
 	-*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
@@ -37,38 +69,46 @@ while test $# -gt 0; do
     esac
 
     case $1 in
-	--help)
-	    echo "${usage}" 1>&2
-	    exit 0
+	-h|--help)
+	    missing_action="no"
+	    usage
+	    ;;
+	--version)
+	    missing_action="no"
+	    echo @PACKAGE_VERSION@
 	    ;;
 	--filters-check)
+	    missing_action="no"
 	    if test ! -d @pkgvbindir@/filters ; then
-		echo "$me: Missing filters directory"
+		error "Missing filters directory"
 		exit 1
 	    fi
 	    for filter in `find @pkgvbindir@/filters/*` ; do
 		echo `basename "$filter"`": OK"
 	    done
-	    exit 0
 	    ;;
 	--filters-dir)
+	    missing_action="no"
 	    echo @pkgvbindir@/filters
-	    exit 0
 	    ;;
 	--styles-dir)
+	    missing_action="no"
 	    echo @pkgvdatadir@/styles
 	    exit 0
 	    ;;
-	--version)
-	    echo @PACKAGE_VERSION@
-	    exit 0
-	    ;;
 	*)
-	    echo "${usage}" 1>&2
+	    error "Unknown option \`$1'"
+	    hint
 	    exit 1
 	    ;;
     esac
     shift
 done
+
+if test "$missing_action" == "yes" ; then
+    error "Missing parameter(s)"
+    hint
+    exit 1
+fi
 
 exit 0;
