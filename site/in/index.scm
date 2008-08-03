@@ -198,11 +198,10 @@
 (p "Francesco Salvestrini <salvestrini AT gmail DOT com>")
 
 (h3 "AUTHORS")
-(p
- "Francesco Salvestrini <salvestrini AT gmail DOT com>"
- (br)
- "Alessandro Massignan <ff0000 DOT it AT gmail DOT com>"
- )
+(p "Francesco Salvestrini <salvestrini AT gmail DOT com>"
+   (br)
+   "Alessandro Massignan <ff0000 DOT it AT gmail DOT com>"
+   )
 
 (h3 "RELEASES")
 (p "Sorry, no public release available at the moment.")
@@ -216,30 +215,31 @@
    " for more information on subscribing to the mailing list.")
 
 (h3 "REPORT A BUG")
-(p
- "If you think you have found a bug in Sitetool, then please send as complete
- a report as possible to <sitetool-bug AT nongnu.org>. An easy way to collect all
- the required information, such as platform and compiler, is to run make check,
- and include the resulting file tests/testsuite.log to your report.
- Disagreements between the manual and the code are also bugs."
- )
+(p "If you think you have found a bug in Sitetool then please send as "
+   "complete a report as possible to <sitetool AT nongnu.org>. An easy way "
+   "to collect all the required information, such as platform and compiler, "
+   "is to include in your report the config.log file available at the end of "
+   "the configuration procedure. ")
+(br)
+(p "If you have a patch for a bug in Sitetool that hasn't yet been fixed in "
+   "the latest repository sources, please be so kind to create it using the "
+   "repository sources, not the release sources.")
 
 (h3 "DEVELOPMENT")
 (h4 "Browsing sources")
-(p
- "You can browse the "
- (a (@ (href "http://git.savannah.nongnu.org/gitweb/?p=sitetool.git"))
-    "Git repository")
- " of this project with your web browser. This gives you a good
- picture of the current status of the source files. You may also view
- the complete histories of any file in the repository as well as
- differences among two versions."
- )
+(p "You can browse the "
+   (a (@ (href "http://git.savannah.nongnu.org/gitweb/?p=sitetool.git"))
+      "Git repository")
+   " of this project with your web browser. This gives you a good "
+   "picture of the current status of the source files. You may also view "
+   "the complete histories of any file in the repository as well as "
+   "differences among two versions.")
+
 (h4 "Getting a copy of the Git Repository")
 (p "Anonymous checkout:")
 (br)
-(p (a (@ (href "http://savannah.gnu.org/maintenance/UsingGit")) git)
-   " clone git://git.savannah.nongnu.org/sitetool.git")
+(tt (a (@ (href "http://savannah.gnu.org/maintenance/UsingGit")) git)
+    " clone git://git.savannah.nongnu.org/sitetool.git")
 
 (h4 "Contribute")
 (p "If you have time and programming skills, you can help us by developing "
