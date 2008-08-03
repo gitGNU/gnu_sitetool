@@ -10,7 +10,8 @@
    "without having to write HTML directly (or via strange machineries) "
    "while having a \"coding\" approach to the generation of their contents.")
 (br)
-(p "Sitetool is divided in (mainly) two layers: backend and frontends.")
+(p "Sitetool content production is divided in two layers: backend and "
+   "frontends.")
 (br)
 (p "The backend is the lower layer. It decouples the different frontends "
    "using " (a (@ (href "http://okmij.org/ftp/Scheme/xml.html")) SXML) " "
@@ -18,43 +19,174 @@
 (br)
 (p "Frontends form the upper layer. "
    "Each frontend translates a content from its format original format to "
-   "a different format. "
-   "Frontends chains are automatically formed (or manually specified) in order "
-   "to finally transform the content from its input format to the backend "
-   "format. "
-   "This layer is fully expandable with python, perl, shell scripts and so on.")
+   "a different format using a chain of filters. "
+   "Filters chains are automatically formed (or manually specified) in order "
+   "to transform each content from its input format to the backend "
+   "format. ")
+(br)
+(p "Available filters:")
+(ul
+ (li "changelog-wikitext")
+ (li "map-sxml")
+ (li "news-wikitext")
+ (li "svnlog-wikitext")
+ (li "sxml-sxml")
+ (li "wikitext-sxml")
+ )
+(br)
+(p "Examples:")
+(ul
+ (li "The filters chain used to transform a ChangeLog file to a backend "
+     "content is changelog-wikitext -> wikitext-sxml -> sxml-sxml")
+ (li "In order to use SXML directly in a content, the pass-through chain "
+     "sxml-sxml is used")
+ (li "A wikitext content get translated to SXML using the "
+     "wikitext-sxml -> sxml-sxml chain")
+ )
 
 (h4 "Use")
+(p "Sitetool is composed by a bunch of utilities. Each utility could be "
+   "invoked manually or by the main program " (tt "sitetool") " via the "
+   (tt "--mode") " option. The main program invocation has the advantage of "
+   "handling the inter-utility dependencies automatically. A common set of "
+   "parameters are available to each utility.")
 (pre
  "Usage: sitetool [OPTION]... [-- [MODE-ARG]...]" (br)
  "" (br)
  "Options:" (br)
  "  -M, --mode=MODE            Running mode is MODE" (br)
- "  -n, --dry-run              display commands without modifying any files" (br)
- "  -f, --force                consider all files obsolete" (br)
- "  -W, --warnings=CATEGORY    report the warnings falling in CATEGORY" (br)
- "  -d, --debug                enable debugging traces" (br)
- "  -v, --verbose              verbosely report processing" (br)
- "  -h, --help                 print this help, then exit" (br)
- "  -V, --version              print version number, then exit" (br)
  "" (br)
- "Warning categories include:" (br)
- "  `all'                      all the warnings" (br)
- "  `none'                     turn off all the warnings" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(p "Current available modes are:")
+(h4 "auths")
+(pre
+ "Usage: sitetool-auths [OPTIONS]" (br)
  "" (br)
- "MODE must be one of the following:" (br)
- "        auths                manage authorizations" (br)
- "        install              install previously built site" (br)
- "        parse                parse" (br)
- "        initialize           initialize" (br)
- "        uninstall            uninstall site from remote host" (br)
- "        clean                remove built files" (br)
- "        build                build site" (br)
- "        check                check links in a previously built site" (br)
- "        digest               compute digest for each previously built page" (br)
- "        preprocess           preprocess" (br)
- "        validate             validate previously built site" (br)
+ "  -i, --initialize            initialize the authorizations DB" (br)
+ "  -A, --add=HOST,LOGIN,PSWD   add a DB entry" (br)
+ "  -D, --delete=HOST,LOGIN     remove a DB entry" (br)
+ "  -S, --show                  show all DB entries" (br)
+ "  -C, --clear                 clear all DB entries" (br)
  "" (br)
+ "    HOST  is host=HOSTNAME" (br)
+ "    LOGIN is login=LOGINNAME" (br)
+ "    PSWD  is password=PASSWORD" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "install")
+(pre
+ "Usage: sitetool-install [OPTIONS]" (br)
+ "" (br)
+ "  -c, --configuration=FILE    configuration file is FILE" (br)
+ "  -i, --input-dir=DIR         source directory is DIR" (br)
+ "  -H, --hname=HOST            destination host is HOST" (br)
+ "  -P, --hpassword=PASSWD      password for host HOST is PASSWD" (br)
+ "  -U, --huser=USER            user for host HOST is USER" (br)
+ "  -o, --hdir=DIR              destination directory is DIR" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "parse")
+(pre
+ "Usage: sitetool-parse [OPTIONS]" (br)
+ "" (br)
+ "  -i, --input=FILE            use FILE as input file" (br)
+ "  -o, --output=FILE           use FILE as output file" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "initialize")
+(pre
+ "Usage: sitetool-initialize [OPTIONS]" (br)
+ "" (br)
+ "  -w, --work-dir=DIR          working directory is DIR" (br)
+ "  -o, --output-dir=DIR        output directory is DIR" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "uninstall")
+(pre
+ "Usage: sitetool-uninstall [OPTIONS]" (br)
+ "" (br)
+ "  -c, --configuration=FILE    configuration file is FILE" (br)
+ "  -i, --input-dir=DIR         source directory is DIR" (br)
+ "  -H, --hname=HOST            destination host is HOST" (br)
+ "  -P, --hpassword=PASSWD      password for host HOST is PASSWD" (br)
+ "  -U, --huser=USER            user for host HOST is USER" (br)
+ "  -o, --hdir=DIR              destination directory is DIR" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "clean")
+(pre
+ "Usage: sitetool-clean [OPTIONS]" (br)
+ "" (br)
+ "  -c, --configuration=FILE    configuration file is FILE" (br)
+ "  -w, --work-dir=DIR          use DIR as a working directory" (br)
+ "  -o, --output-dir=DIR        place output into directory DIR" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "build")
+(pre
+ "Usage: sitetool-build [OPTIONS]" (br)
+ "" (br)
+ "  -c, --configuration=FILE    configuration file is FILE" (br)
+ "  -w, --work-dir=DIR          use DIR as a working directory" (br)
+ "  -o, --output-dir=DIR        place output into directory DIR" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "check")
+(pre
+ "Usage: sitetool-check [OPTIONS]" (br)
+ "" (br)
+ "  -c, --configuration=FILE    configuration file is FILE" (br)
+ "  -o, --output-dir=DIR        use DIR as output directory" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "digest")
+(pre
+ "Usage: sitetool-digest [OPTIONS]" (br)
+ "" (br)
+ "  -c, --configuration=FILE    configuration file is FILE" (br)
+ "  -o, --output-dir=DIR        use DIR as output directory" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "preprocess")
+(pre
+ "Usage: sitetool-preprocess [OPTIONS]" (br)
+ "" (br)
+ "  -D, --define=VAR=VALUE      define variable VAR to value VALUE" (br)
+ "  -U, --undefine=VAR          undefine variable VAR" (br)
+ "  -i, --input=FILE            use FILE as input file" (br)
+ "  -o, --output=FILE           use FILE as output file" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
+ )
+
+(h4 "validate")
+(pre
+ "Usage: sitetool-validate [OPTIONS]" (br)
+ "" (br)
+ "  -c, --configuration=FILE    configuration file is FILE" (br)
+ "  -o, --output-dir=DIR        use DIR as output directory" (br)
+ "" (br)
+ "[COMMON-PARAMETERS]" (br)
  )
 
 (h3 "COPYING")
