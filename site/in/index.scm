@@ -13,18 +13,21 @@
 (p "Sitetool content production is divided in two layers: backend and "
    "frontends.")
 (br)
-(p "The backend is the lower layer. It decouples the different frontends "
+(p "The backend is the lower layer, it decouples the different frontends "
    "using " (a (@ (href "http://okmij.org/ftp/Scheme/xml.html")) SXML) " "
    "as common format.")
 (br)
-(p "Frontends form the upper layer. "
-   "Each frontend translates a content from its format original format to "
-   "a different format using a chain of filters. "
+(p "Frontends form the upper layer, each frontend translates a content from "
+   "its format to the backend format using a chain of filters. "
    "Filters chains are automatically formed (or manually specified) in order "
    "to transform each content from its input format to the backend "
    "format. ")
 (br)
-(p "Available filters:")
+(h4 "Filters")
+(p "A filter is nothing more than a program which takes an input file and "
+   "traslates it to an output file, usually in a different format. "
+   "Sitetool comes with a set of filters:")
+
 (ul
  (li "changelog-wikitext")
  (li "map-sxml")
@@ -43,6 +46,20 @@
  (li "A wikitext content get translated to SXML using the "
      "wikitext-sxml -> sxml-sxml chain")
  )
+(br)
+(p "In order to use third-party filters or your own filters, the "
+   (tt "sitetool-config") " script should be used to find the filters "
+   "installation directory:")
+(pre
+ "Usage: sitetool-config [OPTIONS]" (br)
+ "" (br)
+ "OPTIONS:" (br)
+ "    [-h|--help]" (br)
+ "    [--version]" (br)
+ "    [--filters-check]" (br)
+ "    [--filters-dir]" (br)
+ "    [--styles-dir]" (br)
+ )
 
 (h4 "Use")
 (p "Sitetool is composed by a bunch of utilities. Each utility could be "
@@ -60,7 +77,7 @@
  )
 
 (p "Current available modes are:")
-(h4 "auths")
+(h5 "auths")
 (pre
  "Usage: sitetool-auths [OPTIONS]" (br)
  "" (br)
@@ -77,7 +94,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "install")
+(h5 "install")
 (pre
  "Usage: sitetool-install [OPTIONS]" (br)
  "" (br)
@@ -91,7 +108,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "parse")
+(h5 "parse")
 (pre
  "Usage: sitetool-parse [OPTIONS]" (br)
  "" (br)
@@ -101,7 +118,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "initialize")
+(h5 "initialize")
 (pre
  "Usage: sitetool-initialize [OPTIONS]" (br)
  "" (br)
@@ -111,7 +128,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "uninstall")
+(h5 "uninstall")
 (pre
  "Usage: sitetool-uninstall [OPTIONS]" (br)
  "" (br)
@@ -125,7 +142,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "clean")
+(h5 "clean")
 (pre
  "Usage: sitetool-clean [OPTIONS]" (br)
  "" (br)
@@ -136,7 +153,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "build")
+(h5 "build")
 (pre
  "Usage: sitetool-build [OPTIONS]" (br)
  "" (br)
@@ -147,7 +164,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "check")
+(h5 "check")
 (pre
  "Usage: sitetool-check [OPTIONS]" (br)
  "" (br)
@@ -157,7 +174,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "digest")
+(h5 "digest")
 (pre
  "Usage: sitetool-digest [OPTIONS]" (br)
  "" (br)
@@ -167,7 +184,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "preprocess")
+(h5 "preprocess")
 (pre
  "Usage: sitetool-preprocess [OPTIONS]" (br)
  "" (br)
@@ -179,7 +196,7 @@
  "[COMMON-PARAMETERS]" (br)
  )
 
-(h4 "validate")
+(h5 "validate")
 (pre
  "Usage: sitetool-validate [OPTIONS]" (br)
  "" (br)
