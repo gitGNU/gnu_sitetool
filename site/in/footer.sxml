@@ -31,12 +31,12 @@
    "Powered by "
    (a (@ (href "http://www.nongnu.org/sitetool"))
       ,as_site_variable_PROGRAMNAME)
-   ", hosted by "
+   ", hosted at "
    (a (@ (href "http://savannah.nongnu.org/projects/sitetool"))
       "Savannah")
    (br)
    "Please send broken links and other web page suggestions to "
-   "sitetool-bug AT nongnu.org, thank you."
+   "sitetool-generic AT nongnu.org, thank you."
    (br)
    "This page was last modified on "
    ,(strftime "%A %d %B %Y" (localtime (current-time)))
