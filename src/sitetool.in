@@ -236,7 +236,7 @@ sub help ()
     print "Options:\n";
     print "  -M, --mode=MODE            Running mode is MODE\n";
     print "  -n, --dry-run              display commands without modifying any files\n";
-    print "  -f, --force                consider all files obsolete\n";
+    print "  -f, --force                force operation, if possible\n";
     print "  -W, --warnings=CATEGORY    report the warnings falling in CATEGORY\n";
     print "  -d, --debug                enable debugging traces\n";
     print "  -v, --verbose              verbosely report processing\n";

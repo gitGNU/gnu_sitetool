@@ -80,12 +80,12 @@ sub help_brief ()
     print "  -U, --undefine=VAR          undefine variable VAR\n";
     print "  -i, --input=FILE            use FILE as input file\n";
     print "  -o, --output=FILE           use FILE as output file\n";
-    print "  -f, --force                 consider all files obsolete\n";
 }
 
 sub help_common ()
 {
     print "  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY\n";
+    print "  -f, --force                 force operation, if possible\n";
     print "  -d, --debug                 enable debugging mode\n";
     print "  -v, --verbose               enable verbose mode\n";
     print "  -h, --help                  print this help, then exit\n";
@@ -193,6 +193,7 @@ my @options_list = (
 	  return 1;
       },
       1 ],
+
     [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0 ],
     [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0 ],
     [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1 ],

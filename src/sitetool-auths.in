@@ -79,7 +79,6 @@ sub help_brief ()
     print "  -D, --delete=HOST,LOGIN     remove a DB entry\n";
     print "  -S, --show                  show all DB entries\n";
     print "  -C, --clear                 clear all DB entries\n";
-    print "  -f, --force                 force operations, whenever possible\n";
     print "\n";
     print "    HOST  is host=HOSTNAME\n";
     print "    LOGIN is login=LOGINNAME\n";
@@ -90,6 +89,7 @@ sub help_brief ()
 sub help_common ()
 {
     print "  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY\n";
+    print "  -f, --force                 force operation, if possible\n";
     print "  -d, --debug                 enable debugging mode\n";
     print "  -v, --verbose               enable verbose mode\n";
     print "  -h, --help                  print this help, then exit\n";
@@ -162,6 +162,7 @@ my @options_list = (
     ],
     [ "S", "show",       sub { $running_mode = "show";       return 1; }, 0 ],
     [ "C", "clear",      sub { $running_mode = "clear";      return 1; }, 0 ],
+
     [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0 ],
     [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0 ],
     [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1 ],

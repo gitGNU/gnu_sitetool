@@ -76,12 +76,12 @@ our $PROGRAM_NAME = "sitetool-digest";
 sub help_brief ()
 {
     print "  -o, --output-dir=DIR        use DIR as output directory\n";
-    print "  -f, --force                 consider all files obsolete\n";
 }
 
 sub help_common ()
 {
     print "  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY\n";
+    print "  -f, --force                 force operation, if possible\n";
     print "  -d, --debug                 enable debugging mode\n";
     print "  -v, --verbose               enable verbose mode\n";
     print "  -h, --help                  print this help, then exit\n";
@@ -141,6 +141,7 @@ my @options_list = (
       sub { $configuration_file = $_[0];                     return 1; }, 1 ],
     [ "o", "output-dir",
       sub { $output_dir = $_[0];                             return 1; }, 1 ],
+
     [ "n", "dry-run",    sub { $dry_run = 1;                 return 1; }, 0 ],
     [ "f", "force",      sub { $force_mode = 1;              return 1; }, 0 ],
     [ "W", "warnings",   sub { warning_set($_[0]);           return 1; }, 1 ],
