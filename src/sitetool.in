@@ -93,7 +93,8 @@ my %tools = (
 	FLAGS          =>
 	    "-w %work_dir% " .
 	    "-o %output_dir%",
-	PRE_REQUISITE  => [ ],
+	PRE_REQUISITE  => [
+	],
  	POST_REQUISITE => [ ],
     },
     "preprocess" => {
@@ -103,7 +104,8 @@ my %tools = (
 	    "-i %input_file% "        .
 	    "-o %preprocessed_file% " .
 	    "-Dwork_dir=%work_dir%",
-	PRE_REQUISITE  => [ "initialize" ],
+	PRE_REQUISITE  => [ # "initialize",
+	],
 	POST_REQUISITE => [ ],
     },
     "parse" => {
@@ -113,8 +115,9 @@ my %tools = (
 	    "-i %preprocessed_file% " .
 	    "-w %work_dir% "          .
 	    "-o %configuration_file%",
-	PRE_REQUISITE  => [ "initialize",
-			    "preprocess" ],
+	PRE_REQUISITE  => [ # "initialize",
+			    "preprocess"
+	],
 	POST_REQUISITE => [ ],
     },
     "build" => {
@@ -124,9 +127,10 @@ my %tools = (
 	    "-c %configuration_file% " .
 	    "-w %work_dir% "           .
 	    "-o %output_dir%",
-	PRE_REQUISITE  => [ "initialize",
+	PRE_REQUISITE  => [ # "initialize",
 			    "preprocess",
-			    "parse" ],
+			    "parse"
+	],
 	POST_REQUISITE => [ ],
     },
     "check" => {
@@ -135,10 +139,11 @@ my %tools = (
 	FLAGS          =>
 	    "-c %configuration_file% " .
 	    "-o %output_dir%",
-	PRE_REQUISITE  => [ "initialize",
+	PRE_REQUISITE  => [ # "initialize",
 			    "preprocess",
 			    "parse",
-			    "build" ],
+			    "build"
+	],
 	POST_REQUISITE => [ ],
     },
     "validate" => {
@@ -147,10 +152,11 @@ my %tools = (
 	FLAGS          =>
 	    "-c %configuration_file% " .
 	    "-o %output_dir%",
-	PRE_REQUISITE  => [ "initialize",
+	PRE_REQUISITE  => [ # "initialize",
 			    "preprocess",
 			    "parse",
-			    "build" ],
+			    "build"
+	],
 	POST_REQUISITE => [ ],
     },
     "digest" => {
@@ -159,10 +165,11 @@ my %tools = (
 	FLAGS          =>
 	    "-c %configuration_file% " .
 	    "-o %output_dir%",
-	PRE_REQUISITE  => [ "initialize",
+	PRE_REQUISITE  => [ # "initialize",
 			    "preprocess",
 			    "parse",
-			    "build" ],
+			    "build"
+	],
 	POST_REQUISITE => [ ],
     },
     "install" => {
@@ -170,12 +177,13 @@ my %tools = (
 	DESCRIPTION    => "install previously built site",
 	FLAGS          =>
 	    "-c %configuration_file%",
-	PRE_REQUISITE  => [ "initialize",
+	PRE_REQUISITE  => [ # "initialize",
 			    "preprocess",
 			    "parse",
 			    "build",
 			    "validate",
-			    "check" ],
+			    "check"
+	],
 	POST_REQUISITE => [ ],
     },
     "clean" => {
@@ -185,9 +193,10 @@ my %tools = (
 	    "-c %configuration_file% " .
 	    "-o %output_dir% "         .
 	    "-w %work_dir%",
-	PRE_REQUISITE  => [ "initialize",
+	PRE_REQUISITE  => [ # "initialize",
 			    "preprocess",
-			    "parse" ],
+			    "parse"
+	],
 	POST_REQUISITE => [ ],
     },
     "uninstall" => {
@@ -195,9 +204,10 @@ my %tools = (
 	DESCRIPTION    => "uninstall site from remote host",
 	FLAGS          =>
 	    "-c %configuration_file%",
-	PRE_REQUISITE  => [ "initialize",
+	PRE_REQUISITE  => [ # "initialize",
 			    "preprocess",
-			    "parse" ],
+			    "parse"
+	],
 	POST_REQUISITE => [ ],
     },
     "auths" => {
@@ -205,7 +215,8 @@ my %tools = (
 	DESCRIPTION    => "manage authorizations",
 	FLAGS          =>
 	    "", #"-c %configuration_file%",
-	PRE_REQUISITE  => [ ],
+	PRE_REQUISITE  => [
+	],
 	POST_REQUISITE => [ ],
     },
 #    "styles" => {
@@ -530,7 +541,7 @@ for my $tool (@{$tools{$running_mode}{POST_REQUISITE}}) {
     push(@tools_chain, $tool);
 }
 
-debug("Tools chain is \`@tools_chain'");
+debug("Tools chain for mode \`" . $running_mode . "' is \`@tools_chain'");
 assert($#tools_chain >= 0);
 
 for my $tool (@tools_chain) {
