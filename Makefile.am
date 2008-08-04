@@ -57,10 +57,10 @@ CHANGELOGS =					\
 ##     Makefile.sub is automatically distributed by automake rules
 ##
 EXTRA_DIST =							\
-	TODO BUGS README NEWS COPYING AUTHORS INSTALL THANKS	\
+	BUGS TODO README NEWS COPYING AUTHORS INSTALL THANKS	\
 	$(CHANGELOGS)						\
-	configure.ac.in						\
 	bootstrap						\
+	configure.ac.in						\
 	guile.af						\
 	perl.af
 
