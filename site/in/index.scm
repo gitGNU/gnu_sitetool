@@ -248,10 +248,10 @@
 (h3 "REPORT A BUG")
 (p
  "If you think you have found a bug in Sitetool then please send as "
- "complete a report as possible to <sitetool AT nongnu.org>. An easy way "
- "to collect all the required information, such as platform and compiler, "
- "is to include in your report the config.log file available at the end of "
- "the configuration procedure. "
+ "complete a report as possible to <sitetool AT nongnu DOT org>. An easy "
+ "way to collect all the required information, such as platform and "
+ "compiler, is to include in your report the config.log file available at "
+ "the end of the configuration procedure. "
  (br)
  (br)
  "If you have a patch for a bug in Sitetool that hasn't yet been fixed in "
@@ -271,10 +271,9 @@
 
 (h4 "Getting a copy of the Git Repository")
 (p
- "Anonymous checkout:"
- (br)
- (samp (a (@ (href "http://savannah.gnu.org/maintenance/UsingGit")) git)
-	" clone git://git.savannah.nongnu.org/sitetool.git"))
+ "Anonymous checkout: "
+ (kbd (a (@ (href "http://savannah.gnu.org/maintenance/UsingGit")) git)
+ " clone git://git.savannah.nongnu.org/sitetool.git"))
 
 (h4 "Contribute")
 (p

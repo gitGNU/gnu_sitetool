@@ -29,7 +29,7 @@
   "Savannah")
  (br)
  "Please send broken links and other web page suggestions to "
- "sitetool-generic AT nongnu.org, thank you."
+ "<sitetool-generic AT nongnu DOT org>, thank you."
  (br)
  "This page was last modified on "
  ,(strftime "%A %d %B %Y" (localtime (current-time)))
