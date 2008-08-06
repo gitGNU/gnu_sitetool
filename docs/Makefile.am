@@ -25,13 +25,6 @@ SUBDIRS =					\
 	info
 
 ##
-## NOTE:
-##     Do not ship ChangeLogs here, they are used (and shipped) in the father
-##     directory
-##
-EXTRA_DIST =
-
-##
 ## Maintainer related targets
 ##
 update-local: Makefile
