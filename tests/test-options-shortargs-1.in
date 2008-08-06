@@ -24,6 +24,6 @@
 
 . $testdir/defs || exit 1
 
-$SITETOOL -h auths || exit 1
+$SITETOOL -h build || exit 1
 
 exit 0

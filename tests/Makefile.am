@@ -90,13 +90,7 @@ FAIL_TESTS +=					\
 	test-options-longargs-3			\
 	test-options-longargs-4			\
 	test-options-abbrargs-3			\
-	test-options-abbrargs-4			\
-	test-options-subopts-6			\
-	test-options-subopts-7			\
-	test-options-subopts-8			\
-	test-options-subopts-9			\
-	test-options-subopts-10			\
-	test-options-subopts-11
+	test-options-abbrargs-4
 
 SUCCESS_TESTS +=				\
 	test-success				\
@@ -121,25 +115,15 @@ SUCCESS_TESTS +=				\
 	test-options-multi-6			\
 	test-options-multi-7			\
 	test-options-multi-8			\
-	test-options-tool-auths			\
 	test-options-tool-build			\
 	test-options-tool-check			\
 	test-options-tool-clean			\
-	test-options-tool-digest		\
 	test-options-tool-initialize		\
-	test-options-tool-install		\
 	test-options-tool-parse			\
 	test-options-tool-preprocess		\
-	test-options-tool-uninstall		\
 	test-options-tool-validate		\
-	test-options-subopts-1			\
-	test-options-subopts-2			\
-	test-options-subopts-3			\
-	test-options-subopts-4			\
-	test-options-subopts-5			\
 	test-dry-run				\
 	test-helps				\
-	test-auths				\
 	test-initialize				\
 	test-preprocess				\
 	test-parse				\
@@ -222,18 +206,6 @@ test-options-3: $(srcdir)/test-options-3.in Makefile
 EXTRA_DIST += test-options-3.in
 CLEANFILES += test-options-3
 
-test-options-tool-auths: $(srcdir)/test-options-tool-auths.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-tool-auths.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-tool-auths.in
-CLEANFILES += test-options-tool-auths
-
 test-options-tool-build: $(srcdir)/test-options-tool-build.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/test-options-tool-build.in > $@.tmp && \
@@ -270,18 +242,6 @@ test-options-tool-clean: $(srcdir)/test-options-tool-clean.in Makefile
 EXTRA_DIST += test-options-tool-clean.in
 CLEANFILES += test-options-tool-clean
 
-test-options-tool-digest: $(srcdir)/test-options-tool-digest.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-tool-digest.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-tool-digest.in
-CLEANFILES += test-options-tool-digest
-
 test-options-tool-initialize: $(srcdir)/test-options-tool-initialize.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/test-options-tool-initialize.in > $@.tmp && \
@@ -293,18 +253,6 @@ test-options-tool-initialize: $(srcdir)/test-options-tool-initialize.in Makefile
 	}
 EXTRA_DIST += test-options-tool-initialize.in
 CLEANFILES += test-options-tool-initialize
-
-test-options-tool-install: $(srcdir)/test-options-tool-install.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-tool-install.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-tool-install.in
-CLEANFILES += test-options-tool-install
 
 test-options-tool-parse: $(srcdir)/test-options-tool-parse.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -330,18 +278,6 @@ test-options-tool-preprocess: $(srcdir)/test-options-tool-preprocess.in Makefile
 EXTRA_DIST += test-options-tool-preprocess.in
 CLEANFILES += test-options-tool-preprocess
 
-test-options-tool-uninstall: $(srcdir)/test-options-tool-uninstall.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-tool-uninstall.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-tool-uninstall.in
-CLEANFILES += test-options-tool-uninstall
-
 test-options-tool-validate: $(srcdir)/test-options-tool-validate.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/test-options-tool-validate.in > $@.tmp && \
@@ -365,18 +301,6 @@ test-helps: $(srcdir)/test-helps.in Makefile
 	}
 EXTRA_DIST += test-helps.in
 CLEANFILES += test-helps
-
-test-auths: $(srcdir)/test-auths.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-auths.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-auths.in
-CLEANFILES += test-auths
 
 test-initialize: $(srcdir)/test-initialize.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -809,138 +733,6 @@ test-options-multi-8: $(srcdir)/test-options-multi-8.in Makefile
 	}
 EXTRA_DIST += test-options-multi-8.in
 CLEANFILES += test-options-multi-8
-
-test-options-subopts-1: $(srcdir)/test-options-subopts-1.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-1.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-1.in
-CLEANFILES += test-options-subopts-1
-
-test-options-subopts-2: $(srcdir)/test-options-subopts-2.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-2.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-2.in
-CLEANFILES += test-options-subopts-2
-
-test-options-subopts-3: $(srcdir)/test-options-subopts-3.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-3.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-3.in
-CLEANFILES += test-options-subopts-3
-
-test-options-subopts-4: $(srcdir)/test-options-subopts-4.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-4.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-4.in
-CLEANFILES += test-options-subopts-4
-
-test-options-subopts-5: $(srcdir)/test-options-subopts-5.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-5.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-5.in
-CLEANFILES += test-options-subopts-5
-
-test-options-subopts-6: $(srcdir)/test-options-subopts-6.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-6.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-6.in
-CLEANFILES += test-options-subopts-6
-
-test-options-subopts-7: $(srcdir)/test-options-subopts-7.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-7.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-7.in
-CLEANFILES += test-options-subopts-7
-
-test-options-subopts-8: $(srcdir)/test-options-subopts-8.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-8.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-8.in
-CLEANFILES += test-options-subopts-8
-
-test-options-subopts-9: $(srcdir)/test-options-subopts-9.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-9.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-9.in
-CLEANFILES += test-options-subopts-9
-
-test-options-subopts-10: $(srcdir)/test-options-subopts-10.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-10.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-10.in
-CLEANFILES += test-options-subopts-10
-
-test-options-subopts-11: $(srcdir)/test-options-subopts-11.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-options-subopts-11.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-EXTRA_DIST += test-options-subopts-11.in
-CLEANFILES += test-options-subopts-11
 
 clean-local:
 	rm -rf testSubDir-*

@@ -21,14 +21,11 @@
 . @builddir@/defs
 
 $SITETOOL --help            || exit 1
-$SITETOOL --help install    || exit 1
 $SITETOOL --help parse      || exit 1
 $SITETOOL --help initialize || exit 1
-$SITETOOL --help uninstall  || exit 1
 $SITETOOL --help clean      || exit 1
 $SITETOOL --help build      || exit 1
 $SITETOOL --help check      || exit 1
-$SITETOOL --help digest     || exit 1
 $SITETOOL --help preprocess || exit 1
 $SITETOOL --help validate   || exit 1
 

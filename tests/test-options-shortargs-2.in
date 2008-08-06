@@ -24,6 +24,6 @@
 
 . $testdir/defs || exit 1
 
-$SITETOOL -hauths || exit 1
+$SITETOOL -hbuild || exit 1
 
 exit 0
