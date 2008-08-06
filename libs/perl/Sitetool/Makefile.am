@@ -34,7 +34,6 @@ dist_perllib_DATA =				\
 	Configuration.pm			\
 	Preprocess.pm				\
 	Parse.pm				\
-	Digest.pm				\
 	SXML.pm					\
 	XML.pm					\
 	Pagemap.pm				\
