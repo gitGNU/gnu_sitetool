@@ -32,12 +32,8 @@ pkgvbin_SCRIPTS =				\
 	sitetool-parse				\
 	sitetool-build				\
 	sitetool-clean				\
-	sitetool-install			\
-	sitetool-uninstall			\
 	sitetool-check				\
-	sitetool-validate			\
-	sitetool-digest				\
-	sitetool-auths
+	sitetool-validate
 
 ## Make versioned links on bin_SCRIPTS.  We only run the transform on the
 ## root name; then we make a versioned link with the transformed base name.
@@ -69,12 +65,8 @@ SITETOOL_PERL_SRCS =				\
 	sitetool-parse.in			\
 	sitetool-build.in			\
 	sitetool-clean.in			\
-	sitetool-install.in			\
-	sitetool-uninstall.in			\
 	sitetool-check.in			\
-	sitetool-validate.in			\
-	sitetool-digest.in			\
-	sitetool-auths.in
+	sitetool-validate.in
 
 SITETOOL_SRCS = $(SITETOOL_PERL_SRCS) $(SITETOOL_SHELL_SRCS)
 
@@ -152,26 +144,6 @@ sitetool-clean: $(srcdir)/sitetool-clean.in Makefile
 		exit 1 ; \
 	}
 
-sitetool-install: $(srcdir)/sitetool-install.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/sitetool-install.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-
-sitetool-uninstall: $(srcdir)/sitetool-uninstall.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/sitetool-uninstall.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-
 sitetool-check: $(srcdir)/sitetool-check.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/sitetool-check.in > $@.tmp && \
@@ -185,26 +157,6 @@ sitetool-check: $(srcdir)/sitetool-check.in Makefile
 sitetool-validate: $(srcdir)/sitetool-validate.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/sitetool-validate.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-
-sitetool-digest: $(srcdir)/sitetool-digest.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/sitetool-digest.in > $@.tmp && \
-	  chmod +x $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-
-sitetool-auths: $(srcdir)/sitetool-auths.in Makefile
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/sitetool-auths.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \

@@ -159,33 +159,6 @@ my %tools = (
 	],
 	POST_REQUISITE => [ ],
     },
-    "digest" => {
-	HANDLER        => "sitetool-digest",
-	DESCRIPTION    => "compute digest for each previously built page",
-	FLAGS          =>
-	    "-c %configuration_file% " .
-	    "-o %output_dir%",
-	PRE_REQUISITE  => [ # "initialize",
-			    "preprocess",
-			    "parse",
-			    "build"
-	],
-	POST_REQUISITE => [ ],
-    },
-    "install" => {
-	HANDLER        => "sitetool-install",
-	DESCRIPTION    => "install previously built site",
-	FLAGS          =>
-	    "-c %configuration_file%",
-	PRE_REQUISITE  => [ # "initialize",
-			    "preprocess",
-			    "parse",
-			    "build",
-			    "validate",
-			    "check"
-	],
-	POST_REQUISITE => [ ],
-    },
     "clean" => {
 	HANDLER        => "sitetool-clean",
 	DESCRIPTION    => "remove built files",
@@ -196,26 +169,6 @@ my %tools = (
 	PRE_REQUISITE  => [ # "initialize",
 			    "preprocess",
 			    "parse"
-	],
-	POST_REQUISITE => [ ],
-    },
-    "uninstall" => {
-	HANDLER        => "sitetool-uninstall",
-	DESCRIPTION    => "uninstall site from remote host",
-	FLAGS          =>
-	    "-c %configuration_file%",
-	PRE_REQUISITE  => [ # "initialize",
-			    "preprocess",
-			    "parse"
-	],
-	POST_REQUISITE => [ ],
-    },
-    "auths" => {
-	HANDLER        => "sitetool-auths",
-	DESCRIPTION    => "manage authorizations",
-	FLAGS          =>
-	    "", #"-c %configuration_file%",
-	PRE_REQUISITE  => [
 	],
 	POST_REQUISITE => [ ],
     },
