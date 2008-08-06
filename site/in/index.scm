@@ -86,37 +86,6 @@
  "Current available modes are:"
  (br))
 
-(h5 "auths")
-(pre "
-     Usage: sitetool-auths [OPTIONS]
-
-	    -i, --initialize            initialize the authorizations DB
-	    -A, --add=HOST,LOGIN,PSWD   add a DB entry
-	    -D, --delete=HOST,LOGIN     remove a DB entry
-	    -S, --show                  show all DB entries
-	    -C, --clear                 clear all DB entries
-
-	    HOST  is host=HOSTNAME
-	    LOGIN is login=LOGINNAME
-	    PSWD  is password=PASSWORD
-
-     [COMMON-PARAMETERS]
-")
-
-(h5 "install")
-(pre "
-     Usage: sitetool-install [OPTIONS]
-
-	    -c, --configuration=FILE    configuration file is FILE
-	    -i, --input-dir=DIR         source directory is DIR
-	    -H, --hname=HOST            destination host is HOST
-	    -P, --hpassword=PASSWD      password for host HOST is PASSWD
-	    -U, --huser=USER            user for host HOST is USER
-	    -o, --hdir=DIR              destination directory is DIR
-
-     [COMMON-PARAMETERS]
-")
-
 (h5 "parse")
 (pre "
      Usage: sitetool-parse [OPTIONS]
@@ -133,20 +102,6 @@
 
 	    -w, --work-dir=DIR          working directory is DIR
 	    -o, --output-dir=DIR        output directory is DIR
-
-     [COMMON-PARAMETERS]
-")
-
-(h5 "uninstall")
-(pre "
-     Usage: sitetool-uninstall [OPTIONS]
-
-	    -c, --configuration=FILE    configuration file is FILE
-	    -i, --input-dir=DIR         source directory is DIR
-	    -H, --hname=HOST            destination host is HOST
-	    -P, --hpassword=PASSWD      password for host HOST is PASSWD
-	    -U, --huser=USER            user for host HOST is USER
-	    -o, --hdir=DIR              destination directory is DIR
 
      [COMMON-PARAMETERS]
 ")
