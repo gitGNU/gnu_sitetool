@@ -62,7 +62,7 @@ sub bug($)
 {
     my $message = shift;
 
-    print STDERR "Bug hit: $message";    
+    print STDERR "Bug hit: $message";
     exit(1);
 }
 
@@ -159,7 +159,7 @@ if (!open($rules_handle, "<", $rules_file)) {
 my $line_number = 0;
 while (<$rules_handle>) {
     my $line;
-    
+
     $line = $_;
     if ($line =~ /^[ \t]*#.*$/) {
 	# Skip comments
@@ -220,7 +220,7 @@ for my $filename (@files) {
 	error("Unable to open \`$filename' for reading ($!)\n");
 	exit 1;
     }
-    
+
     while (<$filehandle>) {
 	my $line;
 
@@ -229,7 +229,7 @@ for my $filename (@files) {
 	    $modules{$1} = "INCLUDE";
 	}
     }
-    
+
     close($filehandle);
 }
 
