@@ -20,16 +20,20 @@
 
 include $(top_srcdir)/Makefile.sub
 
+scripts =					\
+        fetch					\
+        whitespace-detect			\
+        git-version-gen				\
+        gitlog-to-changelog			\
+	perl-autofrisk
+
+noinst_SCRIPTS = $(scripts)
+
+CLEANFILES =
 EXTRA_DIST =					\
-	fetch.in				\
-	perl-autofrisk				\
-	whitespace-detect.in
-
-noinst_SCRIPTS =				\
-	fetch					\
-	whitespace-detect
-
-CLEANFILES = $(noinst_SCRIPTS)
+        git-version-gen				\
+        gitlog-to-changelog			\
+	perl-autofrisk
 
 fetch: fetch.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -40,6 +44,8 @@ fetch: fetch.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
+CLEANFILES += fetch
+EXTRA_DIST += fetch.in
 
 whitespace-detect: whitespace-detect.in Makefile
 	( rm -f $@ $@.tmp && \
@@ -50,15 +56,15 @@ whitespace-detect: whitespace-detect.in Makefile
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-
-update: fetch
+CLEANFILES += whitespace-detect
+EXTRA_DIST += whitespace-detect.in
 
 ##
 ## Maintainer related targets
 ##
 HOST = "http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob_plain;hb=HEAD;f="
 
-update-local: Makefile
+update-local: Makefile fetch
 	rm -r -f fetch-dir && \
 	mkdir fetch-dir && \
 	$(FETCH) $(HOST)build-aux/git-version-gen fetch-dir/git-version-gen && \
@@ -73,8 +79,15 @@ update-local: Makefile
 	}
 	rm -r -f fetch-dir
 
-EXTRA_DIST +=					\
-	git-version-gen				\
-	gitlog-to-changelog
+maintainer-check-parameters: Makefile $(scripts)
+	for i in $(scripts) ; do \
+		echo @ECHO_N@ "Checking standard parameters for $$i... " ; \
+		if ( ./$$i -h 2>&1 > /dev/null ) ; then \
+			echo "@ECHO_T@ok" ; \
+		else \
+			echo "@ECHO_T@error" ; \
+			exit 1 ; \
+		fi ; \
+	done
 
-maintainer-check-local: Makefile
+maintainer-check-local: Makefile maintainer-check-parameters
