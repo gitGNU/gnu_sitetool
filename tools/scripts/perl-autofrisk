@@ -28,6 +28,7 @@ use File::stat;
 use Cwd;
 
 my $program = "perl-autofrisk";
+my $version = "0.1";
 
 #
 # Utilities
@@ -132,16 +133,61 @@ sub file_filter($)
     return;
 }
 
+sub hint ($)
+{
+    my $string = shift;
+
+    if (defined($string)) {
+        print "$program: " . $string . "\n";
+    }
+    print "Try `$program --help' for more information.\n";
+}
+
+sub help ()
+{
+    print "Usage: $program [OPTION] FILE\n";
+    print "\n";
+    print "    Autofrisk perl modules.\n";
+    print "\n";
+    print "OPTIONS:\n";
+    print "\n";
+    print "    --help,    -h    display this help and exit\n";
+    print "    --version, -v    output version information and exit\n";
+    print "\n";
+    print "Report bugs to <" . 'salvestrini@gmail.com' . ">\n";
+}
+
+sub version ()
+{
+    print "$program $version\n";
+    print "Written by Francesco Salvestrini.\n";
+    print "\n";
+    print "This is free software; see the source for copying conditions.  There is NO\n";
+    print "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
+}
+
 #
 # Main
 #
 if ($#ARGV < 0) {
-    error("Missing parameters\n");
+    hint("Missing parameters");
     exit 1;
 }
 if ($#ARGV > 1) {
-    error("too many parameters\n");
+    hint("too many parameters");
     exit 1;
+}
+
+if (($ARGV[0] eq "--help") ||
+    ($ARGV[0] eq "-h")) {
+    help();
+    exit 0
+}
+
+if (($ARGV[0] eq "--version") ||
+    ($ARGV[0] eq "-v")) {
+    version();
+    exit 0;
 }
 
 #
