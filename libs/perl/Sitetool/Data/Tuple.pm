@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-package Sitetool::Tuple;
+package Sitetool::Data::Tuple;
 
 use 5.8.0;
 
