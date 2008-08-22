@@ -68,7 +68,7 @@ use Sitetool::Net::WWW::HTTPS;
 use Sitetool::Net::WWW::FTP;
 use Sitetool::Net::WWW::MAILTO;
 use Sitetool::Configuration;
-use Sitetool::Array;
+use Sitetool::Data::Array;
 
 #
 # Globals
