@@ -39,8 +39,7 @@ dist_perllib_DATA =				\
 	Pagemap.pm				\
 	Sitemap.pm				\
 	Variable.pm				\
-	Graphviz.pm				\
-	Array.pm
+	Graphviz.pm
 
 nodist_perllib_DATA =				\
 	Autoconfig.pm				\

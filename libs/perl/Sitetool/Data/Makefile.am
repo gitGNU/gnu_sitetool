@@ -26,7 +26,8 @@ dist_perllib_DATA =				\
 	Tree.pm					\
 	Stack.pm				\
 	Set.pm					\
-	Tuple.pm
+	Tuple.pm				\
+	Array.pm
 
 ##
 ## Maintainer related targets
