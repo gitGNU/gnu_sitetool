@@ -267,8 +267,16 @@ sub run_tool ($$@)
 	return 1;
     }
 
-    if (!shell_execute($command)) {
-	return 0;
+    {
+	my $time1;
+	my $time2;
+
+	$time1 = 0 + time();
+	if (!shell_execute($command)) {
+	    return 0;
+	}
+	$time2 = 0 + time();
+	verbose("Elapsed " . ($time2 - $time1) . " seconds");
     }
 
     return 1;
