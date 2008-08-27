@@ -25,6 +25,7 @@ scripts =					\
         whitespace-detect			\
         git-version-gen				\
         gitlog-to-changelog			\
+	announce-gen				\
 	perl-autofrisk
 
 noinst_SCRIPTS = $(scripts)
@@ -33,6 +34,7 @@ CLEANFILES =
 EXTRA_DIST =					\
         git-version-gen				\
         gitlog-to-changelog			\
+	announce-gen				\
 	perl-autofrisk
 
 fetch: fetch.in Makefile
@@ -73,6 +75,9 @@ update-local: Makefile fetch
 	$(FETCH) $(HOST)build-aux/gitlog-to-changelog fetch-dir/gitlog-to-changelog && \
 	chmod a+rx fetch-dir/gitlog-to-changelog && \
 	chmod u+w  fetch-dir/gitlog-to-changelog && \
+	$(FETCH) $(HOST)build-aux/announce-gen fetch-dir/announce-gen && \
+	chmod a+rx fetch-dir/announce-gen && \
+	chmod u+w  fetch-dir/announce-gen && \
 	mv -f fetch-dir/* ./ || { \
 		rm -r -f fetch-dir ; \
 		exit 1 ; \
