@@ -61,7 +61,7 @@ sub clean ($)
     $self->{OPTIND}    = 0;
     $self->{STRERROR}  = undef;
 
-    # XXX Fix me:
+    # XXX FIX ME:
     #   May we offer both 'opterr' and 'optopt' support?
 }
 
