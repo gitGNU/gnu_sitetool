@@ -36,8 +36,8 @@ BEGIN {
     @EXPORT = qw(&trace_prefix_set
 		 &error
 		 &warning &warning_set &warning_get
-		 &verbose &verbose_set &verbose_get
-		 &debug   &debug_set   &debug_get  );
+		 &verbose &verbose_set &verbose_get &verbose_inc
+		 &debug   &debug_set   &debug_get   &debug_inc);
 }
 
 my $trace_prefix = "";
@@ -93,7 +93,14 @@ sub verbose_set ($)
 {
     my $value = shift;
 
+    assert($value >= 0);
+
     $verbose_mode = $value;
+}
+
+sub verbose_inc ()
+{
+    $verbose_mode = $verbose_mode + 1;
 }
 
 sub verbose_get ()
@@ -106,6 +113,7 @@ sub verbose ($)
     my $string = shift;
 
     assert(defined($string));
+    assert($verbose_mode >= 0);
 
     if ($verbose_mode != 0) {
 	print $trace_prefix . ": " . $string . "\n";
@@ -116,7 +124,14 @@ sub debug_set ($)
 {
     my $value = shift;
 
+    assert($value >= 0);
+
     $debug_mode = $value;
+}
+
+sub debug_inc ()
+{
+    $debug_mode = $debug_mode + 1;
 }
 
 sub debug_get ()
@@ -129,6 +144,7 @@ sub debug ($)
     my $string = shift;
 
     assert(defined($string));
+    assert($debug_mode >= 0);
 
     if ($debug_mode != 0) {
 	print $trace_prefix . ": " . $string . "\n";
