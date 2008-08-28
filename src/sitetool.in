@@ -343,8 +343,8 @@ my @options_list = (
     [ "n", "dry-run",  sub { $dry_run = 1;            return 1; }, 0 ],
     [ "f", "force",    sub { $force_mode = 1;         return 1; }, 0 ],
     [ "W", "warnings", sub { warning_set($_[0]);      return 1; }, 1 ],
-    [ "d", "debug",    sub { debug_set(1);            return 1; }, 0 ],
-    [ "v", "verbose",  sub { verbose_set(1);          return 1; }, 0 ],
+    [ "d", "debug",    sub { debug_inc();             return 1; }, 0 ],
+    [ "v", "verbose",  sub { verbose_inc();           return 1; }, 0 ],
     [ "h", "help",     sub {
 	$run = 0; return (help_mode($_[0]) ? 0 : -1);           }, 2 ],
     [ "V", "version",  sub { version();     $run = 0; return 0; }, 0 ],
@@ -430,10 +430,10 @@ debug("Running mode is \`$running_mode'");
 
     my $flags = "";
 
-    if (verbose_get() != 0) {
+    for (my $count = verbose_get(); $count > 0; $count--) {
 	$flags = "-v $flags";
     }
-    if (debug_get() != 0) {
+    for (my $count = debug_get(); $count > 0; $count--) {
 	$flags = "-d $flags";
     }
     if ($force_mode != 0) {
