@@ -52,7 +52,7 @@ sub new ($$)
 #
 # XXX FIXME: This sub is only a sketch, we should output more clearer messages
 #
-sub iscorrect ()
+sub iscorrect ($)
 {
     my $self = shift;
 
