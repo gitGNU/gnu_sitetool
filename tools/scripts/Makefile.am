@@ -26,7 +26,8 @@ scripts =					\
         git-version-gen				\
         gitlog-to-changelog			\
 	announce-gen				\
-	perl-autofrisk
+	perl-autofrisk				\
+	yaxx-to-grammar
 
 noinst_SCRIPTS = $(scripts)
 
@@ -35,7 +36,8 @@ EXTRA_DIST =					\
         git-version-gen				\
         gitlog-to-changelog			\
 	announce-gen				\
-	perl-autofrisk
+	perl-autofrisk				\
+	yaxx-to-grammar
 
 fetch: fetch.in Makefile
 	( rm -f $@ $@.tmp && \
