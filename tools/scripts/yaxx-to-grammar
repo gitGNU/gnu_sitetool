@@ -1,0 +1,80 @@
+#!/usr/bin/perl
+
+#
+# yaxx-to-grammar
+#
+# Copyright (C) 2007, 2008 Francesco Salvestrini
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+use Text::Balanced;
+
+# Slurp the whole input file
+open my $fh, $ARGV[0] or die $!;
+local $/;
+my $input = <$fh>;
+close $fh;
+
+# Grab the three parts
+$input =~ m/^(.*)%%(.*)%%(.*)$/s;
+my $header = $1 or die("Wrong input file format, missing header");
+my $body   = $2 or die("Wrong input file format, missing body");
+my $footer = $3 or die("Wrong input file format, missing footer");
+
+my $output = "";
+
+# Handle the header
+my $start;
+
+$header =~ m/[\s\t\n]*%start[\s\t\n]+(.*)[\s\t\n]+/s;
+$1 or die("Missing start symbol in header");
+$output .= "Start symbol '$1'\n";
+
+# Handle the body
+my $completed = 0;
+while (!$completed) {
+    my $position = index($body, "{");
+    if ($position == -1) {
+	$output .= $body;
+	print "ciclo fine\n";
+	$completed = 1;
+	last;
+    }
+
+    print "ciclo composizione ($position)\n";
+    my $head      = substr($body, 0, $position - 1);
+    my $remainder = substr($body, $position);
+
+    print "head      = $head";
+    print "remainder = $remainder";
+
+    ($body, $tail) = Text::Balanced::extract_bracketed($remainder, '{}');
+
+    $tail ne $remainder or die("Problems");
+
+    $output .= $head;
+    $body   =  $tail;
+
+    if ($body eq "") {
+	$completed = 1;
+    }
+}
+
+# Discard the footer
+
+print $output;
+
+exit 0;
