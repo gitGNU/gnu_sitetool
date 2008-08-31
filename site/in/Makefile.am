@@ -35,9 +35,8 @@ SITE_SRCS =					\
 
 EXTRA_DIST = $(SITE_SRCS)
 
-
-grammar.scm: $(top_srcdir)/libs/perl/Sitetool/Parse.yp Makefile
-	$(YAXX_TO_GRAMMAR) $(top_srcdir)/libs/perl/Sitetool/Parse.yp > grammar.scm || { \
+grammar.scm: $(top_srcdir)/docs/grammar.txt
+	cp $(top_srcdir)/docs/grammar.txt grammar.scm || { \
 		rm -f grammar.scm ; \
 		exit 1 ; \
 	}
