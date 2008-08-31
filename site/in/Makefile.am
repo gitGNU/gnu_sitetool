@@ -20,19 +20,29 @@
 
 include $(top_srcdir)/Makefile.sub
 
-EXTRA_DIST =					\
+SITE_SRCS =					\
 	contents.as				\
 	files.as				\
 	footer.sxml				\
 	header.sxml				\
 	index.scm				\
+	grammar.scm				\
 	layout.sxml				\
 	map.as					\
 	pages.as				\
 	site.as					\
 	site.css
 
-site:
+EXTRA_DIST = $(SITE_SRCS)
+
+
+grammar.scm: $(top_srcdir)/libs/perl/Sitetool/Parse.yp Makefile
+	$(YAXX_TO_GRAMMAR) $(top_srcdir)/libs/perl/Sitetool/Parse.yp > grammar.scm || { \
+		rm -f grammar.scm ; \
+		exit 1 ; \
+	}
+
+site: $(SITE_SRCS)
 	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
 	export SITETOOL_LIBRARY_PATH ; \
 	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
