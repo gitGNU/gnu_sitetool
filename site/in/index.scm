@@ -71,8 +71,14 @@
  "Sitetool is composed by a bunch of utilities. Each utility could be "
  "invoked manually or by the main program " (samp "sitetool") " via the "
  (samp "--mode") " option. The main program invocation has the advantage of "
- "handling the inter-utility dependencies automatically. A common set of "
- "parameters are available to each utility.")
+ "handling the inter-utility dependencies automatically.")
+
+(p
+ "The complete input file grammar is "
+ (a (@ (href "./grammar.html")) available)
+".")
+
+(p "A common set of parameters is available to each utility.")
 (pre "
      Usage: sitetool [OPTION]... [-- [MODE-ARG]...]
 

@@ -12,4 +12,18 @@ pages = {
 			css   = "site.css";
 		};
 	};
+
+	page = {
+		id          = "p2";
+		destination = "grammar.html";
+		contents = {
+			body   = "p2_body";
+			header = "header";
+			footer = "footer";
+		};
+		vars = {
+			title = "Sitetool";
+			css   = "site.css";
+		};
+	};
 };

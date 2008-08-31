@@ -11,6 +11,18 @@ contents = {
 		};
 	};
 
+	content = {
+		id      = "p2_body";
+		source  = "grammar.scm";
+		filters = {
+			filter[0] = {
+				source      = "sxml";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
         content = {
                 id     = "footer";
                 source = "./footer.sxml";

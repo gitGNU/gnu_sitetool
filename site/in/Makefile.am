@@ -36,9 +36,13 @@ SITE_SRCS =					\
 EXTRA_DIST = $(SITE_SRCS)
 
 grammar.scm: $(top_srcdir)/docs/grammar.txt
-	cp $(top_srcdir)/docs/grammar.txt grammar.scm || { \
-		rm -f grammar.scm ; \
-		exit 1 ; \
+	rm -f grammar.scm &&					\
+	touch grammar.scm &&					\
+	echo "(p (kbd (pre \"" >> grammar.scm &&		\
+	cat $(top_srcdir)/docs/grammar.txt >> grammar.scm &&	\
+	echo "\") ) )" >> grammar.scm || {			\
+		rm -f grammar.scm ;				\
+		exit 1 ;					\
 	}
 
 site: $(SITE_SRCS)
