@@ -27,7 +27,7 @@ SUBDIRS =					\
 EXTRA_DIST =					\
 	grammar.txt
 
-grammar.txt: $(top_srcdir)/libs/perl/Sitetool/Parse.yp Makefile
+grammar.txt: $(YAXX_TO_GRAMMAR) $(top_srcdir)/libs/perl/Sitetool/Parse.yp Makefile
 	$(YAXX_TO_GRAMMAR) $(top_srcdir)/libs/perl/Sitetool/Parse.yp > grammar.txt || { \
 		rm -f grammar.txt ; \
 		exit 1 ; \

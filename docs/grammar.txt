@@ -1,4 +1,4 @@
-Start symbol 'syntax'
+Start symbol syntax
 
 syntax:header body;
 header:AUTOGEN DEFINITIONS SYMBOL ';
