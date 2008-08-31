@@ -79,7 +79,7 @@ $body = $temp;
 
 # Rearrange output again, place each rule on a single line
 my $rules;
-while ($body =~ s/^(.*?)\:(.*?)\;//s) {
+while ($body =~ s/^(.*?)\:(.*?)[^']\;[\s\t\n]*//s) {
     my $symbol     = $1;
     my $expression = $2;
 
