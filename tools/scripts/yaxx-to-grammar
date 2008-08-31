@@ -94,7 +94,7 @@ while ($body =~ s/^(.*?)\:(.*?)\;//s) {
     $rules .= $symbol . ":" . $expression . ";\n";
 }
 
-print "Start symbol '$start'\n";
+print "Start symbol $start\n";
 print "\n";
 print $rules;
 
