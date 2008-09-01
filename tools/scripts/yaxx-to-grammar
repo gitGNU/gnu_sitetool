@@ -58,10 +58,17 @@ $output = "";
 $output = "Start symbol $start\n\n";
 
 # Handle grammar, remove all semantic actions
-while ($grammar =~ s/(.*)\n//) {
+while ($grammar =~ s/(.*)([\n])//) {
     my $line;
+    my $newline;
 
     $line = $1;
+
+    if (defined($2)) {
+	$newline = $2;
+    } else {
+	$newline = "";
+    }
 
     # Fix spaces
     $line =~ s/^([^:]+)\s*:\s+/$1:\ /;
@@ -79,18 +86,19 @@ while ($grammar =~ s/(.*)\n//) {
 	($line !~ s/^(\{[\s.*]?)$/$1/))       {
 
 	if ($line =~ /^\s*;\s*$/) {
-	    $output =~ s/\s+$/\ ;\n/;
+	    $output =~ s/\s+$/\ ;/;
+	    $output = $output . $newline;
 	    next;
 	}
 
 	if ($line =~ s/^\s*\|\s*(.*)$/\|\ $1/) {
 	    $output =~ s/\s+$/\ /;
-	    $output = $output . $line . "\n";
+	    $output = $output . $line . $newline;
 	    next;
 	}
 
 	$line   =~ s/\s*;\s*$/\ ;/;
-	$output = $output . $line . "\n";
+	$output = $output . $line . $newline;
 
 	next;
     }
@@ -98,7 +106,7 @@ while ($grammar =~ s/(.*)\n//) {
     if (defined($1) && defined($2)) {
 	$output = $output . $1 . " ";
     }
-    $grammar = $line . "\n". $grammar;
+    $grammar = $line . $newline . $grammar;
 
     my $extracted;
     my $remainder;
