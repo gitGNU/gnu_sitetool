@@ -20,8 +20,6 @@ configure.ac
 config.log
 config.status
 
-tools/scripts/gitlog2ChangeLog
-tools/scripts/NEWS-query
 tools/scripts/fetch
 tools/scripts/whitespace-detect
 
