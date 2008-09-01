@@ -1,2 +1,2 @@
 [name]
-autosite \- insert comment here
+sitetool \- insert comment here
