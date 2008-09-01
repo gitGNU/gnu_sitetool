@@ -4,6 +4,7 @@
 # yaxx-to-grammar
 #
 # Copyright (C) 2007, 2008 Francesco Salvestrini
+#                          Alessandro Massignan
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,70 +33,88 @@ local $/;
 my $input = <$fh>;
 close $fh;
 
-# Grab the three parts
-$input =~ m/^(.*)%%(.*)%%(.*)$/s;
-my $header = $1 or die("Wrong input file format, missing header");
-my $body   = $2 or die("Wrong input file format, missing body");
-my $footer = $3 or die("Wrong input file format, missing footer");
+# Declarations and grammar sections are required, but programs section's not
+my $declarations;
+my $grammar;
 
-# Handle the header, extract the start symbol
+if (!(($input =~ m/^(.*)\s%%\s(.*)\s%%\s.*$/s) ||
+      ($input =~ m/^(.*)\s%%\s(.*)/s))) {
+    die("Wrong input file format");
+}
+$declarations = $1;
+$grammar      = $2;
+
+# Handle declarations, extract the start symbol
+$declarations =~ /\s*\%start\s+(.*)\s*\n/;
+
+defined($1) or die("Missing start symbol in declarations");
+
 my $start;
+my $output;
 
-$header =~ m/[\s\t\n]*%start[\s\t\n]+(.*)[\s\t\n]+/s;
-$start = $1;
-$start =~ s/[\s\t\n]*//g;
+$start  = $1;
+$output = "";
 
-$start or die("Missing start symbol in header");
+$output = "Start symbol $start\n\n";
 
-# Handle the body, remove all semantic actions
-my $temp      = "";
-my $completed = 0;
-while (!$completed) {
-    my $position = index($body, "{");
-    if ($position == -1) {
-	$temp      .= $body;
-	$completed  = 1;
-	last;
+# Handle grammar, remove all semantic actions
+while ($grammar =~ s/(.*)\n//) {
+    my $line;
+
+    $line = $1;
+
+    # Fix spaces
+    $line =~ s/^([^:]+)\s*:\s+/$1:\ /;
+
+    # Clean comment
+    $line =~ s/\#.*$//;
+
+    # Skip empty line
+    if ($line =~ /^\s*$/) {
+	next;
     }
 
-    my $head      = substr($body, 0, $position - 1);
-    my $remainder = substr($body, $position);
-    my $tail;
+    # Current line hasn't semantic-actions, clean it up
+    if (($line !~ s/^(.*)\s(\{[\s.*]?)$/$2/) &&
+	($line !~ s/^(\{[\s.*]?)$/$1/))       {
 
-    ($body, $tail) = Text::Balanced::extract_bracketed($remainder, '{}');
+	if ($line =~ /^\s*;\s*$/) {
+	    $output =~ s/\s+$/\ ;\n/;
+	    next;
+	}
 
-    $tail ne $remainder or die("bug hit");
+	if ($line =~ s/^\s*\|\s*(.*)$/\|\ $1/) {
+	    $output =~ s/\s+$/\ /;
+	    $output = $output . $line . "\n";
+	    next;
+	}
 
-    $temp .= $head;
-    $body  =  $tail;
+	$line   =~ s/\s*;\s*$/\ ;/;
+	$output = $output . $line . "\n";
 
-    if ($body eq "") {
-	$completed = 1;
+	next;
     }
-}
-$body = $temp;
 
-# Handle the footer, discard it ...
+    if (defined($1) && defined($2)) {
+	$output = $output . $1 . " ";
+    }
+    $grammar = $line . "\n". $grammar;
 
-# Rearrange output again, place each rule on a single line
-my $rules;
-while ($body =~ s/^(.*?)\:(.*?)[^']\;[\s\t\n]*//s) {
-    my $symbol     = $1;
-    my $expression = $2;
+    my $extracted;
+    my $remainder;
 
-    $symbol     =~ s/[\s\t\n]+/ /g;
-    $symbol     =~ s/^[\s\n\t]*//;
-    $symbol     =~ s/[\s\n\t]*$//;
 
-    $expression =~ s/[\s\t\n]+/ /g;
-    $expression =~ s/^[\s\n\t]*//;
-    $expression =~ s/[\s\n\t]*$//;
+    # Extract bracketed semantic action and trash it
+    ($extracted, $remainder) =
+	Text::Balanced::extract_bracketed($grammar, '{}');
 
-    $rules .= $symbol . ":" . $expression . ";\n";
+    ($remainder ne $grammar) or die("Bug hit!");
+
+    $remainder =~ s/^\s*/\ /;
+    $grammar   = $remainder;
 }
 
-print "Start symbol $start\n";
-print "\n";
-print $rules;
+# Print output
+print $output;
 
 exit 0;
