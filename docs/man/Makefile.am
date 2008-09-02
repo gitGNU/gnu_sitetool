@@ -25,8 +25,13 @@ man_aux       = sitetool.x
 
 EXTRA_DIST = $(man_aux)
 
+##
+## NOTE:
+##     Distributed files should never depend on non-distributed built files
+##
+
 # SITETOOL_LIBRARY_PATH="$(top_builddir)/libs@PATH_SEPARATOR@$$PATH";
-sitetool.1: $(srcdir)/sitetool.x $(top_srcdir)/src/sitetool.in
+sitetool.1: $(top_srcdir)/src/sitetool.in
 	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs"; \
 	export SITETOOL_LIBRARY_PATH;	\
 	$(HELP2MAN) \
