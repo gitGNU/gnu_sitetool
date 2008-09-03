@@ -25,104 +25,152 @@ use strict;
 use warnings;
 use diagnostics;
 
+use Getopt::Long;
 use Text::Balanced;
 
-# Slurp the whole input file
-open my $fh, $ARGV[0] or die $!;
-local $/;
-my $input = <$fh>;
-close $fh;
+(my $ME = $0) =~ s|.*/||;
+my $VERSION = "0.0.1";
 
-# Declarations and grammar sections are required, but programs section's not
-my $declarations;
-my $grammar;
-
-if (!(($input =~ m/^(.*)\s%%\s(.*)\s%%\s.*$/s) ||
-      ($input =~ m/^(.*)\s%%\s(.*)/s))) {
-    die("Wrong input file format");
-}
-$declarations = $1;
-$grammar      = $2;
-
-# Handle declarations, extract the start symbol
-$declarations =~ /\s*\%start\s+(.*)\s*\n/;
-
-defined($1) or die("Missing start symbol in declarations");
-
-my $start;
-my $output;
-
-$start  = $1;
-$output = "";
-
-$output = "Start symbol $start\n\n";
-
-# Handle grammar, remove all semantic actions
-while ($grammar =~ s/(.*)([\n])//) {
-    my $line;
-    my $newline;
-
-    $line = $1;
-
-    if (defined($2)) {
-	$newline = $2;
+sub usage ($)
+{
+    my ($exit_code) = @_;
+    my $STREAM = ($exit_code == 0 ? *STDOUT : *STDERR);
+    if ($exit_code != 0) {
+	print $STREAM "Try `$ME --help' for more information.\n";
     } else {
-	$newline = "";
+	print $STREAM <<EOF;
+Usage: $ME [OPTIONS] FILE
+
+    Extract grammar from a yacc/bison/yapp description
+
+OPTIONS:
+
+    --help       display this help and exit
+    --version    output version information and exit
+
+EOF
     }
 
-    # Fix spaces
-    $line =~ s/^([^:]+)\s*:\s+/$1:\ /;
-
-    # Clean comment
-    $line =~ s/\#.*$//;
-
-    # Skip empty line
-    if ($line =~ /^\s*$/) {
-	next;
-    }
-
-    # Current line hasn't semantic-actions, clean it up
-    if (($line !~ s/^(.*)\s(\{[\s.*]?)$/$2/) &&
-	($line !~ s/^(\{[\s.*]?)$/$1/))       {
-
-	if ($line =~ /^\s*;\s*$/) {
-	    $output =~ s/\s+$/\ ;/;
-	    $output = $output . $newline;
-	    next;
-	}
-
-	if ($line =~ s/^\s*\|\s*(.*)$/\|\ $1/) {
-	    $output =~ s/\s+$/\ /;
-	    $output = $output . $line . $newline;
-	    next;
-	}
-
-	$line   =~ s/\s*;\s*$/\ ;/;
-	$output = $output . $line . $newline;
-
-	next;
-    }
-
-    if (defined($1) && defined($2)) {
-	$output = $output . $1 . " ";
-    }
-    $grammar = $line . $newline . $grammar;
-
-    my $extracted;
-    my $remainder;
-
-
-    # Extract bracketed semantic action and trash it
-    ($extracted, $remainder) =
-	Text::Balanced::extract_bracketed($grammar, '{}');
-
-    ($remainder ne $grammar) or die("Bug hit!");
-
-    $remainder =~ s/^\s*/\ /;
-    $grammar   = $remainder;
+    exit $exit_code;
 }
 
-# Print output
-print $output;
+{
+    GetOptions(
+	help    => sub {
+	    usage(0);
+	},
+	version => sub {
+	    print <<EOF;
+$ME ($VERSION)
 
-exit 0;
+Copyright (C) 2007, 2008 Francesco Salvestrini
+			 Alessandro Massignan
+
+This is free software.  You may redistribute copies of it under the terms of
+the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
+There is NO WARRANTY, to the extent permitted by law.
+EOF
+exit(0);
+	},
+	) or usage(1);
+
+    # Slurp the whole input file
+    open my $fh, $ARGV[0] or die $!;
+    local $/;
+    my $input = <$fh>;
+    close $fh;
+
+    # Declarations and grammar sections are required, programs section aren't
+    my $declarations;
+    my $grammar;
+
+    if (!(($input =~ m/^(.*)\s%%\s(.*)\s%%\s.*$/s) ||
+	  ($input =~ m/^(.*)\s%%\s(.*)/s))) {
+	die("Wrong input file format");
+    }
+    $declarations = $1;
+    $grammar      = $2;
+
+    # Handle declarations, extract the start symbol
+    $declarations =~ /\s*\%start\s+(.*)\s*\n/;
+
+    defined($1) or die("Missing start symbol in declarations");
+
+    my $start;
+    my $output;
+
+    $start  = $1;
+    $output = "";
+
+    $output = "Start symbol $start\n\n";
+
+    # Handle grammar, remove all semantic actions
+    while ($grammar =~ s/(.*)([\n])//) {
+	my $line;
+	my $newline;
+
+	$line = $1;
+
+	if (defined($2)) {
+	    $newline = $2;
+	} else {
+	    $newline = "";
+	}
+
+	# Fix spaces
+	$line =~ s/^([^:]+)\s*:\s+/$1:\ /;
+
+	# Clean comment
+	$line =~ s/\#.*$//;
+
+	# Skip empty line
+	if ($line =~ /^\s*$/) {
+	    next;
+	}
+
+	# Current line hasn't semantic-actions, clean it up
+	if (($line !~ s/^(.*)\s(\{[\s.*]?)$/$2/) &&
+	    ($line !~ s/^(\{[\s.*]?)$/$1/))       {
+
+	    if ($line =~ /^\s*;\s*$/) {
+		$output =~ s/\s+$/\ ;/;
+		$output = $output . $newline;
+		next;
+	    }
+
+	    if ($line =~ s/^\s*\|\s*(.*)$/\|\ $1/) {
+		$output =~ s/\s+$/\ /;
+		$output = $output . $line . $newline;
+		next;
+	    }
+
+	    $line   =~ s/\s*;\s*$/\ ;/;
+	    $output = $output . $line . $newline;
+
+	    next;
+	}
+
+	if (defined($1) && defined($2)) {
+	    $output = $output . $1 . " ";
+	}
+	$grammar = $line . $newline . $grammar;
+
+	my $extracted;
+	my $remainder;
+
+
+	# Extract bracketed semantic action and trash it
+	($extracted, $remainder) =
+	    Text::Balanced::extract_bracketed($grammar, '{}');
+
+	($remainder ne $grammar) or die("Bug hit!");
+
+	$remainder =~ s/^\s*/\ /;
+	$grammar   = $remainder;
+    }
+
+    # Print output
+    print $output;
+
+    exit 0;
+}
