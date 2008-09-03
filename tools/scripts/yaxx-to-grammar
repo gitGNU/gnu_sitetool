@@ -123,28 +123,33 @@ exit(0);
 	my $string;
 	my $char;
 
-	if (defined($2)) {
-	    $char = $2;
-	}
+	$string = $1;
 
 	# Clean up string and append it to output
-	$string =  $1;
-	$string =~ s/^\s*//;
-	$string =~ s/\s*$//;
-	$string =~ s/\s+/\ /g;
+	if (defined($string)) {
 
-	if (defined($output)) {
+	    if ($string !~ /^\s*$/) {
 
-	    if ($output =~ /\n$/) {
-		$output = $output . $string;
-	    } else {
-		$output = $output . " " . $string;
+		$string =~ s/^\s*//;
+		$string =~ s/\s*$//;
+		$string =~ s/\s+/\ /g;
+
+		if (defined($output)) {
+
+		    if ($output =~ /\n$/) {
+			$output = $output . $string;
+		    } else {
+			$output = $output . " " . $string;
+		    }
+		} else {
+		    $output = $string;
+		}
 	    }
-	} else {
-	    $output = $string;
 	}
 
-	if (!defined($char)) {
+	if (defined($2)) {
+	    $char = $2;
+	} else {
 	    last;
 	}
 
