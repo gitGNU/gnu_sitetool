@@ -33,31 +33,41 @@ my $VERSION = "0.0.1";
 
 sub usage ($)
 {
-    my ($exit_code) = @_;
-    my $STREAM = ($exit_code == 0 ? *STDOUT : *STDERR);
+    my $message   = shift;
+    my $exit_code = ($message eq "" ? 0 : 1);
+    my $STREAM    = ($exit_code == 0 ? *STDOUT : *STDERR);
+
     if ($exit_code != 0) {
 	print $STREAM "Try `$ME --help' for more information.\n";
     } else {
 	print $STREAM <<EOF;
 Usage: $ME [OPTIONS] FILE
 
-    Extract grammar from a yacc/bison/yapp description
+Extract grammar from a yacc/bison/yapp parser description
 
 OPTIONS:
 
     --help       display this help and exit
     --version    output version information and exit
 
+Report bugs to <salvestrini\@gmail.com>
 EOF
     }
 
     exit $exit_code;
 }
 
+sub fatal ($)
+{
+    my $string = shift;
+    print "$ME: $string\n";
+    exit(1);
+}
+
 {
     GetOptions(
 	help    => sub {
-	    usage(0);
+	    usage("");
 	},
 	version => sub {
 	    print <<EOF;
@@ -72,102 +82,106 @@ There is NO WARRANTY, to the extent permitted by law.
 EOF
 exit(0);
 	},
-	) or usage(1);
+	) or usage("Unrecognized option");
 
     # Slurp the whole input file
-    open my $fh, $ARGV[0] or die $!;
+    defined($ARGV[0])     or usage("Missing input file!");
+    open my $fh, $ARGV[0] or fatal($!);
+
     local $/;
+
     my $input = <$fh>;
     close $fh;
 
-    # Declarations and grammar sections are required, programs section aren't
+    $input =~ s/^\s*//;
+    $input =~ s/\s*$//;
+
+    # Declarations and grammar sections are required, but programs
+    # section's not
     my $declarations;
     my $grammar;
 
     if (!(($input =~ m/^(.*)\s%%\s(.*)\s%%\s.*$/s) ||
 	  ($input =~ m/^(.*)\s%%\s(.*)/s))) {
-	die("Wrong input file format");
+	fatal("Wrong input file format");
     }
     $declarations = $1;
     $grammar      = $2;
 
     # Handle declarations, extract the start symbol
-    $declarations =~ /\s*\%start\s+(.*)\s*\n/;
-
-    defined($1) or die("Missing start symbol in declarations");
-
     my $start;
     my $output;
 
-    $start  = $1;
-    $output = "";
+    $declarations =~ /\s*\%start\s+(.*)\s*\n/;
 
-    $output = "Start symbol $start\n\n";
+    defined($1) or fatal("Missing start symbol in declarations");
 
-    # Handle grammar, remove all semantic actions
-    while ($grammar =~ s/(.*)([\n])//) {
-	my $line;
-	my $newline;
+    $start = $1;
 
-	$line = $1;
+    # Begin parsing and cleaning
+    while ($grammar =~ s/^([^\'\{\#\;]+)([\'\{\#\;])//) {
+	my $string;
+	my $char;
 
 	if (defined($2)) {
-	    $newline = $2;
+	    $char = $2;
+	}
+
+	# Clean up string and append it to output
+	$string =  $1;
+	$string =~ s/^\s*//;
+	$string =~ s/\s*$//;
+	$string =~ s/\s+/\ /g;
+
+	if (defined($output)) {
+
+	    if ($output =~ /\n$/) {
+		$output = $output . $string;
+	    } else {
+		$output = $output . " " . $string;
+	    }
 	} else {
-	    $newline = "";
+	    $output = $string;
 	}
 
-	# Fix spaces
-	$line =~ s/^([^:]+)\s*:\s+/$1:\ /;
-
-	# Clean comment
-	$line =~ s/\#.*$//;
-
-	# Skip empty line
-	if ($line =~ /^\s*$/) {
-	    next;
+	if (!defined($char)) {
+	    last;
 	}
 
-	# Current line hasn't semantic-actions, clean it up
-	if (($line !~ s/^(.*)\s(\{[\s.*]?)$/$2/) &&
-	    ($line !~ s/^(\{[\s.*]?)$/$1/))       {
+	if ($char eq '\'') {
+	    # Preserve single-quoted string
 
-	    if ($line =~ /^\s*;\s*$/) {
-		$output =~ s/\s+$/\ ;/;
-		$output = $output . $newline;
-		next;
-	    }
+	    my $extracted;
+	    my $remainder;
 
-	    if ($line =~ s/^\s*\|\s*(.*)$/\|\ $1/) {
-		$output =~ s/\s+$/\ /;
-		$output = $output . $line . $newline;
-		next;
-	    }
+	    ($extracted, $remainder) =
+		Text::Balanced::extract_quotelike('\'' . $grammar);
 
-	    $line   =~ s/\s*;\s*$/\ ;/;
-	    $output = $output . $line . $newline;
+	    $output  = $output . " " . $extracted;
+	    $grammar = $remainder;
+	} elsif ($char eq '{') {
+	    # Wipe out semantic action
 
-	    next;
+	    my $extracted;
+	    my $remainder;
+
+	    ($extracted, $remainder) =
+		Text::Balanced::extract_bracketed('{' . $grammar, '{}');
+
+	    $grammar = $remainder;
+	} elsif ($char eq '#') {
+	    # Remove comments
+
+	    $grammar =~ s/^[^\n]*//;
+	} elsif ($char eq ';') {
+	    # Handling rule's end
+
+	    $output =~ s/\s*$/\ ;\n/;
+	} else {
+	    fatal("Bug hit!");
 	}
-
-	if (defined($1) && defined($2)) {
-	    $output = $output . $1 . " ";
-	}
-	$grammar = $line . $newline . $grammar;
-
-	my $extracted;
-	my $remainder;
-
-
-	# Extract bracketed semantic action and trash it
-	($extracted, $remainder) =
-	    Text::Balanced::extract_bracketed($grammar, '{}');
-
-	($remainder ne $grammar) or die("Bug hit!");
-
-	$remainder =~ s/^\s*/\ /;
-	$grammar   = $remainder;
     }
+    $output = "Start symbol " . $start . "\n\n" . $output;
 
     # Print output
     print $output;
