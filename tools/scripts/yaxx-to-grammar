@@ -84,8 +84,9 @@ exit(0);
 	},
 	) or usage("Unrecognized option");
 
+    defined($ARGV[0]) or usage("Missing input file!");
+
     # Slurp the whole input file
-    defined($ARGV[0])     or usage("Missing input file!");
     open my $fh, $ARGV[0] or fatal($!);
 
     local $/;
@@ -96,8 +97,7 @@ exit(0);
     $input =~ s/^\s*//;
     $input =~ s/\s*$//;
 
-    # Declarations and grammar sections are required, but programs
-    # section's not
+    # Only declarations and grammar sections are required
     my $declarations;
     my $grammar;
 
@@ -108,80 +108,77 @@ exit(0);
     $declarations = $1;
     $grammar      = $2;
 
+    defined($grammar) or fatal("Wrong grammar section in input file ?");
+
     # Handle declarations, extract the start symbol
     my $start;
-    my $output;
 
     $declarations =~ /\s*\%start\s+(.*)\s*\n/;
-
-    defined($1) or fatal("Missing start symbol in declarations");
-
     $start = $1;
 
-    # Begin parsing and cleaning
-    while ($grammar =~ s/^([^\'\{\#\;]+)([\'\{\#\;])//) {
-	my $string;
-	my $char;
+    defined($start) or fatal("Missing start symbol in declarations");
 
-	$string = $1;
+    # Begin parsing and cleaning
+    my $output;
+
+    $output = "";
+    while (($grammar =~ s/^([^\'\{\#\;]+)//) ||
+	   ($grammar =~ /^[\'\{\#\;]/))       {
+	my $string;
+	my $next_token;
 
 	# Clean up string and append it to output
-	if (defined($string)) {
+	if (defined($1) && ($1 !~ /^\s*$/)) {
 
-	    if ($string !~ /^\s*$/) {
+	    $string = $1;
+	    $string =~ s/^\s*//;
+	    $string =~ s/\s*$//;
+	    $string =~ s/\s+/\ /g;
 
-		$string =~ s/^\s*//;
-		$string =~ s/\s*$//;
-		$string =~ s/\s+/\ /g;
-
-		if (defined($output)) {
-
-		    if ($output =~ /\n$/) {
-			$output = $output . $string;
-		    } else {
-			$output = $output . " " . $string;
-		    }
-		} else {
-		    $output = $string;
-		}
+	    if (($output eq "") || ($output =~ /\n$/)) {
+		$output = $output . $string;
+	    } else {
+		$output = $output . " " . $string;
 	    }
 	}
 
-	if (defined($2)) {
-	    $char = $2;
+	if ($grammar !~ /^\s*$/) {
+	    $grammar    =~ /^(.)/;
+	    $next_token = $1;
 	} else {
 	    last;
 	}
 
-	if ($char eq '\'') {
+	if ($next_token eq '\'') {
 	    # Preserve single-quoted string
 
 	    my $extracted;
 	    my $remainder;
 
 	    ($extracted, $remainder) =
-		Text::Balanced::extract_quotelike('\'' . $grammar);
+		Text::Balanced::extract_quotelike($grammar);
 
 	    $output  = $output . " " . $extracted;
 	    $grammar = $remainder;
-	} elsif ($char eq '{') {
+	} elsif ($next_token eq '{') {
 	    # Wipe out semantic action
 
 	    my $extracted;
 	    my $remainder;
 
 	    ($extracted, $remainder) =
-		Text::Balanced::extract_bracketed('{' . $grammar, '{}');
+		Text::Balanced::extract_bracketed($grammar, '{}');
 
 	    $grammar = $remainder;
-	} elsif ($char eq '#') {
+	} elsif ($next_token eq '#') {
 	    # Remove comments
 
-	    $grammar =~ s/^[^\n]*//;
-	} elsif ($char eq ';') {
+	    $grammar =~ s/^\#[^\n]*//;
+	} elsif ($next_token eq ';') {
 	    # Handling rule's end
 
-	    $output =~ s/\s*$/\ ;\n/;
+	    $grammar =~ s/^;\s*//;
+	    $output = $output . " ;\n";
 	} else {
 	    fatal("Bug hit!");
 	}
