@@ -191,6 +191,7 @@ exit(0);
     my $out_fh;
     open($out_fh, ">", $ARGV[1]) or fatal($!);
     print $out_fh $output;
-
-    exit 0;
+    close($out_fh);
 }
+
+exit 0;
