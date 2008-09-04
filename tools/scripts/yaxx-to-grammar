@@ -41,7 +41,7 @@ sub usage ($)
 	print $STREAM "Try `$ME --help' for more information.\n";
     } else {
 	print $STREAM <<EOF;
-Usage: $ME [OPTIONS] FILE
+Usage: $ME [OPTIONS] INFILE OUTFILE
 
 Extract grammar from a yacc/bison/yapp parser description
 
@@ -85,14 +85,16 @@ exit(0);
 	) or usage("Unrecognized option");
 
     defined($ARGV[0]) or usage("Missing input file!");
+    defined($ARGV[1]) or usage("Missing output file!");
 
     # Slurp the whole input file
-    open my $fh, $ARGV[0] or fatal($!);
+    my $in_fh;
+    open($in_fh, "<", $ARGV[0]) or fatal($!);
 
     local $/;
 
-    my $input = <$fh>;
-    close $fh;
+    my $input = <$in_fh>;
+    close $in_fh;
 
     $input =~ s/^\s*//;
     $input =~ s/\s*$//;
@@ -185,8 +187,10 @@ exit(0);
     }
     $output = "Start symbol " . $start . "\n\n" . $output;
 
-    # Print output
-    print $output;
+    # Finally write the output
+    my $out_fh;
+    open($out_fh, ">", $ARGV[1]) or fatal($!);
+    print $out_fh $output;
 
     exit 0;
 }
