@@ -39,11 +39,13 @@ AM_INIT_AUTOMAKE([1.10 foreign -Wall])
 #
 # Build related programs
 #
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_PROG_LN_S
 AC_PROG_MKDIR_P
 AC_PROG_GREP
 AC_PROG_SED
 AC_PROG_AWK
-AC_PROG_LN_S
 
 AX_PATH_MISSING([YAPP],     [yapp])
 AX_PATH_MISSING([HELP2MAN], [help2man])
@@ -115,9 +117,14 @@ AS_IF([test -z "$RUBY"],[
 	AX_PROG_RUBY_VERSION([1.8.6],[],[])
 ])
 
-AC_PATH_PROG([TIDY],   [tidy])
-AC_PATH_PROG([WPUT],   [wput])
-AC_PATH_PROG([WGET],   [wget])
+#
+# NOTE:
+#     The following programs are used inside the libs (which will be installed)
+#     directory, no AX_PATH_MISSING use allowed
+#
+AC_PATH_PROG([TIDY], [tidy])
+AC_PATH_PROG([WPUT], [wput])
+AC_PATH_PROG([WGET], [wget])
 
 AM_CONDITIONAL([PERL_AVAILABLE],   [ test ! "$PERL" = ""   ])
 AM_CONDITIONAL([PYTHON_AVAILABLE], [ test ! "$PYTHON" = "" ])
