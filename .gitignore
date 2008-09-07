@@ -20,8 +20,8 @@ configure.ac
 config.log
 config.status
 
-tools/scripts/fetch
-tools/scripts/whitespace-detect
+tools/maint/fetch
+tools/maint/whitespace-detect
 
 tools/autotools/install-sh
 tools/autotools/missing
