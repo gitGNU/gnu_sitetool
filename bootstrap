@@ -49,7 +49,7 @@ rm -rf `find ./ -name ".deps"`                       || exit 1
 # Autofrisk perl modules
 #
 echo "$ME: Perl autofrisk ..."
-./tools/scripts/perl-autofrisk ./perl.af && \
+./tools/maint/perl-autofrisk ./perl.af && \
 cat ./perl.af.m4 > ./tools/autotools/m4/perl_autofrisk.m4 && \
 rm -f ./perl.af.m4 || {
     rm -f ./perl.af.m4
