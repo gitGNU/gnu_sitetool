@@ -24,21 +24,21 @@
 
 #. $BASEDIR/environment.sh || exit 1
 
-PROGNAME=bootstrap
+ME=bootstrap
 
 #
 # Dump some useful informations
 #
-echo "$PROGNAME: Dumping build-tools information ..."
+echo "$ME: Dumping build-tools information ..."
 for tool in autoheader autoconf libtool libtoolize aclocal automake; do
     TOOLVER=`$tool --version | head -1`
-    echo "$PROGNAME:   $TOOLVER"
+    echo "$ME:   $TOOLVER"
 done
 
 #
 # Remove files left from the previous run
 #
-echo "$PROGNAME: Removing autotools related files and directories ..."
+echo "$ME: Removing autotools related files and directories ..."
 rm -f  `find ./ -name "Makefile.in"`                 || exit 1
 rm -f  config.cache aclocal.m4 config.h.in configure || exit 1
 rm -f  config.guess config.sub ltmain.sh             || exit 1
@@ -48,7 +48,7 @@ rm -rf `find ./ -name ".deps"`                       || exit 1
 #
 # Autofrisk perl modules
 #
-echo "$PROGNAME: Perl autofrisk ..."
+echo "$ME: Perl autofrisk ..."
 ./tools/scripts/perl-autofrisk ./perl.af && \
 cat ./perl.af.m4 > ./tools/autotools/m4/perl_autofrisk.m4 && \
 rm -f ./perl.af.m4 || {
@@ -60,7 +60,7 @@ rm -f ./perl.af.m4 || {
 #
 # Autofrisk guile modules
 #
-echo "$PROGNAME: Guile autofrisk ..."
+echo "$ME: Guile autofrisk ..."
 guile-tools autofrisk ./guile.af && \
 cat ./guile.af.m4 | sed -e 's/AUTOFRISK_/GUILE_AUTOFRISK_/g' > ./tools/autotools/m4/guile_autofrisk.m4 && \
 rm -f ./guile.af.m4 || {
@@ -72,13 +72,13 @@ rm -f ./guile.af.m4 || {
 #
 # configure.ac
 #
-echo "$PROGNAME: Building configure.ac from configure.ac.in"
+echo "$ME: Building configure.ac from configure.ac.in"
 #if test ! -r ChangeLog ; then
-#    echo "$PROGNAME: Cannot read ChangeLog file"
+#    echo "$ME: Cannot read ChangeLog file"
 #    exit 1
 #fi
 #head -n 1 ChangeLog | sed -e 's/:.*//' > VERSION || {
-#    echo "$PROGNAME: Cannot build VERSION file"
+#    echo "$ME: Cannot build VERSION file"
 #    rm -f VERSION
 #    exit 1
 #}
@@ -91,9 +91,9 @@ chmod a-w configure.ac
 #
 # autoreconf
 #
-echo "$PROGNAME: Handling autotools bootstrap ..."
+echo "$ME: Handling autotools bootstrap ..."
 
-echo "$PROGNAME: Running autoreconf ..."
+echo "$ME: Running autoreconf ..."
 aclocal    --force --install -I ./tools/autotools/m4 && \
 autoreconf --verbose --force --install -Wall         || {
     exit 1
