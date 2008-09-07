@@ -182,7 +182,7 @@ AC_CONFIG_FILES([
 	site/in/Makefile
 
 	tools/Makefile
-	tools/scripts/Makefile
+	tools/maint/Makefile
 	tools/autotools/Makefile
 	tools/autotools/m4/Makefile
 
