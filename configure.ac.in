@@ -190,6 +190,9 @@ AC_CONFIG_FILES([
 	tests/data/Makefile
 ])
 
+AC_CONFIG_FILES([tools/maint/fetch],            [chmod +x tools/maint/fetch])
+AC_CONFIG_FILES([tools/maint/whitespace-detect],[chmod +x tools/maint/whitespace-detect])
+
 AC_OUTPUT
 
 # Header
