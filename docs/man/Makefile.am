@@ -36,7 +36,7 @@ sitetool.1: $(top_srcdir)/src/sitetool.in $(top_srcdir)/libs/perl/Sitetool/Base/
 	export SITETOOL_LIBRARY_PATH;	\
 	$(HELP2MAN) \
 	    --include=$(srcdir)/sitetool.x \
-	    --source="FSF" \
+	    --source="@PACKAGE_NAME@" \
 	    --manual="User Commands" \
 	    --section=1	\
 	    --output=$@	\
