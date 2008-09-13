@@ -22,6 +22,7 @@ config.status
 
 tools/maint/fetch
 tools/maint/whitespace-detect
+tools/maint/yaxx-to-grammar
 
 tools/autotools/install-sh
 tools/autotools/missing

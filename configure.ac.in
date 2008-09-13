@@ -192,6 +192,7 @@ AC_CONFIG_FILES([
 
 AC_CONFIG_FILES([tools/maint/fetch],            [chmod +x tools/maint/fetch])
 AC_CONFIG_FILES([tools/maint/whitespace-detect],[chmod +x tools/maint/whitespace-detect])
+AC_CONFIG_FILES([tools/maint/yaxx-to-grammar],  [chmod +x tools/maint/yaxx-to-grammar])
 
 AC_OUTPUT
 

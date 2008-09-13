@@ -27,7 +27,7 @@ EXTRA_DIST =					\
         gitlog-to-changelog			\
 	announce-gen				\
 	perl-autofrisk				\
-	yaxx-to-grammar
+	yaxx-to-grammar.in
 
 ##
 ## Maintainer related targets
