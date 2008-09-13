@@ -1,2 +1,2 @@
 [name]
-sitetool \- insert comment here
+sitetool \- build site from various content types
