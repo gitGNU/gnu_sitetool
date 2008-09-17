@@ -69,7 +69,7 @@
 (h4 "Use")
 (p
  "Sitetool is composed by a bunch of utilities. Each utility could be "
- "invoked manually or by the main program " (samp "sitetool") " via the "
+ "invoked manually or by using the main program " (samp "sitetool") " via the "
  (samp "--mode") " option. The main program invocation has the advantage of "
  "handling the inter-utility dependencies automatically.")
 
@@ -78,104 +78,27 @@
  (a (@ (href "./grammar.html")) available)
 ".")
 
-(p "A common set of parameters is available to each utility.")
-(pre "
-     Usage: sitetool [OPTION]... [-- [MODE-ARG]...]
-
-     Options:
-	-M, --mode=MODE            Running mode is MODE
-
-     [COMMON-PARAMETERS]
-")
+(p "Note: A common set of parameters is available to each utility.")
 
 (p
  "Current available modes are:"
- (br))
+(br))
 
 (h5 "parse")
-(pre "
-     Usage: sitetool-parse [OPTIONS]
-
-	    -i, --input=FILE            use FILE as input file
-	    -o, --output=FILE           use FILE as output file
-
-     [COMMON-PARAMETERS]
-")
 
 (h5 "initialize")
-(pre "
-     Usage: sitetool-initialize [OPTIONS]
-
-	    -w, --work-dir=DIR          working directory is DIR
-	    -o, --output-dir=DIR        output directory is DIR
-
-     [COMMON-PARAMETERS]
-")
 
 (h5 "clean")
-(pre "
-     Usage: sitetool-clean [OPTIONS]
-
-	  -c, --configuration=FILE    configuration file is FILE
-	  -w, --work-dir=DIR          use DIR as a working directory
-	  -o, --output-dir=DIR        place output into directory DIR
-
-     [COMMON-PARAMETERS]
-")
 
 (h5 "build")
-(pre "
-     Usage: sitetool-build [OPTIONS]
-
-	    -c, --configuration=FILE    configuration file is FILE
-	    -w, --work-dir=DIR          use DIR as a working directory
-	    -o, --output-dir=DIR        place output into directory DIR
-
-    [COMMON-PARAMETERS]
-")
 
 (h5 "check")
-(pre "
-     Usage: sitetool-check [OPTIONS]
-
-	    -c, --configuration=FILE    configuration file is FILE
-	    -o, --output-dir=DIR        use DIR as output directory
-
-    [COMMON-PARAMETERS]
-")
 
 (h5 "digest")
-(pre "
-     Usage: sitetool-digest [OPTIONS]
-
-	    -c, --configuration=FILE    configuration file is FILE
-	    -o, --output-dir=DIR        use DIR as output directory
-
-    [COMMON-PARAMETERS]
-")
 
 (h5 "preprocess")
-(pre "
-     Usage: sitetool-preprocess [OPTIONS]
-
-	    -D, --define=VAR=VALUE      define variable VAR to value VALUE
-	    -U, --undefine=VAR          undefine variable VAR
-	    -i, --input=FILE            use FILE as input file
-	    -o, --output=FILE           use FILE as output file
-
-    [COMMON-PARAMETERS]
-")
 
 (h5 "validate")
-(pre "
-     Usage: sitetool-validate [OPTIONS]
-
-	    -c, --configuration=FILE    configuration file is FILE
-	    -o, --output-dir=DIR        use DIR as output directory
-
-    [COMMON-PARAMETERS]
-
-")
 
 (h3 "COPYING")
 (p
