@@ -24,7 +24,6 @@ EXTRA_DIST =					\
 	fetch.in				\
 	whitespace-detect.in			\
 	gitlog-to-committers.in			\
-	yaxx-to-grammar.in			\
 	perl-autofrisk				\
 	\
 	git-version-gen				\
