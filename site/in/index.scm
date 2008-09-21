@@ -68,21 +68,16 @@
 (p "Current available modes are:"
    (br))
 
-(h5 "parse")
-
-(h5 "initialize")
-
-(h5 "clean")
-
-(h5 "build")
-
-(h5 "check")
-
-(h5 "digest")
-
-(h5 "preprocess")
-
-(h5 "validate")
+(ul
+ (li "parse")
+ (li "initialize")
+ (li "clean")
+ (li "build")
+ (li "check")
+ (li "digest")
+ (li "preprocess")
+ (li "validate")
+ )
 
 (h3 "COPYING")
 (p "Sitetool is licensed under the "
