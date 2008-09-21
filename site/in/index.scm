@@ -7,21 +7,18 @@
    "contents."
    (br)
    (br)
-   "Sitetool content production is divided in two layers: backend and "
-   "frontends."
-   (br)
-   (br)
-   "The backend is the lower layer, it decouples the different frontends "
-   "using " (a (@ (href "http://okmij.org/ftp/Scheme/xml.html")) SXML) " "
-   "as common file format."
-   (br)
-   (br)
-   "Frontends form the upper layer, each frontend translates a content from "
-   "its format to the backend format using a chain of filters. "
-   "Filters chains are automatically formed (or manually specified) in order "
-   "to transform each content from its input format to the backend "
-   "format. "
-   (br))
+   "Sitetool site/contents generation is divided in two layers: "
+   (i "backend") " and " (i "frontends") "."
+   (ul
+    (li "The backend is the lower layer, it decouples the different frontends "
+	"using " (a (@ (href "http://okmij.org/ftp/Scheme/xml.html")) SXML) " "
+	"as common file format")
+    (li "Frontends form the upper layer, each frontend translates a content "
+	"from its format to the backend format using a chain of filters. "
+	"Filters chains are automatically formed (or manually specified) in "
+	"order to transform each content from its input format to the backend "
+	"format")
+    ))
 (h4 "Filters")
 (p "A filter is nothing more than a program which takes an input file and "
    "traslates it to an output file, usually in a different format. "
@@ -39,9 +36,7 @@
  (li "The filters chain used to transform a ChangeLog file to a backend "
      "content is changelog-wikitext -> wikitext-sxml -> sxml-sxml")
  (li "In order to use SXML directly in a content, the pass-through chain "
-     "sxml-sxml is used")
- (li "A wikitext content get translated to SXML using the "
-     "wikitext-sxml -> sxml-sxml chain")
+     "sxml-sxml could be used")
  )
 (p "In order to use third-party filters or your own filters, the "
    (samp "sitetool-config") " script should be used to find the filters "
