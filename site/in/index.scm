@@ -62,10 +62,9 @@
    "invoked manually or by using the main program " (samp "sitetool") " via "
    "the " (samp "--mode") " option. The main program invocation has the "
    "advantage of handling the inter-utility dependencies automatically.")
+(p "The complete input " (a (@ (href "./grammar.html")) "grammar") " "
+   "is available.")
 
-(p "The complete input file grammar is "
-   (a (@ (href "./grammar.html")) available)
-   ".")
 (p "Current available modes are:"
    (br))
 
