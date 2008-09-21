@@ -123,6 +123,9 @@ AS_IF([test -z "$RUBY"],[
 #     The following programs are used inside the libs (which will be installed)
 #     directory, no AX_PATH_MISSING use allowed
 #
+# XXX FIXME:
+#     Some programs should be in AX_PATH_MISSING too (WGET is an example)
+#
 AC_PATH_PROG([TIDY], [tidy])
 AC_PATH_PROG([WPUT], [wput])
 AC_PATH_PROG([WGET], [wget])
