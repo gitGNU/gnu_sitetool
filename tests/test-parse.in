@@ -20,7 +20,7 @@
 
 datadir=@srcdir@/data
 
-. @builddir@/defs
+. $testdir/defs || exit 1
 
 $SITETOOL --mode initialize || exit 1
 $SITETOOL --mode parse      || exit 1
