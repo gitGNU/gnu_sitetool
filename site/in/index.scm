@@ -41,7 +41,8 @@
 (p "In order to use third-party filters or your own filters, the "
    (samp "sitetool-config") " script should be used to find the filters "
    "installation directory:")
-(pre "
+(p (@ class "terminal")
+"
      Usage: sitetool-config [OPTIONS]
 
      OPTIONS:
@@ -49,7 +50,9 @@
 	[--version]
 	[--filters-dir]
 	[--styles-dir]
+
 ")
+
 (p "To use external filters ... simply copy them  into the filters directory.")
 
 (h4 "Use")
@@ -123,10 +126,9 @@
 
 (h4 "Getting a copy of the Git Repository")
 (p "Anonymous checkout: "
-   (br)
-   (br)
-   (kbd (a (@ (href "http://savannah.gnu.org/maintenance/UsingGit")) "git")
-	" clone git://git.savannah.nongnu.org/sitetool.git"))
+   (p (@ class "terminal")
+      (a (@ (href "http://savannah.gnu.org/maintenance/UsingGit")) "git")
+      " clone git://git.savannah.nongnu.org/sitetool.git"))
 
 (h4 "Contribute")
 (p "If you have time and programming skills, you can help us by developing "
