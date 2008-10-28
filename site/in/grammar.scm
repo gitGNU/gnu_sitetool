@@ -1,3 +1,4 @@
+(pre
 (p (@ class "terminal")
 "
 Start symbol syntax
@@ -20,4 +21,4 @@ sub_indexed_items: sub_indexed_item | sub_indexed_item sub_indexed_items ;
 sub_indexed_item: SYMBOL '[' DECIMAL ']' '=' '{' sub_group_items '}' ';' ;
 
 "
-)
+) )
