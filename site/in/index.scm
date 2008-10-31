@@ -8,17 +8,16 @@
    (br)
    (br)
    "Sitetool site/contents generation is divided in two layers: "
-   (i "backend") " and " (i "frontends") "."
-   (ul
-    (li "The backend is the lower layer, it decouples the different frontends "
-	"using " (a (@ (href "http://okmij.org/ftp/Scheme/xml.html")) SXML) " "
-	"as common file format")
-    (li "Frontends form the upper layer, each frontend translates a content "
-	"from its format to the backend format using a chain of filters. "
-	"Filters chains are automatically formed (or manually specified) in "
-	"order to transform each content from its input format to the backend "
-	"format")
-    ))
+   (i "backend") " and " (i "frontends") ".")
+(ul
+ (li "The backend is the lower layer, it decouples the different frontends "
+     "using " (a (@ (href "http://okmij.org/ftp/Scheme/xml.html")) SXML) " "
+     "as common file format")
+ (li "Frontends form the upper layer, each frontend translates a content "
+     "from its format to the backend format using a chain of filters. "
+     "Filters chains are automatically formed (or manually specified) in "
+     "order to transform each content from its input format to the backend "
+     "format"))
 (h4 "Filters")
 (p "A filter is nothing more than a program which takes an input file and "
    "traslates it to an output file, usually in a different format. "
@@ -52,9 +51,7 @@
 	[--styles-dir]
 
 ")
-
 (p "To use external filters ... simply copy them  into the filters directory.")
-
 (h4 "Use")
 (p "Sitetool is composed by a bunch of utilities. Each utility could be "
    "invoked manually or by using the main program " (samp "sitetool") " via "
@@ -62,10 +59,8 @@
    "advantage of handling the inter-utility dependencies automatically.")
 (p "The complete input " (a (@ (href "./grammar.html")) "grammar") " "
    "is available.")
-
 (p "Current available modes are:"
    (br))
-
 (ul
  (li "parse")
  (li "initialize")
@@ -76,23 +71,18 @@
  (li "preprocess")
  (li "validate")
  )
-
 (h3 "COPYING")
 (p "The project is licensed under the "
    (a (@ (href "http://www.gnu.org/licenses/licenses.html"))
       "GNU General Public License, version 2"))
-
 (h3 "MAINTAINERS")
 (p "Francesco Salvestrini <salvestrini AT gmail DOT com>")
-
 (h3 "AUTHORS")
 (p "Francesco Salvestrini <salvestrini AT gmail DOT com>"
    (br)
    "Alessandro Massignan <ff0000 DOT it AT gmail DOT com>")
-
 (h3 "RELEASES")
 (p "Sorry, no public release available at the moment.")
-
 (h3 "MAILING LISTS")
 (p "The project has a single moderated mailing list, with an archive. "
    "In order to post a message to the mailing list you must be subscribed. "
@@ -100,7 +90,6 @@
    (a (@ (href "http://lists.nongnu.org/mailman/listinfo/sitetool-generic") )
       "mailing list page")
    " for more information on subscribing to the mailing list.")
-
 (h3 "REPORT A BUG")
 (p "If you think you have found a bug then please send as complete a report "
    "as possible to "
@@ -113,7 +102,6 @@
    "If you have a patch for a bug that hasn't yet been fixed in "
    "the latest repository sources, please be so kind to create it using the "
    "repository sources, not the release sources.")
-
 (h3 "DEVELOPMENT")
 (h4 "Browsing sources")
 (p "You can browse the "
@@ -123,13 +111,11 @@
    "picture of the current status of the source files. You may also view "
    "the complete histories of any file in the repository as well as "
    "differences among two versions.")
-
 (h4 "Getting a copy of the Git Repository")
 (p "Anonymous checkout: ")
 (p (@ class "terminal")
    (a (@ (href "http://savannah.gnu.org/maintenance/UsingGit")) "git")
    " clone git://git.savannah.nongnu.org/sitetool.git")
-
 (h4 "Contribute")
 (p "If you have time and programming skills, you can help us by developing "
    "missing features, regression tests or bug-fixing the present codebase. "
