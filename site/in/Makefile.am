@@ -41,7 +41,6 @@ grammar.scm: $(top_srcdir)/docs/grammar.txt Makefile
 	echo "(pre (@ class \"terminal\")" >> grammar.scm &&    \
 	echo "\""                          >> grammar.scm &&    \
 	cat $(top_srcdir)/docs/grammar.txt >> grammar.scm &&    \
-	echo ""                            >> grammar.scm &&    \
 	echo "\""                          >> grammar.scm &&    \
 	echo ")" >> grammar.scm || {                            \
 	        rm -f grammar.scm ;                             \

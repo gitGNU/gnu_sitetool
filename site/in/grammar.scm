@@ -18,6 +18,5 @@ sub_container: SYMBOL '=' '{' sub_container_items '}' ';' ;
 sub_container_items: sub_indexed_items | sub_group_items ;
 sub_indexed_items: sub_indexed_item | sub_indexed_item sub_indexed_items ;
 sub_indexed_item: SYMBOL '[' DECIMAL ']' '=' '{' sub_group_items '}' ';' ;
-
 "
 )
