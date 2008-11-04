@@ -54,6 +54,15 @@ AX_PATH_MISSING([HELP2MAN],        [help2man])
 #
 # Runtime related programs
 #
+AX_WITH_FCP
+AS_IF([test -z "$FCP"],[
+	AC_MSG_ERROR([Missing required Filter Chains Processor])
+],[
+	AX_PROG_FCP_VERSION([0.0.5],[],[
+		AC_MSG_ERROR([Missing required Filter Chains Processor version >= 0.0.5])
+	])
+])
+
 AX_WITH_PERL
 AS_IF([test -z "$PERL"],[
 	AC_MSG_ERROR([Missing required Perl interpreter])
@@ -76,18 +85,18 @@ AS_IF([test -z "$GUILE"],[
 
 	guile_modules=yes
 	#GUILE_MODULE_REQUIRED([sxml simple])
-        GUILE_MODULE_AVAILABLE(guile_module_sxml_simple, (sxml simple))
-        AS_IF([test "$guile_module_sxml_simple" = "no"],[
+	GUILE_MODULE_AVAILABLE(guile_module_sxml_simple, (sxml simple))
+	AS_IF([test "$guile_module_sxml_simple" = "no"],[
 		guile_modules=no
 	])
 
 	#GUILE_MODULE_REQUIRED([sxml transform])
-        GUILE_MODULE_AVAILABLE(guile_module_sxml_transform, (sxml transform))
-        AS_IF([test "$guile_module_sxml_transform" = "no"],[
+	GUILE_MODULE_AVAILABLE(guile_module_sxml_transform, (sxml transform))
+	AS_IF([test "$guile_module_sxml_transform" = "no"],[
 		guile_modules=no
 	])
 
-        AS_IF([test "$guile_modules" = "no"],[
+	AS_IF([test "$guile_modules" = "no"],[
 		AC_MSG_WARN([your system seems to be lacking of guile-lib support])
 		AC_MSG_WARN([try installing it from http://home.gna.org/guile-lib])
 		AC_MSG_WARN([if it is missing, tweak environment variable and/or])
