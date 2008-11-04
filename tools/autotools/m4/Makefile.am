@@ -42,6 +42,8 @@ DOWNLOAD = 					\
 
 MACROS =					\
 	$(DOWNLOAD)				\
+	ax_with_fcp.m4				\
+	ax_prog_fcp_version.m4			\
 	ax_prog_perl_modules.m4
 
 update-local: Makefile
