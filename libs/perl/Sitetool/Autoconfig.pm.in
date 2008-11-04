@@ -39,6 +39,7 @@ use vars qw (@ISA @EXPORT);
 	      $WPUT
 	      $TIDY
 	      $GUILE
+	      $FCP
 
 	      $MD5SUM
 	      $SHA1SUM
@@ -59,8 +60,9 @@ use vars qw  (
 
 	      $WGET
 	      $WPUT
-      	      $TIDY
+	      $TIDY
 	      $GUILE
+	      $FCP
 
 	      $MD5SUM
 	      $SHA1SUM
@@ -82,6 +84,7 @@ $WGET              = '@WGET@';
 $WPUT              = '@WPUT@';
 $TIDY              = '@TIDY@';
 $GUILE             = '@GUILE@';
+$GUILE             = '@FCP@';
 
 $MD5SUM            = '@MD5SUM@';
 $SHA1SUM	   = '@SHA1SUM@';
