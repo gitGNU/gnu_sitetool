@@ -18,6 +18,46 @@
      "Filters chains are automatically formed (or manually specified) in "
      "order to transform each content from its input format to the backend "
      "format"))
+
+(h3 "INSTALLATION")
+
+(h4 "Prerequisites")
+(p "In order to install Sitetool into your system you will need:")
+(ul
+ (li (a (@ (href "http://www.perl.org"))               "Perl"     ) )
+ (li (a (@ (href "http://www.gnu.org/software/guile")) "Guile"    ) )
+ (li (a (@ (href "http://home.gna.org/guile-lib/"))    "guile-lib") )
+ )
+
+(h4 "Installation")
+(p "FCP uses the autotools facilities. The simplest way to install "
+   "the package in your system is:")
+(ul
+ (li (kbd "cd") " to the directory containing the package's source code "
+     "and type " (kbd "./configure") " to configure the package for your "
+     "system."
+     "Running " (kbd "configure") " might take a while. While running, "
+     "it prints some messages telling which features it is checking for")
+ (li "Type " (kbd "make") " to compile the package")
+ (li "Optionally, type " (kbd "make check") " to run any self-tests that "
+     "come with the package")
+ (li "Type " (kbd "make install") " to install the programs and any data "
+     "files and documentation"))
+(p "Use " (kbd "./configure --help") " to get a brief help of all "
+   "configuration tweaks available.")
+(p "You can remove the program binaries and object files from the "
+   "source code directory by typing " (kbd "make clean") ". "
+   "To also remove the files that " (samp "configure") " created (so you "
+   "can compile the package for a different architecture), type "
+   (kbd "make distclean") ".")
+(p "You can also type " (kbd "make uninstall") " to remove the installed "
+   "files.")
+(p "Note that the " (samp "--prefix") " option allows installation using "
+   "different paths than the default ones, this option enables sandbox "
+   "installations.")
+
+(h3 "USAGE")
+
 (h4 "Filters")
 (p "A filter is nothing more than a program which takes an input file and "
    "traslates it to an output file, usually in a different format. "
@@ -78,10 +118,12 @@
       "GNU General Public License, version 2"))
 (h3 "MAINTAINERS")
 (p "Francesco Salvestrini <salvestrini AT gmail DOT com>")
+
 (h3 "AUTHORS")
 (p "Francesco Salvestrini <salvestrini AT gmail DOT com>"
    (br)
    "Alessandro Massignan <ff0000 DOT it AT gmail DOT com>")
+
 (h3 "RELEASES")
 (p "Sorry, no public release available at the moment.")
 (h3 "MAILING LISTS")
