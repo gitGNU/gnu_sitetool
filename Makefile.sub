@@ -51,6 +51,7 @@ do_subst_MAINTAINER = \
   -e 's,[@]WGET[@],$(WGET),g'
 
 do_subst_SPECIFIC = \
+  -e 's,[@]FCP[@],$(FCP),g' \
   -e 's,[@]PERL[@],$(PERL),g' \
   -e 's,[@]PYTHON[@],$(PYTHON),g' \
   -e 's,[@]GUILE[@],$(GUILE),g' \
