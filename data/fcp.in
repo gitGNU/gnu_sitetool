@@ -1,0 +1,20 @@
+changelog:wiki
+	@RELDIR@/changelog-wikitext
+
+map:sxml
+	@RELDIR@/map-sxml
+
+news:wiki
+	@RELDIR@/news-wikitext
+
+svnlog:wiki
+	@RELDIR@/svnlog-wikitext
+
+wiki:sxml
+	@RELDIR@/wikitext-sxml
+
+scm:sxml
+	cat $I > $O
+
+sxml:sxml
+	cat $I > $O
