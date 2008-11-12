@@ -202,10 +202,10 @@ if ($dry_run) {
 
 assert(defined($TIDY));
 if ($TIDY eq "") {
-    error("The tidy executable was not available in your system when "   .
+    error("The tidy executable was not available in your system when "  .
 	  $PACKAGE_NAME . " has been configured");
-    error("In order to use the \`check' functionality please install " .
-	  "wput and re-install " . $PACKAGE_NAME);
+    error("In order to use the requested functionality please install " .
+	  "tidy and re-install " . $PACKAGE_NAME);
     exit 1;
 }
 
