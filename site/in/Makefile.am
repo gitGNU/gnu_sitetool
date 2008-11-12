@@ -52,6 +52,8 @@ site: $(SITE_SRCS)
 	export SITETOOL_LIBRARY_PATH ; \
 	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
 	export SITETOOL_BINARY_PATH ; \
+	SITETOOL_DATA_PATH="$(top_builddir)/data" ; \
+	export SITETOOL_DATA_PATH ; \
 	SITETOOL="$(top_builddir)/src/sitetool" ; \
 	$$SITETOOL -v --mode initialize && \
 	$$SITETOOL -v --mode build && \
@@ -68,6 +70,8 @@ maintainer-clean-local:
 		export SITETOOL_LIBRARY_PATH ; \
 		SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
 		export SITETOOL_BINARY_PATH ; \
+		SITETOOL_DATA_PATH="$(top_builddir)/data" ; \
+		export SITETOOL_DATA_PATH ; \
 		SITETOOL="$(top_builddir)/src/sitetool" ; \
 		$$SITETOOL -v --mode clean || exit 1 ; \
 		rm -f site.stamp ; \
