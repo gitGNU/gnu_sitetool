@@ -35,6 +35,12 @@ pkgvbin_SCRIPTS =				\
 	sitetool-check				\
 	sitetool-validate
 
+##
+## XXX FIXME:
+##     Replace 'sed' with '$SED' in install-exec-hook and uninstall-hook
+##     rules ...
+##
+
 ## Make versioned links on bin_SCRIPTS.  We only run the transform on the
 ## root name; then we make a versioned link with the transformed base name.
 ## This seemed like the most reasonable approach.
