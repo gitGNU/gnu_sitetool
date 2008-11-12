@@ -173,6 +173,8 @@ AC_CONFIG_FILES([
 	docs/man/Makefile
 	docs/info/Makefile
 
+	data/Makefile
+
 	src/Makefile
 	src/filters/Makefile
 
