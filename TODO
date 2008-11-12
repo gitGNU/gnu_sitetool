@@ -13,7 +13,9 @@ TO-BE-DONE:
 * Check all string-related assert
 
 * Do a general clean-up of SITETOOL_BINARY_PATH, SITETOOL_DATA_PATH and
-  SITETOOL_LIBRARY_PATH environment variables
+  SITETOOL_LIBRARY_PATH environment variables. Consider removing the
+  SITETOOL_RC_FILES environment variable references or update all the src/*
+  scripts accordingly
 
 * Remove the --brief option handling (out-dated)
 
