@@ -401,9 +401,61 @@ for my $file_id (keys(%{$configuration{FILES}})) {
 #
 debug("Processing contents");
 
+#for my $content_id (keys(%{$configuration{CONTENTS}})) {
+#
+#    verbose("Processing content \`" . $content_id . "'");
+#
+#    my $content;
+#    $content = variable_canonicalize($content_id);
+#    assert(defined($content));
+#
+#    $source = $configuration{CONTENTS}{$content_id}{SOURCE};
+#    if (!file_ispresent($source)) {
+#	error("Missing input file \`" . $source . "'");
+#	exit 1;
+#    }
+#    $destination = File::Spec->catfile($contents_dir,
+#				       $content . ".sxml");
+#
+#    if ($force_mode || file_isnewer($source, $destination)) {
+#	debug("Output file is obsolete or " .
+#	      "the user is requesting a forced update");
+#
+#	my $temp_dir;
+#
+#	$temp_dir = File::Spec->catfile($contents_dir, $content);
+#	assert(defined($temp_dir));
+#	if (!directory_create($temp_dir)) {
+#	    exit 1;
+#	}
+#	if (!filterchain_apply($source,
+#			       $destination,
+#			       File::Spec->catfile($contents_dir, $content),
+#			       \$configuration{CONTENTS}{$content_id}{FILTERS})) {
+#	    exit 1;
+#	}
+#	if (!directory_remove($temp_dir)) {
+#	    exit 1;
+#	}
+#    } else {
+#	debug("Destination file is not obsolete, skipping filtering");
+#    }
+#
+#    # Fill-in in order to use later in page processing phase
+#    $configuration{CONTENTS}{$content_id}{DESTINATION} = $destination;
+#}
+
+# Build all transformations
+verbose("Building transformations");
+
+my $temp_dir;
+my $transformations;
+
+$transformations = "";
+$temp_dir        = $contents_dir;
 for my $content_id (keys(%{$configuration{CONTENTS}})) {
 
-    verbose("Processing content \`" . $content_id . "'");
+    verbose("Building transformation for content \`" . $content_id . "'");
 
     my $content;
     $content = variable_canonicalize($content_id);
@@ -414,36 +466,43 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
 	error("Missing input file \`" . $source . "'");
 	exit 1;
     }
-    $destination = File::Spec->catfile($contents_dir,
-				       $content . ".sxml");
+    $destination = File::Spec->catfile($contents_dir, $content . ".sxml");
 
-    if ($force_mode || file_isnewer($source, $destination)) {
-	debug("Output file is obsolete or " .
-	      "the user is requesting a forced update");
-
-	my $temp_dir;
-
-	$temp_dir = File::Spec->catfile($contents_dir, $content);
-	assert(defined($temp_dir));
-	if (!directory_create($temp_dir)) {
-	    exit 1;
-	}
-	if (!filterchain_apply($source,
-			       $destination,
-			       File::Spec->catfile($contents_dir, $content),
-			       \$configuration{CONTENTS}{$content_id}{FILTERS})) {
-	    exit 1;
-	}
-	if (!directory_remove($temp_dir)) {
-	    exit 1;
-	}
-    } else {
-	debug("Destination file is not obsolete, skipping filtering");
-    }
+    # Got a transformation
+    $transformations = "$transformations ${source}:${destination}";
 
     # Fill-in in order to use later in page processing phase
     $configuration{CONTENTS}{$content_id}{DESTINATION} = $destination;
 }
+
+# Apply all transformations
+assert(defined($FCP));
+if ($FCP eq "") {
+    error("The fcp executable was not available in your system when "   .
+	  $PACKAGE_NAME . " has been configured");
+    error("In order to use the requested functionality please install " .
+	  "fcp and re-install " . $PACKAGE_NAME);
+    exit 1;
+}
+my $command;
+my $fcp_flags;
+
+$fcp_flags = "";
+$fcp_flags = $fcp_flags . ((verbose_get() != 0) ? "-v " : "");
+$fcp_flags = $fcp_flags . ((debug_get()   != 0) ? "-d " : "");
+$command =
+    "$FCP $fcp_flags "    .
+    "-t $temp_dir "       .
+    "-s : "               .
+    "-m 100 "             .
+    "-q "                 .
+    "-r ${data_dir}/fcp " .
+    "${transformations}";
+verbose("Executing transformations");
+if (!shell_execute($command)) {
+    exit 1;
+}
+verbose("Transformations completed");
 
 #
 # Pages processing phase
