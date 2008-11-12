@@ -50,9 +50,9 @@ sub http_download ($$)
     # XXX FIXME: Replace with a proper check
     assert(defined($WGET));
     if ($WGET eq "") {
-	error("The wget executable was not available in your system when "   .
+	error("The wget executable was not available in your system when "  .
 	      $PACKAGE_NAME . " has been configured");
-	error("In order to use the \`install' functionality please install " .
+	error("In order to use the requested functionality please install " .
 	      "wget and re-install " . $PACKAGE_NAME);
 	exit 1;
     }
