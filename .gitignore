@@ -114,6 +114,8 @@ libs/scheme/guile-lib
 docs/man/sitetool.1
 docs/info/sitetool.info
 
+data/fcp
+
 src/sitetool
 src/sitetool-config
 src/sitetool-initialize
