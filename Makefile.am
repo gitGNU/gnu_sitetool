@@ -57,6 +57,9 @@ EXTRA_DIST =							\
 ## Maintainer related targets
 ##
 
+TODO: .todo
+	$(DEVTODO) -T
+
 announcement:
 	$(ANNOUNCE_GEN)				\
 	  --release-type=alpha			\
