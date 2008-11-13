@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<todo version="0.1.20">
+    <note priority="medium" time="1226609434" done="1226609645">
+        Strenghten libs/perl/Sitetool/Options.pm module with argument shifter in order to give place to some options amongst the other
+    </note>
+    <note priority="medium" time="1226609447" done="1226609641">
+        Add code into the libs/perl/Sitetool/Options.pm module in order to have a cleaner option parsing method
+    </note>
+    <note priority="medium" time="1226609460" done="1226609627">
+        Add option bundling in libs/perl/Sitetool/Base/Options.pm module
+    </note>
+    <note priority="medium" time="1226609475" done="1226609624">
+        Develop tools/script/perl-autofrisk in order to mimic the Guile's autofrisk script. The script should be integrated into the bootstrap script
+    </note>
+    <note priority="medium" time="1226609499" done="1226609619">
+        Change tests structure in order to be able to specify a per-test data directory
+    </note>
+    <note priority="medium" time="1226609525" done="1226609598">
+        Add /libs/site/layout.scm in order to handle a generic layout to be used if a specific layout is not defined. Its structure should be like the one found in template-body (/libs/site/template.scm) procedure
+        <comment>
+            Completed in version 0.1.107
+        </comment>
+    </note>
+    <note priority="medium" time="1226609539" done="1226609574">
+        Add lists (ordered, unordered, definition and nested), debug and verbose messages and comments to src/filters/wikitext-sxml.in
+        <comment>
+            Completed in version 0.1.46
+        </comment>
+    </note>
+    <note priority="medium" time="1226609548" done="1226609560">
+        Write a tutorial for Wikitext
+    </note>
+    <note priority="medium" time="1226609275">
+        Fix --dry-run option in all scripts help() sub
+    </note>
+    <note priority="medium" time="1226609284">
+        Add sitemap related plugin in order to generate sitemaps index files
+    </note>
+    <note priority="medium" time="1226609292">
+        Check all string-related assert
+    </note>
+    <note priority="medium" time="1226609313">
+        Do a general clean-up of SITETOOL_BINARY_PATH, SITETOOL_DATA_PATH and SITETOOL_LIBRARY_PATH environment variables. Consider removing the SITETOOL_RC_FILES environment variable references or update all the src/* scripts accordingly
+    </note>
+    <note priority="medium" time="1226609323">
+        Remove the --brief option handling (out-dated)
+    </note>
+    <note priority="medium" time="1226609340">
+        Add to preprocessor the capability to evaluate expressions in its macros with environment variables translation
+    </note>
+    <note priority="medium" time="1226609357">
+        Fix all the system() calls. A boom is assured if they don't find the executable they are looking for
+    </note>
+    <note priority="medium" time="1226609366">
+        Add a feature to choose a global layout via command line switch
+    </note>
+    <note priority="medium" time="1226609378">
+        Add a feature to choose a layout for each page (now we've a common one)
+    </note>
+    <note priority="medium" time="1226609385">
+        Add RSS generation
+    </note>
+    <note priority="medium" time="1226609398">
+        Add support for choosing the right page's DTD. We should have a global site DTD and the option to override it on each page
+    </note>
+    <note priority="medium" time="1226609411">
+        Simplify site configuration (having it in a single file would be a good thing); at the same time think, add and handle a site map indexing
+    </note>
+    <note priority="medium" time="1226609420" done="1226609648">
+        Add handling for subopts in Options.pm module
+    </note>
+</todo>
