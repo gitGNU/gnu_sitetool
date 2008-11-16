@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <todo version="0.1.20">
+    <note priority="medium" time="1226609420" done="1226609648">
+        Add handling for subopts in Options.pm module
+    </note>
     <note priority="medium" time="1226609434" done="1226609645">
         Strenghten libs/perl/Sitetool/Options.pm module with argument shifter in order to give place to some options amongst the other
     </note>
@@ -66,7 +69,10 @@
     <note priority="medium" time="1226609411">
         Simplify site configuration (having it in a single file would be a good thing); at the same time think, add and handle a site map indexing
     </note>
-    <note priority="medium" time="1226609420" done="1226609648">
-        Add handling for subopts in Options.pm module
+    <note priority="medium" time="1226656999">
+        Remove/replace tidy from sitetool-validation
+    </note>
+    <note priority="medium" time="1226657028">
+        Added sxml/xhtml pretty-printing in order to avoid tidy usage
     </note>
 </todo>
