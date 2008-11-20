@@ -84,4 +84,7 @@
             Use sxml to validate each page
         </note>
     </note>
+    <note priority="low" time="1227122764">
+        Rearrange the build process in order to use EXEEXT (if needed)
+    </note>
 </todo>
