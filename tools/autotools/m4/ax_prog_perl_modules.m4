@@ -7,7 +7,7 @@
 # This macro looks if the supplied MODULES are available under the perl
 # interpreter detected via AX_PROG_PERL macro. All log message will be dumped
 # to config.log.
-# 
+#
 # Use it in your configure.ac as:
 #
 #   AX_PROG_PERL([File::Path Cwd]),[ ... ],[ ... ])

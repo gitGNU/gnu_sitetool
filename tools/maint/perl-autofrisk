@@ -286,7 +286,7 @@ for my $key (keys(%modules)) {
     for my $regexp (@module_regexps) {
 	if ($key =~ /^$regexp$/) {
 	    $modules{$key} = "EXCLUDE";
-	    debug("Perl \`use " . $key . "' excluded\n");
+	    debug("Module " . $key . "' excluded\n");
 	    next;
 	}
     }
