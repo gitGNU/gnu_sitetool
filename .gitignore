@@ -39,6 +39,8 @@ tests/defs
 tests/wrapper
 tests/test-fail
 tests/test-success
+tests/test-verbose
+tests/test-debug
 tests/test-helps
 tests/test-dry-run
 tests/test-auths
