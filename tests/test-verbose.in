@@ -26,7 +26,7 @@ rm -f test1.log
 rm -f test2.log
 
 $SITETOOL_NOFLAGS           --dry-run --mode parse > test1.log || exit 1
-$SITETOOL_NOFLAGS --verbose --dry-run --mode-parse > test2.log || exit 1
+$SITETOOL_NOFLAGS --verbose --dry-run --mode parse > test2.log || exit 1
 
 diff test1.log test2.log || {
      rm -f test1.log
