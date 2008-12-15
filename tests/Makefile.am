@@ -123,6 +123,8 @@ SUCCESS_TESTS +=				\
 	test-options-tool-preprocess		\
 	test-options-tool-validate		\
 	test-dry-run				\
+	test-debug				\
+	test-verbose				\
 	test-helps				\
 	test-initialize				\
 	test-preprocess				\
@@ -145,6 +147,30 @@ test-dry-run: $(srcdir)/test-dry-run.in Makefile
 	}
 EXTRA_DIST += test-dry-run.in
 CLEANFILES += test-dry-run
+
+test-verbose: $(srcdir)/test-verbose.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-verbose.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-verbose.in
+CLEANFILES += test-verbose
+
+test-debug: $(srcdir)/test-debug.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-debug.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-debug.in
+CLEANFILES += test-debug
 
 test-success: $(srcdir)/test-success.in Makefile
 	( rm -f $@ $@.tmp && \
