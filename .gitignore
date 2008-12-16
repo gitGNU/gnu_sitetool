@@ -107,6 +107,7 @@ tests/test-options-subopts-8
 tests/test-options-subopts-9
 tests/test-options-subopts-10
 tests/test-options-subopts-11
+tests/test-options-error-1
 
 libs/perl/Sitetool/Autoconfig.pm
 libs/perl/Sitetool/Filterchain.pm
