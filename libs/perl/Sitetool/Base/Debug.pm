@@ -58,7 +58,8 @@ sub bug ($)
 
     confess(); # From Carp module
 
-    exit 1;
+    # We must exit with a different exit code that a generic error (which is 1)
+    exit 88;
 }
 
 sub assert ($)
