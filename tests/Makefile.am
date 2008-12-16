@@ -90,7 +90,8 @@ FAIL_TESTS +=					\
 	test-options-longargs-3			\
 	test-options-longargs-4			\
 	test-options-abbrargs-3			\
-	test-options-abbrargs-4
+	test-options-abbrargs-4			\
+	test-options-error-1
 
 SUCCESS_TESTS +=				\
 	test-success				\
@@ -231,6 +232,18 @@ test-options-3: $(srcdir)/test-options-3.in Makefile
 	}
 EXTRA_DIST += test-options-3.in
 CLEANFILES += test-options-3
+
+test-options-error-1: $(srcdir)/test-options-error-1.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-options-error-1.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-options-error-1.in
+CLEANFILES += test-options-error-1
 
 test-options-tool-build: $(srcdir)/test-options-tool-build.in Makefile
 	( rm -f $@ $@.tmp && \
