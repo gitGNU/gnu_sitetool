@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <todo version="0.1.20">
+    <note priority="veryhigh" time="1229380229" done="1229463282">
+        Fix getopt related bug (run 'sitetool -n check' to reproduce)
+        <comment>
+            Fixed
+        </comment>
+    </note>
     <note priority="medium" time="1226609420" done="1226609648">
         Add handling for subopts in Options.pm module
     </note>
@@ -33,11 +39,11 @@
     <note priority="medium" time="1226609548" done="1226609560">
         Write a tutorial for Wikitext
     </note>
-    <note priority="veryhigh" time="1229380229" done="1229463282">
-        Fix getopt related bug (run 'sitetool -n check' to reproduce)
-        <comment>
-            Fixed
-        </comment>
+    <note priority="veryhigh" time="1229467858">
+        Fix the test-validate test case
+    </note>
+    <note priority="veryhigh" time="1229467864">
+        Fix the test-build test case
     </note>
     <note priority="high" time="1226871137">
         Rearrange input file (site.as) grammar
