@@ -391,7 +391,11 @@ sub _getopt_long ($$)
     }
 
     my $curr_opt = $$argv_ref[$self->{OPTIND}];
-    assert($curr_opt =~ /\-.+/);
+
+    if ($curr_opt !~ /^\-.+$/) {
+	$self->_error("Unrecognized option \`" . $curr_opt . "\`");
+	return '?';
+    }
 
     debug("Processing ARGV[" . $self->{OPTIND} .
 	  "]: \`"            . $curr_opt       .
