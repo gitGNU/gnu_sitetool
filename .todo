@@ -45,6 +45,15 @@
     <note priority="veryhigh" time="1229467864">
         Fix the test-build test case
     </note>
+    <note priority="veryhigh" time="1231516296">
+        Integrate fcp multi-input/singe-output feature (when available)
+    </note>
+    <note priority="veryhigh" time="1231518453">
+        Fix the parameter passing (-l \$4) in map-sxml.in
+    </note>
+    <note priority="veryhigh" time="1231518501">
+        Fix the scheme library building (and inmport)
+    </note>
     <note priority="high" time="1226871137">
         Rearrange input file (site.as) grammar
     </note>
