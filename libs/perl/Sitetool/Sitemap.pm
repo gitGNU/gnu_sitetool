@@ -373,7 +373,7 @@ sub sitemap_create_helper ($$)
     do  {
 	debug("Loop (" . $previous_not_linked . "," . $not_linked . ")");
 
-	for my $page_id (keys(%{$configuration{MAP}})) {
+	for my $page_id (sort(keys(%{$configuration{MAP}}))) {
 	    if ($configuration{MAP}{$page_id}{LINKED}) {
 		next;
 	    }
@@ -431,7 +431,7 @@ sub sitemap_create_helper ($$)
 
 	$previous_not_linked = $not_linked;
 	$not_linked          = 0;
-	for my $page_id (keys(%{$configuration{MAP}})) {
+	for my $page_id (sort(keys(%{$configuration{MAP}}))) {
 	    if (!$configuration{MAP}{$page_id}{LINKED}) {
 		debug("Page \`" . $page_id . "' needs to be linked");
 		$not_linked++;
