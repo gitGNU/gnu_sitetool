@@ -1,3 +1,4 @@
+(h3 "GRAMMAR")
 (pre (@ class "terminal")
 "
 Start symbol syntax
