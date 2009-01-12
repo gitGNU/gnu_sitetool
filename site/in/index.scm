@@ -79,16 +79,14 @@
    (samp "sitetool-config") " script should be used to find the filters "
    "installation directory:")
 (pre (@ class "terminal")
-     "
+"
+Usage: sitetool-config [OPTIONS]
 
-     Usage: sitetool-config [OPTIONS]
-
-     OPTIONS:
-	[-h|--help]
-	[--version]
-	[--filters-dir]
-	[--styles-dir]
-
+OPTIONS:
+    [-h|--help]
+    [--version]
+    [--filters-dir]
+    [--styles-dir]
 ")
 (p "To use external filters ... simply copy them  into the filters directory.")
 (h4 "Use")
