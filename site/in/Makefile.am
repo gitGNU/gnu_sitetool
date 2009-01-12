@@ -31,7 +31,8 @@ SITE_SRCS =					\
 	map.as					\
 	pages.as				\
 	site.as					\
-	site.css
+	site.css				\
+	menu.scm
 
 EXTRA_DIST = $(SITE_SRCS)
 
