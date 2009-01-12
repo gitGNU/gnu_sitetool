@@ -87,20 +87,26 @@ sub tree_dump ($$$)
 	#
 	# The output the result
 	#
-	$string = $string                                             .
-	    (" " x ($level * 2))                                      .
-	    "('leaf "                                                 .
-	    "(\"" . $id . "\" \"" . $title . "\" \"" . $href  . "\")" .
-	    ")\n";
+	$string = $string                                              .
+	    (" " x ($level * 2))                                       .
+	    "((\"" . $id . "\" (\"" . $title . "\" \"" . $href  . "\"))" .
+	    " . ())\n";
+
     } else {
 	# A node must have some children
 	assert($tree->children() >= 0);
 
-	$string = $string                                                     .
-	    (" " x ($level * 2))                                              .
-	    "('node (\"" . $id . "\" \"" . $title . "\" \"" . $href . "\" (\n";
+	if (($tree->is_root()) &&
+	    ($id ne "")        &&
+	    ($title ne "")     &&
+	    ($href ne "")) {
+	    $string = $string                         .
+		      (" " x ($level * 2))            .
+		      "((\"" . $id . "\" \"" . $title .
+		      "\" \"" . $href . "\") (\n";
+	    $level++;
+	}
 
-	$level++;
 	for my $child_ref ($tree->children()) {
 	    assert(defined($child_ref));
 
@@ -117,11 +123,12 @@ sub tree_dump ($$$)
 
 	    $string = $string . $temp;
 	}
-	$level--;
-
+	$level++;
 	$string = $string        .
 	    (" " x ($level * 2)) .
-	    ")))\n";
+	    "())\n";
+	$level--;
+
     }
 
     return $string;
@@ -196,15 +203,15 @@ sub pagemap_create ($$$)
     debug("Computing pagemap for page \`" . $page_id . "'");
 
     my $string;
-
     $string = tree_dump(\$tree, \$page_node, 1);
+
     if (!defined($string)) {
 	error("Cannot build pagemap for page \`" . $page_id . "'");
 	return 0;
     }
 
 #    $string = "(define page-map `(\"" . $page_id . "\"\n" . $string . "))\n";
-    $string = "(\"" . $page_id . "\"\n" . $string . ")\n";
+    $string = "(\"" . $page_id . "\" . (\n" . $string . "  )\n";
 
     $string = scheme_indent($string);
     assert(defined($string));
