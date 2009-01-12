@@ -22,7 +22,7 @@ include $(top_srcdir)/Makefile.sub
 
 schemelibdir = $(pkgvlibsdir)/scheme
 
-dist_schemelib_DATA =				\
+schemelib_SRCS =				\
 	list.scm				\
 	string.scm				\
 	struct.scm				\
@@ -30,10 +30,24 @@ dist_schemelib_DATA =				\
 	xhtml.scm				\
 	sxml.scm
 
+lib.scm: Makefile $(schemelib_SRCS)
+	{ rm -f lib.scm &&						\
+	  touch lib.scm &&						\
+	  for i in $(schemelib_SRCS) ; do				\
+		cat $(srcdir)/$$i | $(SED) -e '1,/^$$/d' >> lib.scm ;	\
+	  done ; } || { rm -f lib.scm ; exit 1 ; }
+CLEANFILES = lib.scm
+
+nodist_schemelib_DATA =				\
+	lib.scm
+
+EXTRA_DIST =					\
+	$(schemelib_SRCS)
+
 ##
 ## Maintainer related targets
 ##
 update-local: Makefile
 
 maintainer-check-local: Makefile
-	$(WHITESPACE_DETECT) $(dist_schemelib_DATA)
+	$(WHITESPACE_DETECT) $(schemelib_SRCS)
