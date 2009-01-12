@@ -114,7 +114,9 @@ libs/perl/Sitetool/Filterchain.pm
 libs/perl/Sitetool/Scheme.pm
 libs/perl/Sitetool/Parse.pm
 libs/perl/Sitetool/Preprocess.pm
+
 libs/scheme/guile-lib
+libs/scheme/lib.scm
 
 docs/man/sitetool.1
 docs/info/sitetool.info
@@ -145,4 +147,5 @@ src/filters/map-sxml
 
 site/in/.sitetool
 site/in/site.stamp
+site/in/grammar.scm
 site/out/*
