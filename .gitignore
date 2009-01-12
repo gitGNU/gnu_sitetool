@@ -115,7 +115,6 @@ libs/perl/Sitetool/Scheme.pm
 libs/perl/Sitetool/Parse.pm
 libs/perl/Sitetool/Preprocess.pm
 
-libs/scheme/guile-lib
 libs/scheme/lib.scm
 
 docs/man/sitetool.1
