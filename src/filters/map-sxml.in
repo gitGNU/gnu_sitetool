@@ -23,7 +23,7 @@
 GUILE="@GUILE@"
 GUILE_FLAGS="--debug"
 
-$GUILE $GUILE_FLAGS -l $4 -c '
+$GUILE $GUILE_FLAGS -l $4 -l $6 -c '
 (map->sxml (open-input-file "'$1'") (open-output-file "'$2'"))
 (exit 0)
 ' || {
