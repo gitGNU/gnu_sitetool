@@ -91,7 +91,6 @@
 
 ")
 (p "To use external filters ... simply copy them  into the filters directory.")
-
 (h4 "Use")
 (p "Sitetool is composed by a bunch of utilities. Each utility could be "
    "invoked manually or by using the main program " (samp "sitetool") " via "
