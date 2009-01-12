@@ -6,9 +6,10 @@ pages = {
 			body   = "p1_body";
 			header = "header";
 			footer = "footer";
+                        map    = "p1_map";
 		};
 		vars = {
-			title = "Sitetool";
+			title = "Home";
 			css   = "site.css";
 		};
 	};
@@ -20,9 +21,10 @@ pages = {
 			body   = "p2_body";
 			header = "header";
 			footer = "footer";
+                        map    = "p2_map";
 		};
 		vars = {
-			title = "Sitetool";
+			title = "Grammar";
 			css   = "site.css";
 		};
 	};
