@@ -39,6 +39,9 @@
     <note priority="medium" time="1226609548" done="1226609560">
         Write a tutorial for Wikitext
     </note>
+    <note priority="veryhigh" time="1226609411">
+        Simplify site configuration language (having it in a single file would be a good thing); at the same time think, add and handle a site map indexing
+    </note>
     <note priority="veryhigh" time="1229467858">
         Fix the test-validate test case
     </note>
@@ -93,9 +96,6 @@
     <note priority="medium" time="1226609398">
         Add support for choosing the right page's DTD. We should have a global site DTD and the option to override it on each page
     </note>
-    <note priority="medium" time="1226609411">
-        Simplify site configuration (having it in a single file would be a good thing); at the same time think, add and handle a site map indexing
-    </note>
     <note priority="medium" time="1226656999">
         Remove/replace tidy from sitetool-validation
         <note priority="medium" time="1226657028">
@@ -104,6 +104,9 @@
         <note priority="medium" time="1226871043">
             Use sxml to validate each page
         </note>
+    </note>
+    <note priority="medium" time="1231800999">
+        Fix the sitemap sorting in order to have a user-defined order
     </note>
     <note priority="low" time="1227122764">
         Rearrange the build process in order to use EXEEXT (if needed)
