@@ -29,6 +29,7 @@
 
 ;; node takes a datum, and left and right branches to make a tree:
 ;; '() is again the empty tree (null)
+
 (define tree-node
   (lambda (x l r)
     (lambda (s)
@@ -66,61 +67,41 @@
 
 ;;(define mytree (node 6 (node 3 '() '()) (node 8 '() '())))
 
+(define map-id
+  (lambda (m)
+    (car m)))
+
+(define map-tree
+  (lambda (m)
+    (cdr m)))
+
+(define node-id
+  (lambda (n)
+    (caar n)))
+
+(define node-id-equal?
+  (lambda (n i)
+    (if (equal? (node-id n) i) #t #f)))
+
+(define node-attributes
+  (lambda (n)
+    (car n)))
+
+(define node-children
+  (lambda (n)
+    (cdr n)))
+
 (define find-node
-  (lambda (t n)
+  (lambda (t i)
     (call-with-current-continuation
-     (lambda (brk)
-       (let f ((t t) (n n))
-	 (for-each
-	  (lambda (x)
-	    (if (pair? x)
-		(if (equal? (car x) n)
-		    (brk x)
-		    (f x n))
-		(if (equal? x n)
-		    (brk t))))
-	  t)) '()))))
-
-(define find-node-father
-  (lambda (t n)
-    (call-with-current-continuation
-     (lambda (brk)
-       (let f ((t t) (n n))
-	 (for-each
-	  (lambda (x)
-	    (if (equal? (car t) n)
-		(brk "")
-		(if (pair? x)
-		    (if (equal? (car x) n)
-			(brk (car t))
-			(f x n))
-		    (if (equal? x n)
-			(brk (car t))))))
-	  t)) '()))))
-
-(define find-node-children
-  (lambda (t n)
-    (let ((c (find-node t n)) (r '()))
-      (if (null? c)
-	  '()
-	  (for-each
-	   (lambda (x)
-	     (if (pair? x)
-		 (and (not (equal? (car x) n))
-		      (set! r (cons (car x) r)))
-		 (and (not (equal? x n))
-		      (set! r (cons x r)))))
-	     c))
-      (reverse r))))
-
-(define find-node-hierarchy
-  (lambda (t n)
-    (call-with-current-continuation
-     (lambda (brk)
-       (let ((t t) (r (cons n '())))
-	 (do ((r r (cons (find-node-father t (car r)) r)))
-	     ((equal? (car r) (car t)) r)
-	   (cond
-	    ((null? (car r)) (brk '()))
-	    ((equal? (car r) "") (brk (cons n '())))
-	    ((equal? (car r) (car t)) (brk r)))))))))
+     (lambda (return)
+       (map
+	(lambda (n)
+	  (if (not (null? n))
+	      (if (node-id-equal? n i)
+		  (return n)
+		  (let ((r (find-node (node-children n) i)))
+		    (if (not (null? r))
+			(return r))))))
+	t)
+       '()))))
