@@ -30,7 +30,7 @@ CLEANFILES = fcp
 ## build it in the destination directory in the install case.
 fcp: Makefile fcp.in
 	cat fcp.in | \
-	$(SED) -e 's,[@]RELDIR[@],$(abs_top_builddir)/bin/filters,' > fcp || { \
+	$(SED) -e 's,[@]RELDIR[@],$(abs_top_builddir)/src/filters,' > fcp || { \
 		rm -f fcp ; \
 		exit 1 ; \
 	}
@@ -40,7 +40,7 @@ all-local: fcp
 install-data-hook:
 	$(MKDIR_P) $(pkgvdatadir) && \
 	cat fcp.in | \
-		$(SED) -e 's,[@]RELDIR[@],$(pkgvbindir)/bin/filters,' > $(pkgvdatadir)/fcp || { \
+		$(SED) -e 's,[@]RELDIR[@],$(pkgvbindir)/filters,' > $(pkgvdatadir)/fcp || { \
 			rm -f $(pkgvdatadir)/fcp ; \
 			exit 1 ; \
 	}
