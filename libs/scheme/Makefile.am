@@ -34,7 +34,8 @@ lib.scm: Makefile $(schemelib_SRCS)
 	{ rm -f lib.scm &&						\
 	  touch lib.scm &&						\
 	  for i in $(schemelib_SRCS) ; do				\
-		cat $(srcdir)/$$i | $(SED) -e '1,/^$$/d' >> lib.scm ;	\
+		cat $(srcdir)/$$i | $(SED) -e '1,/^$$/d' >> lib.scm &&	\
+		echo "" >> lib.scm ;					\
 	  done ; } || { rm -f lib.scm ; exit 1 ; }
 CLEANFILES = lib.scm
 
