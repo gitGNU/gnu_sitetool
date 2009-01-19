@@ -45,19 +45,30 @@ sub shell_execute ($)
 
     debug("Executing command \`$string'");
 
-    system($string);
-    if ($? == -1) {
+    my $exit_val;
+
+    eval {
+        local $SIG{'__WARN__'};
+        system($string);
+    };
+    if ($@) {
+        error("Cannot execute \`$string'");
+        return 0;
+    }
+    $exit_val = $?;
+
+    if ($exit_val == -1) {
 	error("Failed to execute \`$string'");
 	return 0;
-    } elsif ($? & 127) {
+    } elsif ($exit_val & 127) {
 	error("Child died ?");
 	return 0;
     } else {
-	my $retval = $? >> 8;
+	my $ret_val = $exit_val >> 8;
 
-	debug("Shell execution return value is $retval");
+	debug("Shell execution return value is $ret_val");
 
-	return ($retval ? 0 : 1);
+	return ($ret_val ? 0 : 1);
     }
 
     bug("Unreachable part ...");
@@ -73,15 +84,26 @@ sub shell_execute_and_report ($)
 
     debug("executing command \`$string'");
 
-    system($string);
-    if ($? == -1) {
+    my $exit_val;
+
+    eval {
+        local $SIG{'__WARN__'};
+        system($string);
+    };
+    if ($@) {
+        error("Cannot execute \`$string'");
+        return 0;
+    }
+    $exit_val = $?;
+
+    if ($exit_val == -1) {
 	error("Failed to execute \`$string'");
-	$retval = $?;
-    } elsif ($? & 127) {
+	$retval = $exit_val;
+    } elsif ($exit_val & 127) {
 	error("Child died ?");
-	$retval = $? & 127;
+	$retval = $exit_val & 127;
     } else {
-	$retval = $? >> 8;
+	$retval = $exit_val >> 8;
 
 	debug("Shell execution return value is $retval");
     }
