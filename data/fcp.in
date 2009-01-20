@@ -1,17 +1,17 @@
 changelog:wiki
-	@RELDIR@/changelog-wikitext
+	@RELDIR@/changelog-wikitext $I $O
 
 map:sxml
-	@RELDIR@/map-sxml
+	@RELDIR@/map-sxml $I $O
 
 news:wiki
-	@RELDIR@/news-wikitext
+	@RELDIR@/news-wikitext $I $O
 
 svnlog:wiki
-	@RELDIR@/svnlog-wikitext
+	@RELDIR@/svnlog-wikitext $I $O
 
 wiki:sxml
-	@RELDIR@/wikitext-sxml
+	@RELDIR@/wikitext-sxml $I $O
 
 scm:sxml
 	cat $I > $O
