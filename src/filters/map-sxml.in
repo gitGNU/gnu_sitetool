@@ -20,14 +20,43 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+me="map-sxml"
+
 GUILE="@GUILE@"
 GUILE_FLAGS="--debug"
 
-$GUILE $GUILE_FLAGS -l $4 -l $6 -c '
-(map->sxml (open-input-file "'$1'") (open-output-file "'$2'"))
+INPUT="$1"
+if test X"$INPUT" = X"" ; then
+    echo "$me: Missing input file"
+    exit 1
+fi
+
+OUTPUT="$2"
+if test X"$OUTPUT" = X"" ; then
+    echo "$me: Missing output file"
+    exit 1
+fi
+
+shift
+shift
+
+PARAMETERS="$*"
+
+echo "$me: Input:      $INPUT"
+echo "$me: Output:     $OUTPUT"
+echo "$me: Parameters: $PARAMETERS"
+
+if test X"$schemelibdir" != X"" ; then
+    LIBDIR="$schemelibdir"
+else
+    LIBDIR=@pkgvlibsdir@/scheme
+fi
+
+$GUILE $GUILE_FLAGS -l $LIBDIR/lib.scm $PARAMETERS -c '
+(map->sxml (open-input-file "'$INPUT'") (open-output-file "'$OUTPUT'"))
 (exit 0)
 ' || {
-	rm -f $2 ;
+	rm -f $OUTPUT ;
 	exit 1 ;
 }
 
