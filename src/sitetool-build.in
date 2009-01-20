@@ -65,7 +65,6 @@ use Sitetool::OS::Directory;
 use Sitetool::OS::Shell;
 use Sitetool::Variable;
 use Sitetool::Configuration;
-use Sitetool::Filterchain;
 use Sitetool::SXML;
 use Sitetool::XML;
 use Sitetool::Scheme;
