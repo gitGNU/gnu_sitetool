@@ -43,7 +43,6 @@ dist_perllib_DATA =				\
 
 nodist_perllib_DATA =				\
 	Autoconfig.pm				\
-	Filterchain.pm				\
 	Scheme.pm
 
 CLEANFILES = $(nodist_perllib_DATA)
@@ -75,18 +74,6 @@ Autoconfig.pm: Makefile $(srcdir)/Autoconfig.pm.in
 ##
 ## This module needs @PATH_SEPARATOR@ ...
 ##
-Filterchain.pm: Makefile $(srcdir)/Filterchain.pm.in
-	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/Filterchain.pm.in > $@.tmp && \
-	  chmod a-w $@.tmp && \
-	  mv -f $@.tmp $@ ) || { \
-		rm -f $@ $@.tmp ; \
-		exit 1 ; \
-	}
-
-##
-## This module needs @PATH_SEPARATOR@ ...
-##
 Scheme.pm: Makefile $(srcdir)/Scheme.pm.in
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/Scheme.pm.in > $@.tmp && \
@@ -98,7 +85,6 @@ Scheme.pm: Makefile $(srcdir)/Scheme.pm.in
 
 EXTRA_DIST =					\
 	Autoconfig.pm.in			\
-	Filterchain.pm.in			\
 	Scheme.pm.in				\
 	Parse.yp				\
 	Parse.pm				\
