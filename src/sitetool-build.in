@@ -580,7 +580,7 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
 
 	$source = $configuration{CONTENTS}{$content_id}{DESTINATION};
 	if (!defined($source)) {
-	    error("Page \`" . $page_id . "' referts to an undefined " .
+	    error("Page \`" . $page_id . "' refers to an undefined " .
 		  "content \`" . $content_id . "'");
 	    exit 1;
 	}
