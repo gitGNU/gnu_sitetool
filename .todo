@@ -55,10 +55,13 @@
         Fix the parameter passing (-l \$4) in map-sxml.in
     </note>
     <note priority="veryhigh" time="1231518501">
-        Fix the scheme library building (and inmport)
+        Fix the scheme library building (and import)
     </note>
     <note priority="veryhigh" time="1232644268">
         Avoid having both lib.scm and xhtml.scm in libs/scheme directory
+        <note priority="veryhigh" time="1232653574">
+            xhtml.scm is a module used in sxml processing and it is not required in lib.scm ... think about a clever solution
+        </note>
     </note>
     <note priority="high" time="1226871137">
         Rearrange input file (site.as) grammar
