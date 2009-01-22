@@ -85,9 +85,6 @@ OPTIONS:
 (p "Francesco Salvestrini <salvestrini AT gmail DOT com>")
 (p "Alessandro Massignan <ff0000 DOT it AT gmail DOT com>")
 
-(h2 "RELEASES")
-(p "Sorry, no public release available at the moment.")
-
 (h2 "MAILING LISTS")
 (p "The project has a single moderated mailing list, with an archive. "
    "In order to post a message to the mailing list you must be subscribed. "
