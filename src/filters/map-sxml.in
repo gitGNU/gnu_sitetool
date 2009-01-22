@@ -42,22 +42,24 @@ shift
 
 PARAMETERS="$*"
 
-echo "$me: Input:      $INPUT"
-echo "$me: Output:     $OUTPUT"
-echo "$me: Parameters: $PARAMETERS"
-
 if test X"$schemelibdir" != X"" ; then
     LIBDIR="$schemelibdir"
 else
     LIBDIR=@pkgvlibsdir@/scheme
 fi
 
+#echo "$me: Input:      $INPUT"
+#echo "$me: Output:     $OUTPUT"
+#echo "$me: Parameters: $PARAMETERS"
+#echo "$me: Libdir:     $LIBDIR"
+
 $GUILE $GUILE_FLAGS -l $LIBDIR/lib.scm $PARAMETERS -c '
 (map->sxml (open-input-file "'$INPUT'") (open-output-file "'$OUTPUT'"))
 (exit 0)
 ' || {
-	rm -f $OUTPUT ;
-	exit 1 ;
+    echo "$me: Error processing \`$INPUT'"
+    rm -f $OUTPUT
+    exit 1
 }
 
 exit 0
