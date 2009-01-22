@@ -22,13 +22,14 @@ include $(top_srcdir)/Makefile.sub
 
 schemelibdir = $(pkgvlibsdir)/scheme
 
+schemelib_DATA =				\
+	xhtml.scm
+
 schemelib_SRCS =				\
 	list.scm				\
 	string.scm				\
-	struct.scm				\
-	tree.scm				\
-	xhtml.scm				\
-	sxml.scm
+	menu.scm				\
+	tree.scm
 
 lib.scm: Makefile $(schemelib_SRCS)
 	{ rm -f lib.scm &&						\
