@@ -1,4 +1,4 @@
-(h3 "DESCRIPTION")
+(h2 "DESCRIPTION")
 (p "Sitetool is an extendable "
    (a (@ (href "http://en.wikipedia.org/wiki/Content_management_system")) CMS)
    " that should aid developers building their projects web-sites "
@@ -11,15 +11,17 @@
  (li "The backend is the lower layer, it decouples the different frontends "
      "using " (a (@ (href "http://okmij.org/ftp/Scheme/xml.html")) SXML) " "
      "as common file format")
- (li "Frontends form the upper layer, each frontend translates a content "
-     "from its format to the backend format using a chain of filters. "
-     "Filters chains are automatically formed (or manually specified) in "
-     "order to transform each content from its input format to the backend "
-     "format"))
+ (li "Frontends form the upper layer, each frontend usually translates a "
+     "content from its input format to a different output format"))
 
-(h3 "INSTALLATION")
+(p "In order to to transform the frontend output to the common SXML format "
+   "a chain of filters get computed automatically. Filters chains are "
+   "automatically formed using "
+   (a (@ (href "http://www.nongnu.org/fcproc")) FCP) ".")
 
-(h4 "Prerequisites")
+(h2 "INSTALLATION")
+
+(h3 "Prerequisites")
 (p "In order to install Sitetool into your system you will need:")
 (ul
  (li (a (@ (href "http://www.perl.org"))               "Perl"     ) )
@@ -27,8 +29,11 @@
  (li (a (@ (href "http://home.gna.org/guile-lib/"))    "guile-lib") )
  )
 
-(h4 "Installation")
-(p "FCP uses the autotools facilities. The simplest way to install "
+(h3 "Installation")
+(p "The following notes do not override your system's package management "
+   "software, please follow your system's guidelines to install the software.")
+
+(p "Sitetool uses the autotools facilities. The simplest way to install "
    "the package in your system is:")
 (ul
  (li (kbd "cd") " to the directory containing the package's source code "
@@ -37,10 +42,11 @@
      "Running " (kbd "configure") " might take a while. While running, "
      "it prints some messages telling which features it is checking for")
  (li "Type " (kbd "make") " to compile the package")
- (li "Optionally, type " (kbd "make check") " to run any self-tests that "
+ (li "Optionally, type " (kbd "make check") " to run all self-tests that "
      "come with the package")
  (li "Type " (kbd "make install") " to install the programs and any data "
      "files and documentation"))
+
 (p "Use " (kbd "./configure --help") " to get a brief help of all "
    "configuration tweaks available.")
 (p "You can remove the program binaries and object files from the "
@@ -54,9 +60,9 @@
    "different paths than the default ones, this option enables sandbox "
    "installations.")
 
-(h3 "USAGE")
+(h2 "USAGE")
 
-(h4 "Filters")
+(h3 "Filters")
 (p "A filter is nothing more than a program which takes an input file and "
    "traslates it to an output file, usually in a different format. "
    "Sitetool comes with a set of filters:")
@@ -89,7 +95,7 @@ OPTIONS:
     [--styles-dir]
 ")
 (p "To use external filters ... simply copy them  into the filters directory.")
-(h4 "Use")
+(h3 "Use")
 (p "Sitetool is composed by a bunch of utilities. Each utility could be "
    "invoked manually or by using the main program " (samp "sitetool") " via "
    "the " (samp "--mode") " option. The main program invocation has the "
@@ -108,22 +114,22 @@ OPTIONS:
  (li "validate")
  )
 
-(h3 "COPYING")
+(h2 "COPYING")
 (p "The project is licensed under the "
    (a (@ (href "http://www.gnu.org/licenses/licenses.html"))
       "GNU General Public License, version 2"))
 
-(h3 "MAINTAINERS")
+(h2 "MAINTAINERS")
 (p "Francesco Salvestrini <salvestrini AT gmail DOT com>")
 
-(h3 "AUTHORS")
+(h2 "AUTHORS")
 (p "Francesco Salvestrini <salvestrini AT gmail DOT com>")
 (p "Alessandro Massignan <ff0000 DOT it AT gmail DOT com>")
 
-(h3 "RELEASES")
+(h2 "RELEASES")
 (p "Sorry, no public release available at the moment.")
 
-(h3 "MAILING LISTS")
+(h2 "MAILING LISTS")
 (p "The project has a single moderated mailing list, with an archive. "
    "In order to post a message to the mailing list you must be subscribed. "
    "Please consult the "
@@ -131,7 +137,7 @@ OPTIONS:
       "mailing list page")
    " for more information on subscribing to the mailing list.")
 
-(h3 "REPORT A BUG")
+(h2 "REPORT A BUG")
 (p "If you think you have found a bug then please send as complete a report "
    "as possible to "
    "<sitetool-generic AT nongnu DOT org>. "
@@ -142,9 +148,9 @@ OPTIONS:
    "the latest repository sources, please be so kind to create it using the "
    "repository sources, not the release sources.")
 
-(h3 "DEVELOPMENT")
+(h2 "DEVELOPMENT")
 
-(h4 "Browsing sources")
+(h2 "Browsing sources")
 (p "You can browse the "
    (a (@ (href "http://git.savannah.nongnu.org/gitweb/?p=sitetool.git"))
       "Git repository")
@@ -153,13 +159,13 @@ OPTIONS:
    "the complete histories of any file in the repository as well as "
    "differences among two versions.")
 
-(h4 "Getting a copy of the Git Repository")
+(h3 "Getting a copy of the Git Repository")
 (p "Anonymous checkout:")
 (pre (@ class "terminal")
      (a (@ (href "http://savannah.gnu.org/maintenance/UsingGit")) "git")
      " clone git://git.savannah.nongnu.org/sitetool.git")
 
-(h4 "Contribute")
+(h3 "Contribute")
 (p "If you have time and programming skills, you can help us by developing "
    "missing features, regression tests or bug-fixing the present codebase. "
    "Subscribe to the "
