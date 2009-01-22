@@ -18,13 +18,6 @@
 ;; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ;;
 
-;;(define (list-position element list)
-;;  )
-
-;;(define (list-length l)
-;;  (vector-length (list->vector l))
-;;  )
-
 (define (list-of-lists? l)
   (if (not (list? l)) (error "I need a list!"))
   (call-with-current-continuation
@@ -35,15 +28,3 @@
 	       l)
      #f))
   )
-
-;;(define (list-flatten l)
-;;  (if (not (list-of-lists? l)) l)
-;;  (let ((t '()))
-;;    (for-each
-;;     (lambda (x)
-;;       (if (list? x)
-;;	   (list-flatten x)
-;;	   (set! t (append t x)))
-;;       l)
-;;     t))
-;;  )
