@@ -1,6 +1,6 @@
 (h2 "DEVELOPMENT")
 
-(h2 "Browsing sources")
+(h3 "Browsing sources")
 (p "You can browse the "
    (a (@ (href "http://git.savannah.nongnu.org/gitweb/?p=sitetool.git"))
       "Git repository")
