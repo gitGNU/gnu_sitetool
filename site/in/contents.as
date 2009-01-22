@@ -18,14 +18,14 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l menu.scm -l ../../libs/scheme/tree.scm";
+				parameters  = "";
 			};
 		};
 	};
 
 	content = {
 		id      = "p2_body";
-		source  = "grammar.scm";
+		source  = "development.scm";
 		filters = {
 			filter[0] = {
 				source      = "sxml";
@@ -42,7 +42,79 @@ contents = {
 			filter[0] = {
 				source      = "map";
 				destination = "sxml";
-				parameters  = "-l menu.scm -l ../../libs/scheme/tree.scm";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "p3_body";
+		source  = "downloads.scm";
+		filters = {
+			filter[0] = {
+				source      = "sxml";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "p3_map";
+		source  = "@work_dir@/maps/p3.map";
+		filters = {
+			filter[0] = {
+				source      = "map";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "p4_body";
+		source  = "installation.scm";
+		filters = {
+			filter[0] = {
+				source      = "sxml";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "p4_map";
+		source  = "@work_dir@/maps/p4.map";
+		filters = {
+			filter[0] = {
+				source      = "map";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "p5_body";
+		source  = "grammar.scm";
+		filters = {
+			filter[0] = {
+				source      = "sxml";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "p5_map";
+		source  = "@work_dir@/maps/p5.map";
+		filters = {
+			filter[0] = {
+				source      = "map";
+				destination = "sxml";
+				parameters  = "";
 			};
 		};
 	};

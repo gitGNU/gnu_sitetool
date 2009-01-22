@@ -25,20 +25,25 @@ SITE_SRCS =					\
 	files.as				\
 	footer.sxml				\
 	header.sxml				\
-	index.scm				\
-	grammar.scm				\
 	layout.sxml				\
 	map.as					\
 	pages.as				\
 	site.as					\
-	site.css
+	site.css				\
+						\
+	index.scm				\
+	installation.scm			\
+	downloads.scm				\
+	development.scm				\
+						\
+	grammar.scm
 
 EXTRA_DIST = $(SITE_SRCS)
 
 grammar.scm: $(top_srcdir)/docs/grammar.txt Makefile
 	rm -f grammar.scm                                 &&    \
 	touch grammar.scm                                 &&    \
-	echo "(h3 "GRAMMAR")"              >> grammar.scm &&    \
+	echo "(h2 "GRAMMAR")"              >> grammar.scm &&    \
 	echo "(pre (@ class \"terminal\")" >> grammar.scm &&    \
 	echo "\""                          >> grammar.scm &&    \
 	cat $(top_srcdir)/docs/grammar.txt >> grammar.scm &&    \
