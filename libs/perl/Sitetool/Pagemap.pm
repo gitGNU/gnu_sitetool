@@ -96,14 +96,15 @@ sub tree_dump ($$$)
 	# A node must have some children
 	assert($tree->children() >= 0);
 
-	if (($tree->is_root()) &&
-	    ($id ne "")        &&
-	    ($title ne "")     &&
-	    ($href ne "")) {
-	    $string = $string                         .
-		      (" " x ($level * 2))            .
-		      "((\"" . $id . "\" \"" . $title .
-		      "\" \"" . $href . "\") (\n";
+	if ((($tree->is_root()) &&
+	     ($id ne "")        &&
+	     ($title ne "")     &&
+	     ($href ne ""))     ||
+	    !$tree->is_root()) {
+	    $string = $string                          .
+		      (" " x ($level * 2))             .
+		      "((\"" . $id . "\" (\"" . $title .
+		      "\" \"" . $href . "\")) . (\n";
 	    $level++;
 	}
 
@@ -126,7 +127,7 @@ sub tree_dump ($$$)
 	$level++;
 	$string = $string        .
 	    (" " x ($level * 2)) .
-	    "())\n";
+	    "()))\n";
 	$level--;
 
     }
@@ -211,7 +212,7 @@ sub pagemap_create ($$$)
     }
 
 #    $string = "(define page-map `(\"" . $page_id . "\"\n" . $string . "))\n";
-    $string = "(\"" . $page_id . "\" . (\n" . $string . "  )\n";
+    $string = "(\"" . $page_id . "\" . (\n" . $string . "\n";
 
     $string = scheme_indent($string);
     assert(defined($string));
