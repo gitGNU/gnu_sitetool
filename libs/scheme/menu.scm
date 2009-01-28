@@ -39,7 +39,7 @@
        (if (null? (car (node-children n)))
 	   (list (node-attributes n))
 	   (list (node-attributes n)
-		 (menu-clean-up (car (node-children n))))))
+		 (pagemap-clean-up (car (node-children n))))))
      (reverse (cdr (reverse p))))))
 
 (define pagemap->sxml
@@ -55,7 +55,7 @@
 
 (define map->sxml
   (lambda (in-port out-port)
-    (write (pagemap->sxml
-	    (pagemap-clean-up
-	     (tree-id->pagemap
-	      (map-tree (read in-port)) "p1"))) out-port)))
+    (let ((s (read in-port)))
+      (write (pagemap->sxml
+              (pagemap-clean-up
+               (tree-id->pagemap (map-tree s) (map-id s)))) out-port))))
