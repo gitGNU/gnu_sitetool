@@ -50,7 +50,7 @@ AC_PROG_AWK
 AX_PATH_MISSING([YAPP],            [yapp])
 AX_PATH_MISSING([YAPP_TO_GRAMMAR], [yapp-to-grammar])
 AX_PATH_MISSING([HELP2MAN],        [help2man])
-AX_PATH_MISSING([DEVTODO],         [devtodo])
+AX_PATH_MISSING([DNT],             [dnt])
 
 #
 # Runtime related programs
@@ -136,9 +136,9 @@ AS_IF([test -z "$RUBY"],[
 # XXX FIXME:
 #     Some programs should be in AX_PATH_MISSING too (WGET is an example)
 #
-AC_PATH_PROG([TIDY], [tidy])
-AC_PATH_PROG([WPUT], [wput])
-AC_PATH_PROG([WGET], [wget])
+AC_PATH_PROG([TIDY],   [tidy])
+AC_PATH_PROG([WPUT],   [wput])
+AC_PATH_PROG([WGET],   [wget])
 
 AM_CONDITIONAL([PERL_AVAILABLE],   [ test ! "$PERL" = ""   ])
 AM_CONDITIONAL([PYTHON_AVAILABLE], [ test ! "$PYTHON" = "" ])
