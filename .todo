@@ -52,7 +52,7 @@
         Integrate fcp multi-input/singe-output feature (when available)
     </note>
     <note priority="veryhigh" time="1231518453">
-        Fix the parameter passing (-l \$4) in map-sxml.in
+        Fix the parameter passing in map-sxml.in
     </note>
     <note priority="veryhigh" time="1231518501">
         Fix the scheme library building (and import)
