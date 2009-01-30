@@ -66,8 +66,11 @@
     <note priority="high" time="1226871137">
         Rearrange input file (site.as) grammar
     </note>
-    <note priority="high" time="1226871199">
+    <note priority="high" time="1226871199" done="1233306162">
         Rearrange the site in order to be multi-page
+        <comment>
+            Done
+        </comment>
     </note>
     <note priority="high" time="1232644244">
         Replace scheme lib.scm with a better mechanism
