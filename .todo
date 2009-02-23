@@ -83,6 +83,9 @@
         <note priority="high" time="1232644244">
             Replace scheme lib.scm with a better mechanism
         </note>
+        <note priority="high" time="1235431151">
+            Fix the wrapper.in script in the test directory (find a better fix)
+        </note>
         <note priority="medium" time="1226609284">
             Add sitemap related plugin in order to generate sitemaps index files
         </note>
