@@ -62,8 +62,11 @@
         <note priority="veryhigh" time="1232644268">
             Avoid having both lib.scm and xhtml.scm in libs/scheme directory (xhtml.scm is a module used in sxml processing and it is not required in lib.scm ... think about a clever solution)
         </note>
-        <note priority="veryhigh" time="1235495483">
+        <note priority="veryhigh" time="1235495483" done="1235682627">
             Fix the NEWS and TODOs site pages generation in site/in directory
+            <comment>
+                Done
+            </comment>
         </note>
         <note priority="medium" time="1226609275">
             Fix --dry-run option in all scripts help() sub
