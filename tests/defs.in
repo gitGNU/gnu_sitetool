@@ -73,11 +73,11 @@ test -z "$MAKE" && MAKE=make
 # Always issue warnings ...
 FLAGS="$FLAGS --warnings all"
 
+test -z "$WRAPPER"          && WRAPPER="wrapper"
 test -n "$VERBOSE"          && FLAGS="$FLAGS --verbose"
 test -n "$DEBUG"            && FLAGS="$FLAGS --debug"
-test -z "$SITETOOL"         && SITETOOL="wrapper sitetool $FLAGS"
-test -z "$SITETOOL_NOFLAGS" && SITETOOL_NOFLAGS="wrapper sitetool"
-test -z "$WRAPPER"          && WRAPPER="wrapper"
+test -z "$SITETOOL"         && SITETOOL="$WRAPPER sitetool $FLAGS"
+test -z "$SITETOOL_NOFLAGS" && SITETOOL_NOFLAGS="$WRAPPER sitetool"
 
 PATH=`pwd`:$PATH
 echo $PATH
