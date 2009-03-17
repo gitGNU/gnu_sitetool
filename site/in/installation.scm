@@ -6,7 +6,7 @@
    (ul
     (li (a (@ (href "http://www.perl.org"))               "Perl"     ) )
     (li (a (@ (href "http://www.gnu.org/software/guile")) "Guile"    ) )
-    (li (a (@ (href "http://home.gna.org/guile-lib/"))    "guile-lib") )
+    (li (a (@ (href "http://www.nongnu.org/guile-lib"))   "guile-lib") )
     )
    )
 
