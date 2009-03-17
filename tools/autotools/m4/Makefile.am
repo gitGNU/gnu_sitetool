@@ -26,6 +26,7 @@ include $(top_srcdir)/Makefile.sub
 HOST = "http://autoconf-archive.cryp.to"
 
 DOWNLOAD = 					\
+	ax_split_version.m4			\
 	ax_compare_version.m4			\
 	ax_missing_prog.m4			\
 	ax_path_missing.m4			\
@@ -33,7 +34,6 @@ DOWNLOAD = 					\
 	ax_prog_perl_version.m4			\
 	ax_prog_python_version.m4		\
 	ax_prog_ruby_version.m4			\
-	ax_split_version.m4			\
 	ax_with_guile.m4			\
 	ax_with_perl.m4				\
 	ax_with_prog.m4				\
