@@ -46,7 +46,7 @@ CLEAN_FILES =
 news.dump: $(top_srcdir)/.dnt.db
 	$(DNT) --database=$(top_srcdir)/.dnt.db \
 	       --mono \
-	       dump \
+	       show \
 	       --indent-format="(ul " \
 	       --line-format="(li \"%t\")" \
 	       --unindent-format=")" \
@@ -71,7 +71,7 @@ CLEAN_FILES += news.sxml
 todos.dump: $(top_srcdir)/.dnt.db
 	$(DNT) --database=$(top_srcdir)/.dnt.db \
 	       --mono \
-	       dump \
+	       show \
 	       --indent-format="(ul " \
 	       --line-format="(li \"%t\")" \
 	       --unindent-format=")" \
