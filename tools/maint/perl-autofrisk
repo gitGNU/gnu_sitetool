@@ -286,7 +286,7 @@ for my $key (keys(%modules)) {
     for my $regexp (@module_regexps) {
 	if ($key =~ /^$regexp$/) {
 	    $modules{$key} = "EXCLUDE";
-	    debug("Module " . $key . "' excluded\n");
+	    debug("Perl \`use " . $key . "' excluded\n");
 	    next;
 	}
     }
@@ -322,9 +322,17 @@ print $output_handle "\n";
 print $output_handle "AC_DEFUN([PERL_AUTOFRISK_CHECKS],[\n";
 for my $key (keys(%modules)) {
     if ($modules{$key} =~ /^INCLUDE$/) {
-	print $output_handle "\tAX_PROG_PERL_MODULES([$key])\n";
+        my $string =
+            "    AX_PROG_PERL_MODULES([$key],[],[\n"                 .
+            "        AC_MSG_ERROR([cannot find perl module $key])\n" .
+            "    ])\n";
+
+	print $output_handle $string;
     } elsif ($modules{$key} =~ /^EXCLUDE$/) {
-	print $output_handle "#\tAX_PROG_PERL_MODULES([$key])\n";
+        my $string =
+            "    #AX_PROG_PERL_MODULES([$key],[],[])\n";
+
+	print $output_handle $string;
     } else {
 	bug("Unknown module type");
     }
