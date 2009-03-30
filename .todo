@@ -65,7 +65,7 @@
         <note priority="veryhigh" time="1231518501">
             Fix the scheme library building (and import)
         </note>
-        <note priority="veryhigh" time="1232644268">
+        <note priority="high" time="1232644268">
             Avoid having both lib.scm and xhtml.scm in libs/scheme directory (xhtml.scm is a module used in sxml processing and it is not required in lib.scm ... think about a clever solution)
         </note>
         <note priority="medium" time="1226609275">
