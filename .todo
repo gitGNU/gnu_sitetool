@@ -77,8 +77,11 @@
         <note priority="low" time="1227122764">
             Rearrange the build process in order to use EXEEXT (if needed)
         </note>
-        <note priority="verylow" time="1238244120">
+        <note priority="verylow" time="1238244120" done="1238532575">
             Update all copyright dates
+            <comment>
+                Done
+            </comment>
         </note>
     </note>
     <note priority="high" time="1233736868">
