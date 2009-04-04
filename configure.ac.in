@@ -51,6 +51,7 @@ AX_PATH_MISSING([YAPP],            [yapp])
 AX_PATH_MISSING([YAPP_TO_GRAMMAR], [yapp-to-grammar])
 AX_PATH_MISSING([HELP2MAN],        [help2man])
 AX_PATH_MISSING([DNT],             [dnt])
+AX_PATH_MISSING([DEVTODO_TO_DNT],  [devtodo-to-dnt])
 
 #
 # Runtime related programs

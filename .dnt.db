@@ -1,86 +1,143 @@
 <?xml version="1.0"?>
 <root><entry priority="veryhigh" start="1233736863">
         Release 0.1.0
-        <entry priority="veryhigh" start="1229380229" end="1229463282">
+        <entry end="1229463282" priority="veryhigh" start="1229380229">
             Fix getopt related bug (run 'sitetool -n check' to reproduce)
-            </entry><entry priority="high" start="1226871199" end="1233306162">
-            Rearrange the site in order to be multi-page
-            </entry><entry priority="medium" start="1226609420" end="1226609648">
-            Add handling for subopts in Options.pm module
-        </entry><entry priority="medium" start="1226609434" end="1226609645">
-            Strenghten libs/perl/Sitetool/Options.pm module with argument shifter in order to give place to some options amongst the other
-        </entry><entry priority="medium" start="1226609447" end="1226609641">
-            Add code into the libs/perl/Sitetool/Options.pm module in order to have a cleaner option parsing method
-        </entry><entry priority="medium" start="1226609460" end="1226609627">
-            Add option bundling in libs/perl/Sitetool/Base/Options.pm module
-        </entry><entry priority="medium" start="1226609475" end="1226609624">
-            Develop tools/script/perl-autofrisk in order to mimic the Guile's autofrisk script. The script should be integrated into the bootstrap script
-        </entry><entry priority="medium" start="1226609499" end="1226609619">
-            Change tests structure in order to be able to specify a per-test data directory
-        </entry><entry priority="medium" start="1226609525" end="1226609598">
-            Add /libs/site/layout.scm in order to handle a generic layout to be used if a specific layout is not defined. Its structure should be like the one found in template-body (/libs/site/template.scm) procedure
-            </entry><entry priority="medium" start="1226609539" end="1226609574">
-            Add lists (ordered, unordered, definition and nested), debug and verbose messages and comments to src/filters/wikitext-sxml.in
-            </entry><entry priority="medium" start="1226609548" end="1226609560">
-            Write a tutorial for Wikitext
-        </entry><entry priority="veryhigh" start="1229467858">
-            Fix the test-validate test case
-        </entry><entry priority="veryhigh" start="1229467864">
-            Fix the test-build test case
-        </entry><entry priority="veryhigh" start="1231518453">
-            Fix the parameter passing in map-sxml.in
-        </entry><entry priority="veryhigh" start="1231518501">
-            Fix the scheme library building (and import)
-        </entry><entry priority="veryhigh" start="1232644268">
-            Avoid having both lib.scm and xhtml.scm in libs/scheme directory (xhtml.scm is a module used in sxml processing and it is not required in lib.scm ... think about a clever solution)
-        </entry><entry priority="veryhigh" start="1235495483" end="1235682627">
+            <comment>
+                Fixed
+            </comment></entry>
+    <entry end="1235682627" priority="veryhigh" start="1235495483">
             Fix the NEWS and TODOs site pages generation in site/in directory
-            </entry><entry priority="medium" start="1226609275">
+            <comment>
+                Done
+            </comment></entry>
+    <entry end="1233306162" priority="high" start="1226871199">
+            Rearrange the site in order to be multi-page
+            <comment>
+                Done
+            </comment></entry>
+    <entry end="1226609648" priority="medium" start="1226609420">
+            Add handling for subopts in Options.pm module
+        </entry>
+    <entry end="1226609645" priority="medium" start="1226609434">
+            Strenghten libs/perl/Sitetool/Options.pm module with argument shifter in order to give place to some options amongst the other
+        </entry>
+    <entry end="1226609641" priority="medium" start="1226609447">
+            Add code into the libs/perl/Sitetool/Options.pm module in order to have a cleaner option parsing method
+        </entry>
+    <entry end="1226609627" priority="medium" start="1226609460">
+            Add option bundling in libs/perl/Sitetool/Base/Options.pm module
+        </entry>
+    <entry end="1226609624" priority="medium" start="1226609475">
+            Develop tools/script/perl-autofrisk in order to mimic the Guile's autofrisk script. The script should be integrated into the bootstrap script
+        </entry>
+    <entry end="1226609619" priority="medium" start="1226609499">
+            Change tests structure in order to be able to specify a per-test data directory
+        </entry>
+    <entry end="1226609598" priority="medium" start="1226609525">
+            Add /libs/site/layout.scm in order to handle a generic layout to be used if a specific layout is not defined. Its structure should be like the one found in template-body (/libs/site/template.scm) procedure
+            <comment>
+                Completed in version 0.1.107
+            </comment></entry>
+    <entry end="1226609574" priority="medium" start="1226609539">
+            Add lists (ordered, unordered, definition and nested), debug and verbose messages and comments to src/filters/wikitext-sxml.in
+            <comment>
+                Completed in version 0.1.46
+            </comment></entry>
+    <entry end="1226609560" priority="medium" start="1226609548">
+            Write a tutorial for Wikitext
+        </entry>
+    <entry priority="veryhigh" start="1229467858">
+            Fix the test-validate test case
+        </entry>
+    <entry priority="veryhigh" start="1229467864">
+            Fix the test-build test case
+        </entry>
+    <entry priority="veryhigh" start="1231518453">
+            Fix the parameter passing in map-sxml.in
+        </entry>
+    <entry priority="veryhigh" start="1231518501">
+            Fix the scheme library building (and import)
+        </entry>
+    <entry priority="high" start="1232644268">
+            Avoid having both lib.scm and xhtml.scm in libs/scheme directory (xhtml.scm is a module used in sxml processing and it is not required in lib.scm ... think about a clever solution)
+        </entry>
+    <entry priority="medium" start="1226609275">
             Fix --dry-run option in all scripts help() sub
-        </entry><entry priority="medium" start="1226609323">
+        </entry>
+    <entry priority="medium" start="1226609323">
             Remove the --brief option handling (out-dated)
-        </entry><entry priority="low" start="1227122764">
+        </entry>
+    <entry priority="low" start="1227122764">
             Rearrange the build process in order to use EXEEXT (if needed)
-        </entry></entry><entry priority="high" start="1233736868">
+        </entry>
+    <entry end="1238532575" priority="verylow" start="1238244120">
+            Update all copyright dates
+            <comment>
+                Done
+            </comment></entry>
+    </entry>
+    <entry priority="high" start="1233736868">
         Release 0.2.0
         <entry priority="veryhigh" start="1226609411">
             Simplify site configuration language (having it in a single file would be a good thing); at the same time think, add and handle a site map indexing
-        </entry><entry priority="veryhigh" start="1231516296">
+        </entry>
+    <entry priority="veryhigh" start="1231516296">
             Integrate fcp multi-input/singe-output feature (when available)
-        </entry><entry priority="high" start="1232644244">
+        </entry>
+    <entry priority="high" start="1232644244">
             Replace scheme lib.scm with a better mechanism
-        </entry><entry priority="high" start="1235431151">
+        </entry>
+    <entry priority="high" start="1235431151">
             Fix the wrapper.in script in the test directory (find a better fix)
-        </entry><entry priority="medium" start="1226609284">
+        </entry>
+    <entry priority="medium" start="1226609284">
             Add sitemap related plugin in order to generate sitemaps index files
-        </entry><entry priority="medium" start="1226609292">
+        </entry>
+    <entry priority="medium" start="1226609292">
             Check all string-related assert
-        </entry><entry priority="medium" start="1226609313">
+        </entry>
+    <entry priority="medium" start="1226609313">
             Do a general clean-up of SITETOOL_BINARY_PATH, SITETOOL_DATA_PATH and SITETOOL_LIBRARY_PATH environment variables. Consider removing the SITETOOL_RC_FILES environment variable references or update all the src/* scripts accordingly
-        </entry><entry priority="medium" start="1226609340">
+        </entry>
+    <entry priority="medium" start="1226609340">
             Add to preprocessor the capability to evaluate expressions in its macros with environment variables translation
-        </entry><entry priority="medium" start="1226609357">
+        </entry>
+    <entry priority="medium" start="1226609357">
             Fix all system() calls. A boom is assured if they don't find the executable they are looking for
-        </entry><entry priority="medium" start="1226609366">
+        </entry>
+    <entry priority="medium" start="1226609366">
             Add a feature to choose a global layout via command line switch
-        </entry><entry priority="medium" start="1226609378">
+        </entry>
+    <entry priority="medium" start="1226609378">
             Add a feature to choose a layout for each page (now we've a common one)
-        </entry><entry priority="medium" start="1226609385">
+        </entry>
+    <entry priority="medium" start="1226609385">
             Add RSS generation
-        </entry><entry priority="medium" start="1226656999">
+        </entry>
+    <entry priority="medium" start="1226656999">
             Remove/replace tidy from sitetool-validation
             <entry priority="medium" start="1226657028">
                 Added sxml/xhtml pretty-printing in order to avoid tidy usage
-            </entry><entry priority="medium" start="1226871043">
+            </entry>
+    <entry priority="medium" start="1226871043">
                 Use sxml to validate each page
-            </entry></entry></entry><entry priority="medium" start="1233738651">
+            </entry>
+    </entry>
+    </entry>
+    <entry priority="medium" start="1233738651">
         Release 0.3.0
         <entry priority="high" start="1226871137">
             Rearrange input file (site.as) grammar
-        </entry><entry priority="high" start="1233011209">
+        </entry>
+    <entry priority="high" start="1233011209">
             Add the todo-sxml filter
-        </entry><entry priority="medium" start="1226609398">
+        </entry>
+    <entry priority="medium" start="1226609398">
             Add support for choosing the right page's DTD. We should have a global site DTD and the option to override it on each page
-        </entry><entry priority="medium" start="1231800999">
+        </entry>
+    <entry priority="medium" start="1231800999">
             Fix the sitemap sorting in order to have a user-defined order
-        </entry></entry></root>
+        </entry>
+    </entry>
+    </root>
