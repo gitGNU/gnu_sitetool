@@ -11,12 +11,12 @@
 #   Makes sure that python supports the version indicated. If true the shell
 #   commands in ACTION-IF-TRUE are executed. If not the shell commands in
 #   ACTION-IF-FALSE are run. Note if $PYTHON is not set (for example by
-#   running AC_CHECK_PROG or AC_PATH_PROG) will fail.
+#   running AC_CHECK_PROG or AC_PATH_PROG) the macro will fail.
 #
 #   Example:
 #
 #     AC_PATH_PROG([PYTHON],[python])
-#     AC_PROG_PYTHON_VERSION([2.4.4],[ ... ],[ ... ])
+#     AX_PROG_PYTHON_VERSION([2.4.4],[ ... ],[ ... ])
 #
 #   This will check to make sure that the python you have supports at least
 #   version 2.4.4.
@@ -28,7 +28,7 @@
 #
 # LAST MODIFICATION
 #
-#   2008-04-12
+#   2008-12-25
 #
 # COPYLEFT
 #
