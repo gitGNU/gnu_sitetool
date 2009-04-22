@@ -24,7 +24,8 @@ CLEANFILES =
 EXTRA_DIST =
 
 SUBDIRS =					\
-	data
+	data					\
+	data-build-02
 
 ##
 ## NOTE:
@@ -131,7 +132,8 @@ SUCCESS_TESTS +=				\
 	test-preprocess				\
 	test-parse				\
 	test-validate				\
-	test-build
+	test-build				\
+	test-build-02
 
 
 XFAIL_TESTS  = $(FAIL_TESTS)
@@ -388,6 +390,18 @@ test-build: $(srcdir)/test-build.in Makefile
 	}
 EXTRA_DIST += test-build.in
 CLEANFILES += test-build
+
+test-build-02: $(srcdir)/test-build-02.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-build-02.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+EXTRA_DIST += test-build-02.in
+CLEANFILES += test-build-02
 
 test-validate: $(srcdir)/test-validate.in Makefile
 	( rm -f $@ $@.tmp && \

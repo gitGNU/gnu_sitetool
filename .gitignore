@@ -51,6 +51,7 @@ tests/test-preprocess
 tests/test-parse
 tests/test-single
 tests/test-build
+tests/test-build-02
 tests/test-validate
 tests/testSubDir-*
 tests/test-options-1
