@@ -24,7 +24,7 @@ CLEANFILES =
 EXTRA_DIST =
 
 SUBDIRS =					\
-	data					\
+	data-build-01				\
 	data-build-02
 
 ##
@@ -132,7 +132,7 @@ SUCCESS_TESTS +=				\
 	test-preprocess				\
 	test-parse				\
 	test-validate				\
-	test-build				\
+	test-build-01				\
 	test-build-02
 
 
@@ -379,17 +379,17 @@ test-parse: $(srcdir)/test-parse.in Makefile
 EXTRA_DIST += test-parse.in
 CLEANFILES += test-parse
 
-test-build: $(srcdir)/test-build.in Makefile
+test-build-01: $(srcdir)/test-build-01.in Makefile
 	( rm -f $@ $@.tmp && \
-	  $(do_subst) < $(srcdir)/test-build.in > $@.tmp && \
+	  $(do_subst) < $(srcdir)/test-build-01.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
 		exit 1 ; \
 	}
-EXTRA_DIST += test-build.in
-CLEANFILES += test-build
+EXTRA_DIST += test-build-01.in
+CLEANFILES += test-build-01
 
 test-build-02: $(srcdir)/test-build-02.in Makefile
 	( rm -f $@ $@.tmp && \

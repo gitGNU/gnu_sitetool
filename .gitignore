@@ -50,7 +50,7 @@ tests/test-initialize
 tests/test-preprocess
 tests/test-parse
 tests/test-single
-tests/test-build
+tests/test-build-01
 tests/test-build-02
 tests/test-validate
 tests/testSubDir-*

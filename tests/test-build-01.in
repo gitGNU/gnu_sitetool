@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-datadir=@srcdir@/data
+datadir=@srcdir@/data-build-01
 
 . $testdir/defs || exit 1
 
