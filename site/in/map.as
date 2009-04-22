@@ -1,30 +1,30 @@
-map = {	
+map = {
 	node = {
-		id     = "p1";
+		id     = "1";
 		parent = "";
 	};
 	node = {
-		id     = "news";
-		parent = "p1";
+		id     = "1.1";
+		parent = "1";
 	};
 	node = {
-		id     = "p2";
+		id     = "2";
 		parent = "";
 	};
 	node = {
-		id     = "todos";
-		parent = "p2";
+		id     = "2.1";
+		parent = "2";
 	};
 	node = {
-		id     = "p3";
+		id     = "3";
 		parent = "";
 	};
 	node = {
-		id     = "p4";
+		id     = "4";
 		parent = "";
 	};
 	node = {
-		id     = "p5";
+		id     = "5";
 		parent = "";
 	};
 };

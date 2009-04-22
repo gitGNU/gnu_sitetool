@@ -1,12 +1,12 @@
 pages = {
 	page = {
-		id          = "p1";
+		id          = "1";
 		destination = "index.html";
 		contents = {
-			body   = "p1_body";
+			body   = "1-body";
 			header = "header";
 			footer = "footer";
-			map    = "p1_map";
+			map    = "1-map";
 		};
 		vars = {
 			title = "About";
@@ -15,28 +15,13 @@ pages = {
 	};
 
 	page = {
-		id          = "p2";
-		destination = "development.html";
-		contents = {
-			body   = "p2_body";
-			header = "header";
-			footer = "footer";
-			map    = "p2_map";
-		};
-		vars = {
-			title = "Development";
-			css   = "site.css";
-		};
-	};
-
-	page = {
-		id          = "news";
+		id          = "1.1";
 		destination = "news.html";
 		contents = {
-			body   = "news_body";
+			body   = "1.1-body";
 			header = "header";
 			footer = "footer";
-			map    = "news_map";
+			map    = "1.1-map";
 		};
 		vars = {
 			title = "NEWs";
@@ -45,13 +30,28 @@ pages = {
 	};
 
 	page = {
-		id          = "todos";
-		destination = "todos.html";
+		id          = "2";
+		destination = "development.html";
 		contents = {
-			body   = "todos_body";
+			body   = "2-body";
 			header = "header";
 			footer = "footer";
-			map    = "todos_map";
+			map    = "2-map";
+		};
+		vars = {
+			title = "Development";
+			css   = "site.css";
+		};
+	};
+
+	page = {
+		id          = "2.1";
+		destination = "todos.html";
+		contents = {
+			body   = "2.1-body";
+			header = "header";
+			footer = "footer";
+			map    = "2.1-map";
 		};
 		vars = {
 			title = "TODOs";
@@ -60,13 +60,13 @@ pages = {
 	};
 
 	page = {
-		id          = "p3";
+		id          = "3";
 		destination = "downloads.html";
 		contents = {
-			body   = "p3_body";
+			body   = "3-body";
 			header = "header";
 			footer = "footer";
-			map    = "p3_map";
+			map    = "3-map";
 		};
 		vars = {
 			title = "Downloads";
@@ -75,13 +75,13 @@ pages = {
 	};
 
 	page = {
-		id          = "p4";
+		id          = "4";
 		destination = "installation.html";
 		contents = {
-			body   = "p4_body";
+			body   = "4-body";
 			header = "header";
 			footer = "footer";
-			map    = "p4_map";
+			map    = "4-map";
 		};
 		vars = {
 			title = "Installation";
@@ -90,13 +90,13 @@ pages = {
 	};
 
 	page = {
-		id          = "p5";
+		id          = "5";
 		destination = "grammar.html";
 		contents = {
-			body   = "p5_body";
+			body   = "5-body";
 			header = "header";
 			footer = "footer";
-                        map    = "p5_map";
+                        map    = "5-map";
 		};
 		vars = {
 			title = "Grammar";
@@ -105,4 +105,3 @@ pages = {
 	};
 
 };
- 

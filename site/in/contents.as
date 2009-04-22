@@ -1,6 +1,6 @@
 contents = {
 	content = {
-		id      = "p1_body";
+		id      = "1-body";
 		source  = "index.scm";
 		filters = {
 			filter[0] = {
@@ -12,8 +12,8 @@ contents = {
 	};
 
 	content = {
-		id      = "p1_map";
-		source  = "@work_dir@/maps/p1.map";
+		id      = "1-map";
+		source  = "@work_dir@/maps/1.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
@@ -24,55 +24,7 @@ contents = {
 	};
 
 	content = {
-		id      = "p2_body";
-		source  = "development.scm";
-		filters = {
-			filter[0] = {
-				source      = "sxml";
-				destination = "sxml";
-				parameters  = "";
-			};
-		};
-	};
-
-	content = {
-		id      = "p2_map";
-		source  = "@work_dir@/maps/p2.map";
-		filters = {
-			filter[0] = {
-				source      = "map";
-				destination = "sxml";
-				parameters  = "";
-			};
-		};
-	};
-
-	content = {
-		id      = "todos_body";
-		source  = "todos.sxml";
-		filters = {
-			filter[0] = {
-				source      = "sxml";
-				destination = "sxml";
-				parameters  = "";
-			};
-		};
-	};
-
-	content = {
-		id      = "todos_map";
-		source  = "@work_dir@/maps/todos.map";
-		filters = {
-			filter[0] = {
-				source      = "map";
-				destination = "sxml";
-				parameters  = "";
-			};
-		};
-	};
-
-	content = {
-		id      = "news_body";
+		id      = "1.1-body";
 		source  = "news.sxml";
 		filters = {
 			filter[0] = {
@@ -84,8 +36,8 @@ contents = {
 	};
 
 	content = {
-		id      = "news_map";
-		source  = "@work_dir@/maps/news.map";
+		id      = "1.1-map";
+		source  = "@work_dir@/maps/1.1.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
@@ -96,7 +48,55 @@ contents = {
 	};
 
 	content = {
-		id      = "p3_body";
+		id      = "2-body";
+		source  = "development.scm";
+		filters = {
+			filter[0] = {
+				source      = "sxml";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "2-map";
+		source  = "@work_dir@/maps/2.map";
+		filters = {
+			filter[0] = {
+				source      = "map";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "2.1-body";
+		source  = "todos.sxml";
+		filters = {
+			filter[0] = {
+				source      = "sxml";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "2.1-map";
+		source  = "@work_dir@/maps/2.1.map";
+		filters = {
+			filter[0] = {
+				source      = "map";
+				destination = "sxml";
+				parameters  = "";
+			};
+		};
+	};
+
+	content = {
+		id      = "3-body";
 		source  = "downloads.scm";
 		filters = {
 			filter[0] = {
@@ -108,8 +108,8 @@ contents = {
 	};
 
 	content = {
-		id      = "p3_map";
-		source  = "@work_dir@/maps/p3.map";
+		id      = "3-map";
+		source  = "@work_dir@/maps/3.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
@@ -120,7 +120,7 @@ contents = {
 	};
 
 	content = {
-		id      = "p4_body";
+		id      = "4-body";
 		source  = "installation.scm";
 		filters = {
 			filter[0] = {
@@ -132,8 +132,8 @@ contents = {
 	};
 
 	content = {
-		id      = "p4_map";
-		source  = "@work_dir@/maps/p4.map";
+		id      = "4-map";
+		source  = "@work_dir@/maps/4.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
@@ -144,7 +144,7 @@ contents = {
 	};
 
 	content = {
-		id      = "p5_body";
+		id      = "5-body";
 		source  = "grammar.scm";
 		filters = {
 			filter[0] = {
@@ -156,8 +156,8 @@ contents = {
 	};
 
 	content = {
-		id      = "p5_map";
-		source  = "@work_dir@/maps/p5.map";
+		id      = "5-map";
+		source  = "@work_dir@/maps/5.map";
 		filters = {
 			filter[0] = {
 				source      = "map";
