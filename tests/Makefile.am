@@ -24,6 +24,7 @@ CLEANFILES =
 EXTRA_DIST =
 
 SUBDIRS =					\
+	data-common				\
 	data-build-01				\
 	data-build-02
 
