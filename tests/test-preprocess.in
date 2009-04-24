@@ -20,6 +20,8 @@
 
 datadir=@srcdir@/data-common
 
+required=""
+
 . $testdir/defs || exit 1
 
 $SITETOOL --mode initialize || exit 1
