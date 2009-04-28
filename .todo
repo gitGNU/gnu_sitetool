@@ -8,6 +8,12 @@
                 Fixed
             </comment>
         </note>
+        <note priority="veryhigh" time="1229467858" done="1240568621">
+            Fix the test-validate test case
+            <comment>
+                Done
+            </comment>
+        </note>
         <note priority="veryhigh" time="1235495483" done="1235682627">
             Fix the NEWS and TODOs site pages generation in site/in directory
             <comment>
@@ -59,9 +65,6 @@
                 Done
             </comment>
         </note>
-        <note priority="veryhigh" time="1229467858">
-            Fix the test-validate test case
-        </note>
         <note priority="veryhigh" time="1229467864">
             Fix the test-build test case
         </note>
@@ -71,8 +74,11 @@
         <note priority="veryhigh" time="1231518501">
             Fix the scheme library building (and import)
         </note>
-        <note priority="veryhigh" time="1240525984">
+        <note priority="veryhigh" time="1240525984" done="1240924394">
             Add file-hinting support (based on fcp hint-feature)
+            <comment>
+                Done
+            </comment>
         </note>
         <note priority="high" time="1232644268">
             Avoid having both lib.scm and xhtml.scm in libs/scheme directory (xhtml.scm is a module used in sxml processing and it is not required in lib.scm ... think about a clever solution)
