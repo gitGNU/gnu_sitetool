@@ -460,15 +460,65 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
     $content = variable_canonicalize($content_id);
     assert(defined($content));
 
-    $source = $configuration{CONTENTS}{$content_id}{SOURCE};
-    if (!file_ispresent($source)) {
-	error("Missing input file \`" . $source . "'");
+    debug("Content:");
+    debug(Data::Dumper->Dump([$configuration{CONTENTS}{$content_id}]));
+
+    # Handle file names
+    my $source_name;
+    my $destination_name;
+
+    $source_name = $configuration{CONTENTS}{$content_id}{SOURCE};
+    if (!file_ispresent($source_name)) {
+	error("Missing input file \`" . $source_name . "'");
 	exit 1;
     }
-    $destination = File::Spec->catfile($contents_dir, $content . ".sxml");
+    debug("Content source name = " . $source_name);
+
+    # Force destination to sxml (should we act this way ?)
+    $destination_name = File::Spec->catfile($contents_dir, $content . ".sxml");
+    debug("Content destination name = " . $destination_name);
+
+    my @filters = $configuration{CONTENTS}{$content_id}{FILTERS};
+
+    debug("Filters:");
+    debug(Data::Dumper->Dump([@filters]));
+
+    # Handle file filters
+    my $source_filter;
+    my $destination_filter;
+
+    my %filter;
+
+    %filter = %{$filters[0][0]};
+    debug("Source filter data:");
+    verbose(Data::Dumper->Dump([%filter]));
+
+    $source_filter = $filter{SOURCE};
+    if (defined($source_filter)) {
+        $source_filter = "%" . $source_filter;
+    } else {
+        $source_filter = "";
+    }
+    debug("Content source filter = " . $source_filter);
+
+    %filter = %{$filters[0][$#filters]};
+    debug("Destination filter data:");
+    verbose(Data::Dumper->Dump([%filter]));
+
+    $destination_filter = $filter{DESTINATION};
+    if (defined($destination_filter)) {
+        $destination_filter = "%" . $destination_filter;
+    } else {
+        $destination_filter = "";
+    }
+    debug("Content destination filter = " . $destination_filter);
 
     # Got a transformation
-    $transformations = "$transformations ${source}:${destination}";
+    $transformations =
+        "$transformations " .
+        "${source_name}${source_filter}" .
+        ":" .
+        "${destination_name}${destination_filter}";
 
     # Fill-in in order to use later in page processing phase
     $configuration{CONTENTS}{$content_id}{DESTINATION} = $destination;
