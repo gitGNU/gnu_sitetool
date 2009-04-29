@@ -495,19 +495,31 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
 
     $source_filter = $filter{SOURCE};
     if (defined($source_filter)) {
-        $source_filter = "%" . $source_filter;
+        my ($f, $d, $s) = File::Basename::fileparse($source_name,
+                                                    qr/\.[^\.]*$/);
+        $source_filter = "";
+
+        if (('.' . $source_filter) ne $s) {
+            $source_filter = "%" . $source_filter;
+        }
     } else {
         $source_filter = "";
     }
     debug("Content source filter = " . $source_filter);
 
-    %filter = %{$filters[0][$#filters]};
+    %filter = %{$filters[0][$#{$filters[0]}]};
     debug("Destination filter data:");
     verbose(Data::Dumper->Dump([%filter]));
 
     $destination_filter = $filter{DESTINATION};
     if (defined($destination_filter)) {
-        $destination_filter = "%" . $destination_filter;
+        my ($f, $d, $s) = File::Basename::fileparse($destination_name,
+                                                    qr/\.[^\.]*$/);
+        $destination_filter = "";
+
+        if (('.' . $destination_filter) ne $s) {
+            $destination_filter = "%" . $destination_filter;
+        }
     } else {
         $destination_filter = "";
     }
