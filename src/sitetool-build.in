@@ -491,12 +491,11 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
 
     %filter = %{$filters[0][0]};
     debug("Source filter data:");
-    verbose(Data::Dumper->Dump([%filter]));
+    debug(Data::Dumper->Dump([%filter]));
 
     $source_filter = $filter{SOURCE};
     if (defined($source_filter)) {
-        my ($f, $d, $s) = File::Basename::fileparse($source_name,
-                                                    qr/\.[^\.]*$/);
+        my ($f, $d, $s) = File::Basename::fileparse($source_name);
         if (('.' . $source_filter) ne $s) {
             $source_filter = "%" . $source_filter;
         } else {
@@ -509,12 +508,11 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
 
     %filter = %{$filters[0][$#{$filters[0]}]};
     debug("Destination filter data:");
-    verbose(Data::Dumper->Dump([%filter]));
+    debug(Data::Dumper->Dump([%filter]));
 
     $destination_filter = $filter{DESTINATION};
     if (defined($destination_filter)) {
-        my ($f, $d, $s) = File::Basename::fileparse($destination_name,
-                                                    qr/\.[^\.]*$/);
+        my ($f, $d, $s) = File::Basename::fileparse($destination_name);
         if (('.' . $destination_filter) ne $s) {
             $destination_filter = "%" . $destination_filter;
         } else {
@@ -533,7 +531,7 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
         "${destination_name}${destination_filter}";
 
     # Fill-in in order to use later in page processing phase
-    $configuration{CONTENTS}{$content_id}{DESTINATION} = $destination;
+    $configuration{CONTENTS}{$content_id}{DESTINATION} = $destination_name;
 }
 
 # Apply all transformations
