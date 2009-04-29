@@ -74,7 +74,7 @@ contents = {
 		source  = "wikitext.page";
 		filters = {
 			filter[0] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
@@ -98,11 +98,11 @@ contents = {
 		filters = {
 			filter[0] = {
 				source      = "changelog";
-				destination = "wikitext";
+				destination = "wiki";
 				parameters  = "";
 			};
 			filter[1] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
@@ -126,11 +126,11 @@ contents = {
 		filters = {
 			filter[0] = {
 				source      = "changelog";
-				destination = "wikitext";
+				destination = "wiki";
 				parameters  = "";
 			};
 			filter[1] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
@@ -154,11 +154,11 @@ contents = {
 		filters = {
 			filter[0] = {
 				source      = "changelog";
-				destination = "wikitext";
+				destination = "wiki";
 				parameters  = "";
 			};
 			filter[1] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
@@ -182,11 +182,11 @@ contents = {
 		filters = {
 			filter[0] = {
 				source      = "changelog";
-				destination = "wikitext";
+				destination = "wiki";
 				parameters  = "";
 			};
 			filter[1] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
@@ -232,7 +232,7 @@ contents = {
 		source  = "level1/level2/level1/test121.page";
 		filters = {
 			filter[0] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
@@ -256,11 +256,11 @@ contents = {
 		filters = {
 			filter[0] = {
 				source      = "news";
-				destination = "wikitext";
+				destination = "wiki";
 				parameters  = "";
 			};
 			filter[1] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
@@ -283,7 +283,7 @@ contents = {
 		source  = "index.page";
 		filters = {
 			filter[0] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
@@ -307,11 +307,11 @@ contents = {
 		filters = {
 			filter[0] = {
 				source      = "changelog";
-				destination = "wikitext";
+				destination = "wiki";
 				parameters  = "";
 			};
 			filter[1] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
@@ -335,11 +335,11 @@ contents = {
 		filters = {
 			filter[0] = {
 				source      = "svnlog";
-				destination = "wikitext";
+				destination = "wiki";
 				parameters  = "";
 			};
 			filter[1] = {
-				source      = "wikitext";
+				source      = "wiki";
 				destination = "sxml";
 				parameters  = "";
 			};
