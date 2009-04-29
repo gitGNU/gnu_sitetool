@@ -497,10 +497,10 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
     if (defined($source_filter)) {
         my ($f, $d, $s) = File::Basename::fileparse($source_name,
                                                     qr/\.[^\.]*$/);
-        $source_filter = "";
-
         if (('.' . $source_filter) ne $s) {
             $source_filter = "%" . $source_filter;
+        } else {
+            $source_filter = "";
         }
     } else {
         $source_filter = "";
@@ -515,10 +515,10 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
     if (defined($destination_filter)) {
         my ($f, $d, $s) = File::Basename::fileparse($destination_name,
                                                     qr/\.[^\.]*$/);
-        $destination_filter = "";
-
         if (('.' . $destination_filter) ne $s) {
             $destination_filter = "%" . $destination_filter;
+        } else {
+            $destination_filter = "";
         }
     } else {
         $destination_filter = "";
