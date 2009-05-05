@@ -439,9 +439,20 @@ sub sitemap_create_helper ($$)
 	}
 	debug("There are " . $not_linked . " not linked nodes yet");
 
-	# Avoid loops
-	assert($previous_not_linked != $not_linked);
+	if ($previous_not_linked == $not_linked) {
 
+	    for my $page_id (sort(keys(%{$configuration{MAP}}))) {
+
+		if (!$configuration{MAP}{$page_id}{LINKED}) {
+		    error("Parent \`"                           .
+			  $configuration{MAP}{$page_id}{PARENT} .
+			  "' for page \`"                       .
+			  $page_id                              .
+			  "' is not valid");
+		}
+	    }
+	    exit 1;
+	}
     } while ($not_linked != 0);
 
     debug("All nodes linked successfully");
