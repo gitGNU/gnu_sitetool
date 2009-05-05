@@ -93,7 +93,8 @@ FAIL_TESTS +=					\
 	test-options-longargs-4			\
 	test-options-abbrargs-3			\
 	test-options-abbrargs-4			\
-	test-options-error-1
+	test-options-error-1			\
+	test-build-02
 
 SUCCESS_TESTS +=				\
 	test-success				\
@@ -133,8 +134,7 @@ SUCCESS_TESTS +=				\
 	test-preprocess				\
 	test-parse				\
 	test-validate				\
-	test-build-01				\
-	test-build-02
+	test-build-01
 
 
 XFAIL_TESTS  = $(FAIL_TESTS)
