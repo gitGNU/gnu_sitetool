@@ -76,7 +76,7 @@ BEGIN {
 #
 #    my @items;
 #    @items = directory_items($directory, $exclusions_ref, $level);
-#    debug($prefix . "Directory items are `@items'");
+#    debug($prefix . "Directory items are \`@items'");
 #
 #    $level++;
 #
@@ -319,6 +319,7 @@ sub sitemap_create_helper ($$)
     my $tree;
 
     # Create the root node
+    debug("Creating root node");
     $tree = Sitetool::Data::Tree->new("");
     if (!defined($tree)) {
 	error("Cannot create root for tree");
@@ -328,14 +329,16 @@ sub sitemap_create_helper ($$)
     $tree->data("href",  ".");
     $tree->data("title", "");
 
-    # Link all fatherless children to the root
+    # Link all orphaned children to the root
     debug("Linking orphaned pages");
     for my $page_id (keys(%{$configuration{MAP}})) {
 	if (defined($configuration{MAP}{$page_id}{PARENT})) {
+            # This node has a parent, skip it!
 	    next;
 	}
 
-	warning("Page \`" . $page_id . "' is orphan, adopted now by root");
+	warning("Page \`" . $page_id . "' is orphaned, " .
+                "it is going to be adopted by the root page");
 
 	my $node;
 	$node = Sitetool::Data::Tree->new($page_id);
@@ -361,101 +364,109 @@ sub sitemap_create_helper ($$)
 	}
 
 	$configuration{MAP}{$page_id}{LINKED} = 1;
-	debug("Page \`" . $page_id . "' has been linked")
+	debug("Page \`" . $page_id . "' has been linked to the root")
     }
 
+    # Link all remaining pages together
     debug("Linking remaining pages");
     my $previous_not_linked;
     my $not_linked;
 
     $previous_not_linked = -1;
     $not_linked          = -1;
-    do  {
-	debug("Loop (" . $previous_not_linked . "," . $not_linked . ")");
+    {
+        # We need the enclosing curly brackets in order to use "last"
+        do  {
+            debug("Loop (" . $previous_not_linked . "," . $not_linked . ")");
 
-	for my $page_id (sort(keys(%{$configuration{MAP}}))) {
-	    if ($configuration{MAP}{$page_id}{LINKED}) {
-		next;
-	    }
+            for my $page_id (sort(keys(%{$configuration{MAP}}))) {
+                if ($configuration{MAP}{$page_id}{LINKED}) {
+                    # This node has already been linked, skip it ...
+                    next;
+                }
 
-	    my $parent_id;
+                my $parent_id;
 
-	    $parent_id = $configuration{MAP}{$page_id}{PARENT};
-	    assert(defined($parent_id));
+                $parent_id = $configuration{MAP}{$page_id}{PARENT};
+                assert(defined($parent_id));
 
-	    debug("Linking page "             .
-		  "\`" . $page_id   . "' to " .
-		  "\`" . $parent_id . "'");
+                debug("Linking page "             .
+                      "\`" . $page_id   . "' to " .
+                      "\`" . $parent_id . "'");
 
-	    my $parent_ref;
-	    $parent_ref = $tree->find($parent_id);
-	    if (!defined($parent_ref)) {
-		debug("Parent for node "     .
-		      "\`" . $page_id . "' " .
-		      "not yet available");
-		next;
-	    }
+                my $parent_ref;
+                $parent_ref = $tree->find($parent_id);
+                if (!defined($parent_ref)) {
+                    debug("Parent for node "     .
+                          "\`" . $page_id . "' " .
+                          "is not yet available in the tree");
+                    next;
+                }
 
-	    debug("Parent reference is \`" . $parent_ref . "'");
+                debug("Parent reference is \`" . $parent_ref . "'");
 
-	    my $parent;
-	    $parent = ${$parent_ref};
+                my $parent;
+                $parent = ${$parent_ref};
 
-	    assert($parent_id eq $parent->id());
+                assert($parent_id eq $parent->id());
 
-	    debug("Parent for node "          .
-		  "\`" . $page_id . "' "      .
-		  "should be "                .
-		  "\`" . $parent->id() . "'");
+                debug("Parent for node "          .
+                      "\`" . $page_id . "' "      .
+                      "should be "                .
+                      "\`" . $parent->id() . "'");
 
-	    my $node;
-	    $node = Sitetool::Data::Tree->new($page_id);
-	    if (!defined($node)) {
-		error("Cannot create tree node for page " .
-		      "\`" . $page_id . "'");
-		return 0;
-	    }
+                my $node;
+                $node = Sitetool::Data::Tree->new($page_id);
+                if (!defined($node)) {
+                    error("Cannot create tree node for page " .
+                          "\`" . $page_id . "'");
+                    return 0;
+                }
 
-	    $node->parent(\$parent);
+                $node->parent(\$parent);
 
-	    my @children = $parent->children();
-	    if (!$parent->add_child($#children + 1, \$node)) {
-		assert(defined($parent->id()));
-		error("Cannot add child node to page " .
-		      "\`" . $parent->id() . "'");
-		return 0;
-	    }
+                my @children = $parent->children();
+                if (!$parent->add_child($#children + 1, \$node)) {
+                    assert(defined($parent->id()));
+                    error("Cannot add child node to page " .
+                          "\`" . $parent->id() . "'");
+                    return 0;
+                }
 
-	    $configuration{MAP}{$page_id}{LINKED} = 1;
-	}
+                $configuration{MAP}{$page_id}{LINKED} = 1;
+            }
 
-	$previous_not_linked = $not_linked;
-	$not_linked          = 0;
-	for my $page_id (sort(keys(%{$configuration{MAP}}))) {
-	    if (!$configuration{MAP}{$page_id}{LINKED}) {
-		debug("Page \`" . $page_id . "' needs to be linked");
-		$not_linked++;
-	    }
-	}
-	debug("There are " . $not_linked . " not linked nodes yet");
+            $previous_not_linked = $not_linked;
+            $not_linked          = 0;
+            for my $page_id (sort(keys(%{$configuration{MAP}}))) {
+                if (!$configuration{MAP}{$page_id}{LINKED}) {
+                    debug("Page \`" . $page_id . "' needs to be linked");
+                    $not_linked++;
+                }
+            }
 
-	if ($previous_not_linked == $not_linked) {
+            if ($previous_not_linked == $not_linked) {
+                debug("Tree seems stable now ...");
+                last;
+            } else {
+                debug("There are " . $not_linked . " not linked nodes yet");
+            }
 
-	    for my $page_id (sort(keys(%{$configuration{MAP}}))) {
+        } while ($not_linked != 0);
+    }
+    debug("All nodes seems linked");
 
-		if (!$configuration{MAP}{$page_id}{LINKED}) {
-		    error("Parent \`"                           .
-			  $configuration{MAP}{$page_id}{PARENT} .
-			  "' for page \`"                       .
-			  $page_id                              .
-			  "' is not valid");
-		}
-	    }
-	    exit 1;
-	}
-    } while ($not_linked != 0);
-
-    debug("All nodes linked successfully");
+    debug("Checking for configuration problems");
+    for my $page_id (sort(keys(%{$configuration{MAP}}))) {
+        if (!$configuration{MAP}{$page_id}{LINKED}) {
+            error("Parent page \`"                      .
+                  $configuration{MAP}{$page_id}{PARENT} .
+                  "' for page \`"                       .
+                  $page_id                              .
+                  "' seems missing in configuration");
+                        exit 1;
+        }
+    }
 
     debug("Filling node infos");
     for my $page_id (keys(%{$configuration{MAP}})) {
