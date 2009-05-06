@@ -1,5 +1,5 @@
 # ===========================================================================
-#              http://autoconf-archive.cryp.to/ax_with_perl.html
+#          http://www.nongnu.org/autoconf-archive/ax_with_perl.html
 # ===========================================================================
 #
 # SYNOPSIS
@@ -19,13 +19,9 @@
 #
 #         AX_WITH_PERL
 #
-# LAST MODIFICATION
+# LICENSE
 #
-#   2008-05-05
-#
-# COPYLEFT
-#
-#   Copyright (c) 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
+#   Copyright (c) 2009 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice

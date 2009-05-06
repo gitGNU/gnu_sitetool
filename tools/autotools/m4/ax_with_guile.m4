@@ -1,5 +1,5 @@
 # ===========================================================================
-#             http://autoconf-archive.cryp.to/ax_with_guile.html
+#          http://www.nongnu.org/autoconf-archive/ax_with_guile.html
 # ===========================================================================
 #
 # SYNOPSIS
@@ -19,11 +19,7 @@
 #
 #         AX_WITH_GUILE
 #
-# LAST MODIFICATION
-#
-#   2008-05-05
-#
-# COPYLEFT
+# LICENSE
 #
 #   Copyright (c) 2008 Francesco Salvestrini <salvestrini@users.sourceforge.net>
 #
