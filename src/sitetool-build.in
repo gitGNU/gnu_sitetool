@@ -82,12 +82,6 @@ our $PROGRAM_NAME = "sitetool-build";
 # Utilities
 #
 
-sub help_brief ()
-{
-    print "  -w, --work-dir=DIR          use DIR as a working directory\n";
-    print "  -o, --output-dir=DIR        place output into directory DIR\n";
-}
-
 sub help_common ()
 {
     print "  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY\n";
@@ -95,7 +89,6 @@ sub help_common ()
     print "  -d, --debug                 enable debugging mode\n";
     print "  -v, --verbose               enable verbose mode\n";
     print "  -h, --help                  print this help, then exit\n";
-    print "  -B, --brief-help            print a brief help, then exit\n";
     print "  -V, --version               print version number, then exit\n";
 }
 
@@ -110,8 +103,9 @@ sub help ()
     print "Usage: $PROGRAM_NAME [OPTIONS]\n";
     print "\n";
     print "  -c, --configuration=FILE    configuration file is FILE\n";
+    print "  -w, --work-dir=DIR          use DIR as a working directory\n";
+    print "  -o, --output-dir=DIR        place output into directory DIR\n";
 
-    help_brief();
     help_common();
 
     print "\n";
@@ -165,7 +159,6 @@ my @options_list = (
     [ "d", "debug",      sub { debug_inc();                  return 1; }, 0 ],
     [ "v", "verbose",    sub { verbose_inc();                return 1; }, 0 ],
     [ "h", "help",       sub { help();             $run = 0; return 0; }, 0 ],
-    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0 ],
     [ "V", "version",    sub { version();          $run = 0; return 0; }, 0 ],
     );
 

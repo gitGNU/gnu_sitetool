@@ -74,14 +74,6 @@ our $PROGRAM_NAME = "sitetool-preprocess";
 # Utilities
 #
 
-sub help_brief ()
-{
-    print "  -D, --define=VAR=VALUE      define variable VAR to value VALUE\n";
-    print "  -U, --undefine=VAR          undefine variable VAR\n";
-    print "  -i, --input=FILE            use FILE as input file\n";
-    print "  -o, --output=FILE           use FILE as output file\n";
-}
-
 sub help_common ()
 {
     print "  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY\n";
@@ -89,7 +81,6 @@ sub help_common ()
     print "  -d, --debug                 enable debugging mode\n";
     print "  -v, --verbose               enable verbose mode\n";
     print "  -h, --help                  print this help, then exit\n";
-    print "  -B, --brief-help            print a brief help, then exit\n";
     print "  -V, --version               print version number, then exit\n";
 }
 
@@ -103,8 +94,11 @@ sub help ()
 {
     print "Usage: $PROGRAM_NAME [OPTIONS]\n";
     print "\n";
+    print "  -D, --define=VAR=VALUE      define variable VAR to value VALUE\n";
+    print "  -U, --undefine=VAR          undefine variable VAR\n";
+    print "  -i, --input=FILE            use FILE as input file\n";
+    print "  -o, --output=FILE           use FILE as output file\n";
 
-    help_brief();
     help_common();
 
     print "\n";
@@ -200,7 +194,6 @@ my @options_list = (
     [ "d", "debug",      sub { debug_inc();                  return 1; }, 0 ],
     [ "v", "verbose",    sub { verbose_inc();                return 1; }, 0 ],
     [ "h", "help",       sub { help();             $run = 0; return 0; }, 0 ],
-    [ "B", "help-brief", sub { help_brief();       $run = 0; return 0; }, 0 ],
     [ "V", "version",    sub { version();          $run = 0; return 0; }, 0 ],
     );
 
