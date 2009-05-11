@@ -14,6 +14,12 @@
                 Done
             </comment>
         </note>
+        <note priority="veryhigh" time="1229467864" done="1241641794">
+            Fix the test-build test case
+            <comment>
+                Done
+            </comment>
+        </note>
         <note priority="veryhigh" time="1235495483" done="1235682627">
             Fix the NEWS and TODOs site pages generation in site/in directory
             <comment>
@@ -28,6 +34,12 @@
         </note>
         <note priority="high" time="1226871199" done="1233306162">
             Rearrange the site in order to be multi-page
+            <comment>
+                Done
+            </comment>
+        </note>
+        <note priority="medium" time="1226609323" done="1242078003">
+            Remove the --brief option handling (out-dated)
             <comment>
                 Done
             </comment>
@@ -71,26 +83,20 @@
                 Done
             </comment>
         </note>
-        <note priority="veryhigh" time="1229467864" done="1241641794">
-            Fix the test-build test case
-            <comment>
-                Done
-            </comment>
-        </note>
         <note priority="veryhigh" time="1231518453">
             Fix the parameter passing in map-sxml.in
         </note>
         <note priority="veryhigh" time="1231518501">
             Fix the scheme library building (and import)
         </note>
+        <note priority="veryhigh" time="1242078092">
+            Fix the mode related help, by requesting a single tool help ... all the tools helps get displayhed (sitetool --mode=build --help to reproduce)
+        </note>
         <note priority="high" time="1232644268">
             Avoid having both lib.scm and xhtml.scm in libs/scheme directory (xhtml.scm is a module used in sxml processing and it is not required in lib.scm ... think about a clever solution)
         </note>
         <note priority="medium" time="1226609275">
             Fix --dry-run option in all scripts help() sub
-        </note>
-        <note priority="medium" time="1226609323">
-            Remove the --brief option handling (out-dated)
         </note>
         <note priority="low" time="1227122764">
             Rearrange the build process in order to use EXEEXT (if needed)
