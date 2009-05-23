@@ -330,6 +330,7 @@ my $running_mode  = undef;
 my $force_mode    = 0;
 my $dry_run       = 0;
 my $run           = 1;
+my $exit_code     = -1;
 
 debug_set(0);
 verbose_set(0);
@@ -346,9 +347,13 @@ my @options_list = (
     [ "d", "debug",    sub { debug_inc();             return 1; }, 0 ],
     [ "v", "verbose",  sub { verbose_inc();           return 1; }, 0 ],
     [ "h", "help",     sub {
-	$run = 0; return (help_mode($_[0]) ? 1 : 0);            }, 2 ],
+	$run = 0;
+        $exit_code = (help_mode($_[0]) ? 0 : 1);
+        return 0;                                               }, 2 ],
     [ "V", "version",  sub {
-        $run = 0; version(); return 0;                          }, 0 ],
+        $run = 0;
+        version();
+        return 0;                                               }, 0 ],
     );
 
 if (!$options->config(\@options_list)) {
@@ -359,6 +364,9 @@ if (!$options->parse(\@ARGV)) {
     hint($options->strerror());
     exit 1;
 }
+if (!$run) {
+    exit $exit_code;
+}
 
 my @options_slack;
 
@@ -366,14 +374,6 @@ assert($options->{OPTIND} >= 0);
 @options_slack = @ARGV[$options->{OPTIND} .. $#ARGV];
 
 debug("Running \`" . $PROGRAM_NAME . "' version \`" . $PACKAGE_VERSION . "'");
-
-#
-# Parameters check
-#
-
-if (!$run) {
-    exit 0;
-}
 
 #
 # Fixups tools flags
