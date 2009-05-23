@@ -339,15 +339,16 @@ my $options = Sitetool::Base::Options->new();
 assert(defined($options));
 
 my @options_list = (
-    [ "M", "mode",     sub { $running_mode = $_[0];   return 0; }, 1 ],
+    [ "M", "mode",     sub { $running_mode = $_[0];   return 1; }, 1 ],
     [ "n", "dry-run",  sub { $dry_run = 1;            return 1; }, 0 ],
     [ "f", "force",    sub { $force_mode = 1;         return 1; }, 0 ],
     [ "W", "warnings", sub { warning_set($_[0]);      return 1; }, 1 ],
     [ "d", "debug",    sub { debug_inc();             return 1; }, 0 ],
     [ "v", "verbose",  sub { verbose_inc();           return 1; }, 0 ],
     [ "h", "help",     sub {
-	$run = 0; return (help_mode($_[0]) ? 0 : -1);           }, 2 ],
-    [ "V", "version",  sub { version();     $run = 0; return 0; }, 0 ],
+	$run = 0; return (help_mode($_[0]) ? 1 : 0);            }, 2 ],
+    [ "V", "version",  sub {
+        $run = 0; version(); return 0;                          }, 0 ],
     );
 
 if (!$options->config(\@options_list)) {
