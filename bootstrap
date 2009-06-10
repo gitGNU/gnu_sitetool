@@ -59,22 +59,24 @@ LIBTOOLIZE=`( missing glibtoolize || missing libtoolize)`
 GNULIBTOOL=`missing gnulib-tool`
 GIT=`missing git`
 SED=`missing sed`
+PERL_AUTOFRISK=`missing perl-autofrisk`
 
 #
 # Dump some useful informations
 #
 echo "$ME: Dumping build-tools information ..."
-for tool in	\
-    $SED        \
-    $GIT        \
-    $AUTOHEADER	\
-    $AUTOCONF	\
-    $LIBTOOL	\
-    $LIBTOOLIZE	\
-    $ACLOCAL	\
-    $AUTOMAKE	\
-    $AUTORECONF	\
-    $GNULIBTOOL \
+for tool in                                     \
+    $SED                                        \
+    $GIT                                        \
+    $AUTOHEADER                                 \
+    $AUTOCONF                                   \
+    $LIBTOOL                                    \
+    $LIBTOOLIZE                                 \
+    $ACLOCAL                                    \
+    $AUTOMAKE                                   \
+    $AUTORECONF                                 \
+    $GNULIBTOOL                                 \
+    $PERL_AUTOFRISK				\
     ;
 do
     if test -n "$tool" ; then
@@ -109,7 +111,7 @@ rm -rf `find ./ -name ".deps"`                       || exit 1
 # Autofrisk perl modules
 #
 echo "$ME: Perl autofrisk ..."
-./tools/maint/perl-autofrisk ./perl.af && \
+$PERL_AUTOFRISK ./perl.af && \
     cat ./perl.af.m4 > ./tools/autotools/m4/perl_autofrisk.m4 && \
     rm -f ./perl.af.m4 || {
     rm -f ./perl.af.m4
