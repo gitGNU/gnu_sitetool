@@ -6,13 +6,38 @@
             <comment>
                 Fixed
             </comment></entry>
+    <entry end="1240568621" priority="veryhigh" start="1229467858">
+            Fix the test-validate test case
+            <comment>
+                Done
+            </comment></entry>
+    <entry end="1241641794" priority="veryhigh" start="1229467864">
+            Fix the test-build test case
+            <comment>
+                Done
+            </comment></entry>
     <entry end="1235682627" priority="veryhigh" start="1235495483">
             Fix the NEWS and TODOs site pages generation in site/in directory
             <comment>
                 Done
             </comment></entry>
+    <entry end="1240924394" priority="veryhigh" start="1240525984">
+            Add file-hinting support (based on fcp hint-feature)
+            <comment>
+                Done
+            </comment></entry>
+    <entry end="1243086664" priority="veryhigh" start="1242078092">
+            Fix the mode related help, by requesting a single tool help ... all the tools helps get displayed (sitetool --mode=build --help to reproduce)
+            <comment>
+                Done
+            </comment></entry>
     <entry end="1233306162" priority="high" start="1226871199">
             Rearrange the site in order to be multi-page
+            <comment>
+                Done
+            </comment></entry>
+    <entry end="1242078003" priority="medium" start="1226609323">
+            Remove the --brief option handling (out-dated)
             <comment>
                 Done
             </comment></entry>
@@ -47,12 +72,11 @@
     <entry end="1226609560" priority="medium" start="1226609548">
             Write a tutorial for Wikitext
         </entry>
-    <entry priority="veryhigh" start="1229467858">
-            Fix the test-validate test case
-        </entry>
-    <entry priority="veryhigh" start="1229467864">
-            Fix the test-build test case
-        </entry>
+    <entry end="1238532575" priority="verylow" start="1238244120">
+            Update all copyright dates
+            <comment>
+                Done
+            </comment></entry>
     <entry priority="veryhigh" start="1231518453">
             Fix the parameter passing in map-sxml.in
         </entry>
@@ -65,17 +89,9 @@
     <entry priority="medium" start="1226609275">
             Fix --dry-run option in all scripts help() sub
         </entry>
-    <entry priority="medium" start="1226609323">
-            Remove the --brief option handling (out-dated)
-        </entry>
     <entry priority="low" start="1227122764">
             Rearrange the build process in order to use EXEEXT (if needed)
         </entry>
-    <entry end="1238532575" priority="verylow" start="1238244120">
-            Update all copyright dates
-            <comment>
-                Done
-            </comment></entry>
     </entry>
     <entry priority="high" start="1233736868">
         Release 0.2.0
@@ -124,6 +140,9 @@
                 Use sxml to validate each page
             </entry>
     </entry>
+    <entry priority="medium" start="1240389622">
+            Untie map filename from map id
+        </entry>
     </entry>
     <entry priority="medium" start="1233738651">
         Release 0.3.0
@@ -138,6 +157,12 @@
         </entry>
     <entry priority="medium" start="1231800999">
             Fix the sitemap sorting in order to have a user-defined order
+        </entry>
+    </entry>
+    <entry priority="low" start="1243950829">
+        Release 0.4.0
+        <entry priority="medium" start="1244669254">
+            Fix bootstrap in order to exit when a missing program is called
         </entry>
     </entry>
     </root>
