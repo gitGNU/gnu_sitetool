@@ -38,7 +38,7 @@ function hint {
 }
 
 function usage {
-    cat <<EOF 1>&2
+    cat <<EOF
 Usage: sitetool-config [OPTIONS]
 
 OPTIONS:
