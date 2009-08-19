@@ -47,12 +47,12 @@ sub array_uniq (@)
     my %in;
 
     for my $key (@_) {
-	$in{$key} = 1;
+        $in{$key} = 1;
     }
 
     my @out;
     for my $key (keys(%in)) {
-	push(@out, $key);
+        push(@out, $key);
     }
 
     return @out;

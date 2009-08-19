@@ -84,51 +84,51 @@ sub tree_dump ($$$)
 
     if ($tree->is_leaf()) {
 
-	#
-	# The output the result
-	#
-	$string = $string                                              .
-	    (" " x ($level * 2))                                       .
-	    "((\"" . $id . "\" (\"" . $title . "\" \"" . $href  . "\"))" .
-	    " . ())\n";
+        #
+        # The output the result
+        #
+        $string = $string                                              .
+            (" " x ($level * 2))                                       .
+            "((\"" . $id . "\" (\"" . $title . "\" \"" . $href  . "\"))" .
+            " . ())\n";
 
     } else {
-	# A node must have some children
-	assert($tree->children() >= 0);
+        # A node must have some children
+        assert($tree->children() >= 0);
 
-	if ((($tree->is_root()) &&
-	     ($id ne "")        &&
-	     ($title ne "")     &&
-	     ($href ne ""))     ||
-	    !$tree->is_root()) {
-	    $string = $string                          .
-		      (" " x ($level * 2))             .
-		      "((\"" . $id . "\" (\"" . $title .
-		      "\" \"" . $href . "\")) . (\n";
-	    $level++;
-	}
+        if ((($tree->is_root()) &&
+             ($id ne "")        &&
+             ($title ne "")     &&
+             ($href ne ""))     ||
+            !$tree->is_root()) {
+            $string = $string                          .
+                      (" " x ($level * 2))             .
+                      "((\"" . $id . "\" (\"" . $title .
+                      "\" \"" . $href . "\")) . (\n";
+            $level++;
+        }
 
-	for my $child_ref ($tree->children()) {
-	    assert(defined($child_ref));
+        for my $child_ref ($tree->children()) {
+            assert(defined($child_ref));
 
-	    my $temp;
-	    $temp = "";
+            my $temp;
+            $temp = "";
 
-	    debug("Child is \`" . $child_ref . "'");
-	    $temp = &tree_dump($child_ref, $node_ref, $level + 1);
-	    if (!defined($temp)) {
-		error("Cannot compute pagemap for tree " .
-		      "\`" . ${$child_ref}->id() . "'");
-		return undef;
-	    }
+            debug("Child is \`" . $child_ref . "'");
+            $temp = &tree_dump($child_ref, $node_ref, $level + 1);
+            if (!defined($temp)) {
+                error("Cannot compute pagemap for tree " .
+                      "\`" . ${$child_ref}->id() . "'");
+                return undef;
+            }
 
-	    $string = $string . $temp;
-	}
-	$level++;
-	$string = $string        .
-	    (" " x ($level * 2)) .
-	    "()))\n";
-	$level--;
+            $string = $string . $temp;
+        }
+        $level++;
+        $string = $string        .
+            (" " x ($level * 2)) .
+            "()))\n";
+        $level--;
 
     }
 
@@ -146,8 +146,8 @@ sub pagemap_create ($$$)
     assert(defined($output_filename));
 
     if (!file_ispresent($sitemap_filename)) {
-	error("Cannot open file \`" . $sitemap_filename . "' for reading");
-	return 0;
+        error("Cannot open file \`" . $sitemap_filename . "' for reading");
+        return 0;
     }
 
     verbose("Creating pagemap for page \`" . $page_id . "'");
@@ -155,21 +155,21 @@ sub pagemap_create ($$$)
     my $dumped;
     $dumped = "";
     if (!file_tostring($sitemap_filename, \$dumped)) {
-	return 0;
+        return 0;
     }
 
     my $tree_ref;
 
     # XXX FIXME: We should use the former version of 'eval' ...
     #eval {
-    #	no warnings 'all';
-    #	$dumped;
+    #   no warnings 'all';
+    #   $dumped;
     #};
     eval $dumped;
     if ($@) {
-	debug("Evaluation returned `" . $@ . "'");
-	error("Bad data in \`" . $sitemap_filename . "'");
-	return 0;
+        debug("Evaluation returned `" . $@ . "'");
+        error("Bad data in \`" . $sitemap_filename . "'");
+        return 0;
     }
 
     my $tree = $$tree_ref;
@@ -180,7 +180,7 @@ sub pagemap_create ($$$)
     #
 
     if (!$tree->relink()) {
-	return 0;
+        return 0;
     }
 
     debug("Checking if page \`" . $page_id . "' is in site map");
@@ -188,11 +188,11 @@ sub pagemap_create ($$$)
     my $page_node_ref;
     $page_node_ref = $tree->find($page_id);
     if (!defined($page_node_ref)) {
-	error("Page "                       .
-	      "\`" . $page_id . "' "        .
-	      "is not in map "              .
-	      "\'" . $sitemap_filename . "'");
-	return 0;
+        error("Page "                       .
+              "\`" . $page_id . "' "        .
+              "is not in map "              .
+              "\'" . $sitemap_filename . "'");
+        return 0;
     }
     debug("Page node ref is \`" . $page_node_ref . "'");
 
@@ -207,8 +207,8 @@ sub pagemap_create ($$$)
     $string = tree_dump(\$tree, \$page_node, 1);
 
     if (!defined($string)) {
-	error("Cannot build pagemap for page \`" . $page_id . "'");
-	return 0;
+        error("Cannot build pagemap for page \`" . $page_id . "'");
+        return 0;
     }
 
 #    $string = "(define page-map `(\"" . $page_id . "\"\n" . $string . "))\n";
@@ -218,7 +218,7 @@ sub pagemap_create ($$$)
     assert(defined($string));
 
     if (!string_tofile($string, $output_filename)) {
-	return 0;
+        return 0;
     }
 
     return 1;

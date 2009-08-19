@@ -79,7 +79,7 @@ sub value
     assert($index < $self->{SIZE});
 
     if (defined($value)) {
-	$self->{DATA}[$index] = $value;
+        $self->{DATA}[$index] = $value;
     }
 
     return $self->{DATA}[$index];

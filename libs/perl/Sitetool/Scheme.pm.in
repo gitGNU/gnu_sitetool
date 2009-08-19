@@ -39,7 +39,7 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&scheme2xml
-		 &scheme_indent);
+                 &scheme_indent);
 }
 
 sub scheme_indent ($)
@@ -60,19 +60,19 @@ sub scheme_indent ($)
 #    assert(defined($stack));
 #
 #    for my $line (@strings) {
-#	debug("Scheme line is \`" . $line . "'");
-#	if ($line =~ m/^[ \t]*\(/) {
-#	    $stack->push(1);
-#	} elsif ($line =~ /\)[ \t]*$/) {
-#	    $stack->pop();
-#	}
+#       debug("Scheme line is \`" . $line . "'");
+#       if ($line =~ m/^[ \t]*\(/) {
+#           $stack->push(1);
+#       } elsif ($line =~ /\)[ \t]*$/) {
+#           $stack->pop();
+#       }
 #
 #
-#	assert($offset >= 0);
-#	debug("Offset is now " . $offset);
+#       assert($offset >= 0);
+#       debug("Offset is now " . $offset);
 #
-#	$line =~ s/^[ \t]*$//;
-#	$string_out = $string_out . (" " x $stack->peek()) . $line . "\n";
+#       $line =~ s/^[ \t]*$//;
+#       $string_out = $string_out . (" " x $stack->peek()) . $line . "\n";
 #    }
     $string_out = $string_in;
 
@@ -90,34 +90,34 @@ sub scheme2xml ($$$)
     assert(defined($output_filename));
 
     debug("Transforming scheme "         .
-	  "\`" . $input_filename  . "' " .
-	  "to XML "                      .
-	  "\`" . $output_filename . "' " .
-	  "(scheme variable "            .
-	  "\`" . $variable_name   . "'"  .
-	  ")");
+          "\`" . $input_filename  . "' " .
+          "to XML "                      .
+          "\`" . $output_filename . "' " .
+          "(scheme variable "            .
+          "\`" . $variable_name   . "'"  .
+          ")");
 
     if (!file_ispresent($input_filename)) {
-	error("File \`" . $input_filename . "' is missing");
-	return 0;
+        error("File \`" . $input_filename . "' is missing");
+        return 0;
     }
 
     assert(defined($GUILE));
 
     my $base;
     $base = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
-	File::Spec->catfile($ENV{'SITETOOL_LIBRARY_PATH'}) :
-	$libs_dir;
+        File::Spec->catfile($ENV{'SITETOOL_LIBRARY_PATH'}) :
+        $libs_dir;
 
     my $scheme_env;
     $scheme_env = join('@PATH_SEPARATOR@',
-		       map(File::Spec->catfile($_, "scheme"),
-			   (split '@PATH_SEPARATOR@', $base)));
+                       map(File::Spec->catfile($_, "scheme"),
+                           (split '@PATH_SEPARATOR@', $base)));
 
     my $guile_env;
     $guile_env = join('@PATH_SEPARATOR@',
-		      map(File::Spec->catfile($_, "guile-lib"),
-			  (split '@PATH_SEPARATOR@', $scheme_env)));
+                      map(File::Spec->catfile($_, "guile-lib"),
+                          (split '@PATH_SEPARATOR@', $scheme_env)));
 
     debug("Base is:       \`" . $base       . "'");
     debug("Scheme ENV is: \`" . $scheme_env . "'");
@@ -132,25 +132,25 @@ sub scheme2xml ($$$)
     #   Guile 1.8.x supports both -L option and GUILE_LOAD_PATH variable
     #
     $string =
-	"GUILE_LOAD_PATH=$guile_env:$scheme_env "	  .
-	"$GUILE "                                         .
-	"-l $input_filename "                             .
-	"-c "                                             .
-	"\'\n"                                            .
-	"(use-modules (xhtml))\n" .
-	"(use-modules (sxml simple) (sxml transform))\n"  .
-	"(display xhtml-doctype)\n"                       .
-	"(sxml->xml \'$variable_name\')\n"                .
-	"(quit)\n"                                        .
-	"\' "                                             .
-	"> $output_filename || exit 1";
+        "GUILE_LOAD_PATH=$guile_env:$scheme_env "         .
+        "$GUILE "                                         .
+        "-l $input_filename "                             .
+        "-c "                                             .
+        "\'\n"                                            .
+        "(use-modules (xhtml))\n" .
+        "(use-modules (sxml simple) (sxml transform))\n"  .
+        "(display xhtml-doctype)\n"                       .
+        "(sxml->xml \'$variable_name\')\n"                .
+        "(quit)\n"                                        .
+        "\' "                                             .
+        "> $output_filename || exit 1";
 
     if (!shell_execute($string)) {
-	error("Cannot transform scheme file " .
-	      "\`" . $input_filename . "' "   .
-	      "to XML file"                   .
-	      "\`" . $output_filename . "'");
-	return 0;
+        error("Cannot transform scheme file " .
+              "\`" . $input_filename . "' "   .
+              "to XML file"                   .
+              "\`" . $output_filename . "'");
+        return 0;
     }
 
     return 1;

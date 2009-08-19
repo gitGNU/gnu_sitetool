@@ -40,11 +40,11 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&href_compute
-		 &href_extract
-		 &href_isftp
-		 &href_ishttp
-		 &href_ishttps
-		 &href_ismailto);
+                 &href_extract
+                 &href_isftp
+                 &href_ishttp
+                 &href_ishttps
+                 &href_ismailto);
 }
 
 sub href_isftp ($)
@@ -54,7 +54,7 @@ sub href_isftp ($)
     assert(defined($link));
 
     if ($link =~ m/^[ \t]*ftp:\/\/.*$/) {
-	return 1;
+        return 1;
     }
 
     return 0;
@@ -67,7 +67,7 @@ sub href_ishttp ($)
     assert(defined($link));
 
     if ($link =~ m/^[ \t]*http:\/\/.*$/) {
-	return 1;
+        return 1;
     }
 
     return 0;
@@ -80,7 +80,7 @@ sub href_ishttps ($)
     assert(defined($link));
 
     if ($link =~ m/^[ \t]*https:\/\/.*$/) {
-	return 1;
+        return 1;
     }
 
     return 0;
@@ -93,7 +93,7 @@ sub href_ismailto ($)
     assert(defined($link));
 
     if ($link =~ m/^[ \t]*mailto:.*$/) {
-	return 1;
+        return 1;
     }
 
     return 0;
@@ -109,7 +109,7 @@ sub href_extract ($)
     @links = ();
 
     while ($string =~ m/href\s*=\s*"([^"\s]+)"/gi) {
-	push(@links, $1);
+        push(@links, $1);
     }
 
     debug("Extracted HREFs are \`@links'");
@@ -132,22 +132,22 @@ sub href_compute ($$)
     assert(defined($to));
 
     debug("Computing relative link " .
-	  "from \`" . $from . "'"    .
-	  "to \`" . $to   . "'");
+          "from \`" . $from . "'"    .
+          "to \`" . $to   . "'");
     {
-	my ($from_volume, $from_path, $from_file) =
-	    File::Spec->splitpath($from);
+        my ($from_volume, $from_path, $from_file) =
+            File::Spec->splitpath($from);
 
-	debug("Fixing from \`" . $from . "'");
-	$from = File::Spec->catpath($from_volume, $from_path, "");
-	debug("Fixed from \`" . $from . "'");
+        debug("Fixing from \`" . $from . "'");
+        $from = File::Spec->catpath($from_volume, $from_path, "");
+        debug("Fixed from \`" . $from . "'");
 
-	my ($to_volume,   $to_path,   $to_file)   =
-	    File::Spec->splitpath($to);
+        my ($to_volume,   $to_path,   $to_file)   =
+            File::Spec->splitpath($to);
 
-	debug("Fixing to \`" . $to . "'");
-	$to = File::Spec->catpath($to_volume, $to_path, $to_file);
-	debug("Fixing to \`" . $to . "'");
+        debug("Fixing to \`" . $to . "'");
+        $to = File::Spec->catpath($to_volume, $to_path, $to_file);
+        debug("Fixing to \`" . $to . "'");
     }
 
     $link = File::Spec->abs2rel($to, $from);

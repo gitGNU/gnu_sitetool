@@ -24,12 +24,12 @@
     (map
      (lambda (n)
        (if (null? n)
-	   '()
-	   (list (node-attributes n)
-		 (if (and (null? (find-node (node-children n) i))
-			  (not (equal? (node-id n) i)))
-		     '()
-		     (tree-id->pagemap (node-children n) i)))))
+           '()
+           (list (node-attributes n)
+                 (if (and (null? (find-node (node-children n) i))
+                          (not (equal? (node-id n) i)))
+                     '()
+                     (tree-id->pagemap (node-children n) i)))))
      p)))
 
 (define pagemap-clean-up
@@ -37,21 +37,21 @@
     (map
      (lambda (n)
        (if (null? (car (node-children n)))
-	   (list (node-attributes n))
-	   (list (node-attributes n)
-		 (pagemap-clean-up (car (node-children n))))))
+           (list (node-attributes n))
+           (list (node-attributes n)
+                 (pagemap-clean-up (car (node-children n))))))
      (reverse (cdr (reverse p))))))
 
 (define pagemap->sxml
   (lambda (p)
     `(ul
       ,@(map
-	(lambda (n)
-	  (if (null? (node-children n))
-	      `(li (a (@ (href ,@(cdadar n))) ,(caadar n)))
-	      `(li (a (@ (href ,@(cdadar n))) ,(caadar n))
-		   ,(pagemap->sxml (car (node-children n))))))
-	p))))
+        (lambda (n)
+          (if (null? (node-children n))
+              `(li (a (@ (href ,@(cdadar n))) ,(caadar n)))
+              `(li (a (@ (href ,@(cdadar n))) ,(caadar n))
+                   ,(pagemap->sxml (car (node-children n))))))
+        p))))
 
 (define map->sxml
   (lambda (in-port out-port)

@@ -31,10 +31,10 @@ BEGIN
     my $perllibdir;
 
     $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
-	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+        $ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
 
     unshift(@INC, map(File::Spec->catfile($_, "perl"),
-		      (split '@PATH_SEPARATOR@', $perllibdir)));
+                      (split '@PATH_SEPARATOR@', $perllibdir)));
 
     # Override SHELL.  On DJGPP SHELL may not be set to a shell
     # that can handle redirection and quote arguments correctly,
@@ -216,8 +216,8 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     my $destination;
     $destination = $configuration{PAGES}{$page_id}{DESTINATION};
     if (!defined($destination)) {
-	error("Page \`" . $page_id. "' has no destination");
-	exit 1;
+        error("Page \`" . $page_id. "' has no destination");
+        exit 1;
     }
 
     my $file;
@@ -227,8 +227,8 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     my $string;
     $string = undef;
     if (!file_tostring($file, \$string)) {
-	error("Problems reading file \`" . $file . "'");
-	exit 1;
+        error("Problems reading file \`" . $file . "'");
+        exit 1;
     }
     assert(defined($string));
 
@@ -238,11 +238,11 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     verbose("Page \`" . $page_id . "' links are \`@page_links'");
 
     for my $link (@page_links) {
-	if (!defined($links{$link})) {
-	    $links{$link} = [ $page_id ];
-	} else {
-	    push(@{$links{$link}}, $page_id);
-	}
+        if (!defined($links{$link})) {
+            $links{$link} = [ $page_id ];
+        } else {
+            push(@{$links{$link}}, $page_id);
+        }
     }
 }
 
@@ -266,47 +266,47 @@ for my $link (keys(%links)) {
 
     $downloaded = 0;
     if (href_ishttp($link)) {
-	verbose("Checking http link \`" . $link . "'");
-	if (http_download($link, $filename)) {
-	    $downloaded = 1;
-	}
+        verbose("Checking http link \`" . $link . "'");
+        if (http_download($link, $filename)) {
+            $downloaded = 1;
+        }
     } elsif (href_ishttps($link)) {
-	verbose("Checking https link \`" . $link . "'");
-	if (https_download($link, $filename)) {
-	    $downloaded = 1;
-	}
+        verbose("Checking https link \`" . $link . "'");
+        if (https_download($link, $filename)) {
+            $downloaded = 1;
+        }
     } elsif (href_isftp($link)) {
-	verbose("Checking ftp link \`" . $link . "'");
-	if (ftp_download($link, $filename)) {
-	    $downloaded = 1;
-	}
+        verbose("Checking ftp link \`" . $link . "'");
+        if (ftp_download($link, $filename)) {
+            $downloaded = 1;
+        }
     } elsif (href_ismailto($link)) {
-	debug("Skipping mailto link \`" . $link . "'");
-	$downloaded = 1;
+        debug("Skipping mailto link \`" . $link . "'");
+        $downloaded = 1;
     } else {
-	debug("Skipping local link \`" . $link . "'");
-	$downloaded = 1;
+        debug("Skipping local link \`" . $link . "'");
+        $downloaded = 1;
     }
 
     file_remove($filename);
 
     if (!$downloaded) {
-	my @involved_pages;
+        my @involved_pages;
 
-	@involved_pages = @{$links{$link}};
+        @involved_pages = @{$links{$link}};
 
-	my $err;
+        my $err;
 
-	$err =
-	    "Cannot download link \`" . $link . "' " .
-	    "(involved pages \`@involved_pages')";
+        $err =
+            "Cannot download link \`" . $link . "' " .
+            "(involved pages \`@involved_pages')";
 
-	if ($force_mode) {
-	    warning($err);
-	} else {
-	    error($err);
-	    exit 1;
-	}
+        if ($force_mode) {
+            warning($err);
+        } else {
+            error($err);
+            exit 1;
+        }
     }
 }
 

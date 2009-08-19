@@ -31,10 +31,10 @@ BEGIN
     my $perllibdir;
 
     $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
-	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+        $ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
 
     unshift(@INC, map(File::Spec->catfile($_, "perl"),
-		      (split '@PATH_SEPARATOR@', $perllibdir)));
+                      (split '@PATH_SEPARATOR@', $perllibdir)));
 
     # Override SHELL.  On DJGPP SHELL may not be set to a shell
     # that can handle redirection and quote arguments correctly,
@@ -172,19 +172,19 @@ my @options_list = (
       1 ],
     [ "U", "undefine",
       sub {
-	  my $variable;
-	  $variable = $_[0];
-	  if (!defined($variable)) {
-	      hint("Missing environment variable name");
-	      return 0;
-	  }
+          my $variable;
+          $variable = $_[0];
+          if (!defined($variable)) {
+              hint("Missing environment variable name");
+              return 0;
+          }
 
-	  if (!environment_remove($variable)) {
-	      error("Cannot remove environment variable \`" . $variable . "'");
-	      return 0;
-	  }
+          if (!environment_remove($variable)) {
+              error("Cannot remove environment variable \`" . $variable . "'");
+              return 0;
+          }
 
-	  return 1;
+          return 1;
       },
       1 ],
 
@@ -246,13 +246,13 @@ if ($force_mode || file_isnewer($input_file, $output_file)) {
 
     $string = "";
     if (!Sitetool::Preprocess::preprocess($input_file, \$string)) {
-	exit 1;
+        exit 1;
     }
 
     debug("Dumping string to file \`" . $output_file . "'");
     if (!string_tofile($string, $output_file)) {
-	file_remove($output_file);
-	exit 1;
+        file_remove($output_file);
+        exit 1;
     }
 }
 

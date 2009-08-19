@@ -23,8 +23,8 @@
   (call-with-current-continuation
    (lambda (exit)
      (for-each (lambda (x)
-		 (if (list? x)
-		     (exit #t)))
-	       l)
+                 (if (list? x)
+                     (exit #t)))
+               l)
      #f))
   )

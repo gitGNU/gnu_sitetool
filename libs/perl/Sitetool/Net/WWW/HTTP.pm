@@ -50,18 +50,18 @@ sub http_download ($$)
     # XXX FIXME: Replace with a proper check
     assert(defined($WGET));
     if ($WGET eq "") {
-	error("The wget executable was not available in your system when "  .
-	      $PACKAGE_NAME . " has been configured");
-	error("In order to use the requested functionality please install " .
-	      "wget and re-install " . $PACKAGE_NAME);
-	exit 1;
+        error("The wget executable was not available in your system when "  .
+              $PACKAGE_NAME . " has been configured");
+        error("In order to use the requested functionality please install " .
+              "wget and re-install " . $PACKAGE_NAME);
+        exit 1;
     }
 
     my $command;
 
     $command = "$WGET -q --timeout 1 -l 1 -O $filename -- $href";
     if (!shell_execute($command)) {
-	return 0;
+        return 0;
     }
 
     return 1;

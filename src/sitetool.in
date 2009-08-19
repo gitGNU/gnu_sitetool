@@ -31,10 +31,10 @@ BEGIN
     my $perllibdir;
 
     $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
-	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+        $ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
 
     unshift(@INC, map(File::Spec->catfile($_, "perl"),
-		      (split '@PATH_SEPARATOR@', $perllibdir)));
+                      (split '@PATH_SEPARATOR@', $perllibdir)));
 
     # Override SHELL.  On DJGPP SHELL may not be set to a shell
     # that can handle redirection and quote arguments correctly,
@@ -73,112 +73,112 @@ our $PROGRAM_NAME = "sitetool";
 
 # XXX FIXME: To be removed ASAP
 my $work_dir           = File::Spec->catdir(File::Spec->curdir(),
-					    "." . $PROGRAM_NAME,
-					    "site.wrk");
+                                            "." . $PROGRAM_NAME,
+                                            "site.wrk");
 # XXX FIXME: To be removed ASAP
 my $output_dir         = File::Spec->catdir(File::Spec->curdir(),
-					    "." . $PROGRAM_NAME,
-					    "site.out");
+                                            "." . $PROGRAM_NAME,
+                                            "site.out");
 
 #my $style_dir          = File::Spec->catfile($data_dir, "styles",  "default");
 
 my $input_file         = File::Spec->catfile(File::Spec->curdir(), "site.as");
-my $preprocessed_file  = File::Spec->catfile($work_dir, 	   "site.pp");
-my $configuration_file = File::Spec->catfile($work_dir, 	   "site.cfg");
+my $preprocessed_file  = File::Spec->catfile($work_dir,            "site.pp");
+my $configuration_file = File::Spec->catfile($work_dir,            "site.cfg");
 
 my %tools = (
     "initialize" => {
-	HANDLER        => "sitetool-initialize",
-	DESCRIPTION    => "initialize",
-	FLAGS          =>
-	    "-w %work_dir% " .
-	    "-o %output_dir%",
-	PRE_REQUISITE  => [
-	],
- 	POST_REQUISITE => [ ],
+        HANDLER        => "sitetool-initialize",
+        DESCRIPTION    => "initialize",
+        FLAGS          =>
+            "-w %work_dir% " .
+            "-o %output_dir%",
+        PRE_REQUISITE  => [
+        ],
+        POST_REQUISITE => [ ],
     },
     "preprocess" => {
-	HANDLER        => "sitetool-preprocess",
-	DESCRIPTION    => "preprocess",
-	FLAGS          =>
-	    "-i %input_file% "        .
-	    "-o %preprocessed_file% " .
-	    "-Dwork_dir=%work_dir%",
-	PRE_REQUISITE  => [ # "initialize",
-	],
-	POST_REQUISITE => [ ],
+        HANDLER        => "sitetool-preprocess",
+        DESCRIPTION    => "preprocess",
+        FLAGS          =>
+            "-i %input_file% "        .
+            "-o %preprocessed_file% " .
+            "-Dwork_dir=%work_dir%",
+        PRE_REQUISITE  => [ # "initialize",
+        ],
+        POST_REQUISITE => [ ],
     },
     "parse" => {
-	HANDLER        => "sitetool-parse",
-	DESCRIPTION    => "parse",
-	FLAGS          =>
-	    "-i %preprocessed_file% " .
-	    "-w %work_dir% "          .
-	    "-o %configuration_file%",
-	PRE_REQUISITE  => [ # "initialize",
-			    "preprocess"
-	],
-	POST_REQUISITE => [ ],
+        HANDLER        => "sitetool-parse",
+        DESCRIPTION    => "parse",
+        FLAGS          =>
+            "-i %preprocessed_file% " .
+            "-w %work_dir% "          .
+            "-o %configuration_file%",
+        PRE_REQUISITE  => [ # "initialize",
+                            "preprocess"
+        ],
+        POST_REQUISITE => [ ],
     },
     "build" => {
-	HANDLER        => "sitetool-build",
-	DESCRIPTION    => "build site",
-	FLAGS          =>
-	    "-c %configuration_file% " .
-	    "-w %work_dir% "           .
-	    "-o %output_dir%",
-	PRE_REQUISITE  => [ # "initialize",
-			    "preprocess",
-			    "parse"
-	],
-	POST_REQUISITE => [ ],
+        HANDLER        => "sitetool-build",
+        DESCRIPTION    => "build site",
+        FLAGS          =>
+            "-c %configuration_file% " .
+            "-w %work_dir% "           .
+            "-o %output_dir%",
+        PRE_REQUISITE  => [ # "initialize",
+                            "preprocess",
+                            "parse"
+        ],
+        POST_REQUISITE => [ ],
     },
     "check" => {
-	HANDLER        => "sitetool-check",
-	DESCRIPTION    => "check links in a previously built site",
-	FLAGS          =>
-	    "-c %configuration_file% " .
-	    "-o %output_dir%",
-	PRE_REQUISITE  => [ # "initialize",
-			    "preprocess",
-			    "parse",
-			    "build"
-	],
-	POST_REQUISITE => [ ],
+        HANDLER        => "sitetool-check",
+        DESCRIPTION    => "check links in a previously built site",
+        FLAGS          =>
+            "-c %configuration_file% " .
+            "-o %output_dir%",
+        PRE_REQUISITE  => [ # "initialize",
+                            "preprocess",
+                            "parse",
+                            "build"
+        ],
+        POST_REQUISITE => [ ],
     },
     "validate" => {
-	HANDLER        => "sitetool-validate",
-	DESCRIPTION    => "validate previously built site",
-	FLAGS          =>
-	    "-c %configuration_file% " .
-	    "-o %output_dir%",
-	PRE_REQUISITE  => [ # "initialize",
-			    "preprocess",
-			    "parse",
-			    "build"
-	],
-	POST_REQUISITE => [ ],
+        HANDLER        => "sitetool-validate",
+        DESCRIPTION    => "validate previously built site",
+        FLAGS          =>
+            "-c %configuration_file% " .
+            "-o %output_dir%",
+        PRE_REQUISITE  => [ # "initialize",
+                            "preprocess",
+                            "parse",
+                            "build"
+        ],
+        POST_REQUISITE => [ ],
     },
     "clean" => {
-	HANDLER        => "sitetool-clean",
-	DESCRIPTION    => "remove built files",
-	FLAGS          =>
-	    "-c %configuration_file% " .
-	    "-o %output_dir% "         .
-	    "-w %work_dir%",
-	PRE_REQUISITE  => [ # "initialize",
-			    "preprocess",
-			    "parse"
-	],
-	POST_REQUISITE => [ ],
+        HANDLER        => "sitetool-clean",
+        DESCRIPTION    => "remove built files",
+        FLAGS          =>
+            "-c %configuration_file% " .
+            "-o %output_dir% "         .
+            "-w %work_dir%",
+        PRE_REQUISITE  => [ # "initialize",
+                            "preprocess",
+                            "parse"
+        ],
+        POST_REQUISITE => [ ],
     },
 #    "styles" => {
-#	HANDLER        => "sitetool-styles",
-#	DESCRIPTION    => "manage styles",
-#	FLAGS          =>
-#	    "", #"-c %configuration_file%",
-#	    PRE_REQUISITE  => [ ],
-#	    POST_REQUISITE => [ ],
+#       HANDLER        => "sitetool-styles",
+#       DESCRIPTION    => "manage styles",
+#       FLAGS          =>
+#           "", #"-c %configuration_file%",
+#           PRE_REQUISITE  => [ ],
+#           POST_REQUISITE => [ ],
 #    },
     );
 
@@ -215,11 +215,11 @@ sub help ()
 
     print "MODE must be one of the following:\n";
     for my $tool (keys(%tools)) {
-	assert(defined($tools{$tool}{DESCRIPTION}));
+        assert(defined($tools{$tool}{DESCRIPTION}));
 
-	printf("        %-11s          %-s\n",
-	       $tool,
-	       $tools{$tool}{DESCRIPTION});
+        printf("        %-11s          %-s\n",
+               $tool,
+               $tools{$tool}{DESCRIPTION});
     }
     print "\n";
 
@@ -263,20 +263,20 @@ sub run_tool ($$@)
     $command = File::Spec->catfile($bin_dir, $handler) . " " . $flags;
 
     if ($dry_run) {
-	print $command . "\n";
-	return 1;
+        print $command . "\n";
+        return 1;
     }
 
     {
-	my $time1;
-	my $time2;
+        my $time1;
+        my $time2;
 
-	$time1 = 0 + time();
-	if (!shell_execute($command)) {
-	    return 0;
-	}
-	$time2 = 0 + time();
-	verbose("Elapsed " . ($time2 - $time1) . " seconds");
+        $time1 = 0 + time();
+        if (!shell_execute($command)) {
+            return 0;
+        }
+        $time2 = 0 + time();
+        verbose("Elapsed " . ($time2 - $time1) . " seconds");
     }
 
     return 1;
@@ -287,34 +287,34 @@ sub help_mode ($)
     my $mode = shift;
 
     if (defined($mode)) {
-	debug("Producing help for mode \`" . $mode . "'");
-	my $found;
+        debug("Producing help for mode \`" . $mode . "'");
+        my $found;
 
-	# Yes, let us provide help for that mode
-	debug("Mode should be \`" . $mode . "'");
-	$found = 0;
-	for my $tool (keys(%tools)) {
-	    debug("Tool = \`" . $tool . "'");
-	    if ($tool eq $mode) {
-		debug("Got tool \`" . $tool . "' for the requested mode");
-		$found = 1;
-		last;
-	    }
-	}
+        # Yes, let us provide help for that mode
+        debug("Mode should be \`" . $mode . "'");
+        $found = 0;
+        for my $tool (keys(%tools)) {
+            debug("Tool = \`" . $tool . "'");
+            if ($tool eq $mode) {
+                debug("Got tool \`" . $tool . "' for the requested mode");
+                $found = 1;
+                last;
+            }
+        }
 
-	if (!$found) {
-	    error("Unknown MODE \`" . $mode . "'");
-	    return 0;
-	}
+        if (!$found) {
+            error("Unknown MODE \`" . $mode . "'");
+            return 0;
+        }
 
-	if (!run_tool($mode, 0, "-h")) {
-	    error("Cannot get help for MODE \`" . $mode . "'");
-	    return 0;
-	}
+        if (!run_tool($mode, 0, "-h")) {
+            error("Cannot get help for MODE \`" . $mode . "'");
+            return 0;
+        }
     } else {
-	debug("Mode is not defined, producing generic help");
-	# No, let us provide the generic help
-	help();
+        debug("Mode is not defined, producing generic help");
+        # No, let us provide the generic help
+        help();
     }
 
     return 1;
@@ -347,7 +347,7 @@ my @options_list = (
     [ "d", "debug",    sub { debug_inc();             return 1; }, 0 ],
     [ "v", "verbose",  sub { verbose_inc();           return 1; }, 0 ],
     [ "h", "help",     sub {
-	$run = 0;
+        $run = 0;
         $exit_code = (help_mode($_[0]) ? 0 : 1);
         return 0;                                               }, 2 ],
     [ "V", "version",  sub {
@@ -386,11 +386,11 @@ for my $tool (keys(%tools)) {
     assert(defined($string));
 
     $string = string_replace_many($string, {
-	"%work_dir%"           => $work_dir,
-	"%output_dir%"         => $output_dir,
-	"%input_file%"         => $input_file,
-	"%preprocessed_file%"  => $preprocessed_file,
-	"%configuration_file%" => $configuration_file});
+        "%work_dir%"           => $work_dir,
+        "%output_dir%"         => $output_dir,
+        "%input_file%"         => $input_file,
+        "%preprocessed_file%"  => $preprocessed_file,
+        "%configuration_file%" => $configuration_file});
 
     assert(defined($string));
     $tools{$tool}->{FLAGS} = $string;
@@ -410,9 +410,9 @@ my $found = 0;
 for my $tool (keys(%tools)) {
     debug("Tool = \`" . $tool . "'");
     if ($running_mode eq $tool) {
-	debug("Got tool \`" . $tool . "' for the requested mode");
-	$found = 1;
-	last;
+        debug("Got tool \`" . $tool . "' for the requested mode");
+        $found = 1;
+        last;
     }
 }
 if (!$found) {
@@ -432,13 +432,13 @@ debug("Running mode is \`$running_mode'");
     my $flags = "";
 
     for (my $count = verbose_get(); $count > 0; $count--) {
-	$flags = "-v $flags";
+        $flags = "-v $flags";
     }
     for (my $count = debug_get(); $count > 0; $count--) {
-	$flags = "-d $flags";
+        $flags = "-d $flags";
     }
     if ($force_mode != 0) {
-	$flags = "$flags -f";
+        $flags = "$flags -f";
     }
     $flags = "-W " . warning_get() . " " . $flags;
 
@@ -446,18 +446,18 @@ debug("Running mode is \`$running_mode'");
 
     debug("Changing per-tool flags:");
     for my $tool (keys(%tools)) {
-	debug("Tool "                          .
-	      "\`" . $tool . "' "              .
-	      "flags are "                     .
-	      "\`" . $tools{$tool}{FLAGS} . "'");
+        debug("Tool "                          .
+              "\`" . $tool . "' "              .
+              "flags are "                     .
+              "\`" . $tools{$tool}{FLAGS} . "'");
 
-	assert(defined($tools{$tool}{FLAGS}));
-	$tools{$tool}{FLAGS} = $flags . " " . $tools{$tool}{FLAGS};
+        assert(defined($tools{$tool}{FLAGS}));
+        $tools{$tool}{FLAGS} = $flags . " " . $tools{$tool}{FLAGS};
 
-	debug("Modified flags  for tool "      .
-	      "\`" . $tool . "' "              .
-	      "are "                           .
-	      "\`" . $tools{$tool}{FLAGS} . "'");
+        debug("Modified flags  for tool "      .
+              "\`" . $tool . "' "              .
+              "are "                           .
+              "\`" . $tools{$tool}{FLAGS} . "'");
     }
 }
 
@@ -468,16 +468,16 @@ debug("Running mode is \`$running_mode'");
 {
     sub callback ($$)
     {
-	my $key   = shift;
-	my $value = shift;
+        my $key   = shift;
+        my $value = shift;
 
-	if (!defined($key)) {
-	    $key = "undef";
-	}
-	if (!defined($value)) {
-	    $value = "undef";
-	}
-	debug("Environment `" . $key . "' = `" . $value . "'")
+        if (!defined($key)) {
+            $key = "undef";
+        }
+        if (!defined($value)) {
+            $value = "undef";
+        }
+        debug("Environment `" . $key . "' = `" . $value . "'")
     }
     environment_foreach(\&callback)
 }
@@ -508,7 +508,7 @@ assert($#tools_chain >= 0);
 
 for my $tool (@tools_chain) {
     if (!run_tool($tool, $dry_run, @options_slack)) {
-	exit 1;
+        exit 1;
     }
 }
 

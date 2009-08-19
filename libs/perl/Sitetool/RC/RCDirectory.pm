@@ -46,19 +46,19 @@ sub new ($)
 
     $directory = environment_get("SITETOOL_RC_FILES");
     if (!defined($directory)) {
-	$directory =
-	    File::Spec->catfile(home(),
-				"." . $Sitetool::Autoconfig::PACKAGE_NAME);
-	$directory = string_lowercase($directory);
-	assert(defined($directory));
+        $directory =
+            File::Spec->catfile(home(),
+                                "." . $Sitetool::Autoconfig::PACKAGE_NAME);
+        $directory = string_lowercase($directory);
+        assert(defined($directory));
     }
 
     $self->{NAME} = $directory;
 
     if (!directory_ispresent($directory)) {
-	if (!directory_create($directory)) {
-	    return undef;
-	}
+        if (!directory_create($directory)) {
+            return undef;
+        }
     }
 
     assert(directory_ispresent($directory));

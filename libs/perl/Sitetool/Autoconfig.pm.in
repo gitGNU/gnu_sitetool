@@ -31,36 +31,36 @@ use vars qw (@ISA @EXPORT);
 
 @ISA    = qw (Exporter);
 @EXPORT = qw (
-	      $PACKAGE_NAME
-	      $PACKAGE_VERSION
-	      $PACKAGE_BUGREPORT
+              $PACKAGE_NAME
+              $PACKAGE_VERSION
+              $PACKAGE_BUGREPORT
 
-	      $WGET
-	      $WPUT
-	      $TIDY
-	      $GUILE
-	      $FCP
+              $WGET
+              $WPUT
+              $TIDY
+              $GUILE
+              $FCP
 
-	      $bin_dir
-	      $libs_dir
-	      $data_dir
-	     );
+              $bin_dir
+              $libs_dir
+              $data_dir
+             );
 
 use vars qw  (
-	      $PACKAGE_NAME
-	      $PACKAGE_VERSION
-	      $PACKAGE_BUGREPORT
+              $PACKAGE_NAME
+              $PACKAGE_VERSION
+              $PACKAGE_BUGREPORT
 
-	      $WGET
-	      $WPUT
-	      $TIDY
-	      $GUILE
-	      $FCP
+              $WGET
+              $WPUT
+              $TIDY
+              $GUILE
+              $FCP
 
-	      $bin_dir
-	      $libs_dir
-	      $data_dir
-	     );
+              $bin_dir
+              $libs_dir
+              $data_dir
+             );
 
 $PACKAGE_NAME      = '@PACKAGE_NAME@';
 $PACKAGE_BUGREPORT = '@PACKAGE_BUGREPORT@';

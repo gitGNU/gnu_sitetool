@@ -38,16 +38,16 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&file_remove
-		 &file_touch
-		 &file_link
-		 &file_cat
-		 &file_copy
-		 &file_move
-		 &file_mtime
-		 &file_tostring
-		 &file_ispresent
-		 &file_isexecutable
-		 &file_isnewer);
+                 &file_touch
+                 &file_link
+                 &file_cat
+                 &file_copy
+                 &file_move
+                 &file_mtime
+                 &file_tostring
+                 &file_ispresent
+                 &file_isexecutable
+                 &file_isnewer);
 }
 
 sub file_isnewer ($$)
@@ -60,11 +60,11 @@ sub file_isnewer ($$)
     assert(file_ispresent($input_filename));
 
     if (!file_ispresent($output_filename)) {
-	return 1;
+        return 1;
     }
 
     if (file_mtime($input_filename) > file_mtime($output_filename)) {
-	return 1;
+        return 1;
     }
 
     return 0;
@@ -99,24 +99,24 @@ sub file_tostring ($$)
     ${$string_ref} = undef;
 
     if (! -f $filename) {
-	error("Cannot open file "       .
-	      "\`" . $filename . "' "   .
-	      "for input, it is missing");
-	return 0;
+        error("Cannot open file "       .
+              "\`" . $filename . "' "   .
+              "for input, it is missing");
+        return 0;
     }
 
     my $filehandle;
 
     if (!open($filehandle, "<", $filename)) {
-	error("Cannot open \`" . $filename . "' for input");
-	return 0;
+        error("Cannot open \`" . $filename . "' for input");
+        return 0;
     }
 
     my $string;
 
     $string = "";
     while (<$filehandle>) {
-	$string = $string . $_;
+        $string = $string . $_;
     }
 
     close($filehandle);
@@ -134,13 +134,13 @@ sub file_mtime ($)
     assert($filename ne "");
 
     if (!file_ispresent($filename)) {
-	bug("file_mtime() called over not existent file \`" . $filename . "'");
+        bug("file_mtime() called over not existent file \`" . $filename . "'");
     }
 
     my ($dev,   $ino,   $mode,  $nlink,
-	$uid,   $gid,   $rdev,  $size,
-	$atime, $mtime, $ctime, $blksize,
-	$blocks) = stat($filename);
+        $uid,   $gid,   $rdev,  $size,
+        $atime, $mtime, $ctime, $blksize,
+        $blocks) = stat($filename);
 
     return $mtime;
 }
@@ -154,13 +154,13 @@ sub file_remove ($)
 
     debug("Removing file \`" . $filename . "'");
     if (!file_ispresent($filename)) {
-	return 1;
+        return 1;
     } elsif (-f $filename) {
-	if (unlink($filename) != 1) {
-	    error("Cannot remove file \`" . $filename . "'");
-	}
+        if (unlink($filename) != 1) {
+            error("Cannot remove file \`" . $filename . "'");
+        }
 
-	return 1;
+        return 1;
     }
 
     bug("Unreachable part ...");
@@ -178,8 +178,8 @@ sub file_touch ($)
     my $filehandle;
 
     if (!open($filehandle, ">", $filename)) {
-	error("Cannot touch file \`" . $filename . "'");
-	return 0;
+        error("Cannot touch file \`" . $filename . "'");
+        return 0;
     }
 
     print $filehandle "";
@@ -199,17 +199,17 @@ sub file_copy ($$)
     assert($destination ne "");
 
     if (!file_ispresent($source)) {
-	error("File \`" . $source . "' does not exists");
-	return 0;
+        error("File \`" . $source . "' does not exists");
+        return 0;
     }
     if (file_ispresent($destination)) {
-	warning("Overwriting file \`" . $destination . "'");
+        warning("Overwriting file \`" . $destination . "'");
     }
 
     debug("Copying \`" . $source . "' to \`" . $destination . "'");
     if (!copy($source, $destination)) {
-	error("Cannot copy \`" . $source . "' to \`" . $destination . "'");
-	return 0;
+        error("Cannot copy \`" . $source . "' to \`" . $destination . "'");
+        return 0;
     }
 
     return 1;
@@ -226,17 +226,17 @@ sub file_move ($$)
     assert($destination ne "");
 
     if (!file_ispresent($source)) {
-	error("File \`" . $source . "' does not exists");
-	return 0;
+        error("File \`" . $source . "' does not exists");
+        return 0;
     }
     if (file_ispresent($destination)) {
-	warning("Overwriting file \`" . $destination . "'");
+        warning("Overwriting file \`" . $destination . "'");
     }
 
     debug("Moving \`" . $source . "' to \`" . $destination . "'");
     if (!move($source, $destination)) {
-	error("Cannot move \`" . $source . "' to \`" . $destination . "'");
-	return 0;
+        error("Cannot move \`" . $source . "' to \`" . $destination . "'");
+        return 0;
     }
 
     return 1;
@@ -253,32 +253,32 @@ sub file_link ($$)
     assert($destination ne "");
 
     if (!file_ispresent($source)) {
-	error("File \`" . $source . "' does not exists");
-	return 0;
+        error("File \`" . $source . "' does not exists");
+        return 0;
     }
 
     my $symlink_exists;
     $symlink_exists = eval {
-	no warnings 'all';
-	symlink("", "");
-	1
+        no warnings 'all';
+        symlink("", "");
+        1
     };
     if ($symlink_exists) {
-	debug("sym-linking \`" . $source . "' to \`" . $destination . "'");
+        debug("sym-linking \`" . $source . "' to \`" . $destination . "'");
 
-	if (!symlink($source, $destination)) {
-	    error("Cannot symlink "        .
-		  "\`" . $source . "'"     .
-		  " to "                   .
-		  "\`" . $destination . "'");
-	    return 0;
-	}
+        if (!symlink($source, $destination)) {
+            error("Cannot symlink "        .
+                  "\`" . $source . "'"     .
+                  " to "                   .
+                  "\`" . $destination . "'");
+            return 0;
+        }
     } else {
-	debug("hard-linking \`" . $source . "' to \`" . $destination . "'");
+        debug("hard-linking \`" . $source . "' to \`" . $destination . "'");
 
-	if (!file_copy($source, $destination)) {
-	    return 0;
-	}
+        if (!file_copy($source, $destination)) {
+            return 0;
+        }
     }
 
     return 1;
@@ -299,24 +299,24 @@ sub file_cat ($$)
     assert($destination ne "");
 
     if (!file_ispresent($source)) {
-	error("File \`" . $source . "' does not exists");
-	return 0;
+        error("File \`" . $source . "' does not exists");
+        return 0;
     }
 
     my $input_filehandle;
     my $output_filehandle;
 
     if (!open($input_filehandle, "<", $source)) {
-	error("Cannot open \`" . $source . "' for input");
-	return 0;
+        error("Cannot open \`" . $source . "' for input");
+        return 0;
     }
     if (!open($output_filehandle, ">>", $destination)) {
-	error("Cannot open \`" . $destination . "' for output");
-	return 0;
+        error("Cannot open \`" . $destination . "' for output");
+        return 0;
     }
 
     while(<$input_filehandle>) {
-	print $output_filehandle "$_";
+        print $output_filehandle "$_";
     }
 
     close($input_filehandle);

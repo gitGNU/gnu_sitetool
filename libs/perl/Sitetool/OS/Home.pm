@@ -47,19 +47,19 @@ sub home ()
     $osname  = $Config{osname};
     $homedir = undef;
     if ($osname =~ /MSWin32/) {
-	bug("MSWin32 not yet supported")
+        bug("MSWin32 not yet supported")
     } elsif ($osname =~ /darwin/) {
-	bug("darwin not yet supported")
+        bug("darwin not yet supported")
     } elsif ($osname =~ /MacOS9/) {
-	bug("MacOS9 not yet supported")
+        bug("MacOS9 not yet supported")
     } else {
-	$homedir = $ENV{HOME};
+        $homedir = $ENV{HOME};
     }
 
     assert(defined($homedir));
 
     if (!directory_ispresent($homedir)) {
-	bug("Problems detecting home directory");
+        bug("Problems detecting home directory");
     }
 
     return $homedir;

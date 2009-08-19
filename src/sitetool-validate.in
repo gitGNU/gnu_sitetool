@@ -31,10 +31,10 @@ BEGIN
     my $perllibdir;
 
     $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
-	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+        $ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
 
     unshift(@INC, map(File::Spec->catfile($_, "perl"),
-		      (split '@PATH_SEPARATOR@', $perllibdir)));
+                      (split '@PATH_SEPARATOR@', $perllibdir)));
 
     # Override SHELL.  On DJGPP SHELL may not be set to a shell
     # that can handle redirection and quote arguments correctly,
@@ -196,9 +196,9 @@ if ($dry_run) {
 assert(defined($TIDY));
 if ($TIDY eq "") {
     error("The tidy executable was not available in your system when "  .
-	  $PACKAGE_NAME . " has been configured");
+          $PACKAGE_NAME . " has been configured");
     error("In order to use the requested functionality please install " .
-	  "tidy and re-install " . $PACKAGE_NAME);
+          "tidy and re-install " . $PACKAGE_NAME);
     exit 1;
 }
 
@@ -223,39 +223,39 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     my $destination;
     $destination = $configuration{PAGES}{$page_id}{DESTINATION};
     if (!defined($destination)) {
-	error("Page \`" . $page_id. "' has no destination");
-	exit 1;
+        error("Page \`" . $page_id. "' has no destination");
+        exit 1;
     }
 
     my $file;
     $file = File::Spec->catfile($output_dir, $destination);
     if (!file_ispresent($file)) {
-	error("Page \`" . $page_id . "' file \`" . $file . "' is missing");
-	exit 1;
+        error("Page \`" . $page_id . "' file \`" . $file . "' is missing");
+        exit 1;
     }
 
     verbose("Validating page \`" . $page_id . "'");
 
     my $string;
     $string = "$TIDY "                                                        .
-	"--show-warnings " . ((warning_get() ne "none") ? "yes" : "no") . " " .
-	"-q "                                                                 .
-	"--keep-time yes "                                                    .
-	"-m "                                                                 .
-	"$file";
+        "--show-warnings " . ((warning_get() ne "none") ? "yes" : "no") . " " .
+        "-q "                                                                 .
+        "--keep-time yes "                                                    .
+        "-m "                                                                 .
+        "$file";
 
     my $retval;
     $retval = shell_execute_and_report($string);
     if ($retval == 0) {
-	# Input file processed successfully
+        # Input file processed successfully
     } elsif ($retval == 1) {
-	# There were warnings
-	warning("Warnings found on page \`" . $page_id . "'");
+        # There were warnings
+        warning("Warnings found on page \`" . $page_id . "'");
     } else {
-	# There were errors
+        # There were errors
 
-	error("Problems on page \`" . $page_id . "' structure");
-	exit 1;
+        error("Problems on page \`" . $page_id . "' structure");
+        exit 1;
     }
 }
 

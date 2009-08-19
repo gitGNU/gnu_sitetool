@@ -34,7 +34,7 @@
   (lambda (x l r)
     (lambda (s)
       (if (equal? s 'right) r
-	  (if (equal? s 'left) l x)))))
+          (if (equal? s 'left) l x)))))
 
 ;; convenient data accessors:
 (define tree-data  (lambda (tree) (tree 'data)))
@@ -46,24 +46,24 @@
 (define tree-size
   (lambda (tree)
     (if (null? tree) 0
-	(+ 1 (size (tree 'left)) (size (tree 'right))))))
+        (+ 1 (size (tree 'left)) (size (tree 'right))))))
 
 ;; length of longest branch of tree
 (define depth
   (lambda (tree)
     (if (null? tree) 0
-	(let ((ldepth (depth (left tree)))
-	      (rdepth (depth (right tree))))
-	  (+ 1 (if (> ldepth rdepth) ldepth rdepth))))))
+        (let ((ldepth (depth (left tree)))
+              (rdepth (depth (right tree))))
+          (+ 1 (if (> ldepth rdepth) ldepth rdepth))))))
 ;; note that "if" expressions return a value, which we can then add 1 to
 
 ;; determines if element x is present in the tree: - look ma, no if-else!
 (define intree
   (lambda (x tree)
     (and (not (null? tree))
-	 (or (equal? x (data tree))
-	     (intree x (left tree))
-	     (intree x (right tree))))))
+         (or (equal? x (data tree))
+             (intree x (left tree))
+             (intree x (right tree))))))
 
 ;;(define mytree (node 6 (node 3 '() '()) (node 8 '() '())))
 
@@ -96,12 +96,12 @@
     (call-with-current-continuation
      (lambda (return)
        (map
-	(lambda (n)
-	  (if (not (null? n))
-	      (if (node-id-equal? n i)
-		  (return n)
-		  (let ((r (find-node (node-children n) i)))
-		    (if (not (null? r))
-			(return r))))))
-	t)
+        (lambda (n)
+          (if (not (null? n))
+              (if (node-id-equal? n i)
+                  (return n)
+                  (let ((r (find-node (node-children n) i)))
+                    (if (not (null? r))
+                        (return r))))))
+        t)
        '()))))

@@ -31,10 +31,10 @@ BEGIN
     my $perllibdir;
 
     $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
-	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+        $ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
 
     unshift(@INC, map(File::Spec->catfile($_, "perl"),
-		      (split '@PATH_SEPARATOR@', $perllibdir)));
+                      (split '@PATH_SEPARATOR@', $perllibdir)));
 
     # Override SHELL.  On DJGPP SHELL may not be set to a shell
     # that can handle redirection and quote arguments correctly,
@@ -196,12 +196,12 @@ debug("Output directory is  \`" . $output_dir . "'");
 debug("Removing old directories, if present");
 if (directory_ispresent($work_dir)) {
     if (!directory_remove($work_dir)) {
-	exit 1;
+        exit 1;
     }
 }
 if (directory_ispresent($output_dir)) {
     if (!directory_remove($output_dir)) {
-	exit 1;
+        exit 1;
     }
 }
 

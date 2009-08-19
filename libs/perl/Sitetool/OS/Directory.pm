@@ -38,11 +38,11 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&directory_create
-		 &directory_remove
-		 &directory_items
-		 &directory_ispresent
-		 &directory_link
-		 &directory_copy);
+                 &directory_remove
+                 &directory_items
+                 &directory_ispresent
+                 &directory_link
+                 &directory_copy);
 }
 
 sub directory_ispresent ($)
@@ -62,7 +62,7 @@ sub directory_ispresent ($)
 #
 #    $path = dirname($filename);
 #    if (!directory_create($path)) {
-#	return 0;
+#       return 0;
 #    }
 #
 #    return 1;
@@ -78,18 +78,18 @@ sub directory_create ($)
     debug("Creating directory \`$dirname'");
 
     if (directory_ispresent($dirname)) {
-	debug("Directory \`" . $dirname . "' exists already");
-	return 1;
+        debug("Directory \`" . $dirname . "' exists already");
+        return 1;
     }
 
     eval {
-	no warnings 'all';
-	mkpath($dirname, 0, 0777)
+        no warnings 'all';
+        mkpath($dirname, 0, 0777)
     };
     if ($@) {
-	debug("Evaluation returned `" . $@ . "'");
-	error("Cannot create directory \`" . $dirname . "'");
-	return 0;
+        debug("Evaluation returned `" . $@ . "'");
+        error("Cannot create directory \`" . $dirname . "'");
+        return 0;
     }
 
     return 1;
@@ -104,13 +104,13 @@ sub directory_remove ($)
     debug("Removing directory \`$dirname'");
 
     if (!directory_ispresent($dirname)) {
-	debug("Directory \`" . $dirname . "' is not present");
-	return 1;
+        debug("Directory \`" . $dirname . "' is not present");
+        return 1;
     }
 
     if (rmtree($dirname, 0, 1) == 0) {
-	error("Cannot remove directory \`" . $dirname . "'");
-	return 0;
+        error("Cannot remove directory \`" . $dirname . "'");
+        return 0;
     }
 
     return 1;
@@ -126,13 +126,13 @@ sub patterns_match ($$)
 
     @patterns = @{ $patterns_ref };
     for my $pattern (@patterns) {
-	if ($string =~ $pattern) {
-	    debug("String "             .
-		  "\`" . $string . "' " .
-		  "matches patters "    .
-		  "\`" . @patterns . "'");
-	    return 1;
-	}
+        if ($string =~ $pattern) {
+            debug("String "             .
+                  "\`" . $string . "' " .
+                  "matches patters "    .
+                  "\`" . @patterns . "'");
+            return 1;
+        }
     }
 
     return 0;
@@ -150,8 +150,8 @@ sub directory_items ($$)
 
     my $directory_handle;
     if (!opendir($directory_handle, "./")) {
-	error("Cannot open directory \`" . $directory . "'");
-	return 0;
+        error("Cannot open directory \`" . $directory . "'");
+        return 0;
     }
 
     my @items = [ ];
@@ -164,17 +164,17 @@ sub directory_items ($$)
     my @clean_items;
 
     for my $item (@dirty_items) {
-	if (($item =~ /^\.$/) || ($item =~ /^\.\.$/)) {
-	    # Skip `.' and `..' items ...
-	    next;
-	}
+        if (($item =~ /^\.$/) || ($item =~ /^\.\.$/)) {
+            # Skip `.' and `..' items ...
+            next;
+        }
 
-	if (patterns_match($exclusions_ref, $item)) {
-	    debug("Item \`" . $item . "' should be excluded");
-	    next;
-	}
+        if (patterns_match($exclusions_ref, $item)) {
+            debug("Item \`" . $item . "' should be excluded");
+            next;
+        }
 
-	push(@clean_items, $item);
+        push(@clean_items, $item);
     }
     debug("Clean items are: `@clean_items'");
 
@@ -208,32 +208,32 @@ sub directory_link ($$)
     assert($destination ne "");
 
     if (!directory_ispresent($source)) {
-	error("Directory \`" . $source . "' does not exists");
-	return 0;
+        error("Directory \`" . $source . "' does not exists");
+        return 0;
     }
 
     my $symlink_exists;
     $symlink_exists = eval {
-	no warnings 'all';
-	symlink("", "");
-	1
+        no warnings 'all';
+        symlink("", "");
+        1
     };
     if ($symlink_exists) {
-	debug("sym-linking \`" . $source . "' to \`" . $destination . "'");
+        debug("sym-linking \`" . $source . "' to \`" . $destination . "'");
 
-	if (!symlink($source, $destination)) {
-	    error("Cannot symlink "        .
-		  "\`" . $source . "'"     .
-		  " to "                   .
-		  "\`" . $destination . "'");
-	    return 0;
-	}
+        if (!symlink($source, $destination)) {
+            error("Cannot symlink "        .
+                  "\`" . $source . "'"     .
+                  " to "                   .
+                  "\`" . $destination . "'");
+            return 0;
+        }
     } else {
-	debug("hard-linking \`" . $source . "' to \`" . $destination . "'");
+        debug("hard-linking \`" . $source . "' to \`" . $destination . "'");
 
-	if (!directory_copy($source, $destination)) {
-	    return 0;
-	}
+        if (!directory_copy($source, $destination)) {
+            return 0;
+        }
     }
 
     return 1;

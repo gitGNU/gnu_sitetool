@@ -37,8 +37,8 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&bug
-		 &assert
-		 &missing);
+                 &assert
+                 &missing);
 }
 
 sub bug ($)
@@ -47,13 +47,13 @@ sub bug ($)
 
     print STDERR "\n";
     if (defined($string)) {
-	print STDERR "Bug hit: " . $string . "\n";
+        print STDERR "Bug hit: " . $string . "\n";
     } else {
-	print STDERR "Bug hit\n";
+        print STDERR "Bug hit\n";
     }
     print STDERR
-	"Please report the problem to "                   .
-	"<" . $Sitetool::Autoconfig::PACKAGE_BUGREPORT . ">\n";
+        "Please report the problem to "                   .
+        "<" . $Sitetool::Autoconfig::PACKAGE_BUGREPORT . ">\n";
     print STDERR "\n";
 
     confess(); # From Carp module
@@ -67,7 +67,7 @@ sub assert ($)
     my $expression = shift;
 
     if ($expression == 0) {
-	bug("Assertion failed !!!");
+        bug("Assertion failed !!!");
     }
 }
 

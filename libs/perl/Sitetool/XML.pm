@@ -49,26 +49,26 @@ sub xml2xhtml ($$)
     assert(defined($output_filename));
 
     debug("Transforming XML "            .
-	  "\`" . $input_filename  . "' " .
-	  "to XHTML "                    .
-	  "\`" . $output_filename . "'");
+          "\`" . $input_filename  . "' " .
+          "to XHTML "                    .
+          "\`" . $output_filename . "'");
 
     if (!file_ispresent($input_filename)) {
-	error("File \`" . $input_filename . "' is missing");
-	return 0;
+        error("File \`" . $input_filename . "' is missing");
+        return 0;
     }
 
     my $string;
 
     $string =
-	"cp $input_filename $output_filename";
+        "cp $input_filename $output_filename";
 
     if (!shell_execute($string)) {
-	error("Cannot transform XML file "  .
-	      "\`" . $input_filename . "' " .
-	      "into XHTML file "            .
-	      "\`" . $output_filename . "'");
-	return 0;
+        error("Cannot transform XML file "  .
+              "\`" . $input_filename . "' " .
+              "into XHTML file "            .
+              "\`" . $output_filename . "'");
+        return 0;
     }
 
     return 1;

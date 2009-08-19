@@ -42,7 +42,7 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&configuration_freeze
-		 &configuration_melt);
+                 &configuration_melt);
 }
 
 sub configuration_freeze ($$)
@@ -55,7 +55,7 @@ sub configuration_freeze ($$)
     assert(defined($configuration_ref));
 
     if (!configuration_check($configuration_ref)) {
-	return 0;
+        return 0;
     }
 
     verbose("Freezing configuration to file \`" . $output_filename . "'");
@@ -68,7 +68,7 @@ sub configuration_freeze ($$)
     $string = Data::Dumper->Dump([ \%configuration ], [ qw(*configuration) ]);
 
     if (!string_tofile($string, $output_filename)) {
-	return 0;
+        return 0;
     }
 
     debug("Configuration frozen successfully");
@@ -88,69 +88,69 @@ sub configuration_check ($)
     %configuration = %{ $configuration_ref };
 
     {
-	my @keys;
-	@keys = keys(%configuration);
-	debug("Configuration keys are \`@keys'");
+        my @keys;
+        @keys = keys(%configuration);
+        debug("Configuration keys are \`@keys'");
     }
 
     if (!defined($configuration{INTERNAL})) {
-	error("Wrong freezed configuration file, internal data missing ...");
-	return 0;
+        error("Wrong freezed configuration file, internal data missing ...");
+        return 0;
     }
 
     if (!defined($configuration{INTERNAL}{PACKAGE_NAME})) {
-	error("Wrong freezed configuration file, name is missing ...");
-	return 0;
+        error("Wrong freezed configuration file, name is missing ...");
+        return 0;
     }
 
     debug("Configuration was freezed with package name " .
-	  "\`" . $configuration{INTERNAL}{PACKAGE_NAME} . "'");
+          "\`" . $configuration{INTERNAL}{PACKAGE_NAME} . "'");
     if ($configuration{INTERNAL}{PACKAGE_NAME} ne
-	$Sitetool::Autoconfig::PACKAGE_NAME) {
-	error("Configuration was freezed with a wrong package ...");
-	return 0;
+        $Sitetool::Autoconfig::PACKAGE_NAME) {
+        error("Configuration was freezed with a wrong package ...");
+        return 0;
     }
 
     if (!defined($configuration{INTERNAL}{PACKAGE_VERSION})) {
-	error("Wrong freezed configuration file, version is missing ...");
-	return 0;
+        error("Wrong freezed configuration file, version is missing ...");
+        return 0;
     }
 
     debug("Configuration was freezed with package version " .
-	  "\`" . $configuration{INTERNAL}{PACKAGE_VERSION} . "'");
+          "\`" . $configuration{INTERNAL}{PACKAGE_VERSION} . "'");
     if ($configuration{INTERNAL}{PACKAGE_VERSION} ne
-	$Sitetool::Autoconfig::PACKAGE_VERSION) {
-	error("Configuration was freezed with package version "      .
-	      "\`" . $configuration{INTERNAL}{PACKAGE_VERSION} . "'" .
-	      ", this  is version "                                  .
-	      "\`" . $Sitetool::Autoconfig::PACKAGE_VERSION . "' "   .
-	      "...");
-	return 0;
+        $Sitetool::Autoconfig::PACKAGE_VERSION) {
+        error("Configuration was freezed with package version "      .
+              "\`" . $configuration{INTERNAL}{PACKAGE_VERSION} . "'" .
+              ", this  is version "                                  .
+              "\`" . $Sitetool::Autoconfig::PACKAGE_VERSION . "' "   .
+              "...");
+        return 0;
     }
 
     if (!defined($configuration{MAP})) {
-	error("Missing MAP key in configuration");
-	return 0;
+        error("Missing MAP key in configuration");
+        return 0;
     }
     if (!defined($configuration{FILES})) {
-	error("Missing FILES key in configuration");
-	return 0;
+        error("Missing FILES key in configuration");
+        return 0;
     }
     if (!defined($configuration{VARS})) {
-	error("Missing VARS key in configuration");
-	return 0;
+        error("Missing VARS key in configuration");
+        return 0;
     }
     if (!defined($configuration{COMMON})) {
-	error("Missing COMMON key in configuration");
-	return 0;
+        error("Missing COMMON key in configuration");
+        return 0;
     }
     if (!defined($configuration{PAGES})) {
-	error("Missing PAGES key in configuration");
-	return 0;
+        error("Missing PAGES key in configuration");
+        return 0;
     }
     if (!defined($configuration{CONTENTS})) {
-	error("Missing CONTENTS key in configuration");
-	return 0;
+        error("Missing CONTENTS key in configuration");
+        return 0;
     }
 
     debug("Configuration seems correct");
@@ -172,25 +172,25 @@ sub configuration_melt ($$)
     my $string;
 
     if (!file_tostring($input_filename, \$string)) {
-	return 0;
+        return 0;
     }
 
     debug("Cross your fingers, we're starting evaluation");
 
     # XXX FIXME: We should use the former version of 'eval' ...
     #eval {
-    #	no warnings 'all';
-    #	$string;
+    #   no warnings 'all';
+    #   $string;
     #};
     eval $string;
     if ($@) {
-	debug("Evaluation returned `" . $@ . "'");
-	error("Bad configuration frozen in \`" . $input_filename . "' ($@)");
-	return 0;
+        debug("Evaluation returned `" . $@ . "'");
+        error("Bad configuration frozen in \`" . $input_filename . "' ($@)");
+        return 0;
     }
 
     if (!configuration_check(\%configuration)) {
-	return 0;
+        return 0;
     }
 
     debug("Configuration melted successfully");

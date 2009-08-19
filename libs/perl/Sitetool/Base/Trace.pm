@@ -34,10 +34,10 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&trace_prefix_set
-		 &error
-		 &warning &warning_set &warning_get
-		 &verbose &verbose_set &verbose_get &verbose_inc
-		 &debug   &debug_set   &debug_get   &debug_inc);
+                 &error
+                 &warning &warning_set &warning_get
+                 &verbose &verbose_set &verbose_get &verbose_inc
+                 &debug   &debug_set   &debug_get   &debug_inc);
 }
 
 my $trace_prefix = "";
@@ -83,7 +83,7 @@ sub warning ($)
     assert(defined($string));
 
     if ($warning_mode eq "none") {
-	return;
+        return;
     }
 
     print $trace_prefix . ": " . $string . "\n";
@@ -116,7 +116,7 @@ sub verbose ($)
     assert($verbose_mode >= 0);
 
     if ($verbose_mode != 0) {
-	print $trace_prefix . ": " . $string . "\n";
+        print $trace_prefix . ": " . $string . "\n";
     }
 }
 
@@ -147,7 +147,7 @@ sub debug ($)
     assert($debug_mode >= 0);
 
     if ($debug_mode != 0) {
-	print $trace_prefix . ": " . $string . "\n";
+        print $trace_prefix . ": " . $string . "\n";
     }
 }
 

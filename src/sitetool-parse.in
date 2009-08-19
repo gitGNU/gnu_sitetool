@@ -31,10 +31,10 @@ BEGIN
     my $perllibdir;
 
     $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
-	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+        $ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
 
     unshift(@INC, map(File::Spec->catfile($_, "perl"),
-		      (split '@PATH_SEPARATOR@', $perllibdir)));
+                      (split '@PATH_SEPARATOR@', $perllibdir)));
 
     # Override SHELL.  On DJGPP SHELL may not be set to a shell
     # that can handle redirection and quote arguments correctly,
@@ -203,7 +203,7 @@ if ($force_mode || file_isnewer($input_file, $output_file)) {
 
     $string = "";
     if (!Sitetool::Parse::parse($input_file, \$string)) {
-	exit 1;
+        exit 1;
     }
     assert(defined($string));
     $string = "\%configuration = (\n" . $string . ");\n";
@@ -213,14 +213,14 @@ if ($force_mode || file_isnewer($input_file, $output_file)) {
 
     debug("Dumping string to file \`" . $temp1_filename . "'");
     if (!string_tofile($string, $temp1_filename)) {
-	file_remove($temp1_filename);
-	exit 1;
+        file_remove($temp1_filename);
+        exit 1;
     }
 
     debug("Reading back configuration from \`" . $temp1_filename . "'");
     $string = "";
     if (!file_tostring($temp1_filename, \$string)) {
-	exit 1;
+        exit 1;
     }
 
     assert(defined($string));
@@ -238,19 +238,19 @@ if ($force_mode || file_isnewer($input_file, $output_file)) {
 
     my %configuration;
     {
-	debug("Cross your fingers, we're starting evaluation");
+        debug("Cross your fingers, we're starting evaluation");
 
-	# XXX FIXME: We should use the former version of 'eval' ...
-	#%configuration = eval {
-	#    no warnings 'all';
-	#    $string
-	#};
-	eval $string;
-	if ($@) {
-	    debug("Evaluation returned `" . $@ . "'");
-	    error("Bad configuration in \`" . $temp1_filename . "' ($@)");
-	    exit 1;
-	}
+        # XXX FIXME: We should use the former version of 'eval' ...
+        #%configuration = eval {
+        #    no warnings 'all';
+        #    $string
+        #};
+        eval $string;
+        if ($@) {
+            debug("Evaluation returned `" . $@ . "'");
+            error("Bad configuration in \`" . $temp1_filename . "' ($@)");
+            exit 1;
+        }
     }
 
     debug("Configuration parsed successfully");
@@ -266,7 +266,7 @@ if ($force_mode || file_isnewer($input_file, $output_file)) {
     file_remove($temp1_filename);
 
     if (!configuration_freeze(\%configuration, $output_file)) {
-	exit 1;
+        exit 1;
     }
 }
 

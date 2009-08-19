@@ -58,13 +58,13 @@ sub preprocessor_expander($)
     assert(defined($ref));
 
     if (${$ref} =~ m/^[ \t]*$/) {
-	# Skip empty lines
+        # Skip empty lines
 
-	return 1;
+        return 1;
     } elsif (${$ref} =~ m/^[ \t]*\#.*$/) {
-	# Skip comments
+        # Skip comments
 
-	return 1;
+        return 1;
     }
 
     debug("Expanding environment variables");
@@ -73,27 +73,27 @@ sub preprocessor_expander($)
     my $expand = 0;
 
     while ($tmp =~ s/\@(.*)\@//) {
-	my $variable = $1;
+        my $variable = $1;
 
-	debug("Found variable `" . $variable . "\'");
+        debug("Found variable `" . $variable . "\'");
 
-	my $value = environment_get($variable);
+        my $value = environment_get($variable);
 
-	if (!defined($value)) {
-	    debug("Variable `" . $variable . "\' is not defined");
-	    next;
-	}
+        if (!defined($value)) {
+            debug("Variable `" . $variable . "\' is not defined");
+            next;
+        }
 
-	debug("Variable `" . $variable .
-	      "\' value `" . $value    .
-	      "\'");
+        debug("Variable `" . $variable .
+              "\' value `" . $value    .
+              "\'");
 
-	${$ref}   =~ s/\@$variable\@/$value/;
-	$expand   = 1;
+        ${$ref}   =~ s/\@$variable\@/$value/;
+        $expand   = 1;
     }
 
     if ($expand == 1) {
-	debug("  Expanded line `" . ${$ref} . "\'");
+        debug("  Expanded line `" . ${$ref} . "\'");
     }
 
     return 1;
@@ -108,15 +108,15 @@ sub preprocess_helper ($$)
     assert(defined($string_ref));
 
     if (!file_ispresent($file)) {
-	error("File \`" . $file . "' doesn't exists");
-	return 0;
+        error("File \`" . $file . "' doesn't exists");
+        return 0;
     }
 
     my $filehandle;
     debug("Opening filehandle for file \`" . $file . "'");
     if (!open($filehandle, "<", $file)) {
-	error("Cannot open file \`" . $file . "' for reading");
-	return 0;
+        error("Cannot open file \`" . $file . "' for reading");
+        return 0;
     }
 
     my $line;
@@ -130,50 +130,50 @@ sub preprocess_helper ($$)
     $string = $string . "#line "   . $line . "\n";
 
     while (<$filehandle>) {
-	$line++;
+        $line++;
 
-	my $tmp;
-	$tmp = $_;
-	chomp($tmp);
+        my $tmp;
+        $tmp = $_;
+        chomp($tmp);
 
-	debug("  Got line \`" . $tmp . "'");
+        debug("  Got line \`" . $tmp . "'");
 
-	if (!preprocessor_expander(\$tmp)) {
-	    error("Failed to expand environment variables");
-	    exit 1;
-	}
+        if (!preprocessor_expander(\$tmp)) {
+            error("Failed to expand environment variables");
+            exit 1;
+        }
 
-	if ($tmp =~ m/^[ \t]*include[ \t]*\"(.*)\"[ \t]*$/) {
-	    # Handle file inclusion
+        if ($tmp =~ m/^[ \t]*include[ \t]*\"(.*)\"[ \t]*$/) {
+            # Handle file inclusion
 
-	    assert(defined($1));
+            assert(defined($1));
 
-	    my $include_file;
-	    $include_file = File::Spec->rel2abs($1);
+            my $include_file;
+            $include_file = File::Spec->rel2abs($1);
 
-	    debug("Including file \`" . $1 . "'");
+            debug("Including file \`" . $1 . "'");
 
-	    # Place marker
-	    $string = $string . "#file \"" . $file . "\"\n";
-	    $string = $string . "#line "   . $line . "\n";
+            # Place marker
+            $string = $string . "#file \"" . $file . "\"\n";
+            $string = $string . "#line "   . $line . "\n";
 
-	    $line++;
+            $line++;
 
-	    if (!&preprocess_helper($include_file, \$string)) {
-		error("Cannot include file \`" . $include_file . "'");
-		return 0;
-	    }
+            if (!&preprocess_helper($include_file, \$string)) {
+                error("Cannot include file \`" . $include_file . "'");
+                return 0;
+            }
 
-	    $line++;
+            $line++;
 
-	    # Place marker
-	    $string = $string . "#file \"" . $file . "\"\n";
-	    $string = $string . "#line "   . $line . "\n";
+            # Place marker
+            $string = $string . "#file \"" . $file . "\"\n";
+            $string = $string . "#line "   . $line . "\n";
 
-	} else {
-	    # Get the line as it is
-	    $string = $string . $tmp . "\n";
-	}
+        } else {
+            # Get the line as it is
+            $string = $string . $tmp . "\n";
+        }
     }
 
     debug("Closing filehandle for file \`" . $file . "'");
@@ -196,8 +196,8 @@ sub preprocess ($$)
 
     ${$string_ref} = "";
     if (!preprocess_helper($input_filename, $string_ref)) {
-	error("Cannot preprocess file \`" . $input_filename . "'");
-	return 0;
+        error("Cannot preprocess file \`" . $input_filename . "'");
+        return 0;
     }
     assert(defined(${$string_ref}));
 

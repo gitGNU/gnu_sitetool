@@ -59,26 +59,26 @@ sub graphviz_helper ($$)
 
     $id = $node->id();
     if ($node->is_leaf()) {
-	$shape = "box"; # "ellipse peripheries=2";
+        $shape = "box"; # "ellipse peripheries=2";
     } else {
-	$shape = "ellipse"; # "ellipse peripheries=1";
+        $shape = "ellipse"; # "ellipse peripheries=1";
     }
     print $output_handle
-	"\t\"" . $id . "\" [shape=" . $shape . "];\n";
+        "\t\"" . $id . "\" [shape=" . $shape . "];\n";
 
     for my $child_ref (@children) {
-	assert(defined($child_ref));
-#	debug("Child ref is \`$child_ref'");
+        assert(defined($child_ref));
+#       debug("Child ref is \`$child_ref'");
 
-	my $child = $$child_ref;
-	print $output_handle
-	    "\t\"" . $id . "\" -- \"" . $child->id() . "\";\n";
-	if (!&graphviz_helper($child_ref, $output_handle)) {
-	    error("Cannot dump node "        .
-		  "\`" . $child->id() . "' " .
-		  "graphviz structure");
-	    return 0;
-	}
+        my $child = $$child_ref;
+        print $output_handle
+            "\t\"" . $id . "\" -- \"" . $child->id() . "\";\n";
+        if (!&graphviz_helper($child_ref, $output_handle)) {
+            error("Cannot dump node "        .
+                  "\`" . $child->id() . "' " .
+                  "graphviz structure");
+            return 0;
+        }
     }
 
     return 1;
@@ -99,7 +99,7 @@ sub sitemap2graphviz ($$)
     debug("Reading sitemap from \`" . $input_filename . "'");
     $string = "";
     if (!file_tostring($input_filename, \$string)) {
-	return 0;
+        return 0;
     }
 
     my $tree_ref;
@@ -108,22 +108,22 @@ sub sitemap2graphviz ($$)
 
     # XXX FIXME: We should use the former version of 'eval' ...
     #eval {
-    #	no warnings 'all';
-    #	$string;
+    #   no warnings 'all';
+    #   $string;
     #};
     eval $string;
     if ($@) {
-	debug("Evaluation returned `" . $@ . "'");
-	error("Bad configuration frozen in \`" . $input_filename . "' ($@)");
-	return 0;
+        debug("Evaluation returned `" . $@ . "'");
+        error("Bad configuration frozen in \`" . $input_filename . "' ($@)");
+        return 0;
     }
 
     assert(defined($tree_ref));
 
     my $output_filehandle;
     if (!open($output_filehandle, ">" , $output_filename)) {
-	error("Cannot open file \`" . $output_filename . "' for writing");
-	return 0;
+        error("Cannot open file \`" . $output_filename . "' for writing");
+        return 0;
     }
     assert(defined($output_filehandle));
 
@@ -131,9 +131,9 @@ sub sitemap2graphviz ($$)
     print $output_filehandle "\toverlap=scale;\n";
     print $output_filehandle "\tsplines=true;\n";
     if (!graphviz_helper($tree_ref, $output_filehandle)) {
-	close($output_filehandle);
-	file_remove($output_filehandle);
-	return 0;
+        close($output_filehandle);
+        file_remove($output_filehandle);
+        return 0;
     }
     print $output_filehandle "}\n";
 

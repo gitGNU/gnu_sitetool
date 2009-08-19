@@ -35,10 +35,10 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&environment_get
-		 &environment_set
-		 &environment_remove
-		 &environment_clear
-		 &environment_foreach);
+                 &environment_set
+                 &environment_remove
+                 &environment_clear
+                 &environment_foreach);
 }
 
 sub environment_foreach ($)
@@ -48,7 +48,7 @@ sub environment_foreach ($)
     assert(defined($callback_ref));
 
     for my $key (keys(%ENV)) {
-	$callback_ref->($key, $ENV{$key});
+        $callback_ref->($key, $ENV{$key});
     }
 }
 

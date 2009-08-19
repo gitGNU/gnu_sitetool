@@ -31,10 +31,10 @@ BEGIN
     my $perllibdir;
 
     $perllibdir = defined($ENV{'SITETOOL_LIBRARY_PATH'}) ?
-	$ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
+        $ENV{'SITETOOL_LIBRARY_PATH'} : '@pkgvlibsdir@';
 
     unshift(@INC, map(File::Spec->catfile($_, "perl"),
-		      (split '@PATH_SEPARATOR@', $perllibdir)));
+                      (split '@PATH_SEPARATOR@', $perllibdir)));
 
     # Override SHELL.  On DJGPP SHELL may not be set to a shell
     # that can handle redirection and quote arguments correctly,
@@ -264,16 +264,16 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
 
     $destination = $configuration{PAGES}{$page_id}{DESTINATION};
     if (!defined($destination)) {
-	error("Page \`" . $page_id. "' has no destination");
-	exit 1;
+        error("Page \`" . $page_id. "' has no destination");
+        exit 1;
     }
 
     $file      = File::Spec->catfile($output_dir, $destination);
     $directory = dirname($file);
 
     if (!directory_create($directory)) {
-	directory_remove($directory);
-	exit 1;
+        directory_remove($directory);
+        exit 1;
     }
 }
 
@@ -290,16 +290,16 @@ verbose("Creating sitemap");
 #
 #    $destination = $configuration{PAGES}{$page_id}{DESTINATION};
 #    if (!defined($destination)) {
-#	error("Page \`" . $page_id. "' has no destination");
-#	exit 1;
+#       error("Page \`" . $page_id. "' has no destination");
+#       exit 1;
 #    }
 #
 #    $file      = File::Spec->catfile($output_dir, $destination);
 ##    $directory = dirname($file);
 #
 #    if (!string_tofile($page_id, $file)) {
-#	file_remove($file);
-#	exit 1;
+#       file_remove($file);
+#       exit 1;
 #    }
 #}
 
@@ -308,7 +308,7 @@ debug("Building sitemap");
 my $sitemap_file = File::Spec->catfile($work_dir, $map_file);
 assert(defined($sitemap_file));
 if (!sitemap_create(\%configuration,
-		    $sitemap_file)) {
+                    $sitemap_file)) {
     file_remove($sitemap_file);
     exit 1;
 }
@@ -331,7 +331,7 @@ if (!sitemap2graphviz($sitemap_file, $graphviz_file)) {
 ##    $directory   = dirname($file);
 #
 #    if (!file_remove($file)) {
-#	exit 1;
+#       exit 1;
 #    }
 #}
 
@@ -348,15 +348,15 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     $destination = File::Spec->catfile($maps_dir, $page . ".map");
 
 #    if ($destination eq $sitemap_file) {
-#	error("Pagemap for page "          .
-#	      "\`" . $page_id . "' "       .
-#	      "cannot overwrite sitemap file");
-#	exit 1;
+#       error("Pagemap for page "          .
+#             "\`" . $page_id . "' "       .
+#             "cannot overwrite sitemap file");
+#       exit 1;
 #    }
 
     if (!pagemap_create($sitemap_file, $page_id, $destination)) {
-	file_remove($destination);
-	exit 1;
+        file_remove($destination);
+        exit 1;
     }
 }
 
@@ -379,12 +379,12 @@ for my $file_id (keys(%{$configuration{FILES}})) {
     my $output_basedir  = File::Spec->catfile($output_dir, $output_dirname);
 
     if (!directory_create($output_basedir)) {
-	exit 1;
+        exit 1;
     }
 
     if (!file_copy(File::Spec->catfile($input),
-		   File::Spec->catfile($output_basedir, $output_basename))) {
-	exit 1;
+                   File::Spec->catfile($output_basedir, $output_basename))) {
+        exit 1;
     }
 }
 
@@ -403,34 +403,34 @@ debug("Processing contents");
 #
 #    $source = $configuration{CONTENTS}{$content_id}{SOURCE};
 #    if (!file_ispresent($source)) {
-#	error("Missing input file \`" . $source . "'");
-#	exit 1;
+#       error("Missing input file \`" . $source . "'");
+#       exit 1;
 #    }
 #    $destination = File::Spec->catfile($contents_dir,
-#				       $content . ".sxml");
+#                                      $content . ".sxml");
 #
 #    if ($force_mode || file_isnewer($source, $destination)) {
-#	debug("Output file is obsolete or " .
-#	      "the user is requesting a forced update");
+#       debug("Output file is obsolete or " .
+#             "the user is requesting a forced update");
 #
-#	my $temp_dir;
+#       my $temp_dir;
 #
-#	$temp_dir = File::Spec->catfile($contents_dir, $content);
-#	assert(defined($temp_dir));
-#	if (!directory_create($temp_dir)) {
-#	    exit 1;
-#	}
-#	if (!filterchain_apply($source,
-#			       $destination,
-#			       File::Spec->catfile($contents_dir, $content),
-#			       \$configuration{CONTENTS}{$content_id}{FILTERS})) {
-#	    exit 1;
-#	}
-#	if (!directory_remove($temp_dir)) {
-#	    exit 1;
-#	}
+#       $temp_dir = File::Spec->catfile($contents_dir, $content);
+#       assert(defined($temp_dir));
+#       if (!directory_create($temp_dir)) {
+#           exit 1;
+#       }
+#       if (!filterchain_apply($source,
+#                              $destination,
+#                              File::Spec->catfile($contents_dir, $content),
+#                              \$configuration{CONTENTS}{$content_id}{FILTERS})) {
+#           exit 1;
+#       }
+#       if (!directory_remove($temp_dir)) {
+#           exit 1;
+#       }
 #    } else {
-#	debug("Destination file is not obsolete, skipping filtering");
+#       debug("Destination file is not obsolete, skipping filtering");
 #    }
 #
 #    # Fill-in in order to use later in page processing phase
@@ -462,8 +462,8 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
 
     $source_name = $configuration{CONTENTS}{$content_id}{SOURCE};
     if (!file_ispresent($source_name)) {
-	error("Missing input file \`" . $source_name . "'");
-	exit 1;
+        error("Missing input file \`" . $source_name . "'");
+        exit 1;
     }
     debug("Content source name = " . $source_name);
 
@@ -531,9 +531,9 @@ for my $content_id (keys(%{$configuration{CONTENTS}})) {
 assert(defined($FCP));
 if ($FCP eq "") {
     error("The fcp executable was not available in your system when "   .
-	  $PACKAGE_NAME . " has been configured");
+          $PACKAGE_NAME . " has been configured");
     error("In order to use the requested functionality please install " .
-	  "fcp and re-install " . $PACKAGE_NAME);
+          "fcp and re-install " . $PACKAGE_NAME);
     exit 1;
 }
 my $command;
@@ -582,37 +582,37 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
 
     my $file_handle;
     if (!open($file_handle, ">", $destination)) {
-	error("Cannot open file \`" . $destination . "' for writing");
-	exit 1;
+        error("Cannot open file \`" . $destination . "' for writing");
+        exit 1;
     }
 
     # Output all user defined variables (page local)
     for my $var (keys(%{$configuration{PAGES}{$page_id}{VARS}})) {
-	my $name  = $var;
-	my $value = $configuration{PAGES}{$page_id}{VARS}{$var};
+        my $name  = $var;
+        my $value = $configuration{PAGES}{$page_id}{VARS}{$var};
 
-	print $file_handle
-	    "(define as_page_variable_$name \"$value\")\n";
+        print $file_handle
+            "(define as_page_variable_$name \"$value\")\n";
     }
 
     # Output all user defined variables (site global). Note the scope !!!
     for my $var (keys(%{$configuration{VARS}})) {
-	if (defined($configuration{PAGES}{$page_id}{VARS}{$var})) {
-	    debug("Skipping global variable, page redefined value !");
-	    next;
-	}
-	my $name  = $var;
-	my $value = $configuration{VARS}{$var};
+        if (defined($configuration{PAGES}{$page_id}{VARS}{$var})) {
+            debug("Skipping global variable, page redefined value !");
+            next;
+        }
+        my $name  = $var;
+        my $value = $configuration{VARS}{$var};
 
-	print $file_handle
-	    "(define as_page_variable_$name \"$value\")\n";
+        print $file_handle
+            "(define as_page_variable_$name \"$value\")\n";
     }
 
     # Output all system defined variables
     print $file_handle
-	"(define as_site_variable_PROGRAMNAME    \"$PACKAGE_NAME\")\n";
+        "(define as_site_variable_PROGRAMNAME    \"$PACKAGE_NAME\")\n";
     print $file_handle
-	"(define as_site_variable_PROGRAMVERSION \"$PACKAGE_VERSION\")\n";
+        "(define as_site_variable_PROGRAMVERSION \"$PACKAGE_VERSION\")\n";
 
     close($file_handle);
 
@@ -622,28 +622,28 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     debug("Building page contents");
     for my $key (keys(%{$configuration{PAGES}{$page_id}{CONTENTS}})) {
 
-	my $content_id = $configuration{PAGES}{$page_id}{CONTENTS}{$key};
-	my $content    = variable_canonicalize($content_id);
-	assert(defined($content));
+        my $content_id = $configuration{PAGES}{$page_id}{CONTENTS}{$key};
+        my $content    = variable_canonicalize($content_id);
+        assert(defined($content));
 
-	debug("Content is "             .
-	      "\`" . $content_id . "' " .
-	      "(canonicalized as "      .
-	      "\`" . $content . "')");
+        debug("Content is "             .
+              "\`" . $content_id . "' " .
+              "(canonicalized as "      .
+              "\`" . $content . "')");
 
-	$source = $configuration{CONTENTS}{$content_id}{DESTINATION};
-	if (!defined($source)) {
-	    error("Page \`" . $page_id . "' refers to an undefined " .
-		  "content \`" . $content_id . "'");
-	    exit 1;
-	}
+        $source = $configuration{CONTENTS}{$content_id}{DESTINATION};
+        if (!defined($source)) {
+            error("Page \`" . $page_id . "' refers to an undefined " .
+                  "content \`" . $content_id . "'");
+            exit 1;
+        }
 
-	$destination = File::Spec->catfile($pages_dir,
-					   $page . "-content-$content.scm");
-	if (!sxml2scheme($source, "as_page_content_$key", $destination)) {
-	    file_remove($destination);
-	    exit 1;
-	}
+        $destination = File::Spec->catfile($pages_dir,
+                                           $page . "-content-$content.scm");
+        if (!sxml2scheme($source, "as_page_content_$key", $destination)) {
+            file_remove($destination);
+            exit 1;
+        }
     }
 
     #
@@ -652,15 +652,15 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     debug("Building page layout");
     $source      = $configuration{COMMON}{LAYOUT};
     if (!defined($source)) {
-	error("Missing layout file for page \`" . $page_id . "', " .
-	      "using \`" . $source . "'");
-	exit 1;
+        error("Missing layout file for page \`" . $page_id . "', " .
+              "using \`" . $source . "'");
+        exit 1;
     }
     $source      = filename_rel2abs($source);
     $destination = File::Spec->catfile($pages_dir, $page . "-layout.scm");
     if (!sxml2scheme($source, "as_page_layout", $destination)) {
-	file_remove($destination);
-	exit 1;
+        file_remove($destination);
+        exit 1;
     }
 
     #
@@ -669,34 +669,34 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     debug("Building scheme file");
     $destination = File::Spec->catfile($pages_dir, $page . "-all.scm");
     if (!file_remove($destination)) {
-	exit 1;
+        exit 1;
     }
     if (!file_touch($destination)) {
-	exit 1;
+        exit 1;
     }
 
     if (!file_cat(File::Spec->catfile($pages_dir, $page . "-vars.scm"),
-		  $destination)) {
-	file_remove($destination);
-	exit 1;
+                  $destination)) {
+        file_remove($destination);
+        exit 1;
     }
     for my $key (keys(%{$configuration{PAGES}{$page_id}{CONTENTS}})) {
 
-	my $content_id = $configuration{PAGES}{$page_id}{CONTENTS}{$key};
-	my $content    = variable_canonicalize($content_id);
-	assert(defined($content));
+        my $content_id = $configuration{PAGES}{$page_id}{CONTENTS}{$key};
+        my $content    = variable_canonicalize($content_id);
+        assert(defined($content));
 
-	if (!file_cat(File::Spec->catfile($pages_dir,
-					  $page . "-content-$content.scm"),
-		      $destination)) {
-	    file_remove($destination);
-	    exit 1;
-	}
+        if (!file_cat(File::Spec->catfile($pages_dir,
+                                          $page . "-content-$content.scm"),
+                      $destination)) {
+            file_remove($destination);
+            exit 1;
+        }
     }
     if (!file_cat(File::Spec->catfile($pages_dir, $page . "-layout.scm"),
-		  $destination)) {
-	file_remove($destination);
-	exit 1;
+                  $destination)) {
+        file_remove($destination);
+        exit 1;
     }
 
     debug("Building XML file");
@@ -704,8 +704,8 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     $destination = File::Spec->catfile($pages_dir, $page . "-all.xml");
 
     if (!scheme2xml($source, "as_page_layout", $destination)) {
-	file_remove($destination);
-	exit 1;
+        file_remove($destination);
+        exit 1;
     }
 
     #
@@ -713,17 +713,17 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
     #
     debug("Building HTML file");
     my $destination_dir = File::Spec->catfile($output_dir,
-					      $output_dirname);
+                                              $output_dirname);
     if (!directory_create($destination_dir)) {
-	exit 1;
+        exit 1;
     }
 
     $source      = $destination;
     $destination = File::Spec->catfile($destination_dir,
-				       $output_basename);
+                                       $output_basename);
     if (!xml2xhtml($source, $destination)) {
-	file_remove($destination);
-	exit 1;
+        file_remove($destination);
+        exit 1;
     }
 }
 

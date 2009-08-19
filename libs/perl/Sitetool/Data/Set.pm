@@ -86,7 +86,7 @@ sub find ($$)
     assert(defined($key));
 
     if (defined($self->{DATA}->{$key})) {
-	return $self->{DATA}->{$key};
+        return $self->{DATA}->{$key};
     }
 
     return undef;
@@ -101,7 +101,7 @@ sub foreach ($$)
     assert(defined($callback_ref));
 
     for my $key (keys(%{$self->{DATA}})) {
-	$callback_ref->($key);
+        $callback_ref->($key);
     }
 
     return 1;

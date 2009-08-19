@@ -64,14 +64,14 @@ BEGIN {
 #    $wd = cwd;
 #
 #    if (!directory_is_present($directory)) {
-#	error("Cannot open directory \`" . $directory . "'");
-#	return 0;
+#       error("Cannot open directory \`" . $directory . "'");
+#       return 0;
 #    }
 #
 #    debug($prefix . "Working on directory \`" . $directory . "'");
 #    if (!chdir($directory)) {
-#	error("Cannot change directory to \`" . $directory . "'");
-#	return 0;
+#       error("Cannot change directory to \`" . $directory . "'");
+#       return 0;
 #    }
 #
 #    my @items;
@@ -82,57 +82,57 @@ BEGIN {
 #
 #    my $i = 0;
 #    for my $item (sort(@items)) {
-#	debug($prefix . "Working on directory item \`" . $item . "'");
+#       debug($prefix . "Working on directory item \`" . $item . "'");
 #
-#	my $child;
-#	$child = Sitetool::Data::Tree->new("");
-#	assert(defined($child));
+#       my $child;
+#       $child = Sitetool::Data::Tree->new("");
+#       assert(defined($child));
 #
-#	$child->parent(\$tree);
-#	$child->data("href", $item);
+#       $child->parent(\$tree);
+#       $child->data("href", $item);
 #
-#	$tree->add_child($i, \$child);
-#	$i++;
+#       $tree->add_child($i, \$child);
+#       $i++;
 #
-#	if (directory_ispresent($item)) {
-#	    debug($prefix . "Item \`" . $item . "' is a directory");
+#       if (directory_ispresent($item)) {
+#           debug($prefix . "Item \`" . $item . "' is a directory");
 #
-#	    if (!&tree_create($child, $item, $exclusions_ref, $level)) {
-#		return 0;
-#	    }
+#           if (!&tree_create($child, $item, $exclusions_ref, $level)) {
+#               return 0;
+#           }
 #
-#	    if (!$child->rename("")) {
-#		bug("A tree node cannot be renamed");
-#	    }
+#           if (!$child->rename("")) {
+#               bug("A tree node cannot be renamed");
+#           }
 #
-#	    $child->data("type", "directory");
-#	    $child->data("href", $item);
-#	} elsif (file_ispresent($item)) {
-#	    debug($prefix . "Item \`" . $item . "' is a file");
+#           $child->data("type", "directory");
+#           $child->data("href", $item);
+#       } elsif (file_ispresent($item)) {
+#           debug($prefix . "Item \`" . $item . "' is a file");
 #
-#	    my $page_id;
-#	    if (!file_tostring($item, \$page_id)) {
-#		error("Cannot read page id from file \`" . $item . "'");
-#		return 0;
-#	    }
-#	    assert(defined($page_id));
+#           my $page_id;
+#           if (!file_tostring($item, \$page_id)) {
+#               error("Cannot read page id from file \`" . $item . "'");
+#               return 0;
+#           }
+#           assert(defined($page_id));
 #
-#	    if (!$child->rename($page_id)) {
-#		bug("A tree node cannot be renamed");
-#	    }
+#           if (!$child->rename($page_id)) {
+#               bug("A tree node cannot be renamed");
+#           }
 #
-#	    $child->data("type", "file");
-#	    $child->data("href", $item);
-#	} else {
-#	    error("Unknown item \`" . $item . "' type");
-#	    return 0;
-#	}
+#           $child->data("type", "file");
+#           $child->data("href", $item);
+#       } else {
+#           error("Unknown item \`" . $item . "' type");
+#           return 0;
+#       }
 #    }
 #
 #    debug($prefix . "Changing current directory back to \`" . $wd . "'");
 #    if (!chdir($wd)) {
-#	error("Cannot change directory to \`" . $wd . "'");
-#	return 0;
+#       error("Cannot change directory to \`" . $wd . "'");
+#       return 0;
 #    }
 #
 #    return 1;
@@ -167,8 +167,8 @@ BEGIN {
 #    $tree->data("type", "directory");
 #    $tree->data("href", ".");
 #    if (!tree_create($tree, $input_directory, \@exclusions, 0)) {
-#	error("Cannot create sitemap");
-#	return 0;
+#       error("Cannot create sitemap");
+#       return 0;
 #    }
 #
 #    #
@@ -177,8 +177,8 @@ BEGIN {
 #    debug("Writing output to file \`$output_file'");
 #    my $output_handle;
 #    if (!open($output_handle, ">", $output_file)) {
-#	error("Cannot open \`$output_file' for output");
-#	return 0;
+#       error("Cannot open \`$output_file' for output");
+#       return 0;
 #    }
 #    print $output_handle Data::Dumper->Dump([\$tree],[qw(tree_ref)]);
 #    close($output_handle);
@@ -200,9 +200,9 @@ sub sitemap_tree_check_helper ($)
     assert(defined($node));
 
     if (defined($sitemap_tree_check_helper_hash{$node->id()})) {
-	$sitemap_tree_check_helper_hash{$node->id()}++;
+        $sitemap_tree_check_helper_hash{$node->id()}++;
     } else {
-	$sitemap_tree_check_helper_hash{$node->id()} = 1;
+        $sitemap_tree_check_helper_hash{$node->id()} = 1;
     }
 }
 
@@ -220,13 +220,13 @@ sub sitemap_tree_check ($)
     $tree->foreach(\&sitemap_tree_check_helper);
 
     for my $key (keys(%sitemap_tree_check_helper_hash)) {
-	my $count;
+        my $count;
 
-	$count = $sitemap_tree_check_helper_hash{$key};
-	if ($count != 1) {
-	    error("Wrong data for page \`" . $key . "' (" . $count ." count)");
-	    return 0;
-	}
+        $count = $sitemap_tree_check_helper_hash{$key};
+        if ($count != 1) {
+            error("Wrong data for page \`" . $key . "' (" . $count ." count)");
+            return 0;
+        }
     }
 
     return 1;
@@ -244,17 +244,17 @@ sub sitemap_create_check ($)
 
     # Check map cross-linking
     for my $page_id (keys(%{$configuration{MAP}})) {
-	assert(defined($page_id));
+        assert(defined($page_id));
 
-	if ($page_id eq "") {
-	    error("A page id is empty ...");
-	    return 0;
-	}
+        if ($page_id eq "") {
+            error("A page id is empty ...");
+            return 0;
+        }
 
-	if (!defined($configuration{PAGES}{$page_id}{DESTINATION})) {
-	    error("Page \`" . $page_id . "' is defined only in the map");
-	    return 0;
-	}
+        if (!defined($configuration{PAGES}{$page_id}{DESTINATION})) {
+            error("Page \`" . $page_id . "' is defined only in the map");
+            return 0;
+        }
     }
 
     return 1;
@@ -271,10 +271,10 @@ sub sitemap_create_prepare ($)
 
     # Check map consistency
     for my $page_id (keys(%{$configuration{MAP}})) {
-	assert(defined($page_id));
-	assert($page_id ne "");
+        assert(defined($page_id));
+        assert($page_id ne "");
 
-	$configuration{MAP}{$page_id}{LINKED} = 0;
+        $configuration{MAP}{$page_id}{LINKED} = 0;
     }
 
     return 1;
@@ -290,9 +290,9 @@ sub sitemap_create_cleanup ($)
     %configuration = %{ $configuration_ref };
 
     for my $page_id (keys(%{$configuration{MAP}})) {
-	assert(defined($page_id));
+        assert(defined($page_id));
 
-	delete($configuration{MAP}{$page_id}{LINKED});
+        delete($configuration{MAP}{$page_id}{LINKED});
     }
 
     return 1;
@@ -322,8 +322,8 @@ sub sitemap_create_helper ($$)
     debug("Creating root node");
     $tree = Sitetool::Data::Tree->new("");
     if (!defined($tree)) {
-	error("Cannot create root for tree");
-	return 0;
+        error("Cannot create root for tree");
+        return 0;
     }
     $tree->parent(undef);
     $tree->data("href",  ".");
@@ -332,39 +332,39 @@ sub sitemap_create_helper ($$)
     # Link all orphaned children to the root
     debug("Linking orphaned pages");
     for my $page_id (keys(%{$configuration{MAP}})) {
-	if (defined($configuration{MAP}{$page_id}{PARENT})) {
+        if (defined($configuration{MAP}{$page_id}{PARENT})) {
             # This node has a parent, skip it!
-	    next;
-	}
+            next;
+        }
 
-	warning("Page \`" . $page_id . "' is orphaned, " .
+        warning("Page \`" . $page_id . "' is orphaned, " .
                 "it is going to be adopted by the root page");
 
-	my $node;
-	$node = Sitetool::Data::Tree->new($page_id);
-	if (!defined($node)) {
-	    error("Cannot create tree node for page \`" . $page_id . "'");
-	    return 0;
-	}
+        my $node;
+        $node = Sitetool::Data::Tree->new($page_id);
+        if (!defined($node)) {
+            error("Cannot create tree node for page \`" . $page_id . "'");
+            return 0;
+        }
 
-	if (!defined($configuration{PAGES}{$page_id})) {
-	    error("Page \`" . $page_id . "' " .
-		  "is defined inside the sitemap but not as a page");
-	    return 0;
-	}
+        if (!defined($configuration{PAGES}{$page_id})) {
+            error("Page \`" . $page_id . "' " .
+                  "is defined inside the sitemap but not as a page");
+            return 0;
+        }
 
-	$node->parent(\$tree);
+        $node->parent(\$tree);
 
-	my @children = $tree->children();
-	if (!$tree->add_child($#children + 1, \$node)) {
-	    assert(defined($tree->id()));
-	    error("Cannot add child node to page " .
-		  "\`" . $tree->id() . "'");
-	    return 0;
-	}
+        my @children = $tree->children();
+        if (!$tree->add_child($#children + 1, \$node)) {
+            assert(defined($tree->id()));
+            error("Cannot add child node to page " .
+                  "\`" . $tree->id() . "'");
+            return 0;
+        }
 
-	$configuration{MAP}{$page_id}{LINKED} = 1;
-	debug("Page \`" . $page_id . "' has been linked to the root")
+        $configuration{MAP}{$page_id}{LINKED} = 1;
+        debug("Page \`" . $page_id . "' has been linked to the root")
     }
 
     # Link all remaining pages together
@@ -471,28 +471,28 @@ sub sitemap_create_helper ($$)
     debug("Filling node infos");
     for my $page_id (keys(%{$configuration{MAP}})) {
 
-	my $node_ref;
-	$node_ref = $tree->find($page_id);
-	assert(defined($node_ref));
+        my $node_ref;
+        $node_ref = $tree->find($page_id);
+        assert(defined($node_ref));
 
-	my $node;
-	$node = ${$node_ref};
+        my $node;
+        $node = ${$node_ref};
 
-	my $href = $configuration{PAGES}{$page_id}{DESTINATION};
-	assert(defined($href));
-	my $title = $configuration{PAGES}{$page_id}{VARS}{TITLE};
-	assert(defined($title));
+        my $href = $configuration{PAGES}{$page_id}{DESTINATION};
+        assert(defined($href));
+        my $title = $configuration{PAGES}{$page_id}{VARS}{TITLE};
+        assert(defined($title));
 
-	$node->data("href",  $href);
-	$node->data("title", $title);
+        $node->data("href",  $href);
+        $node->data("title", $title);
     }
     debug("All nodes filled with proper infos");
 
     $tree->pack();
 
     if (!sitemap_tree_check(\$tree)) {
-	error("Bad sitemap");
-	return 0;
+        error("Bad sitemap");
+        return 0;
     }
 
     #
@@ -507,7 +507,7 @@ sub sitemap_create_helper ($$)
     # Write output to file
     #
     if (!string_tofile($string, $output_file)) {
-	return 0;
+        return 0;
     }
 
     return 1;
@@ -529,10 +529,10 @@ sub sitemap_create ($$)
     #
 
     if (!sitemap_create_check($configuration_ref)) {
-	return 0;
+        return 0;
     }
     if (!sitemap_create_prepare($configuration_ref)) {
-	return 0;
+        return 0;
     }
 
     my $retval;
@@ -541,7 +541,7 @@ sub sitemap_create ($$)
     $retval = sitemap_create_helper($configuration_ref, $output_file);
 
     if (!sitemap_create_cleanup($configuration_ref)) {
-	return 0;
+        return 0;
     }
 
     return ($retval ? 1 : 0);

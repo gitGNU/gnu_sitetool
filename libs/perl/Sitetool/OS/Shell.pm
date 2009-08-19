@@ -58,17 +58,17 @@ sub shell_execute ($)
     $exit_val = $?;
 
     if ($exit_val == -1) {
-	error("Failed to execute \`$string'");
-	return 0;
+        error("Failed to execute \`$string'");
+        return 0;
     } elsif ($exit_val & 127) {
-	error("Child died ?");
-	return 0;
+        error("Child died ?");
+        return 0;
     } else {
-	my $ret_val = $exit_val >> 8;
+        my $ret_val = $exit_val >> 8;
 
-	debug("Shell execution return value is $ret_val");
+        debug("Shell execution return value is $ret_val");
 
-	return ($ret_val ? 0 : 1);
+        return ($ret_val ? 0 : 1);
     }
 
     bug("Unreachable part ...");
@@ -97,15 +97,15 @@ sub shell_execute_and_report ($)
     $exit_val = $?;
 
     if ($exit_val == -1) {
-	error("Failed to execute \`$string'");
-	$retval = $exit_val;
+        error("Failed to execute \`$string'");
+        $retval = $exit_val;
     } elsif ($exit_val & 127) {
-	error("Child died ?");
-	$retval = $exit_val & 127;
+        error("Child died ?");
+        $retval = $exit_val & 127;
     } else {
-	$retval = $exit_val >> 8;
+        $retval = $exit_val >> 8;
 
-	debug("Shell execution return value is $retval");
+        debug("Shell execution return value is $retval");
     }
 
     return $retval;

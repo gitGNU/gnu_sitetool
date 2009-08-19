@@ -38,9 +38,9 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&filename_rel2abs
-		 &filename_canonicalize
-		 &filename_extension
-		 &filename_mktemp);
+                 &filename_canonicalize
+                 &filename_extension
+                 &filename_mktemp);
 }
 
 sub filename_mktemp ()

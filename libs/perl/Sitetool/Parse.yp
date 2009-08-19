@@ -34,11 +34,11 @@
     use Sitetool::OS::Filename;
 
     BEGIN {
-	use Exporter ();
-	our ($VERSION, @ISA, @EXPORT);
+        use Exporter ();
+        our ($VERSION, @ISA, @EXPORT);
 
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(&parse);
+        @ISA    = qw(Exporter);
+        @EXPORT = qw(&parse);
     }
 
     my $parsed_string   = "";
@@ -73,11 +73,11 @@ main_group: SYMBOL '=' '{' {
     $_[1] =~ y/[a-z]/[A-Z]/;
 
     $parsed_string .= $indentation .
-	"\'"         .
-	$_[1]        .
-	"\' => "     .
-	$o_curly     .
-	"\n";
+        "\'"         .
+        $_[1]        .
+        "\' => "     .
+        $o_curly     .
+        "\n";
 
     $indentation .= "\t";
 
@@ -99,21 +99,21 @@ main_group_item: sub_variable | sub_group | sub_indexed
 sub_variable: SYMBOL '=' QUOTEDSTRING ';' {
 
     if ($container_start == 1) {
-	$container_start = 0;
-	$container_type  = 'GROUP';
+        $container_start = 0;
+        $container_type  = 'GROUP';
 
-	$parsed_string .= $o_curly . "\n";
+        $parsed_string .= $o_curly . "\n";
     }
 
     $_[1] =~ y/[a-z]/[A-Z]/;
     $_[1] =~ s/^VAR\-//;
 
     $parsed_string .= $indentation .
-	"\'"         .
-	$_[1]        .
-	"\' => \""   .
-	$_[3]        .
-	"\",\n";
+        "\'"         .
+        $_[1]        .
+        "\' => \""   .
+        $_[3]        .
+        "\",\n";
 
 }
 ;
@@ -130,11 +130,11 @@ sub_group: SYMBOL '=' '{' sub_group_id sub_group_items '}' ';' {
 sub_group_id: 'id' '=' QUOTEDSTRING ';' {
 
     $parsed_string .= $indentation .
-	"\'"         .
-	$_[3]        .
-	"\' => "     .
-	$o_curly     .
-	"\n";
+        "\'"         .
+        $_[3]        .
+        "\' => "     .
+        $o_curly     .
+        "\n";
 
     $indentation .= "\t";
 
@@ -161,9 +161,9 @@ sub_container: SYMBOL '=' '{' {
     $indentation =~ s/.//;
 
     if ($container_type eq 'GROUP') {
-	$parsed_string .= $indentation . $c_curly . ",\n";
+        $parsed_string .= $indentation . $c_curly . ",\n";
     } else {
-	$parsed_string .= $indentation . "],\n";
+        $parsed_string .= $indentation . "],\n";
     }
 
 }
@@ -178,10 +178,10 @@ sub_indexed_items: sub_indexed_item | sub_indexed_item sub_indexed_items
 sub_indexed_item: SYMBOL '[' DECIMAL ']' '=' '{' {
 
     if ($container_start == 1) {
-	$container_start = 0;
-	$container_type  = 'INDEXED';
+        $container_start = 0;
+        $container_type  = 'INDEXED';
 
-	$parsed_string .= "[\n";
+        $parsed_string .= "[\n";
 
     }
     $parsed_string .= $indentation . $o_curly . "\n";
@@ -207,103 +207,103 @@ sub lexer_callback
     assert(defined($parser->YYData->{INPUT}));
 
     while (length($parser->YYData->{INPUT}) >= 0) {
-	debug("Parsing " . $file_name . ":" . $line_number . " "  .
-	      "(" . length($parser->YYData->{INPUT}) . " to go)");
+        debug("Parsing " . $file_name . ":" . $line_number . " "  .
+              "(" . length($parser->YYData->{INPUT}) . " to go)");
 
-	# Remove leading whitespaces
-	$parser->YYData->{INPUT} =~ s/^[ \t]+//;
+        # Remove leading whitespaces
+        $parser->YYData->{INPUT} =~ s/^[ \t]+//;
 
-	if ($parser->YYData->{INPUT} =~ s/^\n//) {
+        if ($parser->YYData->{INPUT} =~ s/^\n//) {
 
-	    debug("Eating newline");
-	    $line_number++;
+            debug("Eating newline");
+            $line_number++;
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^\/\/.*\n//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^\/\/.*\n//) {
 
-	    debug("Eating comment and newline");
-	    $line_number++;
+            debug("Eating comment and newline");
+            $line_number++;
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^id[ \t]*//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^id[ \t]*//) {
 
-	    debug("Got id");
+            debug("Got id");
 
-	    return ("id", "id");
+            return ("id", "id");
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^autogen[ \t]*//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^autogen[ \t]*//) {
 
-	    debug("Got autogen keyword");
+            debug("Got autogen keyword");
 
-	    return ("AUTOGEN", undef);
+            return ("AUTOGEN", undef);
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^definitions[ \t]*//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^definitions[ \t]*//) {
 
-	    debug("Got definitions keyword");
+            debug("Got definitions keyword");
 
-	    return ("DEFINITIONS", undef);
+            return ("DEFINITIONS", undef);
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^\#[ \t]*line[ \t]+([0-9]+)[ \t]*//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^\#[ \t]*line[ \t]+([0-9]+)[ \t]*//) {
 
-	    debug("Got line \`" . $1 . "' directive");
-	    $line_number = $1;
+            debug("Got line \`" . $1 . "' directive");
+            $line_number = $1;
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^\#[ \t]*file[ \t]+\"(.*)"[ \t]*//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^\#[ \t]*file[ \t]+\"(.*)"[ \t]*//) {
 
-	    debug("Got file \`" . $1 . "' directive");
-	    $file_name = $1;
+            debug("Got file \`" . $1 . "' directive");
+            $file_name = $1;
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^([a-zA-Z_][a-zA-Z0-9_\-]*)[ \t]*//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^([a-zA-Z_][a-zA-Z0-9_\-]*)[ \t]*//) {
 
-	    debug("Got symbol \`" . $1 . "'");
+            debug("Got symbol \`" . $1 . "'");
 
-	    return ("SYMBOL", $1);
+            return ("SYMBOL", $1);
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^([0-9]+)[ \t]*//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^([0-9]+)[ \t]*//) {
 
-	    debug("Got decimal");
+            debug("Got decimal");
 
-	    return ("DECIMAL", $1);
+            return ("DECIMAL", $1);
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^\"(.*)\"[ \t]*//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^\"(.*)\"[ \t]*//) {
 
-	    debug("Got quoted string \`" . $1 . "'");
+            debug("Got quoted string \`" . $1 . "'");
 
-	    return ("QUOTEDSTRING", $1);
+            return ("QUOTEDSTRING", $1);
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^([\{\}\[\]\;\=])[ \t]*//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^([\{\}\[\]\;\=])[ \t]*//) {
 
-	    debug("Got punctuation \`" . $1 . "'");
+            debug("Got punctuation \`" . $1 . "'");
 
-	    return ($1, $1);
+            return ($1, $1);
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^(.)//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^(.)//) {
 
-	    debug("Got character \`" . $1 . "'");
+            debug("Got character \`" . $1 . "'");
 
-	    return ($1, $1);
+            return ($1, $1);
 
-	} elsif ($parser->YYData->{INPUT} =~
-		 s/^$//) {
+        } elsif ($parser->YYData->{INPUT} =~
+                 s/^$//) {
 
-	    debug("Got END-OF-FILE");
+            debug("Got END-OF-FILE");
 
-	    return ('', undef);
+            return ('', undef);
 
-	} else {
-	    bug("Undefined lexer input `" .
-		substr($parser->YYData->{INPUT}, 0, 1)     .
-		"\'");
-	}
+        } else {
+            bug("Undefined lexer input `" .
+                substr($parser->YYData->{INPUT}, 0, 1)     .
+                "\'");
+        }
     }
 
     bug("Unreachable code");
@@ -344,13 +344,13 @@ sub parse ($$)
     debug("Parsing file \`" . $input_filename . "'");
 
     if (!file_ispresent($input_filename)) {
-	error("Input file \`" . $input_filename . "' is missing");
-	return 0;
+        error("Input file \`" . $input_filename . "' is missing");
+        return 0;
     }
 
     my $string = "";
     if (!file_tostring($input_filename, \$string)) {
-	return 0;
+        return 0;
     }
 
     # Setup useful variables used later on
@@ -369,12 +369,12 @@ sub parse ($$)
 
     my $result;
     $result = $parser->YYParse(yylex   => \&lexer_callback,
-			       yyerror => \&error_callback,
-			       yydebug => $debug_level);
+                               yyerror => \&error_callback,
+                               yydebug => $debug_level);
 
     if ($parser->YYNberr() > 0) {
-	error("Cannot parse input file \`" . $input_filename . "'");
-	return 0;
+        error("Cannot parse input file \`" . $input_filename . "'");
+        return 0;
     }
 
     debug("Parsing completed successfully");

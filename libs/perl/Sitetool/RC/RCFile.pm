@@ -60,31 +60,31 @@ sub iscorrect ($)
 
     my $found_host = 0;
     for my $host (keys(%{$self->{HOSTS}})) {
-	$found_host = 1;
+        $found_host = 1;
 
-	my $found_login = 0;
-	for my $login (keys(%{$self->{HOSTS}->{$host}->{LOGIN}})) {
+        my $found_login = 0;
+        for my $login (keys(%{$self->{HOSTS}->{$host}->{LOGIN}})) {
 
-	    $found_login = 1;
-	    if (!defined(($self->{HOSTS}->{$host}->{LOGIN}->{$login}))) {
-		warning("Host "              .
-			"\`" . $host . "', " .
-			"login "             .
-			"\`" . $login . "' " .
-			"is without a password");
-		return 1;
-	    }
-	}
+            $found_login = 1;
+            if (!defined(($self->{HOSTS}->{$host}->{LOGIN}->{$login}))) {
+                warning("Host "              .
+                        "\`" . $host . "', " .
+                        "login "             .
+                        "\`" . $login . "' " .
+                        "is without a password");
+                return 1;
+            }
+        }
 
-	if (!$found_login) {
-	    warning("Host \`" . $host . "' is without a login");
-	    return 1;
-	}
+        if (!$found_login) {
+            warning("Host \`" . $host . "' is without a login");
+            return 1;
+        }
     }
 
     if (!$found_host) {
-	warning("No hosts defined");
-	return 1;
+        warning("No hosts defined");
+        return 1;
     }
 
     return 1;
@@ -104,15 +104,15 @@ sub load ($)
     assert(defined($filename));
 
     if (!file_ispresent($filename)) {
-	error("File \`" . $filename . "' is not present");
-	return 0;
+        error("File \`" . $filename . "' is not present");
+        return 0;
     }
 
     my $filehandle;
 
     if (!open($filehandle, "<", $filename)) {
-	error("Cannot open \`$filename' for input");
-	return 0;
+        error("Cannot open \`$filename' for input");
+        return 0;
     }
 
     my $string;
@@ -130,93 +130,93 @@ sub load ($)
 
     debug("Parsing file \`" . $filename . "'");
     while (<$filehandle>) {
-	$string = $_;
-	if ($string =~ /^[ \t]*\#.*$/) {
-	    # Skip comments
-	} elsif ($string =~ /^[ \t]*$/) {
-	    # Skip empty lines
-	} elsif ($string =~ /^[ \t]*host[ \t]+(.*)$/) {
+        $string = $_;
+        if ($string =~ /^[ \t]*\#.*$/) {
+            # Skip comments
+        } elsif ($string =~ /^[ \t]*$/) {
+            # Skip empty lines
+        } elsif ($string =~ /^[ \t]*host[ \t]+(.*)$/) {
 
-	    $host     = $1;
-	    $login    = undef;
-	    $password = undef;
+            $host     = $1;
+            $login    = undef;
+            $password = undef;
 
-	    debug("Got $1");
+            debug("Got $1");
 
-	    assert(defined($host));
-	    debug("Got host keyword at line " . $lineno . ", " .
-		  "host = \`" . $host . "'");
+            assert(defined($host));
+            debug("Got host keyword at line " . $lineno . ", " .
+                  "host = \`" . $host . "'");
 
-	    $self->{HOSTS}->{$host} = { };
+            $self->{HOSTS}->{$host} = { };
 
-	    $nodes++;
+            $nodes++;
 
-	} elsif ($string =~ /^[ \t]*login[ \t]+(.*)$/) {
+        } elsif ($string =~ /^[ \t]*login[ \t]+(.*)$/) {
 
-	    debug("Got $1");
+            debug("Got $1");
 
-	    $login    = $1;
-	    $password = undef;
+            $login    = $1;
+            $password = undef;
 
-	    assert(defined($login));
-	    debug("Got login keyword at line " . $lineno . ", " .
-		  "login = \`" . $login . "'");
+            assert(defined($login));
+            debug("Got login keyword at line " . $lineno . ", " .
+                  "login = \`" . $login . "'");
 
-	    if (!defined($host)) {
-		error("Wrong formatted input file \`" . $filename . "'");
-		return 0;
-	    }
+            if (!defined($host)) {
+                error("Wrong formatted input file \`" . $filename . "'");
+                return 0;
+            }
 
-	    #if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
-	    #	error("Login \`" . $login . "' already defined");
-	    #	return 0;
-	    #}
-	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = undef;
+            #if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
+            #   error("Login \`" . $login . "' already defined");
+            #   return 0;
+            #}
+            $self->{HOSTS}->{$host}->{LOGIN}->{$login} = undef;
 
-	    $nodes++;
+            $nodes++;
 
-	} elsif ($string =~ /^[ \t]*password[ \t]+(.*)$/) {
+        } elsif ($string =~ /^[ \t]*password[ \t]+(.*)$/) {
 
-	    debug("Got $1");
+            debug("Got $1");
 
-	    $password = $1;
+            $password = $1;
 
-	    assert(defined($password));
-	    debug("Got password keyword at line " . $lineno . ", " .
-		  "password = \`" . $password . "'");
+            assert(defined($password));
+            debug("Got password keyword at line " . $lineno . ", " .
+                  "password = \`" . $password . "'");
 
-	    if (!defined($host)) {
-		error("Wrong formatted input file \`" . $filename . "'");
-		return 0;
-	    }
-	    if (!defined($login)) {
-		error("Wrong formatted input file \`" . $filename . "'");
-		return 0;
-	    }
+            if (!defined($host)) {
+                error("Wrong formatted input file \`" . $filename . "'");
+                return 0;
+            }
+            if (!defined($login)) {
+                error("Wrong formatted input file \`" . $filename . "'");
+                return 0;
+            }
 
-	    #if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
-	    #	error("Login \`" . $login . "' already defined");
-	    #	return 0;
-	    #}
-	    $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
+            #if (defined($self->{HOSTS}->{$host}->{LOGIN}->{$login})) {
+            #   error("Login \`" . $login . "' already defined");
+            #   return 0;
+            #}
+            $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
 
-	    $nodes++;
+            $nodes++;
 
-	} else {
-	    error("Unknown input line " . $lineno . " in file " .
-		  "\`" . $filename . "'");
-	    return 0;
-	}
+        } else {
+            error("Unknown input line " . $lineno . " in file " .
+                  "\`" . $filename . "'");
+            return 0;
+        }
 
-	$lineno++;
+        $lineno++;
     }
     debug("Parsing of \`" . $filename . "' complete");
 
     close($filehandle);
 
     if (!$self->iscorrect()) {
-	error("File \`" . $filename . "' has an incorrect format");
-	return 0;
+        error("File \`" . $filename . "' has an incorrect format");
+        return 0;
     }
 
     debug("Loaded " . $nodes . " nodes");
@@ -233,8 +233,8 @@ sub save ($)
     debug("Saving RC file");
 
     if (!$self->iscorrect()) {
-	error("RC Data contains incorrect data");
-	return 0;
+        error("RC Data contains incorrect data");
+        return 0;
     }
 
     my $filename;
@@ -245,40 +245,40 @@ sub save ($)
     my $filehandle;
 
     if (!open($filehandle, ">", $filename)) {
-	error("Cannot open \`$filename' for input");
-	return 0;
+        error("Cannot open \`$filename' for input");
+        return 0;
     }
 
     my $nodes;
 
     $nodes = 0;
     for my $host (keys(%{$self->{HOSTS}})) {
-	debug("Saving host \`" . $host . "'");
+        debug("Saving host \`" . $host . "'");
 
-	print $filehandle "host     " . $host . "\n";
+        print $filehandle "host     " . $host . "\n";
 
-	$nodes++;
+        $nodes++;
 
-	for my $login (keys(%{$self->{HOSTS}->{$host}->{LOGIN}})) {
-	    debug("Saving login \`" . $login . "'");
+        for my $login (keys(%{$self->{HOSTS}->{$host}->{LOGIN}})) {
+            debug("Saving login \`" . $login . "'");
 
-	    print $filehandle "login    " . $login . "\n";
+            print $filehandle "login    " . $login . "\n";
 
-	    $nodes++;
+            $nodes++;
 
-	    my $password;
+            my $password;
 
-	    $password = $self->{HOSTS}->{$host}->{LOGIN}->{$login};
-	    if (defined($password)) {
-		debug("Saving password \`" . $password . "'");
+            $password = $self->{HOSTS}->{$host}->{LOGIN}->{$login};
+            if (defined($password)) {
+                debug("Saving password \`" . $password . "'");
 
-		print $filehandle "password " . $password . "\n";
+                print $filehandle "password " . $password . "\n";
 
-		$nodes++;
-	    }
-	}
+                $nodes++;
+            }
+        }
 
-	print $filehandle "\n";
+        print $filehandle "\n";
     }
     debug("Saved " . $nodes . " nodes");
 
@@ -300,24 +300,24 @@ sub add ($$$$)
     assert(defined($password));
 
     debug("Adding RC entry " .
-	  "(\`" . $host . "', \`" . $login . "', \`" . $password . "')");
+          "(\`" . $host . "', \`" . $login . "', \`" . $password . "')");
 
     if (!defined($self->{HOSTS})) {
-	$self->{HOSTS} = { };
-	debug("HOSTS created")
+        $self->{HOSTS} = { };
+        debug("HOSTS created")
     }
     if (!defined($self->{HOSTS}->{$host})) {
-	$self->{HOSTS}->{$host} = { };
-	debug("HOSTS \`" . $host . "' created")
+        $self->{HOSTS}->{$host} = { };
+        debug("HOSTS \`" . $host . "' created")
     }
     if (!defined($self->{HOSTS}->{$host}->{LOGIN})) {
-	$self->{HOSTS}->{$host}->{LOGIN} = { };
-	debug("HOSTS \`" . $host . "' LOGIN created")
+        $self->{HOSTS}->{$host}->{LOGIN} = { };
+        debug("HOSTS \`" . $host . "' LOGIN created")
     }
 
     $self->{HOSTS}->{$host}->{LOGIN}->{$login} = $password;
     debug("HOSTS \`" . $host . "' LOGIN \`" . $login . "' password created " .
-	  " with value \`" . $self->{HOSTS}->{$host}->{LOGIN}->{$login} . "'");
+          " with value \`" . $self->{HOSTS}->{$host}->{LOGIN}->{$login} . "'");
 
     return 1;
 }
@@ -333,7 +333,7 @@ sub remove ($$$)
     assert(defined($login));
 
     debug("Removing RC entry " .
-	  "(\`" . $host . "', \`" . $login . "')");
+          "(\`" . $host . "', \`" . $login . "')");
 
     delete $self->{HOSTS}->{$host}->{LOGIN}->{$login};
 
@@ -349,18 +349,18 @@ sub foreach ($$)
     assert(defined($callback));
 
     for my $host (keys(%{$self->{HOSTS}})) {
-	debug("Iterating over host \`" . $host . "'");
+        debug("Iterating over host \`" . $host . "'");
 
-	for my $login (keys(%{$self->{HOSTS}->{$host}->{LOGIN}})) {
-	    debug("Iterating over login \`" . $login . "'");
+        for my $login (keys(%{$self->{HOSTS}->{$host}->{LOGIN}})) {
+            debug("Iterating over login \`" . $login . "'");
 
-	    my $password;
-	    $password = $self->{HOSTS}->{$host}->{LOGIN}->{$login};
+            my $password;
+            $password = $self->{HOSTS}->{$host}->{LOGIN}->{$login};
 
-	    if (!$callback->($host, $login, $password)) {
-		return;
-	    }
-	}
+            if (!$callback->($host, $login, $password)) {
+                return;
+            }
+        }
     }
 }
 

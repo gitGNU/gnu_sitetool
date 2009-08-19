@@ -35,8 +35,8 @@ BEGIN {
 
     @ISA    = qw(Exporter);
     @EXPORT = qw(&version
-		 &hint
-		 &program_name_set);
+                 &hint
+                 &program_name_set);
 }
 
 sub program_name_set ($)
@@ -62,9 +62,9 @@ sub hint ($)
     my $string = shift;
 
     if (defined($string)) {
-	assert($string ne "");
+        assert($string ne "");
 
-	print $::PROGRAM_NAME . ": " . $string . "\n";
+        print $::PROGRAM_NAME . ": " . $string . "\n";
     }
     print "Try \`" . $::PROGRAM_NAME . " -h' for more information.\n";
 }

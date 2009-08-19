@@ -50,23 +50,23 @@ sub sxml2scheme ($$$)
     assert(defined($output_filename));
 
     debug("Transforming SXML "           .
-	  "\`" . $input_filename  . "' " .
-	  "to scheme "                   .
-	  "\`" . $output_filename . "' " .
-	  "(scheme variable "            .
-	  "\`" . $variable_name   . "'"  .
-	  ")");
+          "\`" . $input_filename  . "' " .
+          "to scheme "                   .
+          "\`" . $output_filename . "' " .
+          "(scheme variable "            .
+          "\`" . $variable_name   . "'"  .
+          ")");
 
     if (!file_ispresent($input_filename)) {
-	error("File \`" . $input_filename . "' is missing");
-	return 0;
+        error("File \`" . $input_filename . "' is missing");
+        return 0;
     }
 
     my $string;
 
     $string = "";
     if (!file_tostring($input_filename, \$string)) {
-	return 0;
+        return 0;
     }
 
     my $temp_string;
@@ -79,7 +79,7 @@ sub sxml2scheme ($$$)
     $temp_string = $temp_string . ")\n";
 
     if (!string_tofile($temp_string, $output_filename)) {
-	return 0;
+        return 0;
     }
 
     return 1;

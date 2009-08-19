@@ -71,7 +71,7 @@ sub id ($)
     assert(defined($self));
 
     if (defined($id)) {
-	$self->{ID} = $id;
+        $self->{ID} = $id;
     }
 
     return $self->{ID};
@@ -84,8 +84,8 @@ sub is_root ($)
     assert(defined($self));
 
     if (!defined($self->{PARENT})) {
-	debug("Node \`" . $self->{ID} . "' is a tree root");
-	return 1;
+        debug("Node \`" . $self->{ID} . "' is a tree root");
+        return 1;
     }
 
     debug("Node \`" . $self->{ID} . "' is not a tree root");
@@ -105,7 +105,7 @@ sub is_leaf ($)
     assert($count >= 0);
 
     if ($count == 0) {
-	return 1;
+        return 1;
     }
 
     return 0;
@@ -133,53 +133,53 @@ sub find ($$)
     assert(defined($id));
 
     debug("Finding node "           .
-	  "\`" . $id . "' "         .
-	  "into "                   .
-	  "\`" . $self->{ID} . "' " .
-	  "forest");
+          "\`" . $id . "' "         .
+          "into "                   .
+          "\`" . $self->{ID} . "' " .
+          "forest");
 
     if ($self->{ID} eq $id) {
-	debug("Got it in the current node");
-	return \$self;
+        debug("Got it in the current node");
+        return \$self;
     }
 
     debug("Children of node "              .
-	  "\`" . $self->{ID} . "' "        .
-	  "are "                           .
-	  "\`" . @{$self->{CHILDREN}} . "'");
+          "\`" . $self->{ID} . "' "        .
+          "are "                           .
+          "\`" . @{$self->{CHILDREN}} . "'");
 
     for my $child_ref (@{$self->{CHILDREN}}) {
-	debug("Child ref is \`" . $child_ref . "'");
+        debug("Child ref is \`" . $child_ref . "'");
 
-	assert(defined($child_ref));
-	assert(ref($child_ref) ne "");
+        assert(defined($child_ref));
+        assert(ref($child_ref) ne "");
 
-	my $child;
-	$child = ${$child_ref};
+        my $child;
+        $child = ${$child_ref};
 
-	debug("Working on "             .
-	      "\`" . $self->{ID} . "' " .
-	      "child "                  .
-	      "\`" . $child->{ID} . "'");
+        debug("Working on "             .
+              "\`" . $self->{ID} . "' " .
+              "child "                  .
+              "\`" . $child->{ID} . "'");
 
-	assert(defined($child));
+        assert(defined($child));
 
-	my $node_ref;
-	$node_ref = $child->find($id);
-	if (defined($node_ref)) {
-	    debug("Got the node matching id \`" . $id . "'");
+        my $node_ref;
+        $node_ref = $child->find($id);
+        if (defined($node_ref)) {
+            debug("Got the node matching id \`" . $id . "'");
 
-	    assert(${$node_ref}->{ID} eq $id);
+            assert(${$node_ref}->{ID} eq $id);
 
-	    return $node_ref;
-	}
+            return $node_ref;
+        }
     }
 
     debug("Node "                   .
-	  "\`" . $self->{ID} . "' " .
-	  "has no child "           .
-	  "\`" . $id . "' "         .
-	  "in its forest");
+          "\`" . $self->{ID} . "' " .
+          "has no child "           .
+          "\`" . $id . "' "         .
+          "in its forest");
 
     return undef;
 }
@@ -196,25 +196,25 @@ sub pack ($)
 
     debug("Self children is \`" . $self->{CHILDREN} . "'");
     for my $child_ref (@{$self->{CHILDREN}}) {
-	debug("Child ref is "                                  .
-	      "\`"                                             .
-	      (defined($child_ref) ? $child_ref : "undefined") .
-	      "'");
+        debug("Child ref is "                                  .
+              "\`"                                             .
+              (defined($child_ref) ? $child_ref : "undefined") .
+              "'");
 
-	if (ref($child_ref)) {
-	    debug("Packed children are now \`@tmp'");
-	    push(@tmp, $child_ref);
+        if (ref($child_ref)) {
+            debug("Packed children are now \`@tmp'");
+            push(@tmp, $child_ref);
 
-	    my $child;
-	    $child = ${$child_ref};
-	    if ($child->can('pack')) {
-		$child->pack();
-	    }
-	} elsif (!defined($child_ref)) {
-	    debug("Removing undefined child on node \`" . $self->{ID} . "'");
-	} else {
-	    bug("Wrong data structure");
-	}
+            my $child;
+            $child = ${$child_ref};
+            if ($child->can('pack')) {
+                $child->pack();
+            }
+        } elsif (!defined($child_ref)) {
+            debug("Removing undefined child on node \`" . $self->{ID} . "'");
+        } else {
+            bug("Wrong data structure");
+        }
     }
 
     @{$self->{CHILDREN}} = @tmp;
@@ -282,8 +282,8 @@ sub root ($$)
     debug("Looking for \`" . $self->{ID} . "' root");
 
     if ($self->is_root()) {
-	debug("Node \`" . $self->{ID} . "' is the root");
-	return \$self;
+        debug("Node \`" . $self->{ID} . "' is the root");
+        return \$self;
     }
 
     debug("Node \`" . $self->{ID} . "' is not root, going back to parent ...");
@@ -312,24 +312,24 @@ sub parent ()
     assert(defined($self));
 
     if (defined($parent)) {
-	debug("Passed parent is \`" . $parent . "'");
+        debug("Passed parent is \`" . $parent . "'");
 
-	assert(ref($parent) eq "REF");
-	assert(${$parent}->isa("Sitetool::Data::Tree"));
+        assert(ref($parent) eq "REF");
+        assert(${$parent}->isa("Sitetool::Data::Tree"));
 
-	$self->{PARENT} = $parent;
+        $self->{PARENT} = $parent;
 
-	debug("Parent for node "                   .
-	      "\`" . $self->{ID} . "' "            .
-	      "is node "                           .
-	      "\`" . ${$self->{PARENT}}->{ID} . "'");
+        debug("Parent for node "                   .
+              "\`" . $self->{ID} . "' "            .
+              "is node "                           .
+              "\`" . ${$self->{PARENT}}->{ID} . "'");
     }
 
     if (defined($self->{PARENT})) {
-	debug("Node "                    .
-	      "\`" . $self->{ID} . "' "  .
-	      "parent is "               .
-	      "\`" . $self->{PARENT}. "'");
+        debug("Node "                    .
+              "\`" . $self->{ID} . "' "  .
+              "parent is "               .
+              "\`" . $self->{PARENT}. "'");
     }
 
     return $self->{PARENT};
@@ -345,7 +345,7 @@ sub data ()
     assert(defined($key));
 
     if (defined($value)) {
-	$self->{DATA}->{$key} = $value;
+        $self->{DATA}->{$key} = $value;
     }
 
     return $self->{DATA}->{$key};
@@ -361,25 +361,25 @@ sub foreach ($$)
 
     # Call the callback for this node
     debug("Calling callback "         .
-	  "\`" . $callback_ref . "' " .
-	  "for node "                 .
-	  "\`" . $self->{ID}. "'");
+          "\`" . $callback_ref . "' " .
+          "for node "                 .
+          "\`" . $self->{ID}. "'");
     $callback_ref->(\$self);
 
     # And for all its children
     for my $child_ref (@{$self->{CHILDREN}}) {
-	if (ref($child_ref)) {
-	    assert(${$child_ref}->isa("Sitetool::Data::Tree"));
+        if (ref($child_ref)) {
+            assert(${$child_ref}->isa("Sitetool::Data::Tree"));
 
-	    my $child;
-	    $child = ${$child_ref};
+            my $child;
+            $child = ${$child_ref};
 
-	    $child->foreach($callback_ref);
-	} elsif (!defined($child_ref)) {
-	    debug("No child");
-	} else {
-	    bug("Unreacheable code");
-	}
+            $child->foreach($callback_ref);
+        } elsif (!defined($child_ref)) {
+            debug("No child");
+        } else {
+            bug("Unreacheable code");
+        }
     }
 }
 
@@ -392,17 +392,17 @@ sub relink ($$)
     debug("Relinking node \`" . $self->{ID} . "'");
 
     for my $child_ref (@{$self->{CHILDREN}}) {
-	if (ref($child_ref)) {
-	    assert(${$child_ref}->isa("Sitetool::Data::Tree"));
+        if (ref($child_ref)) {
+            assert(${$child_ref}->isa("Sitetool::Data::Tree"));
 
-	    my $child;
-	    $child = ${$child_ref};
+            my $child;
+            $child = ${$child_ref};
 
-	    $child->{PARENT} = \$self;
-	    if (!$child->relink()) {
-		return 0;
-	    }
-	}
+            $child->{PARENT} = \$self;
+            if (!$child->relink()) {
+                return 0;
+            }
+        }
     }
 
     return 1;
