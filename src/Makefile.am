@@ -178,6 +178,8 @@ update-local: Makefile
 maintainer-check-parameters: Makefile $(bin_SCRIPTS) $(pkgvbin_SCRIPTS)
 	for i in $(bin_SCRIPTS) $(pkgvbin_SCRIPTS) ; do \
 		echo @ECHO_N@ "Checking standard parameters for $$i... " ; \
+		SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
+		export SITETOOL_LIBRARY_PATH ;	\
 		if ( ./$$i -h 2>&1 > /dev/null ) ; then \
 			echo "@ECHO_T@ok" ; \
 		else \
@@ -186,5 +188,7 @@ maintainer-check-parameters: Makefile $(bin_SCRIPTS) $(pkgvbin_SCRIPTS)
 		fi ; \
 	done
 
-maintainer-check-local: Makefile maintainer-check-parameters
+maintainer-check-whitespaces: Makefile
 	$(WHITESPACE_DETECT) $(SITETOOL_PERL_SRCS)
+
+maintainer-check-local: Makefile maintainer-check-parameters maintainer-check-whitespaces
