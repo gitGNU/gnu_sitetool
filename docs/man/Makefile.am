@@ -32,8 +32,8 @@ EXTRA_DIST = $(man_aux)
 
 # SITETOOL_LIBRARY_PATH="$(top_builddir)/libs@PATH_SEPARATOR@$$PATH";
 sitetool.1: $(top_srcdir)/src/sitetool.in $(top_srcdir)/libs/perl/Sitetool/Base/Program.pm $(top_srcdir)/configure.ac
-	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs"; \
-	export SITETOOL_LIBRARY_PATH;	\
+	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
+	export SITETOOL_LIBRARY_PATH ;	\
 	$(HELP2MAN) \
 	    --include=$(srcdir)/sitetool.x \
 	    --source="@PACKAGE_NAME@" \
