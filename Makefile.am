@@ -45,12 +45,11 @@ AUTOMAKE_OPTIONS = check-news
 EXTRA_DIST =						\
 	TODO NEWS 					\
 	BUGS README COPYING AUTHORS INSTALL THANKS	\
-	bootstrap					\
+	bootstrap .bootstrap				\
 	configure.ac.in					\
 	guile.af					\
 	perl.af						\
-	.todo						\
-	.dnt.db
+	.todo .dnt.db
 
 ##
 ## Maintainer related targets
