@@ -20,7 +20,11 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-AC_INIT([Sitetool],[@VERSION@],[salvestrini@gmail.com],[sitetool])
+AC_INIT([Sitetool],
+        m4_esyscmd([tools/maint/git-version-gen .tarball-version]),
+        [salvestrini@gmail.com],
+        [sitetool],
+        [http://www.nongnu.org/sitetool])
 
 # Check for a recent version of autoconf
 AC_PREREQ([2.64])
