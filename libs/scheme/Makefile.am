@@ -51,7 +51,7 @@ EXTRA_DIST =					\
 ##
 update-local: Makefile
 
-maintainer-check-whitespaces: Makefile
+maintainer-check-whitespaces: Makefile $(schemelib_SRCS)
 	$(WHITESPACE_DETECT) $(schemelib_SRCS)
 
 maintainer-check-local: Makefile maintainer-check-whitespaces

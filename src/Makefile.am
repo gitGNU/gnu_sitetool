@@ -188,7 +188,7 @@ maintainer-check-parameters: Makefile $(bin_SCRIPTS) $(pkgvbin_SCRIPTS)
 		fi ; \
 	done
 
-maintainer-check-whitespaces: Makefile
+maintainer-check-whitespaces: Makefile $(SITETOOL_PERL_SRCS)
 	$(WHITESPACE_DETECT) $(SITETOOL_PERL_SRCS)
 
 maintainer-check-local: Makefile maintainer-check-parameters maintainer-check-whitespaces

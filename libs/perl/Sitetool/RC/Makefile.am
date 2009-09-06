@@ -31,7 +31,7 @@ dist_perllib_DATA =				\
 ##
 update-local: Makefile
 
-maintainer-check-whitespaces: Makefile
+maintainer-check-whitespaces: Makefile $(dist_perllib_DATA) $(nodist_perllib_DATA)
 	$(WHITESPACE_DETECT) $(dist_perllib_DATA) $(nodist_perllib_DATA)
 
 maintainer-check-local: Makefile maintainer-check-whitespaces
