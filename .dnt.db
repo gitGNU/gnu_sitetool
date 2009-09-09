@@ -83,6 +83,9 @@
     <entry priority="veryhigh" start="1231518501">
             Fix the scheme library building (and import)
         </entry>
+    <entry priority="veryhigh" start="1252443506">
+            Rearrange the build-related code (macros, makefiles, bootstrap, gnulib-use)
+        </entry>
     <entry priority="high" start="1232644268">
             Avoid having both lib.scm and xhtml.scm in libs/scheme directory (xhtml.scm is a module used in sxml processing and it is not required in lib.scm ... think about a clever solution)
         </entry>
