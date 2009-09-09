@@ -1,9 +1,0 @@
-KNOWN BUGS:
-
-* The parser doesn't accepts comments like:
-
-     /// This is a comment
-
-  while it accepts comment like:
-
-     // This is a comment
