@@ -27,7 +27,7 @@ URL_AA = "http://git.savannah.gnu.org/cgit/autoconf-archive.git/plain/m4"
 URL_BU = "http://github.com/salvestrini/build-utils/tree/master/m4"
 
 EXTERNAL =					\
-	$(URL_BB)/ax_split_version.m4		\
+	$(URL_BU)/ax_split_version.m4		\
 	$(URL_AA)/ax_compare_version.m4		\
 	$(URL_AA)/ax_missing_prog.m4		\
 	$(URL_AA)/ax_path_missing.m4		\
