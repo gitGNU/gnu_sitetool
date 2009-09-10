@@ -42,6 +42,7 @@ EXTERNAL =					\
 	$(URL_AA)/ax_with_ruby.m4
 
 INTERNAL =					\
+	gnulib-cache.m4				\
 	ax_with_fcp.m4				\
 	ax_prog_fcp_version.m4
 
