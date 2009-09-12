@@ -43,9 +43,8 @@ SITE_SRCS =					\
 EXTRADIST  = $(SITE_SRCS)
 CLEANFILES =
 
-news.dump: $(top_srcdir)/.dnt.db
-	$(DNT) --database=$(top_srcdir)/.dnt.db \
-	       --mono \
+news.dump: $(DNT_DB)
+	$(DNT) $(DNT_FLAGS) \
 	       show \
 	       --indent-fill="(ul " \
 	       --unindent-fill=")" \
@@ -68,9 +67,8 @@ news.sxml: news.dump
 	}
 CLEANFILES += news.sxml
 
-todos.dump: $(top_srcdir)/.dnt.db
-	$(DNT) --database=$(top_srcdir)/.dnt.db \
-	       --mono \
+todos.dump: $(DNT_DB)
+	$(DNT) $(DNT_FLAGS) \
 	       show \
 	       --indent-fill="(ul " \
 	       --unindent-fill=")" \
