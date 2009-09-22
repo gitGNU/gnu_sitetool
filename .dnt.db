@@ -126,6 +126,9 @@
 				</entry>
 			</entry>
 		</entry>
+		<entry priority="veryhigh" start="1253657508">
+			Fix the site-global variables substitution (it is hardwired at the moment)
+		</entry>
 	</entry>
 	<entry priority="high" start="1233736868">
 		Release 0.2.0
