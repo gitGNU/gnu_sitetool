@@ -33,21 +33,21 @@ SITE_SRCS =					\
 	index.scm				\
 	installation.scm			\
 	downloads.scm				\
-	development.scm			\
-	todos.sxml				\
-	news.sxml				\
-						\
-	grammar.scm				\
-						\
-	site.as.in
+	development.scm
 
-EXTRADIST  = $(SITE_SRCS)
+SITE_BUILT_SRCS =				\
+	site.as					\
+	news.sxml				\
+	todos.sxml				\
+	grammar.scm
+
+EXTRADIST  = $(SITE_SRCS) site.as.in
 CLEANFILES =
 
 site.as: $(srcdir)/site.as.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/site.as.in > $@.tmp && \
-	  chmod +x $@.tmp && \
+	  chmod -x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \
 		rm -f $@ $@.tmp ; \
@@ -115,8 +115,9 @@ grammar.scm: $(top_srcdir)/docs/grammar.txt Makefile
 	        rm -f grammar.scm ;                             \
 	        exit 1 ;                                        \
 	}
+CLEANFILES += grammar.scm
 
-site: $(SITE_SRCS) site.as
+site: $(SITE_SRCS) $(SITE_BUILT_SRCS)
 	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
 	export SITETOOL_LIBRARY_PATH ; \
 	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
@@ -128,8 +129,8 @@ site: $(SITE_SRCS) site.as
 	$$SITETOOL -v --mode build && \
 	$$SITETOOL -v --mode validate && \
 	touch site.stamp || { \
-		$$SITETOOL -v --mode clean ; \
-		rm -f site.stamp \
+		echo $$SITETOOL -v --mode clean ; \
+		echo rm -f site.stamp \
 		exit 1 ; \
 	}
 
