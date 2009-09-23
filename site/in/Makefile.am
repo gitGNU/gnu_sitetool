@@ -28,20 +28,32 @@ SITE_SRCS =					\
 	layout.sxml				\
 	map.as					\
 	pages.as				\
-	site.as					\
 	site.css				\
 						\
 	index.scm				\
 	installation.scm			\
 	downloads.scm				\
-	development.scm				\
+	development.scm			\
 	todos.sxml				\
 	news.sxml				\
 						\
-	grammar.scm
+	grammar.scm				\
+						\
+	site.as.in
 
 EXTRADIST  = $(SITE_SRCS)
 CLEANFILES =
+
+site.as: $(srcdir)/site.as.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/site.as.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+CLEANFILES += site.as
 
 news.dump: $(DNT_DB)
 	$(DNT) $(DNT_FLAGS) \
@@ -104,7 +116,7 @@ grammar.scm: $(top_srcdir)/docs/grammar.txt Makefile
 	        exit 1 ;                                        \
 	}
 
-site: $(SITE_SRCS)
+site: $(SITE_SRCS) site.as
 	SITETOOL_LIBRARY_PATH="$(top_builddir)/libs" ; \
 	export SITETOOL_LIBRARY_PATH ; \
 	SITETOOL_BINARY_PATH="$(top_builddir)/src" ; \
