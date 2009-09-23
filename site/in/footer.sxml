@@ -21,7 +21,7 @@
 
 (p
  (script
-  (@ (src  "http://www.ohloh.net/p/26030/widgets/project_partner_badge.js")
+  (@ (src  ,as_page_variable_OHLOH_BADGE_URL)
      (type "text/javascript")))
 
  (a (@ (href "http://jigsaw.w3.org/css-validator/check?uri=referer"))
@@ -32,7 +32,7 @@
           (src "http://www.w3.org/Icons/valid-xhtml10.png"))))
  "Powered by "
  (a (@ (href "http://www.nongnu.org/sitetool"))
-  ,as_site_variable_PROGRAMNAME)
+  "Sitetool")
  ", hosted at "
  (a (@ (href "http://savannah.nongnu.org/projects/sitetool"))
   "Savannah")
