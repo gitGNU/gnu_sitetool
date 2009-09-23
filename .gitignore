@@ -154,4 +154,5 @@ Makefile
 /site/in/news.sxml
 /site/in/news.dump
 /site/in/grammar.scm
+/site/in/site.as
 /site/out/*
