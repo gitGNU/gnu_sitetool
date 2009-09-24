@@ -1,7 +1,7 @@
 (h2 "INSTALLATION")
 
 (h3 "Prerequisites")
-(p "In order to install " ,as_site_variable_PROGRAMNAME " into your system "
+(p "In order to install the package into your system "
    "you will need:"
    (ul
     (li (a (@ (href "http://www.perl.org"))               "Perl"     ) )
@@ -14,8 +14,7 @@
 (p "The following notes do not override your system's package management "
    "software, please follow your system's guidelines to install the software.")
 
-(p ,as_site_variable_PROGRAMNAME " uses the "
-   "uses the "
+(p "The package uses the "
    (a (@ (href "http://en.wikipedia.org/wiki/Autotools")) autotools)
    " facilities, the simplest way to install the package in your system is:")
 
