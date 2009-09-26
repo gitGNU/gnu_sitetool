@@ -374,6 +374,10 @@ for my $file_id (keys(%{$configuration{FILES}})) {
 
     my $input           = $configuration{FILES}{$file_id}{SOURCE};
     my $output          = $configuration{FILES}{$file_id}{DESTINATION};
+
+    assert(defined($input));
+    assert(defined($output));
+
     my $output_dirname  = dirname($output);
     my $output_basename = basename($output);
     my $output_basedir  = File::Spec->catfile($output_dir, $output_dirname);
@@ -586,35 +590,37 @@ for my $page_id (keys(%{$configuration{PAGES}})) {
         exit 1;
     }
 
-    # Output all user defined variables (page local)
-    for my $var (keys(%{$configuration{PAGES}{$page_id}{VARS}})) {
-        my $name  = $var;
-        my $value = $configuration{PAGES}{$page_id}{VARS}{$var};
+    {
+        my %vars;
 
-        print $file_handle
-            "(define as_page_variable_$name \"$value\")\n";
-    }
+        # Accumulate all user defined variables (page local)
+        for my $var (keys(%{$configuration{PAGES}{$page_id}{VARS}})) {
+            my $name  = $var;
+            my $value = $configuration{PAGES}{$page_id}{VARS}{$var};
 
-    # Output all user defined variables (site global). Note the scope !!!
-    for my $var (keys(%{$configuration{VARS}})) {
-        if (defined($configuration{PAGES}{$page_id}{VARS}{$var})) {
-            debug("Skipping global variable, page redefined value !");
-            next;
+            $vars{$name} = $value;
         }
-        my $name  = $var;
-        my $value = $configuration{VARS}{$var};
 
-        print $file_handle
-            "(define as_page_variable_$name \"$value\")\n";
+        # Accumulate all user defined variables (site global)
+        for my $var (keys(%{$configuration{VARS}})) {
+            if (defined($configuration{PAGES}{$page_id}{VARS}{$var})) {
+                debug("Skipping global variable, page redefined value !");
+                next;
+            }
+            my $name  = $var;
+            my $value = $configuration{VARS}{$var};
+
+            $vars{$name} = $value;
+        }
+
+        # Output all the variables now
+        for my $var (keys(%vars)) {
+            print $file_handle
+                "(define " . $var . " \"" . $vars{$var} . "\")\n";
+        }
+
+        close($file_handle);
     }
-
-    # Output all system defined variables
-    print $file_handle
-        "(define as_site_variable_PROGRAMNAME    \"$PACKAGE_NAME\")\n";
-    print $file_handle
-        "(define as_site_variable_PROGRAMVERSION \"$PACKAGE_VERSION\")\n";
-
-    close($file_handle);
 
     #
     # Page contents
