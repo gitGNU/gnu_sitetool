@@ -79,11 +79,11 @@ OPTIONS:
       "GNU General Public License, version 2"))
 
 (h2 "MAINTAINERS")
-(p "Francesco Salvestrini <salvestrini AT gmail DOT com>")
+(p "Francesco Salvestrini")
 
 (h2 "AUTHORS")
-(p "Francesco Salvestrini <salvestrini AT gmail DOT com>")
-(p "Alessandro Massignan <ff0000 DOT it AT gmail DOT com>")
+(p "Francesco Salvestrini")
+(p "Alessandro Massignan")
 
 (h2 "MAILING LISTS")
 (p "The project has a single moderated mailing list, with an archive. "
@@ -96,7 +96,7 @@ OPTIONS:
 (h2 "REPORT A BUG")
 (p "If you think you have found a bug then please send as complete a report "
    "as possible to "
-   "<sitetool-generic AT nongnu DOT org>. "
+   "<" ,PACKAGE_BUGREPORT ">. "
    "An easy way to collect all the required information, such as platform and "
    "compiler, is to include in your report the config.log file available at "
    "the end of the configuration procedure.")

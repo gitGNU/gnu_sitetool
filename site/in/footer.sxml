@@ -21,7 +21,7 @@
 
 (p
  (script
-  (@ (src  ,as_page_variable_OHLOH_BADGE_URL)
+  (@ (src  ,OHLOH_BADGE_URL)
      (type "text/javascript")))
 
  (a (@ (href "http://jigsaw.w3.org/css-validator/check?uri=referer"))
@@ -38,7 +38,8 @@
   "Savannah")
  (br)
  "Please send broken links and other web page suggestions to "
- "<sitetool-generic AT nongnu DOT org>, thank you."
+ ,PACKAGE_BUGREPORT
+ ", thank you."
  (br)
  "This page was last modified on "
  ,(strftime "%A %d %B %Y" (localtime (current-time)))
