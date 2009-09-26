@@ -126,7 +126,7 @@
 				</entry>
 			</entry>
 		</entry>
-		<entry priority="veryhigh" start="1253657508">
+		<entry end="1253886121" priority="veryhigh" start="1253657508">
 			Rearrange the variables substitution (they start with as_page_ or as_site_ ...)
 		</entry>
 		<entry end="1253800634" priority="veryhigh" start="1253795239">
