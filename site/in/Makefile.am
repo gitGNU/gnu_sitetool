@@ -129,8 +129,8 @@ site: $(SITE_SRCS) $(SITE_BUILT_SRCS)
 	$$SITETOOL -v --mode build && \
 	$$SITETOOL -v --mode validate && \
 	touch site.stamp || { \
-		echo $$SITETOOL -v --mode clean ; \
-		echo rm -f site.stamp \
+		$$SITETOOL -v --mode clean ; \
+		rm -f site.stamp \
 		exit 1 ; \
 	}
 
