@@ -22,7 +22,7 @@
 
 AC_INIT([Sitetool],
         m4_esyscmd([tools/maint/git-version-gen .tarball-version]),
-        [salvestrini@gmail.com],
+        [sitetool-generic@nongnu.org],
         [sitetool],
         [http://www.nongnu.org/sitetool])
 
