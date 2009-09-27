@@ -54,3 +54,9 @@
      (string->list str))
     s)
   )
+
+(use-modules (string transform))
+
+(define (email-protect mail)
+  (transform-string (transform-string mail #\. " DOT ") #\@ " AT ")
+  )
