@@ -55,6 +55,7 @@
     s)
   )
 
+;; XXX FIXME: Please remove this guile-lib dependency
 (use-modules (string transform))
 
 (define (email-protect mail)

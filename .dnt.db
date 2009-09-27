@@ -132,6 +132,9 @@
 		<entry end="1253800634" priority="veryhigh" start="1253795239">
 			Fix quoted variable parsing when @ character is used (e.g. url=alpha@beta.com)
 		</entry>
+		<entry priority="veryhigh" start="1254066106">
+			Remove the guile-library dependency in string.scm internal library (it uses string transform module)
+		</entry>
 	</entry>
 	<entry priority="high" start="1233736868">
 		Release 0.2.0
