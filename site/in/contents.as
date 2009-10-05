@@ -172,9 +172,9 @@ contents = {
                 source = "./footer.sxml";
                 filters = {
                         filter[0] = {
-                                source      = "sxml";
+                                source      = "scm";
                                 destination = "sxml";
-                                parameters  = "";
+                                parameters  = "-I utility.scm";
                         };
                 };
         };
