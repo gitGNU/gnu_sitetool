@@ -146,6 +146,7 @@ Makefile
 /src/filters/sxml-sxml
 /src/filters/wikitext-sxml
 /src/filters/map-sxml
+/src/filters/scm-sxml
 
 /site/in/.sitetool
 /site/in/site.stamp
