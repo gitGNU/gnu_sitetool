@@ -14,7 +14,7 @@ wiki:sxml
 	@RELDIR@/wikitext-sxml $I $O
 
 scm:sxml
-	cat $I > $O
+	@RELDIR@/scm-sxml $I $O
 
 sxml:sxml
 	cat $I > $O

@@ -55,11 +55,13 @@ if SHELL_AVAILABLE
 filters_SCRIPTS +=				\
 	map-sxml				\
 	news-wikitext				\
-	sxml-sxml
+	sxml-sxml				\
+	scm-sxml
 filters_SRCS    +=				\
 	map-sxml.in				\
 	news-wikitext.in			\
-	sxml-sxml.in
+	sxml-sxml.in				\
+	scm-sxml.in
 endif
 
 CLEANFILES = $(filters_SCRIPTS)
@@ -118,6 +120,16 @@ news-wikitext: news-wikitext.in Makefile
 sxml-sxml: sxml-sxml.in Makefile
 	( rm -f $@ $@.tmp && \
 	  $(do_subst) < $(srcdir)/sxml-sxml.in > $@.tmp && \
+	  chmod +x $@.tmp && \
+	  chmod a-w $@.tmp && \
+	  mv -f $@.tmp $@ ) || { \
+		rm -f $@ $@.tmp ; \
+		exit 1 ; \
+	}
+
+scm-sxml: scm-sxml.in Makefile
+	( rm -f $@ $@.tmp && \
+	  $(do_subst) < $(srcdir)/scm-sxml.in > $@.tmp && \
 	  chmod +x $@.tmp && \
 	  chmod a-w $@.tmp && \
 	  mv -f $@.tmp $@ ) || { \

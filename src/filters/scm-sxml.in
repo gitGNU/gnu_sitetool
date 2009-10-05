@@ -1,0 +1,130 @@
+#! @SHELL@
+
+#
+# scm-sxml
+#
+# Copyright (C) 2008, 2009 Francesco Salvestrini
+#                          Alessandro Massignan
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+me="scm-sxml"
+
+SED="sed"
+
+INPUT="$1"
+if test X"$INPUT" = X"" ; then
+    echo "$me: Missing input file"
+    exit 1
+fi
+
+OUTPUT="$2"
+if test X"$OUTPUT" = X"" ; then
+    echo "$me: Missing output file"
+    exit 1
+fi
+
+shift
+shift
+
+#echo "$me: Input:      $INPUT"
+#echo "$me: Output:     $OUTPUT"
+
+MODULES="utility.scm"
+MODULES_DIRS="./"
+
+# Parsing parameters
+while test ! "x$1" = "x"
+do
+    case $1 in
+        --include|-I) shift
+                      test ! "x${1}" = "x" || {
+                          echo "${me}: missing file name";
+                          rm -f $OUTPUT;
+                          exit 1;
+                      }
+                      test "x`echo ${MODULES | \
+                              ${SED} -n '/'$1'/='`" = "x" && {
+                          if test "x${MODULES}" = "x"; then
+                              MODULES=$1
+                          else
+                              MODULES="${MODULES} $1"
+                          fi;
+                      }
+                      ;;
+        --basedir|-B) shift
+                      test ! "x${1}" = "x" || {
+                          echo "${me}: missing directory name";
+                          rm -f $OUTPUT;
+                          exit 1;
+                      }
+                      test ! -d $1 || {
+                          echo "${me}: directory \`${1}' does not exist";
+                          rm -f $OUTPUT;
+                          exit 1;
+                      }
+                      test "x`echo ${MODULES_DIRS | \
+                              ${SED} -n '/'$1'/='`" = "x" && {
+                          MODULES_DIR="MODULES_DIRS ${1}";
+                      }
+                      ;;
+        *           ) echo "${me}: unknown option \`${1}'"
+                      rm -f $OUTPUT
+                      exit 1
+                      ;;
+    esac
+    shift
+done
+
+# Checking modules
+MODULES_LIST=""
+
+for m in $MODULES
+do
+
+    for d in $MODULES_DIRS
+    do
+
+        if test -r "$d/$m"; then
+
+            if test "x${MODULES_LIST}" = "x"; then
+                MODULES_LIST="$d/$m"
+            else
+                MODULES_LIST="${MODULES_LIST} $d/$m"
+            fi
+            break
+        fi
+    done
+done
+
+
+# Extracting header from input and put it on output
+$SED -n -e ':a /^;;.*/{ p;n;ba; }; /^[\ \t]*$/{ p;n;ba; }' \
+        -e 'q' <$INPUT >$OUTPUT
+
+# Extracting modules code and append to output
+for m in $MODULES_LIST
+do
+    echo   >>$OUTPUT
+    cat $m >>$OUTPUT
+    echo   >>$OUTPUT
+done
+
+# Finally append input code to output
+$SED -n -e ':a /^;;.*/{ n;ba; }; /^[\ \t]*$/{ n;ba; }' \
+        -e ':b /^[\ \t]*$/{ n;bb; }; p;n;bb;' <$INPUT >>$OUTPUT
+
+exit 0
