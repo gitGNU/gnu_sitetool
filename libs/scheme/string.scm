@@ -54,10 +54,3 @@
      (string->list str))
     s)
   )
-
-;; XXX FIXME: Please remove this guile-lib dependency
-(use-modules (string transform))
-
-(define (email-protect mail)
-  (transform-string (transform-string mail #\. " DOT ") #\@ " AT ")
-  )
