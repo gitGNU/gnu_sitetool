@@ -43,7 +43,7 @@ shift
 #echo "$me: Input:      $INPUT"
 #echo "$me: Output:     $OUTPUT"
 
-MODULES="utility.scm"
+MODULES=""
 MODULES_DIRS="./"
 
 # Parsing parameters
