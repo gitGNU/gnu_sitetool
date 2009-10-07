@@ -226,7 +226,7 @@ if ($input_file eq "") {
     exit 1;
 }
 if (!file_ispresent($input_file)) {
-    error("Input file is missing");
+    error("Input file \`" . $input_file . "' is missing");
     exit 1;
 }
 if ($output_file eq "") {
