@@ -95,11 +95,10 @@ OPTIONS:
 
 (h2 "REPORT A BUG")
 (p "If you think you have found a bug then please send as complete a report "
-   "as possible to "
-   "<" ,PACKAGE_BUGREPORT ">. "
+   "as possible to <" ,PACKAGE_BUGREPORT ">. "
    "An easy way to collect all the required information, such as platform and "
    "compiler, is to include in your report the config.log file available at "
    "the end of the configuration procedure.")
-(p "If you have a patch for a bug that hasn't yet been fixed in "
-   "the latest repository sources, please be so kind to create it using the "
+(p "If you have a patch for a bug that hasn't yet been fixed in the "
+   "latest repository sources, please be so kind to create it using the "
    "repository sources, not the release sources.")

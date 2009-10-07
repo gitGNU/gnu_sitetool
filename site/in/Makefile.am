@@ -41,7 +41,7 @@ SITE_BUILT_SRCS =				\
 	todos.sxml				\
 	grammar.scm
 
-EXTRADIST  = $(SITE_SRCS) site.as.in
+EXTRA_DIST = $(SITE_SRCS) site.as.in
 CLEANFILES =
 
 site.as: $(srcdir)/site.as.in Makefile
@@ -129,8 +129,8 @@ site: $(SITE_SRCS) $(SITE_BUILT_SRCS)
 	$$SITETOOL -v --mode build && \
 	$$SITETOOL -v --mode validate && \
 	touch site.stamp || { \
-		$$SITETOOL -v --mode clean ; \
-		rm -f site.stamp \
+		echo $$SITETOOL -v --mode clean ; \
+		echo rm -f site.stamp \
 		exit 1 ; \
 	}
 

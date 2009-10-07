@@ -174,7 +174,7 @@ contents = {
                         filter[0] = {
                                 source      = "scm";
                                 destination = "sxml";
-                                parameters  = "-I utility.scm";
+                                parameters  = "";
                         };
                 };
         };
