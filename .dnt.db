@@ -136,7 +136,7 @@
 			Remove the guile-library dependency in string.scm internal library (it uses string transform module)
 		</entry>
 		<entry end="1255090937" priority="medium" start="1255090926">
-			Grouped as external some site files and added a target to fetch them
+			Externalize site files and add a Makefile target to fetch them all
 		</entry>
 	</entry>
 	<entry priority="high" start="1233736868">
