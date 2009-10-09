@@ -172,6 +172,6 @@ update-local-site: Makefile
 	done && \
 	rm -r -f fetch-dir
 
-update-local: Makefile
+update-local: Makefile update-local-site
 
 maintainer-check-local: Makefile
