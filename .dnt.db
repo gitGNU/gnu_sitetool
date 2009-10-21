@@ -96,7 +96,7 @@
 		<entry priority="veryhigh" start="1231518501">
 			Fix the scheme library building (and import)
 		</entry>
-		<entry priority="veryhigh" start="1252443506">
+		<entry end="1256122433" priority="veryhigh" start="1252443506">
 			Rearrange the build-related code (macros, makefiles, bootstrap, gnulib-use)
 		</entry>
 		<entry priority="high" start="1232644268">
