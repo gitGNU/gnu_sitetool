@@ -108,7 +108,7 @@
 		<entry priority="low" start="1227122764">
 			Rearrange the build process in order to use EXEEXT (if needed)
 		</entry>
-		<entry priority="high" start="1253139070">
+		<entry end="1257332861" priority="high" start="1253139070">
 			Update build
 			<entry end="1255031564" priority="high" start="1253139071">
 				Fix package version in order to handle git versioning
@@ -119,9 +119,9 @@
 			<entry end="1253650719" priority="high" start="1253139071">
 				Move internal macros to build-utils package
 			</entry>
-			<entry priority="high" start="1253139071">
+			<entry end="1257332858" priority="high" start="1253139071">
 				Create AX_PACKAGE_API macro
-				<entry priority="high" start="1253139071">
+				<entry end="1257332855" priority="high" start="1253139071">
 					Update configure.ac replacing API-handling with AX_PACKAGE_API
 				</entry>
 			</entry>
