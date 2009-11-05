@@ -54,4 +54,7 @@ update-local: Makefile
 maintainer-check-whitespaces: Makefile $(schemelib_SRCS)
 	$(WHITESPACE_DETECT) $(schemelib_SRCS)
 
+maintainer-check-wordwraps: Makefile $(schemelib_SRCS)
+	$(WORDWRAP_DETECT) --tab-size 8 --columns 80 $(schemelib_SRCS)
+
 maintainer-check-local: Makefile maintainer-check-whitespaces
