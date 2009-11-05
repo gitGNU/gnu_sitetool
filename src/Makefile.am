@@ -191,4 +191,10 @@ maintainer-check-parameters: Makefile $(bin_SCRIPTS) $(pkgvbin_SCRIPTS)
 maintainer-check-whitespaces: Makefile $(SITETOOL_PERL_SRCS)
 	$(WHITESPACE_DETECT) $(SITETOOL_PERL_SRCS)
 
-maintainer-check-local: Makefile maintainer-check-parameters maintainer-check-whitespaces
+maintainer-check-wordwraps: Makefile $(SITETOOL_PERL_SRCS)
+	$(WORDWRAP_DETECT) --tab-size 8 --columns 80 $(SITETOOL_PERL_SRCS)
+
+maintainer-check-local: Makefile		\
+	maintainer-check-parameters		\
+	maintainer-check-whitespaces		\
+	maintainer-check-wordwraps
