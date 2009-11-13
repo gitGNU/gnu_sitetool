@@ -1,3 +1,5 @@
+# -*- perl -*-
+
 #
 # Graphviz.pm
 #

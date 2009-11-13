@@ -1,3 +1,5 @@
+# -*- perl -*-
+
 #
 # RCFile.pm
 #
