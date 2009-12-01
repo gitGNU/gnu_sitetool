@@ -22,7 +22,7 @@ include $(top_srcdir)/Makefile.sub
 
 schemelibdir = $(pkgvlibsdir)/scheme
 
-schemelib_DATA =				\
+dist_schemelib_DATA =				\
 	xhtml.scm
 
 schemelib_SRCS =				\
